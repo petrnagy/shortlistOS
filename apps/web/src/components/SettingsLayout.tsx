@@ -18,6 +18,7 @@ import {
   HiOutlineShieldCheck,
   HiOutlineUser,
 } from "react-icons/hi2";
+
 import { usePermissions } from "~/hooks/usePermissions";
 import { useWorkspace } from "~/providers/workspace";
 
@@ -29,10 +30,28 @@ interface SettingsLayoutProps {
 export function SettingsLayout({ children, currentTab }: SettingsLayoutProps) {
   const router = useRouter();
   const { workspace } = useWorkspace();
-  const { canViewWorkspace, canEditWorkspace } = usePermissions();
+  const { canViewWorkspace } = usePermissions();
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
 
-  const isAdmin = workspace.role === "admin";
+  const isSuperAdmin = String(workspace.role) === "superadmin";
+  const superAdminOnlyTabs = [
+    "integrations",
+    "webhooks",
+    "api",
+    "billing",
+    "permissions",
+  ];
+  const isSuperAdminOnlyTab = superAdminOnlyTabs.includes(currentTab);
+
+  useEffect(() => {
+    if (isSuperAdminOnlyTab && !isSuperAdmin) {
+      void router.replace("/settings/workspace");
+    }
+  }, [isSuperAdminOnlyTab, isSuperAdmin, router]);
+
+  if (isSuperAdminOnlyTab && !isSuperAdmin) {
+    return null;
+  }
 
   const settingsTabs = [
     {
@@ -51,31 +70,31 @@ export function SettingsLayout({ children, currentTab }: SettingsLayoutProps) {
       key: "permissions",
       icon: <HiOutlineShieldCheck />,
       label: t`Permissions`,
-      condition: isAdmin,
+      condition: isSuperAdmin,
     },
     {
       key: "billing",
       label: t`Billing`,
       icon: <HiOutlineBanknotes />,
-      condition: env("NEXT_PUBLIC_KAN_ENV") === "cloud" && isAdmin,
+      condition: env("NEXT_PUBLIC_KAN_ENV") === "cloud" && isSuperAdmin,
     },
     {
       key: "api",
       icon: <HiOutlineCodeBracketSquare />,
       label: t`API`,
-      condition: true,
+      condition: isSuperAdmin,
     },
     {
       key: "webhooks",
       icon: <HiOutlineBolt />,
       label: t`Webhooks`,
-      condition: isAdmin,
+      condition: isSuperAdmin,
     },
     {
       key: "integrations",
       icon: <HiOutlineCodeBracketSquare />,
       label: t`Integrations`,
-      condition: canEditWorkspace,
+      condition: isSuperAdmin,
     },
   ];
 

@@ -22,6 +22,7 @@ export default function WorkspaceSettings() {
   const { modalContentType, openModal, isOpen } = useModal();
   const { workspace } = useWorkspace();
   const { canEditWorkspace } = usePermissions();
+  const isSuperAdmin = String(workspace.role) === "superadmin";
   const { data: workspaceData } = api.workspace.byId.useQuery(
     { workspacePublicId: workspace.publicId },
     { enabled: !!workspace.publicId && workspace.publicId.length >= 12 },
@@ -41,24 +42,32 @@ export default function WorkspaceSettings() {
           disabled={!canEditWorkspace}
         />
 
-        <h2 className="mb-4 mt-8 text-[14px] font-bold text-neutral-900 dark:text-dark-1000">
-          {t`Workspace URL`}
-        </h2>
-        <UpdateWorkspaceUrlForm
-          workspacePublicId={workspace.publicId}
-          workspaceUrl={workspace.slug ?? ""}
-          workspacePlan={workspace.plan ?? "free"}
-          disabled={!canEditWorkspace}
-        />
+        {isSuperAdmin && (
+          <div>
+            <h2 className="mb-4 mt-8 text-[14px] font-bold text-neutral-900 dark:text-dark-1000">
+              {t`Workspace URL`}
+            </h2>
+            <UpdateWorkspaceUrlForm
+              workspacePublicId={workspace.publicId}
+              workspaceUrl={workspace.slug ?? ""}
+              workspacePlan={workspace.plan ?? "free"}
+              disabled={!canEditWorkspace}
+            />
+          </div>
+        )}
 
-        <h2 className="mb-4 mt-8 text-[14px] font-bold text-neutral-900 dark:text-dark-1000">
-          {t`Workspace description`}
-        </h2>
-        <UpdateWorkspaceDescriptionForm
-          workspacePublicId={workspace.publicId}
-          workspaceDescription={workspace.description ?? ""}
-          disabled={!canEditWorkspace}
-        />
+        {isSuperAdmin && (
+          <div>
+            <h2 className="mb-4 mt-8 text-[14px] font-bold text-neutral-900 dark:text-dark-1000">
+              {t`Workspace description`}
+            </h2>
+            <UpdateWorkspaceDescriptionForm
+              workspacePublicId={workspace.publicId}
+              workspaceDescription={workspace.description ?? ""}
+              disabled={!canEditWorkspace}
+            />
+          </div>
+        )}
 
         <h2 className="mb-4 mt-8 text-[14px] font-bold text-neutral-900 dark:text-dark-1000">
           {t`Week start day`}
@@ -69,16 +78,20 @@ export default function WorkspaceSettings() {
           disabled={!canEditWorkspace}
         />
 
-        <h2 className="mb-4 mt-8 text-[14px] font-bold text-neutral-900 dark:text-dark-1000">
-          {t`Email visibility`}
-        </h2>
-        <UpdateWorkspaceEmailVisibilityForm
-          workspacePublicId={workspace.publicId}
-          showEmailsToMembers={Boolean(
-            workspaceData?.showEmailsToMembers ?? false,
-          )}
-          disabled={!canEditWorkspace}
-        />
+        {isSuperAdmin && (
+          <div>
+            <h2 className="mb-4 mt-8 text-[14px] font-bold text-neutral-900 dark:text-dark-1000">
+              {t`Email visibility`}
+            </h2>
+            <UpdateWorkspaceEmailVisibilityForm
+              workspacePublicId={workspace.publicId}
+              showEmailsToMembers={Boolean(
+                workspaceData?.showEmailsToMembers ?? false,
+              )}
+              disabled={!canEditWorkspace}
+            />
+          </div>
+        )}
 
         <div className="border-t border-light-300 dark:border-dark-300">
           <h2 className="mb-4 mt-8 text-[14px] font-bold text-neutral-900 dark:text-dark-1000">
@@ -91,7 +104,7 @@ export default function WorkspaceSettings() {
             <Button
               variant="secondary"
               onClick={() => openModal("DELETE_WORKSPACE")}
-              disabled={workspace.role !== "admin"}
+              disabled={!isSuperAdmin}
             >
               {t`Delete workspace`}
             </Button>
