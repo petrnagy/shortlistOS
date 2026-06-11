@@ -11,6 +11,7 @@ import { usePermissions } from "~/hooks/usePermissions";
 import { useModal } from "~/providers/modal";
 import { useWorkspace } from "~/providers/workspace";
 import { api } from "~/utils/api";
+import { isSuperAdmin as isSuperAdminHelper } from "~/utils/is-super-admin";
 import { DeleteWorkspaceConfirmation } from "./components/DeleteWorkspaceConfirmation";
 import UpdateWeekStartDayForm from "./components/UpdateWeekStartDayForm";
 import UpdateWorkspaceDescriptionForm from "./components/UpdateWorkspaceDescriptionForm";
@@ -22,7 +23,7 @@ export default function WorkspaceSettings() {
   const { modalContentType, openModal, isOpen } = useModal();
   const { workspace } = useWorkspace();
   const { canEditWorkspace } = usePermissions();
-  const isSuperAdmin = String(workspace.role) === "superadmin";
+  const isSuperAdmin = isSuperAdminHelper();
   const { data: workspaceData } = api.workspace.byId.useQuery(
     { workspacePublicId: workspace.publicId },
     { enabled: !!workspace.publicId && workspace.publicId.length >= 12 },

@@ -62,6 +62,12 @@ export default function WorkspaceMenu({
             >
               <Menu.Button
                 disabled
+                // onClick={(e) => {
+                //   e.preventDefault();
+                //   e.stopPropagation();
+                //   router.push("/boards");
+                // }}
+                // hover:bg-light-200 dark:hover:bg-dark-200
                 className={twMerge(
                   "mb-1 flex h-[34px] min-w-0 flex-1 items-center justify-start rounded-md p-1.5",
                   isCollapsed &&

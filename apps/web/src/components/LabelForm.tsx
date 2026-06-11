@@ -11,6 +11,7 @@ import Input from "~/components/Input";
 import Toggle from "~/components/Toggle";
 import { useModal } from "~/providers/modal";
 import { api } from "~/utils/api";
+import { getTemplates } from "~/views/boards/components/TemplateBoards";
 
 interface LabelFormInput {
   name: string;
@@ -55,6 +56,10 @@ export function LabelForm({
     });
 
   const isCreateAnotherEnabled = watch("isCreateAnotherEnabled");
+  const shortlist = getTemplates().find(
+    (template) => template.id === "shortlist",
+  );
+  const canEdit = !shortlist?.labels.includes(watch("name"));
 
   const createLabel = api.label.create.useMutation({
     onSuccess: (newLabel) => {
@@ -133,6 +138,7 @@ export function LabelForm({
         <Input
           id="label-name"
           placeholder={t`Name`}
+          readOnly={!canEdit}
           {...register("name")}
           onKeyDown={async (e) => {
             if (e.key === "Enter") {
@@ -205,9 +211,14 @@ export function LabelForm({
             </Listbox>
           )}
         />
+        {!canEdit && (
+          <p className="mt-6 text-xs text-light-900 dark:text-dark-800">
+            {t`System labels cannot be renamed or deleted`}
+          </p>
+        )}
       </div>
 
-      <div className="mt-12 flex items-center justify-end space-x-4 border-t border-light-600 px-5 pb-5 pt-5 dark:border-dark-600">
+      <div className="mt-3 flex items-center justify-end space-x-4 border-t border-light-600 px-5 pb-5 pt-5 dark:border-dark-600">
         {!isEdit && (
           <Toggle
             label={t`Create another`}
@@ -219,7 +230,7 @@ export function LabelForm({
         )}
 
         <div className="space-x-2">
-          {isEdit && (
+          {isEdit && canEdit && (
             <Button
               type="button"
               variant="secondary"

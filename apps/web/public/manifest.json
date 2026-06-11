@@ -1,16 +1,12 @@
 {
-  "background_color": "#000000",
-  "categories": [
-    "business",
-    "productivity",
-    "utilities"
-  ],
-  "description": "The open source Trello alternative.",
+  "background_color": "#0f172a",
+  "categories": ["business", "productivity", "utilities"],
+  "description": "Job hunting is hard. Tracking it shouldn't be.",
   "display": "standalone",
   "icons": [
     {
       "sizes": "512x512",
-      "src": "/icon-512.png",
+      "src": "/images/favicon/logo-v3.2_640x640px_radius.png",
       "type": "image/png",
       "purpose": "any"
     }
@@ -19,21 +15,21 @@
   "screenshots": [
     {
       "sizes": "1624x1561",
-      "src": "/screenshot-wide.png",
+      "src": "/images/TODO.png",
       "type": "image/png",
       "form_factor": "wide"
     },
     {
       "sizes": "1290x2796",
-      "src": "/screenshot-narrow.png",
+      "src": "/images/TODO.png",
       "type": "image/png",
       "form_factor": "narrow"
     }
   ],
   "orientation": "portrait-primary",
-  "name": "Kan.bn | The open source alternative to Trello",
+  "name": "shortlistOS | Job hunting is hard. Tracking it shouldn't be.",
   "scope": "/",
-  "short_name": "Kan.bn",
+  "short_name": "shortlistOS",
   "start_url": "/",
-  "theme_color": "#000000"
+  "theme_color": "#0f172a"
 }

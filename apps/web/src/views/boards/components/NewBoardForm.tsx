@@ -14,13 +14,13 @@ import { useModal } from "~/providers/modal";
 import { usePopup } from "~/providers/popup";
 import { useWorkspace } from "~/providers/workspace";
 import { api } from "~/utils/api";
-import TemplateBoards from "./TemplateBoards";
+import TemplateBoards, { getTemplates } from "./TemplateBoards";
 
 const schema = z.object({
   name: z
     .string()
-    .min(1, { message: t`Board name is required` })
-    .max(100, { message: t`Board name cannot exceed 100 characters` }),
+    .min(1, { message: t`List name is required` })
+    .max(100, { message: t`List name cannot exceed 100 characters` }),
   workspacePublicId: z.string(),
   template: z.custom<Template | null>(),
 });
@@ -37,7 +37,7 @@ export function NewBoardForm({ isTemplate }: { isTemplate?: boolean }) {
   const router = useRouter();
   const { showPopup } = usePopup();
   const { workspace } = useWorkspace();
-  const [showTemplates, setShowTemplates] = useState(false);
+  const [showTemplates, setShowTemplates] = useState(true);
   const { data: templates } = api.board.all.useQuery(
     { workspacePublicId: workspace.publicId ?? "", type: "template" },
     { enabled: !!workspace.publicId },
@@ -51,6 +51,9 @@ export function NewBoardForm({ isTemplate }: { isTemplate?: boolean }) {
     labels: template.labels.map((label) => label.name),
   }));
 
+  const defaultTemplate =
+    getTemplates().find((tpl) => tpl.id === "shortlist") ?? null;
+
   const {
     register,
     handleSubmit,
@@ -60,9 +63,9 @@ export function NewBoardForm({ isTemplate }: { isTemplate?: boolean }) {
   } = useForm<NewBoardInputWithTemplate>({
     resolver: zodResolver(schema),
     defaultValues: {
-      name: "",
+      name: t`Job hunt` + " " + new Date().getFullYear(),
       workspacePublicId: workspace.publicId || "",
-      template: null,
+      template: defaultTemplate,
     },
   });
 
@@ -75,7 +78,7 @@ export function NewBoardForm({ isTemplate }: { isTemplate?: boolean }) {
       if (!board) {
         showPopup({
           header: t`Error`,
-          message: t`Failed to create board`,
+          message: t`Failed to create a list`,
           icon: "error",
         });
       } else {
@@ -90,7 +93,7 @@ export function NewBoardForm({ isTemplate }: { isTemplate?: boolean }) {
     onError: () => {
       showPopup({
         header: t`Error`,
-        message: t`Failed to create board`,
+        message: t`Failed to create a list`,
         icon: "error",
       });
     },
@@ -108,16 +111,18 @@ export function NewBoardForm({ isTemplate }: { isTemplate?: boolean }) {
   };
 
   useEffect(() => {
-    const titleElement: HTMLElement | null =
-      document.querySelector<HTMLElement>("#name");
-    if (titleElement) titleElement.focus();
+    const titleElement = document.querySelector<HTMLInputElement>("#name");
+    if (titleElement) {
+      titleElement.focus();
+      titleElement.select();
+    }
   }, []);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="px-5 pt-5">
         <div className="text-neutral-9000 flex w-full items-center justify-between pb-4 dark:text-dark-1000">
-          <h2 className="text-sm font-bold">{t`New ${isTemplate ? "template" : "board"}`}</h2>
+          <h2 className="text-sm font-bold">{t`New ${isTemplate ? "template" : "shortlist"}`}</h2>
           <button
             type="button"
             className="hover:bg-li ght-300 rounded p-1 focus:outline-none dark:hover:bg-dark-300"
@@ -142,28 +147,32 @@ export function NewBoardForm({ isTemplate }: { isTemplate?: boolean }) {
           }}
         />
       </div>
-      <TemplateBoards
-        currentBoard={currentTemplate}
-        setCurrentBoard={(t) => setValue("template", t)}
-        showTemplates={showTemplates}
-        customTemplates={formattedTemplates ?? []}
-      />
-      <div className="mt-12 flex items-center justify-end space-x-4 border-t border-light-600 px-5 pb-5 pt-5 dark:border-dark-600">
-        {!isTemplate && (
-          <Toggle
-            label={t`Use template`}
-            isChecked={showTemplates}
-            onChange={() => {
-              setShowTemplates(!showTemplates);
-              if (!showTemplates && !currentTemplate) {
-                setValue("template", (templates?.[0] as any) ?? null);
-              }
-            }}
-          />
-        )}
+      <div className="hidden">
+        <TemplateBoards
+          currentBoard={currentTemplate}
+          setCurrentBoard={(t) => setValue("template", t)}
+          showTemplates={showTemplates}
+          customTemplates={formattedTemplates ?? []}
+        />
+      </div>
+      <div className="mt-6 flex items-center justify-end space-x-4 border-t border-light-600 px-5 pb-5 pt-5 dark:border-dark-600">
+        <div className="hidden">
+          {!isTemplate && (
+            <Toggle
+              label={t`Use template`}
+              isChecked={showTemplates}
+              onChange={() => {
+                setShowTemplates(!showTemplates);
+                if (!showTemplates && !currentTemplate) {
+                  setValue("template", (templates?.[0] as any) ?? null);
+                }
+              }}
+            />
+          )}
+        </div>
         <div>
           <Button type="submit" isLoading={createBoard.isPending}>
-            {t`Create ${isTemplate ? "template" : "board"}`}
+            {t`Create ${isTemplate ? "template" : "shortlist"}`}
           </Button>
         </div>
       </div>

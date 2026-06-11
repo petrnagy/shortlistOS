@@ -36,6 +36,7 @@ import { usePopup } from "~/providers/popup";
 import { useWorkspace } from "~/providers/workspace";
 import { api } from "~/utils/api";
 import { formatToArray } from "~/utils/helpers";
+import { isSuperAdmin } from "~/utils/is-super-admin";
 import { DeleteCardConfirmation } from "~/views/card/components/DeleteCardConfirmation";
 import BoardDropdown from "./components/BoardDropdown";
 import Card from "./components/Card";
@@ -368,6 +369,9 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
     }
   };
 
+  const boardVisibility: "private" | "public" =
+    boardData?.visibility === "public" ? "public" : "private";
+
   const renderModalContent = () => {
     return (
       <>
@@ -527,7 +531,7 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
   return (
     <>
       <PageHead
-        title={`${boardData?.name ?? (isTemplate ? t`Board` : t`Template`)} | ${workspace.name ?? t`Workspace`}`}
+        title={`${boardData?.name ?? (isTemplate ? t`Shortlist` : t`Template`)} | ${workspace.name ?? t`Workspace`}`}
       />
       <div className="relative flex h-full flex-col">
         <PatternedBackground />
@@ -566,7 +570,7 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
                 {t`Template`}
               </div>
             )}
-            {!isTemplate && (
+            {!isTemplate && isSuperAdmin() && (
               <>
                 <UpdateBoardSlugButton
                   handleOnClick={() => openModal("UPDATE_BOARD_SLUG")}
@@ -574,11 +578,11 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
                   workspaceSlug={workspace.slug ?? ""}
                   boardSlug={boardData?.slug ?? ""}
                   boardPublicId={boardId ?? ""}
-                  visibility={boardData?.visibility ?? "private"}
+                  visibility={boardVisibility}
                   canEdit={canEditBoard}
                 />
                 <VisibilityButton
-                  visibility={boardData?.visibility ?? "private"}
+                  visibility={boardVisibility}
                   boardPublicId={boardId ?? ""}
                   boardSlug={boardData?.slug ?? ""}
                   queryParams={queryParams}
@@ -598,28 +602,30 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
                 )}
               </>
             )}
-            <Tooltip
-              content={
-                !canCreateList
-                  ? t`You don't have permission`
-                  : createListShortcutTooltipContent
-              }
-            >
-              <Button
-                iconLeft={
-                  <HiOutlinePlusSmall
-                    className="-mr-0.5 h-5 w-5"
-                    aria-hidden="true"
-                  />
+            {isSuperAdmin() && (
+              <Tooltip
+                content={
+                  !canCreateList
+                    ? t`You don't have permission`
+                    : createListShortcutTooltipContent
                 }
-                onClick={() => {
-                  if (boardId && canCreateList) openNewListForm(boardId);
-                }}
-                disabled={!boardData || !canCreateList}
               >
-                {t`New list`}
-              </Button>
-            </Tooltip>
+                <Button
+                  iconLeft={
+                    <HiOutlinePlusSmall
+                      className="-mr-0.5 h-5 w-5"
+                      aria-hidden="true"
+                    />
+                  }
+                  onClick={() => {
+                    if (boardId && canCreateList) openNewListForm(boardId);
+                  }}
+                  disabled={!boardData || !canCreateList}
+                >
+                  {t`New list`}
+                </Button>
+              </Tooltip>
+            )}
             <BoardDropdown
               isTemplate={!!isTemplate}
               isLoading={!boardData}

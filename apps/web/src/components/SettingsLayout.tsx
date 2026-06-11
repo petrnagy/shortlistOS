@@ -21,6 +21,7 @@ import {
 
 import { usePermissions } from "~/hooks/usePermissions";
 import { useWorkspace } from "~/providers/workspace";
+import { isSuperAdmin as isSuperAdminHelper } from "~/utils/is-super-admin";
 
 interface SettingsLayoutProps {
   children: React.ReactNode;
@@ -33,7 +34,7 @@ export function SettingsLayout({ children, currentTab }: SettingsLayoutProps) {
   const { canViewWorkspace } = usePermissions();
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
 
-  const isSuperAdmin = String(workspace.role) === "superadmin";
+  const isSuperAdmin = isSuperAdminHelper();
   const superAdminOnlyTabs = [
     "integrations",
     "webhooks",

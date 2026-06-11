@@ -4,16 +4,18 @@ import {
   HiEllipsisHorizontal,
   HiLink,
   HiOutlineDocumentDuplicate,
-  HiOutlineTrash,
   HiOutlineStar,
+  HiOutlineTrash,
   HiStar,
 } from "react-icons/hi2";
 import { IoArchiveOutline } from "react-icons/io5";
+
 import Dropdown from "~/components/Dropdown";
 import { usePermissions } from "~/hooks/usePermissions";
 import { useModal } from "~/providers/modal";
 import { usePopup } from "~/providers/popup";
 import { api } from "~/utils/api";
+import { isSuperAdmin } from "~/utils/is-super-admin";
 
 export default function BoardDropdown({
   isTemplate,
@@ -43,10 +45,12 @@ export default function BoardDropdown({
       void utils.board.byId.invalidate();
       if (variables.isArchived !== undefined) {
         showPopup({
-          header: variables.isArchived ? t`Board archived` : t`Board unarchived`,
+          header: variables.isArchived
+            ? t`Shortlist archived`
+            : t`Shortlist unarchived`,
           message: variables.isArchived
-            ? t`The board has been archived.`
-            : t`The board has been unarchived.`,
+            ? t`The shortlist has been archived.`
+            : t`The shortlist has been unarchived.`,
           icon: "success",
         });
         void router.push(`/boards`);
@@ -56,15 +60,15 @@ export default function BoardDropdown({
             ? t`Added to favorites`
             : t`Removed from favorites`,
           message: variables.favorite
-            ? t`${boardName ?? "Board"} has been added to your favorites.`
-            : t`${boardName ?? "Board"} has been removed from your favorites.`,
+            ? t`${boardName ?? "Shortlist"} has been added to your favorites.`
+            : t`${boardName ?? "Shortlist"} has been removed from your favorites.`,
           icon: "success",
         });
       }
     },
     onError: () => {
       showPopup({
-        header: t`Unable to update board`,
+        header: t`Unable to update shortlist`,
         message: t`Please try again later, or contact customer support.`,
         icon: "error",
       });
@@ -86,43 +90,42 @@ export default function BoardDropdown({
   };
 
   const isArchiveActionPending = updateBoard.isPending;
+  const canEditBoardUrl = !isTemplate && canEditBoard && isSuperAdmin();
 
   const items = [
     ...(isTemplate && canCreateBoard
       ? [
-        {
-          label: t`Make template`,
-          action: () => openModal("CREATE_TEMPLATE"),
-          icon: (
-            <HiOutlineDocumentDuplicate className="h-[16px] w-[16px] text-dark-900" />
-          ),
-        },
-      ]
+          {
+            label: t`Make template`,
+            action: () => openModal("CREATE_TEMPLATE"),
+            icon: (
+              <HiOutlineDocumentDuplicate className="h-[16px] w-[16px] text-dark-900" />
+            ),
+          },
+        ]
       : []),
-    ...(!isTemplate && canEditBoard
+    ...(canEditBoardUrl
       ? [
-        {
-          label: t`Edit board URL`,
-          action: () => openModal("UPDATE_BOARD_SLUG"),
-          icon: <HiLink className="h-[16px] w-[16px] text-dark-900" />,
-        },
-      ]
+          {
+            label: t`Edit board URL`,
+            action: () => openModal("UPDATE_BOARD_SLUG"),
+            icon: <HiLink className="h-[16px] w-[16px] text-dark-900" />,
+          },
+        ]
       : []),
     ...(!isTemplate && canArchiveBoard
       ? [
-        {
-          label: isArchived ? t`Unarchive board` : t`Archive board`,
-          action: handleArchiveOrUnarchive,
-          icon: (
-            <IoArchiveOutline className="h-[16px] w-[16px] text-dark-900" />
-          ),
-        },
-      ]
+          {
+            label: isArchived ? t`Unarchive shortlist` : t`Archive shortlist`,
+            action: handleArchiveOrUnarchive,
+            icon: (
+              <IoArchiveOutline className="h-[16px] w-[16px] text-dark-900" />
+            ),
+          },
+        ]
       : []),
     {
-      label: isFavorite
-        ? t`Remove from favorites`
-        : t`Add to favorites`,
+      label: isFavorite ? t`Remove from favorites` : t`Add to favorites`,
       action: handleToggleFavorite,
       icon: isFavorite ? (
         <HiStar className="h-[16px] w-[16px] text-dark-900" />
@@ -132,14 +135,14 @@ export default function BoardDropdown({
     },
     ...(canDeleteBoard
       ? [
-        {
-          label: isTemplate ? t`Delete template` : t`Delete board`,
-          action: () => openModal("DELETE_BOARD"),
-          icon: (
-            <HiOutlineTrash className="h-[16px] w-[16px] text-dark-900" />
-          ),
-        },
-      ]
+          {
+            label: isTemplate ? t`Delete template` : t`Delete shortlist`,
+            action: () => openModal("DELETE_BOARD"),
+            icon: (
+              <HiOutlineTrash className="h-[16px] w-[16px] text-dark-900" />
+            ),
+          },
+        ]
       : []),
   ];
 
@@ -148,10 +151,7 @@ export default function BoardDropdown({
   }
 
   return (
-    <Dropdown
-      disabled={isLoading || isArchiveActionPending}
-      items={items}
-    >
+    <Dropdown disabled={isLoading || isArchiveActionPending} items={items}>
       <HiEllipsisHorizontal className="h-5 w-5 text-dark-900" />
     </Dropdown>
   );

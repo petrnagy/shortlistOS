@@ -18,12 +18,12 @@ import { hasActiveSubscription } from "@kan/shared/utils";
 import type { KeyboardShortcut } from "~/providers/keyboard-shortcuts";
 import boardsIconDark from "~/assets/boards-dark.json";
 import boardsIconLight from "~/assets/boards-light.json";
-import membersIconDark from "~/assets/members-dark.json";
-import membersIconLight from "~/assets/members-light.json";
+// import membersIconDark from "~/assets/members-dark.json";
+// import membersIconLight from "~/assets/members-light.json";
 import settingsIconDark from "~/assets/settings-dark.json";
 import settingsIconLight from "~/assets/settings-light.json";
-import templatesIconDark from "~/assets/templates-dark.json";
-import templatesIconLight from "~/assets/templates-light.json";
+// import templatesIconDark from "~/assets/templates-dark.json";
+// import templatesIconLight from "~/assets/templates-light.json";
 import ButtonComponent from "~/components/Button";
 import ReactiveButton from "~/components/ReactiveButton";
 import UserMenu from "~/components/UserMenu";
@@ -94,7 +94,7 @@ export default function SideNavigation({
     keyboardShortcut: KeyboardShortcut;
   }[] = [
     {
-      name: t`Boards`,
+      name: t`Shortlists`,
       href: "/boards",
       icon: isDarkMode ? boardsIconDark : boardsIconLight,
       keyboardShortcut: {
@@ -102,33 +102,33 @@ export default function SideNavigation({
         strokes: [{ key: "G" }, { key: "B" }],
         action: () => router.push("/boards"),
         group: "NAVIGATION",
-        description: t`Go to boards`,
+        description: t`Go to shortlists`,
       },
     },
-    {
-      name: t`Templates`,
-      href: "/templates",
-      icon: isDarkMode ? templatesIconDark : templatesIconLight,
-      keyboardShortcut: {
-        type: "SEQUENCE",
-        strokes: [{ key: "G" }, { key: "T" }],
-        action: () => router.push("/templates"),
-        group: "NAVIGATION",
-        description: t`Go to templates`,
-      },
-    },
-    {
-      name: t`Members`,
-      href: "/members",
-      icon: isDarkMode ? membersIconDark : membersIconLight,
-      keyboardShortcut: {
-        type: "SEQUENCE",
-        strokes: [{ key: "G" }, { key: "M" }],
-        action: () => router.push("/members"),
-        group: "NAVIGATION",
-        description: t`Go to members`,
-      },
-    },
+    // {
+    //   name: t`Templates`,
+    //   href: "/templates",
+    //   icon: isDarkMode ? templatesIconDark : templatesIconLight,
+    //   keyboardShortcut: {
+    //     type: "SEQUENCE",
+    //     strokes: [{ key: "G" }, { key: "T" }],
+    //     action: () => router.push("/templates"),
+    //     group: "NAVIGATION",
+    //     description: t`Go to templates`,
+    //   },
+    // },
+    // {
+    //   name: t`Members`,
+    //   href: "/members",
+    //   icon: isDarkMode ? membersIconDark : membersIconLight,
+    //   keyboardShortcut: {
+    //     type: "SEQUENCE",
+    //     strokes: [{ key: "G" }, { key: "M" }],
+    //     action: () => router.push("/members"),
+    //     group: "NAVIGATION",
+    //     description: t`Go to members`,
+    //   },
+    // },
     {
       name: t`Settings`,
       href: "/settings",
@@ -160,7 +160,7 @@ export default function SideNavigation({
             {!isCollapsed && (
               <Link href="/" className="block">
                 <h1 className="pl-2 text-[16px] font-bold tracking-tight text-neutral-900 dark:text-dark-1000">
-                  kan.bn
+                  {t`shortlistOS`}
                 </h1>
               </Link>
             )}
@@ -207,7 +207,7 @@ export default function SideNavigation({
         <div className="space-y-2">
           <UserMenu
             displayName={user.displayName ?? undefined}
-            email={user.email ?? "Email not provided?"}
+            email={user.email ?? "Email not provided"}
             imageUrl={user.image ?? undefined}
             isLoading={isLoading}
             isCollapsed={isCollapsed}
