@@ -3,7 +3,7 @@ services:
     image: ghcr.io/kanbn/kan-migrate:latest
     container_name: ${CONTAINER_NAME:-kan-migrate}
     networks:
-      - kan-network
+      - shortlistos-network
     build:
       context: .
       dockerfile: ./apps/web/Dockerfile
@@ -17,11 +17,11 @@ services:
 
   web:
     image: ghcr.io/kanbn/kan:latest
-    container_name: ${CONTAINER_NAME:-kan-web}
+    container_name: ${CONTAINER_NAME:-shortlistos-web}
     ports:
       - "${WEB_PORT:-3000}:3000"
     networks:
-      - kan-network
+      - shortlistos-network
     build:
       context: .
       dockerfile: ./apps/web/Dockerfile
@@ -133,26 +133,26 @@ services:
 
   postgres:
     image: postgres:15
-    container_name: kan-db
+    container_name: shortlistos-db
     environment:
-      - POSTGRES_DB=kan_db
-      - POSTGRES_USER=kan
+      - POSTGRES_DB=shortlistos_db
+      - POSTGRES_USER=shortlistos
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     ports:
       - 5432:5432
     volumes:
-      - kan_postgres_data:/var/lib/postgresql/data
+      - shortlistos_postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U kan -d kan_db"]
+      test: ["CMD-SHELL", "pg_isready -U shortlistos -d shortlistos_db"]
       interval: 5s
       timeout: 5s
       retries: 10
     restart: unless-stopped
     networks:
-      - kan-network
+      - shortlistos-network
 
 networks:
-  kan-network:
+  shortlistos-network:
 
 volumes:
-  kan_postgres_data:
+  shortlistos_postgres_data:
