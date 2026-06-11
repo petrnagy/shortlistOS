@@ -14,6 +14,7 @@ import { useModal } from "~/providers/modal";
 import { usePopup } from "~/providers/popup";
 import { useWorkspace } from "~/providers/workspace";
 import { api } from "~/utils/api";
+import { createWorkspaceSlug } from "../utils/workspace-slug";
 import LoadingSpinner from "./LoadingSpinner";
 
 const schema = z.object({
@@ -122,6 +123,8 @@ export function NewWorkspaceForm() {
   const isValidSlug = slug && slug.length >= 3 && !errors.slug;
 
   const onSubmit = (values: FormValues) => {
+    const generatedSlug = createWorkspaceSlug(values.name);
+
     // Don't submit if slug is provided but not available
     if (values.slug && isWorkspaceSlugAvailable?.isAvailable === false) {
       return;
@@ -129,7 +132,7 @@ export function NewWorkspaceForm() {
 
     createWorkspace.mutate({
       name: values.name,
-      slug: values.slug,
+      slug: generatedSlug,
     });
   };
 
@@ -162,7 +165,7 @@ export function NewWorkspaceForm() {
 
         <Input
           id="workspace-name"
-          placeholder={t`Workspace name`}
+          placeholder={t`e.g. "Pete's Workspace", "Job hunt", etc.`}
           {...register("name")}
           errorMessage={errors.name?.message}
           onKeyDown={async (e) => {
@@ -173,7 +176,7 @@ export function NewWorkspaceForm() {
           }}
         />
 
-        <div className="mt-4">
+        <div className="mt-4 hidden">
           <Input
             id="workspace-slug"
             placeholder={t`workspace-url`}
