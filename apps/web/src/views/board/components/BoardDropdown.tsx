@@ -3,6 +3,7 @@ import { t } from "@lingui/core/macro";
 import {
   HiEllipsisHorizontal,
   HiLink,
+  HiOutlineCog6Tooth,
   HiOutlineDocumentDuplicate,
   HiOutlineStar,
   HiOutlineTrash,
@@ -113,13 +114,13 @@ export default function BoardDropdown({
           },
         ]
       : []),
-    ...(!isTemplate && canArchiveBoard
+    ...(!isTemplate && canEditBoard
       ? [
           {
-            label: isArchived ? t`Unarchive shortlist` : t`Archive shortlist`,
-            action: handleArchiveOrUnarchive,
+            label: t`Shortlist settings`,
+            action: () => void router.push(`/boards/${boardPublicId}/settings`),
             icon: (
-              <IoArchiveOutline className="h-[16px] w-[16px] text-dark-900" />
+              <HiOutlineCog6Tooth className="h-[16px] w-[16px] text-dark-900" />
             ),
           },
         ]
@@ -133,6 +134,17 @@ export default function BoardDropdown({
         <HiOutlineStar className="h-[16px] w-[16px] text-dark-900" />
       ),
     },
+    ...(!isTemplate && canArchiveBoard
+      ? [
+          {
+            label: isArchived ? t`Unarchive shortlist` : t`Archive shortlist`,
+            action: handleArchiveOrUnarchive,
+            icon: (
+              <IoArchiveOutline className="h-[16px] w-[16px] text-dark-900" />
+            ),
+          },
+        ]
+      : []),
     ...(canDeleteBoard
       ? [
           {

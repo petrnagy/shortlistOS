@@ -25,6 +25,7 @@ import settingsIconLight from "~/assets/settings-light.json";
 // import templatesIconDark from "~/assets/templates-dark.json";
 // import templatesIconLight from "~/assets/templates-light.json";
 import ButtonComponent from "~/components/Button";
+import IconBolt from "~/components/IconBolt";
 import ReactiveButton from "~/components/ReactiveButton";
 import UserMenu from "~/components/UserMenu";
 import WorkspaceMenu from "~/components/WorkspaceMenu";
@@ -203,7 +204,7 @@ export default function SideNavigation({
           </ul>
         </div>
 
-        <div className="space-y-2">
+        <div className={twMerge("space-y-2")}>
           <UserMenu
             displayName={user.displayName ?? undefined}
             email={user.email ?? "Email not provided"}
@@ -213,19 +214,39 @@ export default function SideNavigation({
             onCloseSideNav={onCloseSideNav}
           />
 
-          {/* <ButtonComponent
-            iconLeft={<HiBolt />}
-            fullWidth
-            variant="secondary"
-            href={`TODO`}
+          <div
+            className={twMerge("w-full", isCollapsed && "flex justify-center")}
           >
-            {t`Get the Powerpack`}
-          </ButtonComponent> */}
+            {isCollapsed ? (
+              <ButtonComponent
+                iconLeft={<IconBolt />}
+                variant="secondary"
+                href={`TODO`}
+                aria-label={t`Get the Powerpack`}
+                title={t`Get the Powerpack`}
+                iconOnly
+              />
+            ) : (
+              <ButtonComponent
+                iconLeft={<IconBolt />}
+                fullWidth
+                variant="secondary"
+                href={`TODO`}
+              >
+                {t`Get the Powerpack`}
+              </ButtonComponent>
+            )}
+          </div>
 
           {isCloudEnv &&
             !hasActiveSubscription(subscriptions, "pro") &&
             !hasActiveSubscription(subscriptions, "team") && (
-              <div className={twMerge(isCollapsed && "flex justify-center")}>
+              <div
+                className={twMerge(
+                  "w-full",
+                  isCollapsed && "flex justify-center",
+                )}
+              >
                 {isCollapsed ? (
                   <ButtonComponent
                     iconLeft={<HiBolt />}

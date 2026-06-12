@@ -1,6 +1,10 @@
 import { differenceInDays } from "date-fns";
 
-export type CardAgingLevel = "none" | "aged-1-week" | "aged-2-weeks" | "aged-1-month";
+export type CardAgingLevel =
+  | "none"
+  | "aged-1-week"
+  | "aged-2-weeks"
+  | "aged-1-month";
 
 /**
  * Determine the aging level of a card based on lastActivity date
@@ -9,7 +13,9 @@ export type CardAgingLevel = "none" | "aged-1-week" | "aged-2-weeks" | "aged-1-m
  * - Older than 2 weeks: moderate yellowing with texture
  * - Older than 1 month: heavy parchment effect
  */
-export function getCardAgingLevel(lastActivity: Date | null | undefined): CardAgingLevel {
+export function getCardAgingLevel(
+  lastActivity: Date | null | undefined,
+): CardAgingLevel {
   if (!lastActivity) return "none";
 
   const daysAgo = differenceInDays(new Date(), new Date(lastActivity));

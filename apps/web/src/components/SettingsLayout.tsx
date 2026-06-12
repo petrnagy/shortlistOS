@@ -16,12 +16,10 @@ import {
   HiOutlineCodeBracketSquare,
   HiOutlineRectangleGroup,
   HiOutlineShieldCheck,
-  HiOutlineSquares2X2,
   HiOutlineUser,
 } from "react-icons/hi2";
 
 import { usePermissions } from "~/hooks/usePermissions";
-import { useWorkspace } from "~/providers/workspace";
 import { isSuperAdmin as isSuperAdminHelper } from "~/utils/is-super-admin";
 
 interface SettingsLayoutProps {
@@ -31,7 +29,6 @@ interface SettingsLayoutProps {
 
 export function SettingsLayout({ children, currentTab }: SettingsLayoutProps) {
   const router = useRouter();
-  const { workspace } = useWorkspace();
   const { canViewWorkspace } = usePermissions();
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
 
@@ -66,12 +63,6 @@ export function SettingsLayout({ children, currentTab }: SettingsLayoutProps) {
       key: "workspace",
       icon: <HiOutlineRectangleGroup />,
       label: t`Workspace`,
-      condition: canViewWorkspace,
-    },
-    {
-      key: "boards",
-      icon: <HiOutlineSquares2X2 />,
-      label: t`Shortlists`,
       condition: canViewWorkspace,
     },
     {
