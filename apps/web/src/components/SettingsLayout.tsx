@@ -16,6 +16,7 @@ import {
   HiOutlineCodeBracketSquare,
   HiOutlineRectangleGroup,
   HiOutlineShieldCheck,
+  HiOutlineSquares2X2,
   HiOutlineUser,
 } from "react-icons/hi2";
 
@@ -65,6 +66,12 @@ export function SettingsLayout({ children, currentTab }: SettingsLayoutProps) {
       key: "workspace",
       icon: <HiOutlineRectangleGroup />,
       label: t`Workspace`,
+      condition: canViewWorkspace,
+    },
+    {
+      key: "boards",
+      icon: <HiOutlineSquares2X2 />,
+      label: t`Shortlists`,
       condition: canViewWorkspace,
     },
     {

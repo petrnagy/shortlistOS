@@ -15,6 +15,7 @@ import LabelIcon from "~/components/LabelIcon";
 import { Tooltip } from "~/components/Tooltip";
 import { useLocalisation } from "~/hooks/useLocalisation";
 import { formatLastActivity } from "~/utils/format-last-activity";
+import { getCardAgingClasses, getCardAgingLevel } from "~/utils/card-aging";
 import { getAvatarUrl } from "~/utils/helpers";
 
 const Card = ({
@@ -72,9 +73,11 @@ const Card = ({
   const hasAttachments = attachments && attachments.length > 0;
   const hasDueDate = !!dueDate;
   const formattedLastActivity = formatLastActivity(lastActivity, dateLocale);
+  const agingLevel = getCardAgingLevel(lastActivity);
+  const agingClasses = getCardAgingClasses(agingLevel);
 
   return (
-    <div className="flex flex-col overflow-hidden rounded-md border border-light-200 bg-light-50 px-3 py-2 text-sm text-neutral-900 dark:border-dark-200 dark:bg-dark-200 dark:text-dark-1000 dark:hover:bg-dark-300">
+    <div className={twMerge("flex flex-col overflow-hidden rounded-md border border-light-200 bg-light-50 px-3 py-2 text-sm text-neutral-900 dark:border-dark-200 dark:bg-dark-200 dark:text-dark-1000 dark:hover:bg-dark-300", agingClasses)}>
       {/* {ticketNumber && (
         <span className="mb-1 text-xs text-light-700 dark:text-dark-800">
           {ticketNumber}
