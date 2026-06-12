@@ -185,7 +185,6 @@ export default function SideNavigation({
             </Button>
           </div>
           <div className="mx-1 mb-4 hidden w-auto border-b border-light-300 dark:border-dark-400 md:block" />
-
           <WorkspaceMenu isCollapsed={isCollapsed} />
           <ul role="list" className="space-y-1">
             {navigation.map((item) => (
@@ -213,6 +212,16 @@ export default function SideNavigation({
             isCollapsed={isCollapsed}
             onCloseSideNav={onCloseSideNav}
           />
+
+          {/* <ButtonComponent
+            iconLeft={<HiBolt />}
+            fullWidth
+            variant="secondary"
+            href={`TODO`}
+          >
+            {t`Get the Powerpack`}
+          </ButtonComponent> */}
+
           {isCloudEnv &&
             !hasActiveSubscription(subscriptions, "pro") &&
             !hasActiveSubscription(subscriptions, "team") && (

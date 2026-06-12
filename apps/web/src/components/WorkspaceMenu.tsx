@@ -75,7 +75,7 @@ export default function WorkspaceMenu({
                 )}
                 title={isCollapsed ? workspace.name : undefined}
               >
-                <span className="inline-flex h-6 w-6 items-center justify-center rounded-md bg-indigo-700">
+                <span className="bg-brand inline-flex h-6 w-6 items-center justify-center rounded-md">
                   <span className="text-xs font-bold leading-none text-white">
                     {workspace.name.charAt(0).toUpperCase()}
                   </span>

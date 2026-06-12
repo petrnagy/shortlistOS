@@ -1,43 +1,35 @@
 import { t } from "@lingui/core/macro";
 import { useState } from "react";
+import { PageHead } from "~/components/PageHead";
+import Toggle from "~/components/Toggle";
 
 const BoardsSettings = () => {
   const [cardAgingEnabled, setCardAgingEnabled] = useState(true);
 
   return (
-    <div className="space-y-6 py-6">
-      <div className="border-b border-light-200 pb-6 dark:border-dark-200">
-        <h2 className="mb-4 text-lg font-semibold text-light-1000 dark:text-dark-1000">
-          {t`Card Display`}
+    <>
+      <PageHead title={t`Settings | Shortlists`} />
+
+      <div className="mb-8 border-t border-light-300 dark:border-dark-300">
+        <h2 className="mb-4 mt-8 text-[14px] font-bold text-neutral-900 dark:text-dark-1000">
+          {t`Card Aging`}
         </h2>
-
-        <div className="flex items-center justify-between rounded-lg border border-light-200 bg-light-50 p-4 dark:border-dark-200 dark:bg-dark-50">
-          <div className="flex-1">
-            <h3 className="font-medium text-light-1000 dark:text-dark-1000">
-              {t`Card Aging`}
-            </h3>
-            <p className="mt-1 text-sm text-light-700 dark:text-dark-700">
-              {t`Show visual aging effects on cards based on last activity. Cards older than 1 week show progressive aging from faded to parchment style.`}
-            </p>
-          </div>
-
-          <button
-            onClick={() => setCardAgingEnabled(!cardAgingEnabled)}
-            className={`ml-4 inline-flex h-8 w-14 flex-shrink-0 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 ${
-              cardAgingEnabled
-                ? "bg-green-600 focus:ring-green-500"
-                : "bg-light-300 focus:ring-light-400 dark:bg-dark-300 dark:focus:ring-dark-400"
-            }`}
-          >
-            <span
-              className={`inline-block h-6 w-6 transform rounded-full bg-white transition-transform ${
-                cardAgingEnabled ? "translate-x-7" : "translate-x-1"
-              }`}
-            />
-          </button>
+        <p className="mb-8 text-sm text-neutral-500 dark:text-dark-900">
+          {t`Show visual aging effects on cards based on last activity. Cards older than 1 week show progressive aging from faded to parchment style.`}
+        </p>
+        <div className="flex items-center gap-3">
+          <Toggle
+            isChecked={cardAgingEnabled}
+            onChange={() => setCardAgingEnabled(!cardAgingEnabled)}
+            label={t`Card Aging`}
+            showLabel={false}
+          />
+          <span className="text-sm text-neutral-700 dark:text-dark-900">
+            {cardAgingEnabled ? t`Enabled` : t`Disabled`}
+          </span>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
