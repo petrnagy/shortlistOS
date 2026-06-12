@@ -24,6 +24,7 @@ import { useWorkspace } from "~/providers/workspace";
 import { api } from "~/utils/api";
 import { invalidateCard } from "~/utils/cardInvalidation";
 import { formatMemberDisplayName, getAvatarUrl } from "~/utils/helpers";
+import { isSuperAdmin as isSuperAdminHelper } from "~/utils/is-super-admin";
 import { DeleteLabelConfirmation } from "../../components/DeleteLabelConfirmation";
 import ActivityList from "./components/ActivityList";
 import { AttachmentThumbnails } from "./components/AttachmentThumbnails";
@@ -138,7 +139,7 @@ export function CardRightPanel({ isTemplate }: { isTemplate?: boolean }) {
           disabled={!canEdit}
         />
       </div>
-      {!isTemplate && (
+      {!isTemplate && isSuperAdminHelper() && (
         <div className="mb-4 flex w-full flex-row">
           <p className="my-2 mb-2 w-[100px] text-sm font-medium">{t`Members`}</p>
           <MemberSelector
@@ -150,7 +151,7 @@ export function CardRightPanel({ isTemplate }: { isTemplate?: boolean }) {
         </div>
       )}
       <div className="mb-4 flex w-full flex-row">
-        <p className="my-2 mb-2 w-[100px] text-sm font-medium">{t`Due date`}</p>
+        <p className="my-2 mb-2 w-[100px] text-sm font-medium">{t`Interview`}</p>
         <DueDateSelector
           cardPublicId={cardId ?? ""}
           dueDate={card?.dueDate}

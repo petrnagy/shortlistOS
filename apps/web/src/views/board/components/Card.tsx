@@ -4,6 +4,7 @@ import {
   HiBars3BottomLeft,
   HiChatBubbleLeft,
   HiOutlineClock,
+  HiOutlinePencil,
 } from "react-icons/hi2";
 import { twMerge } from "tailwind-merge";
 
@@ -11,7 +12,9 @@ import Avatar from "~/components/Avatar";
 import Badge from "~/components/Badge";
 import CircularProgress from "~/components/CircularProgress";
 import LabelIcon from "~/components/LabelIcon";
+import { Tooltip } from "~/components/Tooltip";
 import { useLocalisation } from "~/hooks/useLocalisation";
+import { formatLastActivity } from "~/utils/format-last-activity";
 import { getAvatarUrl } from "~/utils/helpers";
 
 const Card = ({
@@ -24,6 +27,7 @@ const Card = ({
   comments,
   attachments,
   dueDate,
+  lastActivity,
 }: {
   title: string;
   ticketNumber?: string | null;
@@ -47,6 +51,7 @@ const Card = ({
   comments: { publicId: string }[];
   attachments?: { publicId: string }[];
   dueDate?: Date | null;
+  lastActivity?: Date | null;
 }) => {
   const { dateLocale } = useLocalisation();
   const showYear = dueDate ? !isSameYear(dueDate, new Date()) : false;
@@ -66,14 +71,15 @@ const Card = ({
     description && description.replace(/<[^>]*>/g, "").trim().length > 0;
   const hasAttachments = attachments && attachments.length > 0;
   const hasDueDate = !!dueDate;
+  const formattedLastActivity = formatLastActivity(lastActivity, dateLocale);
 
   return (
     <div className="flex flex-col overflow-hidden rounded-md border border-light-200 bg-light-50 px-3 py-2 text-sm text-neutral-900 dark:border-dark-200 dark:bg-dark-200 dark:text-dark-1000 dark:hover:bg-dark-300">
-      {ticketNumber && (
+      {/* {ticketNumber && (
         <span className="mb-1 text-xs text-light-700 dark:text-dark-800">
           {ticketNumber}
         </span>
-      )}
+      )} */}
       <span className="break-words">{title}</span>
       {labels.length ||
       members.length ||
@@ -127,6 +133,11 @@ const Card = ({
               )}
             </div>
             <div className="flex items-center justify-end gap-1">
+              {formattedLastActivity && (
+                <Tooltip content={formattedLastActivity} placement="top">
+                  <HiOutlinePencil className="h-3 w-3 cursor-help text-light-700 dark:text-dark-800" />
+                </Tooltip>
+              )}
               {checklists.length > 0 && (
                 <div className="flex items-center gap-1 rounded-full border-[1px] border-light-300 px-2 py-1 dark:border-dark-600">
                   <CircularProgress

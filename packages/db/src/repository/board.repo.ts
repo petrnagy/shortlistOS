@@ -78,7 +78,9 @@ export const getAllByWorkspaceId = async (
       eq(boards.workspaceId, workspaceId),
       isNull(boards.deletedAt),
       opts?.type ? eq(boards.type, opts.type) : undefined,
-      opts?.archived !== undefined ? eq(boards.isArchived, opts.archived) : undefined,
+      opts?.archived !== undefined
+        ? eq(boards.isArchived, opts.archived)
+        : undefined,
     ),
   });
 
@@ -326,6 +328,13 @@ export const getByPublicId = async (
                 where: isNull(comments.deletedAt),
                 limit: 1,
               },
+              activities: {
+                columns: {
+                  createdAt: true,
+                },
+                orderBy: [desc(cardActivities.createdAt)],
+                limit: 1,
+              },
             },
             where: and(
               cardIds.length > 0 ? inArray(cards.publicId, cardIds) : undefined,
@@ -369,6 +378,7 @@ export const getByPublicId = async (
       ...list,
       cards: list.cards.map((card) => ({
         ...card,
+        lastActivity: card.activities[0]?.createdAt ?? null,
         labels: card.labels.map((label) => label.label),
         members: card.members
           .map((member) => member.member)
@@ -481,6 +491,13 @@ export const getBySlug = async (
                 where: isNull(comments.deletedAt),
                 limit: 1,
               },
+              activities: {
+                columns: {
+                  createdAt: true,
+                },
+                orderBy: [desc(cardActivities.createdAt)],
+                limit: 1,
+              },
               checklists: {
                 columns: {
                   publicId: true,
@@ -544,6 +561,7 @@ export const getBySlug = async (
       ...list,
       cards: list.cards.map((card) => ({
         ...card,
+        lastActivity: card.activities[0]?.createdAt ?? null,
         labels: card.labels.map((label) => label.label),
       })),
     })),
@@ -647,7 +665,9 @@ export const update = async (
       slug: boardInput.slug,
       visibility: boardInput.visibility,
       updatedAt: new Date(),
-      ...(boardInput.isArchived !== undefined && { isArchived: boardInput.isArchived })
+      ...(boardInput.isArchived !== undefined && {
+        isArchived: boardInput.isArchived,
+      }),
     })
     .where(eq(boards.publicId, boardInput.boardPublicId))
     .returning({
@@ -994,8 +1014,8 @@ export const removeUserFavorite = async (
     .where(
       and(
         eq(userBoardFavorites.userId, userId),
-        eq(userBoardFavorites.boardId, boardId)
-      )
+        eq(userBoardFavorites.boardId, boardId),
+      ),
     )
     .returning();
 };

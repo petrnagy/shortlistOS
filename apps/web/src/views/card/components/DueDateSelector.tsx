@@ -118,7 +118,7 @@ export function DueDateSelector({
         ) : (
           <>
             <HiMiniPlus size={22} className="pr-2" />
-            {t`Set due date`}
+            {t`Set interview date`}
           </>
         )}
       </button>
