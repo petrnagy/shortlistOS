@@ -81,6 +81,8 @@ export default function SideNavigation({
   }, [isCollapsed, isInitialised]);
 
   const { pathname } = router;
+  const firstPathSegment = pathname.split("/").filter(Boolean)[0] ?? "";
+  const activeRootPath = firstPathSegment ? `/${firstPathSegment}` : pathname;
 
   const { resolvedTheme } = useTheme();
 
@@ -192,7 +194,7 @@ export default function SideNavigation({
               <li key={item.name}>
                 <ReactiveButton
                   href={item.href}
-                  current={pathname.includes(item.href)}
+                  current={activeRootPath === item.href}
                   name={item.name}
                   json={item.icon}
                   isCollapsed={isCollapsed}
@@ -221,7 +223,7 @@ export default function SideNavigation({
               <ButtonComponent
                 iconLeft={<IconBolt />}
                 variant="secondary"
-                href={`TODO`}
+                href="/settings/powerpack"
                 aria-label={t`Get the Powerpack`}
                 title={t`Get the Powerpack`}
                 iconOnly
@@ -231,7 +233,7 @@ export default function SideNavigation({
                 iconLeft={<IconBolt />}
                 fullWidth
                 variant="secondary"
-                href={`TODO`}
+                href="/settings/powerpack"
               >
                 {t`Get the Powerpack`}
               </ButtonComponent>

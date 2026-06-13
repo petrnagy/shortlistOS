@@ -13,7 +13,10 @@ const IconBolt = ({ className }: { className?: string }) => {
   return (
     <span
       aria-hidden="true"
-      className={twMerge("relative inline-block h-4 w-4", className)}
+      className={twMerge(
+        "relative inline-flex h-4 w-4 shrink-0 items-center justify-center align-middle leading-none",
+        className,
+      )}
     >
       <span
         className="bolt-steam absolute inset-0"

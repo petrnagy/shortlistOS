@@ -26,6 +26,7 @@ const Button = ({
   fullWidth,
   openInNewTab,
   iconOnly,
+  className,
   ...props
 }: ButtonProps) => {
   const classes = twMerge(
@@ -52,6 +53,7 @@ const Button = ({
     variant === "ghost" &&
       "bg-none text-light-1000 shadow-none hover:bg-light-300 dark:text-dark-1000 dark:hover:bg-dark-200",
     props.disabled && "opacity-60",
+    className,
   );
 
   const content = (

@@ -66,6 +66,12 @@ export function SettingsLayout({ children, currentTab }: SettingsLayoutProps) {
       condition: canViewWorkspace,
     },
     {
+      key: "powerpack",
+      icon: <HiOutlineBolt />,
+      label: t`Powerpack`,
+      condition: true,
+    },
+    {
       key: "permissions",
       icon: <HiOutlineShieldCheck />,
       label: t`Permissions`,
@@ -135,7 +141,12 @@ export function SettingsLayout({ children, currentTab }: SettingsLayoutProps) {
               >
                 <div className="relative mb-4">
                   <ListboxButton className="w-full appearance-none rounded-lg border-0 bg-light-50 py-2 pl-3 pr-10 text-left text-sm text-light-1000 shadow-sm ring-1 ring-inset ring-light-300 focus:ring-2 focus:ring-inset focus:ring-light-400 dark:bg-dark-50 dark:text-dark-1000 dark:ring-dark-300 dark:focus:ring-dark-500">
-                    {availableTabs[selectedTabIndex]?.label ?? "Select a tab"}
+                    <span className="inline-flex items-center gap-1">
+                      {availableTabs[selectedTabIndex]?.label ?? "Select a tab"}
+                      {availableTabs[selectedTabIndex]?.key === "powerpack" && (
+                        <HiOutlineBolt className="h-4 w-4" aria-hidden="true" />
+                      )}
+                    </span>
                     <HiChevronDown
                       aria-hidden="true"
                       className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-light-900 dark:text-dark-900"
@@ -148,7 +159,15 @@ export function SettingsLayout({ children, currentTab }: SettingsLayoutProps) {
                         value={availableTabs.indexOf(tab)}
                         className="relative cursor-pointer select-none py-2 pl-3 pr-9 text-light-1000 dark:text-dark-1000"
                       >
-                        {tab.label}
+                        <span className="inline-flex items-center gap-1">
+                          {tab.label}
+                          {tab.key === "powerpack" && (
+                            <HiOutlineBolt
+                              className="h-4 w-4"
+                              aria-hidden="true"
+                            />
+                          )}
+                        </span>
                       </ListboxOption>
                     ))}
                   </ListboxOptions>
@@ -171,7 +190,15 @@ export function SettingsLayout({ children, currentTab }: SettingsLayoutProps) {
                           : "border-transparent text-light-900 hover:border-light-950 hover:text-light-950 dark:text-dark-900 dark:hover:border-white/20 dark:hover:text-dark-950"
                       }`}
                     >
-                      {tab.label}
+                      <span className="inline-flex items-center gap-1">
+                        {tab.label}
+                        {tab.key === "powerpack" && (
+                          <HiOutlineBolt
+                            className="h-4 w-4"
+                            aria-hidden="true"
+                          />
+                        )}
+                      </span>
                     </Link>
                   ))}
                 </nav>

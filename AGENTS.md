@@ -1,5 +1,10 @@
 # AGENTS.md
 
+## Shell Environment
+
+- Use WSL for shell commands in this workspace.
+- Do not use PowerShell for repository inspection, editing, tests, or git operations unless the user explicitly asks for it.
+
 ## Project Overview
 
 Kan is an open-source project management tool (Trello alternative) built with:
