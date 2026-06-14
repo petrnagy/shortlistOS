@@ -7,10 +7,13 @@ import { HiCheck } from "react-icons/hi2";
 
 import { authClient } from "@kan/auth/client";
 
+import { hasActivePowerpack } from "~/utils/powerpack";
+
 import Button from "~/components/Button";
 import { PageHead } from "~/components/PageHead";
 import { POWERPACK_PRICE } from "~/config/pricing";
 import { usePopup } from "~/providers/popup";
+import { api } from "~/utils/api";
 
 interface FeatureRow {
   label: string;
@@ -186,7 +189,18 @@ export default function PowerpackSettings() {
   const router = useRouter();
   const { showPopup } = usePopup();
   const { data: session } = authClient.useSession();
+  const { data: user } = api.user.getUser.useQuery(undefined, {
+    enabled: !!session?.user.id,
+  });
   const [isCheckoutLoading, setIsCheckoutLoading] = useState(false);
+  const userHasActivePowerpack = hasActivePowerpack(user);
+  const formattedPowerpackExpiry = user?.shortlistPowerpackExpiresAt
+    ? new Intl.DateTimeFormat(undefined, {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+      }).format(user.shortlistPowerpackExpiresAt)
+    : null;
   const loadStripeSafe = loadStripe as unknown as (
     publishableKey: string,
   ) => Promise<StripeCheckoutClient | null>;
@@ -349,20 +363,26 @@ export default function PowerpackSettings() {
                   {t`Already got it!`}
                 </td>
                 <td className="px-4 py-3 text-center">
-                  <Button
-                    variant="primary"
-                    size="sm"
-                    isLoading={isCheckoutLoading}
-                    onClick={handleCheckout}
-                    className="powerpack-cta-gradient text-light-50 dark:text-light-50"
-                    style={{
-                      background:
-                        "linear-gradient(-45deg, #06B6D4, #e73c7e, #ee7752, #10B981)",
-                      backgroundSize: "400% 400%",
-                    }}
-                  >
-                    {t`3 months for ${POWERPACK_PRICE}`}
-                  </Button>
+                  {userHasActivePowerpack && formattedPowerpackExpiry ? (
+                    <span className="text-sm font-medium text-light-900 dark:text-dark-900">
+                      {t`Active until ${formattedPowerpackExpiry}`}
+                    </span>
+                  ) : (
+                    <Button
+                      variant="primary"
+                      size="sm"
+                      isLoading={isCheckoutLoading}
+                      onClick={handleCheckout}
+                      className="powerpack-cta-gradient text-light-50 dark:text-light-50"
+                      style={{
+                        background:
+                          "linear-gradient(-45deg, #06B6D4, #e73c7e, #ee7752, #10B981)",
+                        backgroundSize: "400% 400%",
+                      }}
+                    >
+                      {t`3 months for ${POWERPACK_PRICE}`}
+                    </Button>
+                  )}
                 </td>
               </tr>
             </tfoot>
@@ -387,6 +407,19 @@ export default function PowerpackSettings() {
             }
           `}</style>
         </div>
+
+        <pre className="mt-4 overflow-x-auto rounded-md border border-light-300 bg-light-100 p-4 text-xs text-light-1000 dark:border-dark-300 dark:bg-dark-200 dark:text-dark-1000">
+          {JSON.stringify(
+            {
+              shortlistPowerpackActivatedAt:
+                user?.shortlistPowerpackActivatedAt?.toISOString() ?? null,
+              shortlistPowerpackExpiresAt:
+                user?.shortlistPowerpackExpiresAt?.toISOString() ?? null,
+            },
+            null,
+            2,
+          )}
+        </pre>
       </div>
     </>
   );

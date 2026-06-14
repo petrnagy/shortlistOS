@@ -27,6 +27,8 @@ export const userRouter = createTRPCRouter({
         name: z.string().nullable(),
         image: z.string().nullable(),
         stripeCustomerId: z.string().nullable(),
+        shortlistPowerpackActivatedAt: z.date().nullable(),
+        shortlistPowerpackExpiresAt: z.date().nullable(),
         hasPassword: z.boolean(),
         hasMagicLinkAccount: z.boolean(),
         apiKey: z

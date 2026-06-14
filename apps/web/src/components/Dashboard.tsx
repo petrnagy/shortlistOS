@@ -231,6 +231,10 @@ export default function Dashboard({
                 displayName: user?.name ?? session?.user.name,
                 email: user?.email ?? session?.user.email ?? "",
                 image: user?.image ?? undefined,
+                shortlistPowerpackActivatedAt:
+                  user?.shortlistPowerpackActivatedAt ?? null,
+                shortlistPowerpackExpiresAt:
+                  user?.shortlistPowerpackExpiresAt ?? null,
               }}
               isLoading={sessionLoading || userLoading}
               onCloseSideNav={closeSideNav}

@@ -26,8 +26,7 @@ export default async function handler(
 ) {
   const start = Date.now();
   const requestId = randomUUID();
-  const procedure =
-    req.url?.split("?")[0] ?? "/api/shortlist_stripe/webhook";
+  const procedure = req.url?.split("?")[0] ?? "/api/shortlist_stripe/webhook";
 
   if (req.method !== "POST") {
     return res.status(405).json({ message: "Method not allowed" });
@@ -37,12 +36,12 @@ export default async function handler(
     return res.status(500).json({ message: "Stripe is not configured" });
   }
 
-  const webhookSecret =
-    process.env.STRIPE_SHORTLIST_WEBHOOK_SECRET ??
-    process.env.STRIPE_WEBHOOK_SECRET_LEGACY;
+  const webhookSecret = process.env.STRIPE_SHORTLIST_WEBHOOK_SECRET;
 
   if (!webhookSecret) {
-    return res.status(500).json({ message: "Webhook secret is not configured" });
+    return res
+      .status(500)
+      .json({ message: "Webhook secret is not configured" });
   }
 
   const sig = req.headers["stripe-signature"];
@@ -61,7 +60,7 @@ export default async function handler(
 
     switch (event.type) {
       case "checkout.session.completed": {
-        const checkoutSession = event.data.object as Stripe.Checkout.Session;
+        const checkoutSession = event.data.object;
         const metadataUserId = checkoutSession.metadata?.userId;
         const userId = metadataUserId ?? checkoutSession.client_reference_id;
 

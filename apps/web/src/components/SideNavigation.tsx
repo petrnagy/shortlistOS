@@ -31,6 +31,7 @@ import UserMenu from "~/components/UserMenu";
 import WorkspaceMenu from "~/components/WorkspaceMenu";
 import { useWorkspace } from "~/providers/workspace";
 import { api } from "~/utils/api";
+import { hasActivePowerpack } from "~/utils/powerpack";
 
 interface SideNavigationProps {
   user: UserType;
@@ -42,6 +43,8 @@ interface UserType {
   displayName?: string | null | undefined;
   email?: string | null | undefined;
   image?: string | null | undefined;
+  shortlistPowerpackActivatedAt?: Date | null;
+  shortlistPowerpackExpiresAt?: Date | null;
 }
 
 export default function SideNavigation({
@@ -81,12 +84,14 @@ export default function SideNavigation({
   }, [isCollapsed, isInitialised]);
 
   const { pathname } = router;
-  const firstPathSegment = pathname.split("/").filter(Boolean)[0] ?? "";
+  const firstPathSegment =
+    pathname.split("/").find((segment) => segment.length > 0) ?? "";
   const activeRootPath = firstPathSegment ? `/${firstPathSegment}` : pathname;
 
   const { resolvedTheme } = useTheme();
 
   const isCloudEnv = env("NEXT_PUBLIC_KAN_ENV") === "cloud";
+  const userHasActivePowerpack = hasActivePowerpack(user);
 
   const isDarkMode = resolvedTheme === "dark";
 
@@ -103,7 +108,9 @@ export default function SideNavigation({
       keyboardShortcut: {
         type: "SEQUENCE",
         strokes: [{ key: "G" }, { key: "B" }],
-        action: () => router.push("/boards"),
+        action: () => {
+          void router.push("/boards");
+        },
         group: "NAVIGATION",
         description: t`Go to shortlists`,
       },
@@ -139,7 +146,9 @@ export default function SideNavigation({
       keyboardShortcut: {
         type: "SEQUENCE",
         strokes: [{ key: "G" }, { key: "S" }],
-        action: () => router.push("/settings"),
+        action: () => {
+          void router.push("/settings");
+        },
         group: "NAVIGATION",
         description: t`Go to settings`,
       },
@@ -216,29 +225,31 @@ export default function SideNavigation({
             onCloseSideNav={onCloseSideNav}
           />
 
-          <div
-            className={twMerge("w-full", isCollapsed && "flex justify-center")}
-          >
-            {isCollapsed ? (
-              <ButtonComponent
-                iconLeft={<IconBolt />}
-                variant="secondary"
-                href="/settings/powerpack"
-                aria-label={t`Get the Powerpack`}
-                title={t`Get the Powerpack`}
-                iconOnly
-              />
-            ) : (
-              <ButtonComponent
-                iconLeft={<IconBolt />}
-                fullWidth
-                variant="secondary"
-                href="/settings/powerpack"
-              >
-                {t`Get the Powerpack`}
-              </ButtonComponent>
-            )}
-          </div>
+          {!userHasActivePowerpack && (
+            <div
+              className={twMerge("w-full", isCollapsed && "flex justify-center")}
+            >
+              {isCollapsed ? (
+                <ButtonComponent
+                  iconLeft={<IconBolt />}
+                  variant="secondary"
+                  href="/settings/powerpack"
+                  aria-label={t`Get the Powerpack`}
+                  title={t`Get the Powerpack`}
+                  iconOnly
+                />
+              ) : (
+                <ButtonComponent
+                  iconLeft={<IconBolt />}
+                  fullWidth
+                  variant="secondary"
+                  href="/settings/powerpack"
+                >
+                  {t`Get the Powerpack`}
+                </ButtonComponent>
+              )}
+            </div>
+          )}
 
           {isCloudEnv &&
             !hasActiveSubscription(subscriptions, "pro") &&

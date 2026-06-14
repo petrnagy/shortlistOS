@@ -28,13 +28,13 @@ const PowerpackSuccessPage: NextPageWithLayout = () => {
       <PageHead title={t`Settings | Powerpack purchase success`} />
       <div className="mb-8 border-t border-light-300 pt-8 dark:border-dark-300">
         <h2 className="mb-3 text-[14px] font-bold text-neutral-900 dark:text-dark-1000">
-          {t`Purchase complete`}
+          {t`Powerpack unlocked`}
         </h2>
         <p className="mb-6 text-sm text-neutral-500 dark:text-dark-900">
-          {t`Thanks for your purchase. Your Powerpack access is being activated now.`}
+          {t`You're all set! Your account now has Powerpack features enabled and ready to go.`}
         </p>
-        <Button href="/settings/powerpack" variant="primary" size="sm">
-          {t`Back to Powerpack settings`}
+        <Button href="/boards" variant="primary" size="sm">
+          {t`Continue job hunting with Powerpack`}
         </Button>
       </div>
     </SettingsLayout>

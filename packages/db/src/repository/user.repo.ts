@@ -22,6 +22,8 @@ export const getById = async (db: dbClient, userId: string) => {
         email: true,
         image: true,
         stripeCustomerId: true,
+        shortlistPowerpackActivatedAt: true,
+        shortlistPowerpackExpiresAt: true,
       },
       with: {
         apiKeys: {
