@@ -1,14 +1,27 @@
+import { useRouter } from "next/router";
 import { t } from "@lingui/core/macro";
+import { loadStripe } from "@stripe/stripe-js";
+import { env } from "next-runtime-env";
+import { useState } from "react";
 import { HiCheck } from "react-icons/hi2";
+
+import { authClient } from "@kan/auth/client";
 
 import Button from "~/components/Button";
 import { PageHead } from "~/components/PageHead";
 import { POWERPACK_PRICE } from "~/config/pricing";
+import { usePopup } from "~/providers/popup";
 
 interface FeatureRow {
   label: string;
   inFree: boolean;
   inPowerpack: boolean;
+}
+
+interface StripeCheckoutClient {
+  redirectToCheckout: (options: {
+    sessionId: string;
+  }) => Promise<{ error?: Error }>;
 }
 
 const featureGroups: { title: string; items: FeatureRow[] }[] = [
@@ -170,6 +183,85 @@ const featureGroups: { title: string; items: FeatureRow[] }[] = [
 ];
 
 export default function PowerpackSettings() {
+  const router = useRouter();
+  const { showPopup } = usePopup();
+  const { data: session } = authClient.useSession();
+  const [isCheckoutLoading, setIsCheckoutLoading] = useState(false);
+  const loadStripeSafe = loadStripe as unknown as (
+    publishableKey: string,
+  ) => Promise<StripeCheckoutClient | null>;
+
+  const handleCheckout = async () => {
+    if (!session?.user.id) {
+      await router.push(
+        `/login?next=${encodeURIComponent("/settings/powerpack")}`,
+      );
+      return;
+    }
+
+    const publishableKey = env("NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY");
+
+    if (!publishableKey) {
+      showPopup({
+        icon: "error",
+        header: t`Stripe is not configured`,
+        message: t`Missing NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY environment variable.`,
+      });
+      return;
+    }
+
+    setIsCheckoutLoading(true);
+
+    try {
+      const stripe = await loadStripeSafe(publishableKey);
+
+      if (!stripe) {
+        throw new Error("Unable to initialize Stripe");
+      }
+
+      const response = await fetch(
+        "/api/shortlist_stripe/create_checkout_session",
+        {
+          method: "POST",
+        },
+      );
+
+      const payload = (await response.json()) as {
+        sessionId?: string;
+        error?: string;
+        loginUrl?: string;
+      };
+
+      if (response.status === 401 && payload.loginUrl) {
+        await router.push(payload.loginUrl);
+        return;
+      }
+
+      if (!response.ok || !payload.sessionId) {
+        throw new Error(payload.error ?? "Unable to create checkout session");
+      }
+
+      const result = await stripe.redirectToCheckout({
+        sessionId: payload.sessionId,
+      });
+
+      if (result.error) {
+        throw result.error;
+      }
+    } catch (error) {
+      showPopup({
+        icon: "error",
+        header: t`Checkout error`,
+        message:
+          error instanceof Error
+            ? error.message
+            : t`Unable to start checkout right now. Please try again.`,
+      });
+    } finally {
+      setIsCheckoutLoading(false);
+    }
+  };
+
   return (
     <>
       <PageHead title={t`Settings | Powerpack`} />
@@ -258,9 +350,10 @@ export default function PowerpackSettings() {
                 </td>
                 <td className="px-4 py-3 text-center">
                   <Button
-                    href="#"
                     variant="primary"
                     size="sm"
+                    isLoading={isCheckoutLoading}
+                    onClick={handleCheckout}
                     className="powerpack-cta-gradient text-light-50 dark:text-light-50"
                     style={{
                       background:

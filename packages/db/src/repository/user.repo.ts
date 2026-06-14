@@ -126,3 +126,56 @@ export const update = async (
 
   return result;
 };
+
+const addDays = (base: Date, days: number) => {
+  const result = new Date(base);
+  result.setUTCDate(result.getUTCDate() + days);
+  return result;
+};
+
+export const grantShortlistPowerpack = async (
+  db: dbClient,
+  userId: string,
+  membershipDurationDays: number,
+) => {
+  const user = await db.query.users.findFirst({
+    columns: {
+      id: true,
+      shortlistPowerpackActivatedAt: true,
+      shortlistPowerpackExpiresAt: true,
+    },
+    where: eq(users.id, userId),
+  });
+
+  if (!user) return undefined;
+
+  const now = new Date();
+  const activatedAt = user.shortlistPowerpackActivatedAt;
+  const expiresAt = user.shortlistPowerpackExpiresAt;
+
+  const isMembershipActive =
+    !!activatedAt && !!expiresAt && now >= activatedAt && now <= expiresAt;
+
+  const nextActivatedAt =
+    activatedAt && isMembershipActive ? activatedAt : new Date(now);
+
+  const nextExpiresAt = !expiresAt
+    ? addDays(nextActivatedAt, membershipDurationDays)
+    : isMembershipActive
+      ? addDays(expiresAt, membershipDurationDays)
+      : addDays(now, membershipDurationDays);
+
+  const [result] = await db
+    .update(users)
+    .set({
+      shortlistPowerpackActivatedAt: nextActivatedAt,
+      shortlistPowerpackExpiresAt: nextExpiresAt,
+    })
+    .where(eq(users.id, userId))
+    .returning({
+      shortlistPowerpackActivatedAt: users.shortlistPowerpackActivatedAt,
+      shortlistPowerpackExpiresAt: users.shortlistPowerpackExpiresAt,
+    });
+
+  return result;
+};
