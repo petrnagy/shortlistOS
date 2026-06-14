@@ -2,20 +2,23 @@ import { relations, sql } from "drizzle-orm";
 import {
   bigint,
   bigserial,
+  boolean,
   index,
   pgEnum,
   pgTable,
   primaryKey,
+  smallint,
   text,
   timestamp,
   uniqueIndex,
   uuid,
   varchar,
-  boolean,
 } from "drizzle-orm/pg-core";
+
 import { imports } from "./imports";
 import { labels } from "./labels";
 import { lists } from "./lists";
+import { shortlistActivityLogs } from "./shortlist";
 import { users } from "./users";
 import { workspaces } from "./workspaces";
 
@@ -57,6 +60,20 @@ export const boards = pgTable(
     type: boardTypeEnum("type").notNull().default("regular"),
     isArchived: boolean("isArchived").notNull().default(false),
     sourceBoardId: bigint("sourceBoardId", { mode: "number" }),
+    shortlistAutoArchiveAfterDays: smallint("shortlist_autoArchiveAfterDays"),
+    shortlistAutoGhostedAfterDays: smallint("shortlist_autoGhostedAfterDays"),
+    shortlistSavedReminderAfterDays: smallint(
+      "shortlist_savedReminderAfterDays",
+    ),
+    shortlistInterviewingNudgeAfterDays: smallint(
+      "shortlist_interviewingNudgeAfterDays",
+    ),
+    shortlistNegotiatingNudgeAfterDays: smallint(
+      "shortlist_negotiatingNudgeAfterDays",
+    ),
+    shortlistInactivityDigestAfterDays: smallint(
+      "shortlist_inactivityDigestAfterDays",
+    ),
   },
   (table) => [
     index("board_is_archived_idx").on(table.isArchived),
@@ -89,6 +106,7 @@ export const boardsRelations = relations(boards, ({ one, many }) => ({
     references: [imports.id],
     relationName: "boardImport",
   }),
+  shortlistActivityLogs: many(shortlistActivityLogs),
   workspace: one(workspaces, {
     fields: [boards.workspaceId],
     references: [workspaces.id],

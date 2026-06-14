@@ -4,9 +4,12 @@ import {
   bigserial,
   index,
   integer,
+  json,
+  numeric,
   pgEnum,
   pgTable,
   primaryKey,
+  smallint,
   text,
   timestamp,
   uuid,
@@ -18,6 +21,7 @@ import { checklists } from "./checklists";
 import { imports } from "./imports";
 import { labels } from "./labels";
 import { lists } from "./lists";
+import { shortlistActivityLogs, shortlistInbox } from "./shortlist";
 import { users } from "./users";
 import { workspaceMembers } from "./workspaces";
 
@@ -80,9 +84,45 @@ export const cards = pgTable(
       () => imports.id,
     ),
     dueDate: timestamp("dueDate"),
+    shortlistCompanyName: varchar("shortlist_companyName", { length: 255 }),
+    shortlistJobPostingUrl: text("shortlist_jobPostingUrl"),
+    shortlistSalaryMin: integer("shortlist_salaryMin"),
+    shortlistSalaryMax: integer("shortlist_salaryMax"),
+    shortlistSalaryCurrency: varchar("shortlist_salaryCurrency", {
+      length: 10,
+    }),
+    shortlistSalaryPercentileUs: smallint("shortlist_salaryPercentileUS"),
+    shortlistSalaryPercentileEu: smallint("shortlist_salaryPercentileEU"),
+    shortlistSalaryPercentileApac: smallint("shortlist_salaryPercentileAPAC"),
+    shortlistSalaryPercentileUk: smallint("shortlist_salaryPercentileUK"),
+    shortlistSalaryPercentileGlobal: smallint(
+      "shortlist_salaryPercentileGlobal",
+    ),
+    shortlistCompanyRatingAggregated: numeric(
+      "shortlist_companyRatingAggregated",
+      {
+        precision: 2,
+        scale: 1,
+      },
+    ),
+    shortlistCompanySentimentBlob: json("shortlist_companySentimentBlob"),
+    shortlistCompanySentimentSummary: text("shortlist_companySentimentSummary"),
+    shortlistCardSource: varchar("shortlist_cardSource", {
+      length: 20,
+    })
+      .notNull()
+      .default("MANUAL"),
+    shortlistJobLocation: varchar("shortlist_jobLocation", { length: 255 }),
+    shortlistJobLocationType: varchar("shortlist_jobLocationType", {
+      length: 20,
+    }),
+    shortlistCompanyLocation: varchar("shortlist_companyLocation", {
+      length: 255,
+    }),
   },
   (table) => [
     index("card_list_number_idx").on(table.listId, table.cardNumber),
+    index("card_shortlist_company_name_idx").on(table.shortlistCompanyName),
   ],
 ).enableRLS();
 
@@ -113,6 +153,8 @@ export const cardsRelations = relations(cards, ({ one, many }) => ({
   activities: many(cardActivities),
   checklists: many(checklists),
   attachments: many(cardAttachments),
+  shortlistActivityLogs: many(shortlistActivityLogs),
+  shortlistInboxEntries: many(shortlistInbox),
 }));
 
 export const cardActivities = pgTable("card_activity", {

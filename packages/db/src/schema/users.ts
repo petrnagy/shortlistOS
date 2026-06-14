@@ -1,6 +1,7 @@
 import { relations, sql } from "drizzle-orm";
 import {
   boolean,
+  index,
   pgTable,
   timestamp,
   uuid,
@@ -11,23 +12,47 @@ import { apikey } from "./auth";
 import { boards, userBoardFavorites } from "./boards";
 import { cards } from "./cards";
 import { imports } from "./imports";
-import { lists } from "./lists";
-import { workspaceMembers, workspaces } from "./workspaces";
 import { integrations } from "./integrations";
+import { lists } from "./lists";
+import { shortlistActivityLogs, shortlistInbox } from "./shortlist";
+import { workspaceMembers, workspaces } from "./workspaces";
 
-export const users = pgTable("user", {
-  id: uuid("id")
-    .notNull()
-    .primaryKey()
-    .default(sql`uuid_generate_v4()`),
-  name: varchar("name", { length: 255 }),
-  email: varchar("email", { length: 255 }).notNull().unique(),
-  emailVerified: boolean("emailVerified").notNull(),
-  image: varchar("image", { length: 255 }),
-  createdAt: timestamp("createdAt").notNull().defaultNow(),
-  updatedAt: timestamp("updatedAt").notNull().defaultNow(),
-  stripeCustomerId: varchar("stripeCustomerId", { length: 255 }),
-}).enableRLS();
+export const users = pgTable(
+  "user",
+  {
+    id: uuid("id")
+      .notNull()
+      .primaryKey()
+      .default(sql`uuid_generate_v4()`),
+    name: varchar("name", { length: 255 }),
+    email: varchar("email", { length: 255 }).notNull().unique(),
+    emailVerified: boolean("emailVerified").notNull(),
+    image: varchar("image", { length: 255 }),
+    createdAt: timestamp("createdAt").notNull().defaultNow(),
+    updatedAt: timestamp("updatedAt").notNull().defaultNow(),
+    stripeCustomerId: varchar("stripeCustomerId", { length: 255 }),
+    shortlistStripeCustomerId: varchar("shortlist_stripeCustomerId", {
+      length: 255,
+    }),
+    shortlistPowerpackActivatedAt: timestamp("shortlist_powerpackActivatedAt"),
+    shortlistPowerpackExpiresAt: timestamp("shortlist_powerpackExpiresAt"),
+    shortlistIsicVerifiedAt: timestamp("shortlist_isicVerifiedAt"),
+    shortlistIsicExpiresAt: timestamp("shortlist_isicExpiresAt"),
+    shortlistFeedSecret: varchar("shortlist_feedSecret", { length: 255 }),
+    shortlistWeeklyDigestEnabled: boolean("shortlist_weeklyDigestEnabled")
+      .notNull()
+      .default(false),
+    shortlistTimezone: varchar("shortlist_timezone", { length: 255 })
+      .notNull()
+      .default("UTC"),
+    shortlistLastActivity: timestamp("shortlist_lastActivity"),
+  },
+  (table) => [
+    index("user_shortlist_powerpack_expires_at_idx").on(
+      table.shortlistPowerpackExpiresAt,
+    ),
+  ],
+).enableRLS();
 
 export const usersRelations = relations(users, ({ many }) => ({
   deletedBoards: many(boards, {
@@ -49,6 +74,8 @@ export const usersRelations = relations(users, ({ many }) => ({
   lists: many(lists, {
     relationName: "listsCreatedByUser",
   }),
+  shortlistActivityLogs: many(shortlistActivityLogs),
+  shortlistInboxEntries: many(shortlistInbox),
   deletedWorkspaces: many(workspaces, {
     relationName: "workspaceDeletedByUser",
   }),
@@ -85,13 +112,16 @@ export const usersToWorkspacesRelations = relations(
   }),
 );
 
-export const userBoardFavoritesRelations = relations(userBoardFavorites, ({ one }) => ({
-  user: one(users, {
-    fields: [userBoardFavorites.userId],
-    references: [users.id],
+export const userBoardFavoritesRelations = relations(
+  userBoardFavorites,
+  ({ one }) => ({
+    user: one(users, {
+      fields: [userBoardFavorites.userId],
+      references: [users.id],
+    }),
+    board: one(boards, {
+      fields: [userBoardFavorites.boardId],
+      references: [boards.id],
+    }),
   }),
-  board: one(boards, {
-    fields: [userBoardFavorites.boardId],
-    references: [boards.id],
-  }),
-}));
+);
