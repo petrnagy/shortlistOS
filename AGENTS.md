@@ -325,6 +325,9 @@ Update all of the following:
 
 ## Git & Commits
 
+- Do not commit directly to `dev`.
+- Before making or committing changes, work on a typed branch off `dev` using one of these prefixes: `develop/{branch}`, `feature/{branch}`, `bugfix/{branch}`, or `chore/{branch}`.
+- Use a short, descriptive, kebab-case branch suffix, for example `feature/card-automation-controls` or `bugfix/card-index-ordering`.
 - Use conventional commits: `feat:`, `fix:`, `refactor:`, `docs:`, etc.
 - Keep commits focused on single changes
 - Reference issue numbers when applicable

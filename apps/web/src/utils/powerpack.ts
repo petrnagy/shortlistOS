@@ -15,5 +15,7 @@ export const hasActivePowerpack = (
     return false;
   }
 
-  return now >= shortlistPowerpackActivatedAt && now <= shortlistPowerpackExpiresAt;
+  return (
+    now >= shortlistPowerpackActivatedAt && now <= shortlistPowerpackExpiresAt
+  );
 };

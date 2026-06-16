@@ -7,13 +7,12 @@ import { HiCheck } from "react-icons/hi2";
 
 import { authClient } from "@kan/auth/client";
 
-import { hasActivePowerpack } from "~/utils/powerpack";
-
 import Button from "~/components/Button";
 import { PageHead } from "~/components/PageHead";
 import { POWERPACK_PRICE } from "~/config/pricing";
 import { usePopup } from "~/providers/popup";
 import { api } from "~/utils/api";
+import { hasActivePowerpack } from "~/utils/powerpack";
 
 interface FeatureRow {
   label: string;

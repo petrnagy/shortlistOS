@@ -227,7 +227,10 @@ export default function SideNavigation({
 
           {!userHasActivePowerpack && (
             <div
-              className={twMerge("w-full", isCollapsed && "flex justify-center")}
+              className={twMerge(
+                "w-full",
+                isCollapsed && "flex justify-center",
+              )}
             >
               {isCollapsed ? (
                 <ButtonComponent
