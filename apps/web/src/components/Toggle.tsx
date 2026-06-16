@@ -28,7 +28,7 @@ const Toggle = ({
       disabled={disabled}
       className={twMerge(
         "relative inline-flex h-4 w-6 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-light-800 transition-colors duration-200 ease-in-out focus:outline-none dark:bg-dark-800",
-        isChecked && "bg-indigo-600 dark:bg-indigo-600",
+        isChecked && "bg-brand-600 dark:bg-brand-600",
       )}
     >
       <span className="sr-only">{label}</span>
