@@ -1,15 +1,23 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { t } from "@lingui/core/macro";
+import type { KeyboardEvent } from "react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import {
   HiOutlineBars3BottomLeft,
+  HiOutlineBanknotes,
   HiOutlineBriefcase,
+  HiOutlineBuildingOffice2,
   HiOutlineCalendarDays,
+  HiOutlineChatBubbleLeftRight,
   HiOutlineDocumentText,
+  HiOutlineLink,
   HiOutlineLockClosed,
+  HiOutlineMapPin,
+  HiOutlinePencilSquare,
   HiOutlineShieldCheck,
+  HiOutlineStar,
   HiOutlineTag,
   HiXMark,
 } from "react-icons/hi2";
@@ -57,6 +65,372 @@ interface FormValues {
   description: string;
 }
 
+const CARD_SOURCE_OPTIONS = ["MANUAL", "EMAIL", "WEB_CLIPPER", "LINK"] as const;
+const JOB_LOCATION_TYPE_OPTIONS = ["onsite", "hybrid", "remote"] as const;
+const JOB_TYPE_OPTIONS = [
+  "FULL_TIME",
+  "PART_TIME",
+  "CONTRACT",
+  "INTERNSHIP",
+  "TEMPORARY",
+  "FREELANCE",
+] as const;
+const SALARY_REGIONS = ["EU", "US", "UK", "APAC", "Global"] as const;
+const CURRENCY_OPTIONS = [
+  { code: "AED", symbol: "د.إ" },
+  { code: "AFN", symbol: "؋" },
+  { code: "ALL", symbol: "L" },
+  { code: "AMD", symbol: "֏" },
+  { code: "ANG", symbol: "ƒ" },
+  { code: "AOA", symbol: "Kz" },
+  { code: "ARS", symbol: "$" },
+  { code: "AUD", symbol: "$" },
+  { code: "AWG", symbol: "ƒ" },
+  { code: "AZN", symbol: "₼" },
+  { code: "BAM", symbol: "KM" },
+  { code: "BBD", symbol: "$" },
+  { code: "BDT", symbol: "৳" },
+  { code: "BGN", symbol: "лв" },
+  { code: "BHD", symbol: ".د.ب" },
+  { code: "BIF", symbol: "FBu" },
+  { code: "BMD", symbol: "$" },
+  { code: "BND", symbol: "$" },
+  { code: "BOB", symbol: "Bs." },
+  { code: "BOV", symbol: "BOV" },
+  { code: "BRL", symbol: "R$" },
+  { code: "BSD", symbol: "$" },
+  { code: "BTN", symbol: "Nu." },
+  { code: "BWP", symbol: "P" },
+  { code: "BYN", symbol: "Br" },
+  { code: "BZD", symbol: "$" },
+  { code: "CAD", symbol: "$" },
+  { code: "CDF", symbol: "FC" },
+  { code: "CHF", symbol: "CHF" },
+  { code: "CLF", symbol: "CLF" },
+  { code: "CLP", symbol: "$" },
+  { code: "CNY", symbol: "¥" },
+  { code: "COP", symbol: "$" },
+  { code: "COU", symbol: "COU" },
+  { code: "CRC", symbol: "₡" },
+  { code: "CUP", symbol: "$" },
+  { code: "CVE", symbol: "$" },
+  { code: "CZK", symbol: "Kč" },
+  { code: "DJF", symbol: "Fdj" },
+  { code: "DKK", symbol: "kr" },
+  { code: "DOP", symbol: "$" },
+  { code: "DZD", symbol: "د.ج" },
+  { code: "EGP", symbol: "£" },
+  { code: "ERN", symbol: "Nfk" },
+  { code: "ETB", symbol: "Br" },
+  { code: "EUR", symbol: "€" },
+  { code: "FJD", symbol: "$" },
+  { code: "FKP", symbol: "£" },
+  { code: "GBP", symbol: "£" },
+  { code: "GEL", symbol: "₾" },
+  { code: "GHS", symbol: "₵" },
+  { code: "GIP", symbol: "£" },
+  { code: "GMD", symbol: "D" },
+  { code: "GNF", symbol: "FG" },
+  { code: "GTQ", symbol: "Q" },
+  { code: "GYD", symbol: "$" },
+  { code: "HKD", symbol: "$" },
+  { code: "HNL", symbol: "L" },
+  { code: "HTG", symbol: "G" },
+  { code: "HUF", symbol: "Ft" },
+  { code: "IDR", symbol: "Rp" },
+  { code: "ILS", symbol: "₪" },
+  { code: "INR", symbol: "₹" },
+  { code: "IQD", symbol: "ع.د" },
+  { code: "IRR", symbol: "﷼" },
+  { code: "ISK", symbol: "kr" },
+  { code: "JMD", symbol: "$" },
+  { code: "JOD", symbol: "د.ا" },
+  { code: "JPY", symbol: "¥" },
+  { code: "KES", symbol: "KSh" },
+  { code: "KGS", symbol: "сом" },
+  { code: "KHR", symbol: "៛" },
+  { code: "KMF", symbol: "CF" },
+  { code: "KPW", symbol: "₩" },
+  { code: "KRW", symbol: "₩" },
+  { code: "KWD", symbol: "د.ك" },
+  { code: "KYD", symbol: "$" },
+  { code: "KZT", symbol: "₸" },
+  { code: "LAK", symbol: "₭" },
+  { code: "LBP", symbol: "ل.ل" },
+  { code: "LKR", symbol: "Rs" },
+  { code: "LRD", symbol: "$" },
+  { code: "LSL", symbol: "L" },
+  { code: "LYD", symbol: "ل.د" },
+  { code: "MAD", symbol: "د.م." },
+  { code: "MDL", symbol: "L" },
+  { code: "MGA", symbol: "Ar" },
+  { code: "MKD", symbol: "ден" },
+  { code: "MMK", symbol: "K" },
+  { code: "MNT", symbol: "₮" },
+  { code: "MOP", symbol: "P" },
+  { code: "MRU", symbol: "UM" },
+  { code: "MUR", symbol: "₨" },
+  { code: "MVR", symbol: "Rf" },
+  { code: "MWK", symbol: "MK" },
+  { code: "MXN", symbol: "$" },
+  { code: "MXV", symbol: "MXV" },
+  { code: "MYR", symbol: "RM" },
+  { code: "MZN", symbol: "MT" },
+  { code: "NAD", symbol: "$" },
+  { code: "NGN", symbol: "₦" },
+  { code: "NIO", symbol: "C$" },
+  { code: "NOK", symbol: "kr" },
+  { code: "NPR", symbol: "₨" },
+  { code: "NZD", symbol: "$" },
+  { code: "OMR", symbol: "ر.ع." },
+  { code: "PAB", symbol: "B/." },
+  { code: "PEN", symbol: "S/" },
+  { code: "PGK", symbol: "K" },
+  { code: "PHP", symbol: "₱" },
+  { code: "PKR", symbol: "₨" },
+  { code: "PLN", symbol: "zł" },
+  { code: "PYG", symbol: "₲" },
+  { code: "QAR", symbol: "ر.ق" },
+  { code: "RON", symbol: "lei" },
+  { code: "RSD", symbol: "дин." },
+  { code: "RUB", symbol: "₽" },
+  { code: "RWF", symbol: "FRw" },
+  { code: "SAR", symbol: "ر.س" },
+  { code: "SBD", symbol: "$" },
+  { code: "SCR", symbol: "₨" },
+  { code: "SDG", symbol: "ج.س." },
+  { code: "SEK", symbol: "kr" },
+  { code: "SGD", symbol: "$" },
+  { code: "SHP", symbol: "£" },
+  { code: "SLE", symbol: "Le" },
+  { code: "SOS", symbol: "Sh" },
+  { code: "SRD", symbol: "$" },
+  { code: "SSP", symbol: "£" },
+  { code: "STN", symbol: "Db" },
+  { code: "SVC", symbol: "$" },
+  { code: "SYP", symbol: "£" },
+  { code: "SZL", symbol: "L" },
+  { code: "THB", symbol: "฿" },
+  { code: "TJS", symbol: "ЅМ" },
+  { code: "TMT", symbol: "m" },
+  { code: "TND", symbol: "د.ت" },
+  { code: "TOP", symbol: "T$" },
+  { code: "TRY", symbol: "₺" },
+  { code: "TTD", symbol: "$" },
+  { code: "TWD", symbol: "$" },
+  { code: "TZS", symbol: "Sh" },
+  { code: "UAH", symbol: "₴" },
+  { code: "UGX", symbol: "USh" },
+  { code: "USD", symbol: "$" },
+  { code: "USN", symbol: "USN" },
+  { code: "UYI", symbol: "UYI" },
+  { code: "UYU", symbol: "$U" },
+  { code: "UYW", symbol: "UYW" },
+  { code: "UZS", symbol: "so'm" },
+  { code: "VED", symbol: "Bs.D" },
+  { code: "VES", symbol: "Bs." },
+  { code: "VND", symbol: "₫" },
+  { code: "VUV", symbol: "VT" },
+  { code: "WST", symbol: "T" },
+  { code: "XAF", symbol: "FCFA" },
+  { code: "XCD", symbol: "$" },
+  { code: "XOF", symbol: "F CFA" },
+  { code: "XPF", symbol: "₣" },
+  { code: "YER", symbol: "﷼" },
+  { code: "ZAR", symbol: "R" },
+  { code: "ZMW", symbol: "ZK" },
+  { code: "ZWG", symbol: "ZiG" },
+] as const;
+const TEST_SALARY_COMPARISON_DATA = {
+  EU: { min: 55000, max: 92000, currency: "EUR" },
+  US: { min: 95000, max: 160000, currency: "USD" },
+  UK: { min: 62000, max: 105000, currency: "GBP" },
+  APAC: { min: 40000, max: 75000, currency: "USD" },
+  Global: { min: 50000, max: 90000, currency: "USD" },
+} as const;
+
+type CardSource = (typeof CARD_SOURCE_OPTIONS)[number];
+type JobLocationType = (typeof JOB_LOCATION_TYPE_OPTIONS)[number];
+type JobType = (typeof JOB_TYPE_OPTIONS)[number];
+type SalaryRegion = (typeof SALARY_REGIONS)[number];
+
+interface SalaryRange {
+  min: number | null;
+  max: number | null;
+  currency: string | null;
+}
+
+type ShortlistUpdateFields = {
+  shortlistCompanyName?: string | null;
+  shortlistJobPostingUrl?: string | null;
+  shortlistSalaryMin?: number | null;
+  shortlistSalaryMax?: number | null;
+  shortlistSalaryCurrency?: string | null;
+  shortlistCardSource?: CardSource;
+  shortlistJobLocation?: string | null;
+  shortlistJobLocationType?: JobLocationType | null;
+  shortlistJobType?: JobType;
+  shortlistCompanyLocation?: string | null;
+};
+
+const emptyToNull = (value: string) => {
+  const trimmed = value.trim();
+  return trimmed.length > 0 ? trimmed : null;
+};
+
+const integerOrNull = (value: string) => {
+  if (value.trim().length === 0) return null;
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? Math.round(parsed) : null;
+};
+
+const formatSource = (source: string) => {
+  switch (source) {
+    case "MANUAL":
+      return t`Manually`;
+    case "EMAIL":
+      return t`Magic Inbox`;
+    case "WEB_CLIPPER":
+    case "WEBCLIPPER":
+      return t`Web Clipper`;
+    case "LINK":
+      return t`Link`;
+    default:
+      return source;
+  }
+};
+
+const formatEnumLabel = (value: string) =>
+  value
+    .toLowerCase()
+    .split("_")
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(" ");
+
+const formatCurrencyAmount = (amount: number | null, currency: string | null) => {
+  if (amount === null) return "";
+
+  const symbol = CURRENCY_OPTIONS.find((option) => option.code === currency)
+    ?.symbol;
+  const compact =
+    Math.abs(amount) >= 1000 ? `${Math.round(amount / 1000)}k` : `${amount}`;
+
+  return `${symbol ? symbol : currency ? `${currency} ` : ""}${compact}`;
+};
+
+const formatSalaryRange = (range: SalaryRange) => {
+  if (range.min === null && range.max === null) return "";
+  if (range.min !== null && range.max !== null && range.min !== range.max) {
+    return `${formatCurrencyAmount(range.min, range.currency)} – ${formatCurrencyAmount(range.max, range.currency)}`;
+  }
+
+  return formatCurrencyAmount(range.min ?? range.max, range.currency);
+};
+
+const isRecord = (value: unknown): value is Record<string, unknown> =>
+  typeof value === "object" && value !== null && !Array.isArray(value);
+
+const toSalaryRange = (value: unknown): SalaryRange | null => {
+  if (!isRecord(value)) return null;
+
+  const min = typeof value.min === "number" ? value.min : null;
+  const max = typeof value.max === "number" ? value.max : null;
+  const currency = typeof value.currency === "string" ? value.currency : null;
+
+  if (min === null && max === null) return null;
+
+  return { min, max, currency };
+};
+
+const getSalaryComparisonRanges = (salaryData: unknown) => {
+  const source = isRecord(salaryData)
+    ? isRecord(salaryData.comparedRanges)
+      ? salaryData.comparedRanges
+      : salaryData
+    : {};
+
+  return SALARY_REGIONS.map((region) => {
+    const value = isRecord(source)
+      ? (source[region] ?? source[region.toLowerCase()])
+      : undefined;
+
+    return {
+      region,
+      range: toSalaryRange(value),
+    };
+  }).filter((item): item is { region: SalaryRegion; range: SalaryRange } =>
+    Boolean(item.range),
+  );
+};
+
+function SalaryComparisonBars({
+  offer,
+  salaryData,
+}: {
+  offer: SalaryRange;
+  salaryData: unknown;
+}) {
+  const comparisonRanges = getSalaryComparisonRanges(salaryData);
+  const allRanges = [
+    offer.min !== null || offer.max !== null ? offer : null,
+    ...comparisonRanges.map((item) => item.range),
+  ].filter((range): range is SalaryRange => Boolean(range));
+
+  const values = allRanges.flatMap((range) =>
+    [range.min, range.max].filter((value): value is number => value !== null),
+  );
+  const minValue = values.length ? Math.min(...values) : 0;
+  const maxValue = values.length ? Math.max(...values) : 0;
+  const span = Math.max(1, maxValue - minValue);
+
+  if (comparisonRanges.length === 0) {
+    return (
+      <p className="text-sm text-light-700 dark:text-dark-800">
+        {t`No salary comparison data yet.`}
+      </p>
+    );
+  }
+
+  return (
+    <div className="space-y-2">
+      <p className="text-xs font-medium text-light-900 dark:text-dark-900">
+        {t`Compared with`}
+      </p>
+      {comparisonRanges.map(({ region, range }) => {
+        const rangeMin = range.min ?? range.max ?? minValue;
+        const rangeMax = range.max ?? range.min ?? rangeMin;
+        const left = ((rangeMin - minValue) / span) * 100;
+        const width = Math.max(3, ((rangeMax - rangeMin) / span) * 100);
+
+        return (
+          <div
+            key={region}
+            className="grid grid-cols-[44px_1fr] items-center gap-2"
+          >
+            <span className="text-xs font-medium text-light-900 dark:text-dark-900">
+              {region}
+            </span>
+            <div>
+              <div className="relative h-3 rounded-full bg-light-200 dark:bg-dark-200">
+                <div
+                  className="absolute top-0 h-3 rounded-full bg-light-900 dark:bg-dark-900"
+                  style={{
+                    left: `${Math.min(100, Math.max(0, left))}%`,
+                    width: `${Math.min(100, width)}%`,
+                  }}
+                />
+              </div>
+              <p className="mt-1 text-xs text-light-700 dark:text-dark-800">
+                {formatSalaryRange(range)}
+              </p>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 export function CardRightPanel({ isTemplate }: { isTemplate?: boolean }) {
   const router = useRouter();
   const { canEditCard } = usePermissions();
@@ -80,6 +454,17 @@ export function CardRightPanel({ isTemplate }: { isTemplate?: boolean }) {
   const workspaceMembers = board?.workspace.members;
   const selectedLabels = card?.labels;
   const selectedMembers = card?.members;
+  const [shortlistDraft, setShortlistDraft] = useState({
+    companyName: "",
+    jobPostingUrl: "",
+    salaryMin: "",
+    salaryMax: "",
+    salaryCurrency: "",
+    jobLocation: "",
+    companyLocation: "",
+  });
+  const [salaryIsRange, setSalaryIsRange] = useState(true);
+  const [isEditingJobUrl, setIsEditingJobUrl] = useState(false);
 
   const updateManualUpdatedOnly = api.card.update.useMutation({
     onMutate: async (update) => {
@@ -123,6 +508,49 @@ export function CardRightPanel({ isTemplate }: { isTemplate?: boolean }) {
     },
   });
 
+  const updateShortlistFields = api.card.update.useMutation({
+    onMutate: async (update) => {
+      await utils.card.byId.cancel();
+
+      const previousCard = utils.card.byId.getData({
+        cardPublicId: cardId ?? "",
+      });
+
+      if (cardId) {
+        utils.card.byId.setData({ cardPublicId: cardId }, (oldCard) => {
+          if (!oldCard) return oldCard;
+
+          const { cardPublicId: _cardPublicId, ...fields } = update;
+          return {
+            ...oldCard,
+            ...fields,
+          };
+        });
+      }
+
+      return { previousCard };
+    },
+    onError: (_error, _update, context) => {
+      if (cardId) {
+        utils.card.byId.setData(
+          { cardPublicId: cardId },
+          context?.previousCard,
+        );
+      }
+      showPopup({
+        header: t`Unable to update details`,
+        message: t`Please try again later, or contact customer support.`,
+        icon: "error",
+      });
+    },
+    onSettled: async () => {
+      if (cardId) {
+        await invalidateCard(utils, cardId);
+      }
+      await utils.board.byId.invalidate();
+    },
+  });
+
   const handleManualUpdatedOnlyToggle = () => {
     if (!cardId || !card || !canEdit) return;
 
@@ -131,6 +559,49 @@ export function CardRightPanel({ isTemplate }: { isTemplate?: boolean }) {
       manualUpdatedOnly: !card.manualUpdatedOnly,
     });
   };
+
+  const commitShortlistFields = (fields: ShortlistUpdateFields) => {
+    if (!cardId || !card || !canEdit) return;
+
+    updateShortlistFields.mutate({
+      cardPublicId: cardId,
+      ...fields,
+    });
+  };
+
+  const updateDraft = (field: keyof typeof shortlistDraft, value: string) => {
+    setShortlistDraft((current) => ({ ...current, [field]: value }));
+  };
+
+  useEffect(() => {
+    if (!card) return;
+
+    setShortlistDraft({
+      companyName: card.shortlistCompanyName ?? "",
+      jobPostingUrl: card.shortlistJobPostingUrl ?? "",
+      salaryMin:
+        card.shortlistSalaryMin !== null ? String(card.shortlistSalaryMin) : "",
+      salaryMax:
+        card.shortlistSalaryMax !== null ? String(card.shortlistSalaryMax) : "",
+      salaryCurrency: card.shortlistSalaryCurrency ?? "",
+      jobLocation: card.shortlistJobLocation ?? "",
+      companyLocation: card.shortlistCompanyLocation ?? "",
+    });
+    setSalaryIsRange(
+      card.shortlistSalaryMin !== null &&
+        card.shortlistSalaryMax !== null &&
+        card.shortlistSalaryMin !== card.shortlistSalaryMax,
+    );
+  }, [
+    card?.publicId,
+    card?.shortlistCompanyName,
+    card?.shortlistJobPostingUrl,
+    card?.shortlistSalaryMin,
+    card?.shortlistSalaryMax,
+    card?.shortlistSalaryCurrency,
+    card?.shortlistJobLocation,
+    card?.shortlistCompanyLocation,
+  ]);
 
   const formattedLabels =
     labels?.map((label) => {
@@ -182,6 +653,60 @@ export function CardRightPanel({ isTemplate }: { isTemplate?: boolean }) {
       };
     }) ?? [];
 
+  const inputClass =
+    "w-full rounded-[5px] border border-light-300 bg-light-50 px-2 py-1 text-xs text-light-1000 focus:border-light-600 focus:outline-none focus:ring-0 disabled:cursor-not-allowed disabled:opacity-60 dark:border-dark-300 dark:bg-dark-50 dark:text-dark-1000 dark:focus:border-dark-600";
+  const detailGroupClass =
+    "space-y-1 rounded-[8px] border border-light-300 p-3 dark:border-dark-300";
+  const detailRowClass =
+    "grid min-h-[48px] grid-cols-[28px_92px_1fr] items-center gap-2";
+  const detailTextRowClass =
+    "grid grid-cols-[28px_92px_1fr] items-start gap-2 py-2";
+  const detailIconClass = "h-4 w-4 text-light-900 dark:text-dark-900";
+  const detailLabelClass =
+    "text-sm font-semibold text-light-900 dark:text-dark-900";
+  const ratingValue =
+    card?.shortlistCompanyRatingAggregated !== null &&
+    card?.shortlistCompanyRatingAggregated !== undefined
+      ? Math.min(5, Math.max(0, Number(card.shortlistCompanyRatingAggregated)))
+      : null;
+  const salaryOffer = {
+    min: card?.shortlistSalaryMin ?? null,
+    max: card?.shortlistSalaryMax ?? null,
+    currency: card?.shortlistSalaryCurrency ?? null,
+  };
+
+  const commitSalaryFields = (currency = shortlistDraft.salaryCurrency) => {
+    const min = integerOrNull(shortlistDraft.salaryMin);
+    const max = salaryIsRange ? integerOrNull(shortlistDraft.salaryMax) : min;
+
+    commitShortlistFields({
+      shortlistSalaryMin: min,
+      shortlistSalaryMax: max,
+      shortlistSalaryCurrency: emptyToNull(currency.toUpperCase()),
+    });
+  };
+
+  const commitJobUrl = (input: HTMLInputElement) => {
+    if (!input.validity.valid) {
+      input.reportValidity();
+      return;
+    }
+
+    commitShortlistFields({
+      shortlistJobPostingUrl: emptyToNull(shortlistDraft.jobPostingUrl),
+    });
+    setIsEditingJobUrl(false);
+  };
+
+  const commitOnEnter = (
+    event: KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>,
+    commit: () => void,
+  ) => {
+    if (event.key !== "Enter") return;
+    event.preventDefault();
+    commit();
+  };
+
   return (
     <div className="h-full w-[360px] overflow-y-auto border-l-[1px] border-light-300 bg-light-50 p-6 text-light-900 dark:border-dark-300 dark:bg-dark-50 dark:text-dark-900">
       <div className="mb-10 flex items-center justify-between">
@@ -211,12 +736,10 @@ export function CardRightPanel({ isTemplate }: { isTemplate?: boolean }) {
             {t`Details`}
           </h3>
         </div>
-        <div className="space-y-3">
-          <div className="grid min-h-[56px] grid-cols-[36px_1fr_1.3fr] items-center rounded-[8px] border border-light-300 px-4 dark:border-dark-300">
-            <HiOutlineBars3BottomLeft className="h-4 w-4 text-light-900 dark:text-dark-900" />
-            <span className="text-sm font-medium text-light-700 dark:text-dark-800">
-              {t`List`}
-            </span>
+        <div className={detailGroupClass}>
+          <div className={detailRowClass}>
+            <HiOutlineBars3BottomLeft className={detailIconClass} />
+            <span className={detailLabelClass}>{t`Status`}</span>
             <ListSelector
               cardPublicId={cardId ?? ""}
               lists={formattedLists}
@@ -225,17 +748,349 @@ export function CardRightPanel({ isTemplate }: { isTemplate?: boolean }) {
               menuPosition="right"
             />
           </div>
-          <div className="grid min-h-[56px] grid-cols-[36px_1fr_1.3fr] items-center rounded-[8px] border border-light-300 px-4 dark:border-dark-300">
-            <HiOutlineCalendarDays className="h-4 w-4 text-light-900 dark:text-dark-900" />
-            <span className="text-sm font-medium text-light-700 dark:text-dark-800">
-              {t`Interview`}
-            </span>
+          <div className={detailRowClass}>
+            <HiOutlineCalendarDays className={detailIconClass} />
+            <span className={detailLabelClass}>{t`Next interview`}</span>
             <DueDateSelector
               cardPublicId={cardId ?? ""}
               dueDate={card?.dueDate}
               isLoading={!card}
               disabled={!canEdit}
               popoverPosition="right"
+            />
+          </div>
+          <div className={detailRowClass}>
+            <HiOutlineDocumentText className={detailIconClass} />
+            <span className={detailLabelClass}>{t`Created`}</span>
+            <span className="text-sm text-light-1000 dark:text-dark-1000">
+              {formatSource(card?.shortlistCardSource ?? "MANUAL")}
+            </span>
+          </div>
+        </div>
+      </section>
+
+      <div className="my-8 border-t border-light-300 dark:border-dark-300" />
+
+      <section>
+        <div className="mb-4 flex items-center gap-3">
+          <HiOutlineBriefcase className="h-5 w-5 text-light-900 dark:text-dark-900" />
+          <h3 className="text-sm font-semibold text-light-1000 dark:text-dark-1000">
+            {t`Role`}
+          </h3>
+        </div>
+        <div className={detailGroupClass}>
+          <div className={detailRowClass}>
+            <HiOutlineBuildingOffice2 className={detailIconClass} />
+            <span className={detailLabelClass}>{t`Company name`}</span>
+            <input
+              type="text"
+              value={shortlistDraft.companyName}
+              onChange={(event) =>
+                updateDraft("companyName", event.target.value)
+              }
+              onBlur={() =>
+                commitShortlistFields({
+                  shortlistCompanyName: emptyToNull(
+                    shortlistDraft.companyName,
+                  ),
+                })
+              }
+              onKeyDown={(event) =>
+                commitOnEnter(event, () =>
+                  commitShortlistFields({
+                    shortlistCompanyName: emptyToNull(
+                      shortlistDraft.companyName,
+                    ),
+                  }),
+                )
+              }
+              disabled={!canEdit}
+              className={inputClass}
+            />
+          </div>
+          <div className={detailRowClass}>
+            <HiOutlineBriefcase className={detailIconClass} />
+            <span className={detailLabelClass}>{t`Contract`}</span>
+            <select
+              value={card?.shortlistJobType ?? "FULL_TIME"}
+              onChange={(event) =>
+                commitShortlistFields({
+                  shortlistJobType: event.target.value as JobType,
+                })
+              }
+              disabled={!canEdit}
+              className={inputClass}
+            >
+              {JOB_TYPE_OPTIONS.map((option) => (
+                <option key={option} value={option}>
+                  {formatEnumLabel(option)}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className={detailRowClass}>
+            <HiOutlineMapPin className={detailIconClass} />
+            <span className={detailLabelClass}>{t`Location type`}</span>
+            <select
+              value={card?.shortlistJobLocationType ?? ""}
+              onChange={(event) =>
+                commitShortlistFields({
+                  shortlistJobLocationType:
+                    event.target.value.length > 0
+                      ? (event.target.value as JobLocationType)
+                      : null,
+                })
+              }
+              disabled={!canEdit}
+              className={inputClass}
+            >
+              <option value="">{t`unknown`}</option>
+              {JOB_LOCATION_TYPE_OPTIONS.map((option) => (
+                <option key={option} value={option}>
+                  {formatEnumLabel(option)}
+                </option>
+              ))}
+            </select>
+          </div>
+          {card?.shortlistJobLocationType !== "remote" && (
+            <div className={detailRowClass}>
+              <HiOutlineMapPin className={detailIconClass} />
+              <span className={detailLabelClass}>{t`Job location`}</span>
+              <input
+                type="text"
+                value={shortlistDraft.jobLocation}
+                onChange={(event) =>
+                  updateDraft("jobLocation", event.target.value)
+                }
+                onBlur={() =>
+                  commitShortlistFields({
+                    shortlistJobLocation: emptyToNull(
+                      shortlistDraft.jobLocation,
+                    ),
+                  })
+                }
+                onKeyDown={(event) =>
+                  commitOnEnter(event, () =>
+                    commitShortlistFields({
+                      shortlistJobLocation: emptyToNull(
+                        shortlistDraft.jobLocation,
+                      ),
+                    }),
+                  )
+                }
+                disabled={!canEdit}
+                className={inputClass}
+              />
+            </div>
+          )}
+          <div className={detailRowClass}>
+            <HiOutlineLink className={detailIconClass} />
+            <span className={detailLabelClass}>{t`Job URL`}</span>
+            {isEditingJobUrl ? (
+              <input
+                type="url"
+                value={shortlistDraft.jobPostingUrl}
+                onChange={(event) =>
+                  updateDraft("jobPostingUrl", event.target.value)
+                }
+                onBlur={(event) => commitJobUrl(event.currentTarget)}
+                onKeyDown={(event) =>
+                  commitOnEnter(event, () =>
+                    commitJobUrl(event.currentTarget),
+                  )
+                }
+                disabled={!canEdit}
+                className={inputClass}
+                autoFocus
+              />
+            ) : (
+              <div className="flex min-w-0 items-center gap-2">
+                {card?.shortlistJobPostingUrl ? (
+                  <a
+                    href={card.shortlistJobPostingUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="truncate text-xs font-medium text-light-1000 underline underline-offset-2 dark:text-dark-1000"
+                  >
+                    {card.shortlistJobPostingUrl}
+                  </a>
+                ) : (
+                  <span aria-hidden="true" />
+                )}
+                {canEdit && (
+                  <button
+                    type="button"
+                    onClick={() => setIsEditingJobUrl(true)}
+                    className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-[5px] text-light-700 hover:bg-light-200 dark:text-dark-800 dark:hover:bg-dark-200"
+                    aria-label={t`Edit job URL`}
+                  >
+                    <HiOutlinePencilSquare className="h-4 w-4" />
+                  </button>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
+
+      <div className="my-8 border-t border-light-300 dark:border-dark-300" />
+
+      <section>
+        <div className="mb-4 flex items-center gap-3">
+          <HiOutlineBuildingOffice2 className="h-5 w-5 text-light-900 dark:text-dark-900" />
+          <h3 className="text-sm font-semibold text-light-1000 dark:text-dark-1000">
+            {t`Company insight`}
+          </h3>
+        </div>
+        <div className={detailGroupClass}>
+          <div className={detailRowClass}>
+            <HiOutlineBuildingOffice2 className={detailIconClass} />
+            <span className={detailLabelClass}>{t`Company HQ`}</span>
+            <input
+              type="text"
+              value={shortlistDraft.companyLocation}
+              onChange={(event) =>
+                updateDraft("companyLocation", event.target.value)
+              }
+              onBlur={() =>
+                commitShortlistFields({
+                  shortlistCompanyLocation: emptyToNull(
+                    shortlistDraft.companyLocation,
+                  ),
+                })
+              }
+              onKeyDown={(event) =>
+                commitOnEnter(event, () =>
+                  commitShortlistFields({
+                    shortlistCompanyLocation: emptyToNull(
+                      shortlistDraft.companyLocation,
+                    ),
+                  }),
+                )
+              }
+              disabled={!canEdit}
+              className={inputClass}
+            />
+          </div>
+          <div className={detailRowClass}>
+            <HiOutlineStar className={detailIconClass} />
+            <span className={detailLabelClass}>{t`Rating`}</span>
+            <div className="flex items-center gap-2">
+              <div className="text-sm leading-none text-yellow-500">
+                {"★".repeat(Math.round(ratingValue ?? 0))}
+                {"☆".repeat(5 - Math.round(ratingValue ?? 0))}
+              </div>
+              <p className="text-xs text-light-700 dark:text-dark-800">
+                {ratingValue !== null ? ratingValue.toFixed(1) : "0.0"} / 5.0
+              </p>
+            </div>
+          </div>
+          <div className={detailTextRowClass}>
+            <HiOutlineChatBubbleLeftRight className={detailIconClass} />
+            <span className={detailLabelClass}>{t`Sentiment`}</span>
+            <p className="text-xs leading-5 text-light-900 dark:text-dark-900">
+              {card?.shortlistCompanySentimentSummary
+                ? `"${card.shortlistCompanySentimentSummary}"`
+                : t`No sentiment summary yet.`}
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <div className="my-8 border-t border-light-300 dark:border-dark-300" />
+
+      <section>
+        <div className="mb-4 flex items-center gap-3">
+          <HiOutlineBanknotes className="h-5 w-5 text-light-900 dark:text-dark-900" />
+          <h3 className="text-sm font-semibold text-light-1000 dark:text-dark-1000">
+            {t`Salary`}
+          </h3>
+        </div>
+        <div className="space-y-3 rounded-[8px] border border-light-300 p-4 dark:border-dark-300">
+          <div className="flex items-start justify-between gap-3">
+            <div>
+              <p className="text-xs font-medium text-light-900 dark:text-dark-900">
+                {t`${card?.shortlistCompanyName || "Company"}'s offer`}
+              </p>
+              <p className="mt-1 text-sm font-semibold text-light-1000 dark:text-dark-1000">
+                {formatSalaryRange(salaryOffer)}
+              </p>
+            </div>
+            <label className="flex cursor-pointer items-center gap-2 whitespace-nowrap text-xs font-medium text-light-1000 hover:text-light-900 dark:text-dark-1000 dark:hover:text-dark-900">
+              <input
+                type="checkbox"
+                checked={salaryIsRange}
+                onChange={(event) => {
+                  const nextIsRange = event.target.checked;
+                  setSalaryIsRange(nextIsRange);
+
+                  if (!nextIsRange) {
+                    const salaryValue = integerOrNull(shortlistDraft.salaryMin);
+                    commitShortlistFields({
+                      shortlistSalaryMin: salaryValue,
+                      shortlistSalaryMax: salaryValue,
+                    });
+                  }
+                }}
+                disabled={!canEdit}
+                className="h-4 w-4 cursor-pointer rounded border-light-500 bg-transparent disabled:cursor-not-allowed dark:border-dark-500"
+              />
+              {t`Enter as range`}
+            </label>
+          </div>
+          <div
+            className={`grid gap-2 ${salaryIsRange ? "grid-cols-3" : "grid-cols-2"}`}
+          >
+            <input
+              type="number"
+              min={0}
+              placeholder={salaryIsRange ? t`Min` : t`Salary`}
+              value={shortlistDraft.salaryMin}
+              onChange={(event) => updateDraft("salaryMin", event.target.value)}
+              onBlur={() => commitSalaryFields()}
+              onKeyDown={(event) => commitOnEnter(event, commitSalaryFields)}
+              disabled={!canEdit}
+              className={inputClass}
+            />
+            {salaryIsRange && (
+              <input
+                type="number"
+                min={0}
+                placeholder={t`Max`}
+                value={shortlistDraft.salaryMax}
+                onChange={(event) =>
+                  updateDraft("salaryMax", event.target.value)
+                }
+                onBlur={() => commitSalaryFields()}
+                onKeyDown={(event) => commitOnEnter(event, commitSalaryFields)}
+                disabled={!canEdit}
+                className={inputClass}
+              />
+            )}
+            <select
+              value={shortlistDraft.salaryCurrency}
+              onChange={(event) => {
+                updateDraft("salaryCurrency", event.target.value);
+                commitSalaryFields(event.target.value);
+              }}
+              onBlur={() => commitSalaryFields()}
+              disabled={!canEdit}
+              className={inputClass}
+            >
+              <option value="">{t`Currency`}</option>
+              {CURRENCY_OPTIONS.map((currency) => (
+                <option key={currency.code} value={currency.code}>
+                  {currency.code} / {currency.symbol}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="border-t border-light-300 pt-4 dark:border-dark-300">
+            <SalaryComparisonBars
+              offer={salaryOffer}
+              salaryData={
+                card?.shortlistSalaryData ?? TEST_SALARY_COMPARISON_DATA
+              }
             />
           </div>
         </div>
@@ -250,12 +1105,14 @@ export function CardRightPanel({ isTemplate }: { isTemplate?: boolean }) {
             {t`Labels`}
           </h3>
         </div>
-        <LabelSelector
-          cardPublicId={cardId ?? ""}
-          labels={formattedLabels}
-          isLoading={!card}
-          disabled={!canEdit}
-        />
+        <div className={detailGroupClass}>
+          <LabelSelector
+            cardPublicId={cardId ?? ""}
+            labels={formattedLabels}
+            isLoading={!card}
+            disabled={!canEdit}
+          />
+        </div>
       </section>
 
       {!isTemplate && isSuperAdminHelper() && (

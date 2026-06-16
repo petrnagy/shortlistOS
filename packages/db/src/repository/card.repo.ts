@@ -205,6 +205,18 @@ export const update = async (
     description?: string;
     dueDate?: Date | null;
     manualUpdatedOnly?: boolean;
+    shortlistCompanyName?: string | null;
+    shortlistJobPostingUrl?: string | null;
+    shortlistSalaryMin?: number | null;
+    shortlistSalaryMax?: number | null;
+    shortlistSalaryCurrency?: string | null;
+    shortlistCompanyRatingAggregated?: string | null;
+    shortlistCompanySentimentSummary?: string | null;
+    shortlistCardSource?: string;
+    shortlistJobLocation?: string | null;
+    shortlistJobLocationType?: string | null;
+    shortlistJobType?: string;
+    shortlistCompanyLocation?: string | null;
   },
   args: {
     cardPublicId: string;
@@ -217,6 +229,20 @@ export const update = async (
       description: cardInput.description,
       dueDate: cardInput.dueDate !== undefined ? cardInput.dueDate : undefined,
       manualUpdatedOnly: cardInput.manualUpdatedOnly,
+      shortlistCompanyName: cardInput.shortlistCompanyName,
+      shortlistJobPostingUrl: cardInput.shortlistJobPostingUrl,
+      shortlistSalaryMin: cardInput.shortlistSalaryMin,
+      shortlistSalaryMax: cardInput.shortlistSalaryMax,
+      shortlistSalaryCurrency: cardInput.shortlistSalaryCurrency,
+      shortlistCompanyRatingAggregated:
+        cardInput.shortlistCompanyRatingAggregated,
+      shortlistCompanySentimentSummary:
+        cardInput.shortlistCompanySentimentSummary,
+      shortlistCardSource: cardInput.shortlistCardSource,
+      shortlistJobLocation: cardInput.shortlistJobLocation,
+      shortlistJobLocationType: cardInput.shortlistJobLocationType,
+      shortlistJobType: cardInput.shortlistJobType,
+      shortlistCompanyLocation: cardInput.shortlistCompanyLocation,
       updatedAt: new Date(),
     })
     .where(and(eq(cards.publicId, args.cardPublicId), isNull(cards.deletedAt)))
@@ -227,6 +253,19 @@ export const update = async (
       description: cards.description,
       dueDate: cards.dueDate,
       manualUpdatedOnly: cards.manualUpdatedOnly,
+      shortlistCompanyName: cards.shortlistCompanyName,
+      shortlistJobPostingUrl: cards.shortlistJobPostingUrl,
+      shortlistSalaryMin: cards.shortlistSalaryMin,
+      shortlistSalaryMax: cards.shortlistSalaryMax,
+      shortlistSalaryCurrency: cards.shortlistSalaryCurrency,
+      shortlistSalaryData: cards.shortlistSalaryData,
+      shortlistCompanyRatingAggregated: cards.shortlistCompanyRatingAggregated,
+      shortlistCompanySentimentSummary: cards.shortlistCompanySentimentSummary,
+      shortlistCardSource: cards.shortlistCardSource,
+      shortlistJobLocation: cards.shortlistJobLocation,
+      shortlistJobLocationType: cards.shortlistJobLocationType,
+      shortlistJobType: cards.shortlistJobType,
+      shortlistCompanyLocation: cards.shortlistCompanyLocation,
     });
 
   return result;
@@ -263,6 +302,19 @@ export const getByPublicId = (db: dbClient, cardPublicId: string) => {
       listId: true,
       dueDate: true,
       manualUpdatedOnly: true,
+      shortlistCompanyName: true,
+      shortlistJobPostingUrl: true,
+      shortlistSalaryMin: true,
+      shortlistSalaryMax: true,
+      shortlistSalaryCurrency: true,
+      shortlistSalaryData: true,
+      shortlistCompanyRatingAggregated: true,
+      shortlistCompanySentimentSummary: true,
+      shortlistCardSource: true,
+      shortlistJobLocation: true,
+      shortlistJobLocationType: true,
+      shortlistJobType: true,
+      shortlistCompanyLocation: true,
     },
     with: {
       list: {
@@ -493,6 +545,19 @@ export const getWithListAndMembersByPublicId = async (
       description: true,
       dueDate: true,
       manualUpdatedOnly: true,
+      shortlistCompanyName: true,
+      shortlistJobPostingUrl: true,
+      shortlistSalaryMin: true,
+      shortlistSalaryMax: true,
+      shortlistSalaryCurrency: true,
+      shortlistSalaryData: true,
+      shortlistCompanyRatingAggregated: true,
+      shortlistCompanySentimentSummary: true,
+      shortlistCardSource: true,
+      shortlistJobLocation: true,
+      shortlistJobLocationType: true,
+      shortlistJobType: true,
+      shortlistCompanyLocation: true,
       createdBy: true,
       cardNumber: true,
       index: true,
@@ -885,6 +950,19 @@ export const reorder = async (
         description: true,
         dueDate: true,
         manualUpdatedOnly: true,
+        shortlistCompanyName: true,
+        shortlistJobPostingUrl: true,
+        shortlistSalaryMin: true,
+        shortlistSalaryMax: true,
+        shortlistSalaryCurrency: true,
+        shortlistSalaryData: true,
+        shortlistCompanyRatingAggregated: true,
+        shortlistCompanySentimentSummary: true,
+        shortlistCardSource: true,
+        shortlistJobLocation: true,
+        shortlistJobLocationType: true,
+        shortlistJobType: true,
+        shortlistCompanyLocation: true,
       },
       where: eq(cards.id, card.id),
     });
