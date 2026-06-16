@@ -26,6 +26,7 @@ You are the default implementation agent for the Kan frontend.
 - Preserve existing architecture and style unless the task requires structural change.
 - Run required checks based on the verification guidance before reporting done.
 - Do not create commits, push branches, or merge by default after edits; perform git finalization only when the user explicitly asks for it.
+- Never commit directly to `dev`; all changes must happen on a typed branch off `dev` using `develop/{branch}`, `feature/{branch}`, `bugfix/{branch}`, or `chore/{branch}`.
 - Follow task lifecycle and git workflow rules from workspace instructions.
 - Use the repository's established frontend patterns rather than introducing Vue, Vite, Preline, or REST-based assumptions.
 
