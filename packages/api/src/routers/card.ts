@@ -853,6 +853,7 @@ export const cardRouter = createTRPCRouter({
         index: z.number().optional(),
         listPublicId: z.string().min(12).optional(),
         dueDate: z.date().nullable().optional(),
+        manualUpdatedOnly: z.boolean().optional(),
       }),
     )
     .output(cardUpdateResponseSchema)
@@ -929,18 +930,27 @@ export const cardRouter = createTRPCRouter({
             description: string | null;
             publicId: string;
             dueDate: Date | null;
+            manualUpdatedOnly: boolean;
           }
         | undefined;
 
       const previousDueDate = existingCard.dueDate;
 
-      if (input.title || input.description || input.dueDate !== undefined) {
+      if (
+        input.title ||
+        input.description ||
+        input.dueDate !== undefined ||
+        input.manualUpdatedOnly !== undefined
+      ) {
         result = await cardRepo.update(
           ctx.db,
           {
             ...(input.title && { title: input.title }),
             ...(input.description && { description: input.description }),
             ...(input.dueDate !== undefined && { dueDate: input.dueDate }),
+            ...(input.manualUpdatedOnly !== undefined && {
+              manualUpdatedOnly: input.manualUpdatedOnly,
+            }),
           },
           { cardPublicId: input.cardPublicId },
         );
@@ -1047,6 +1057,15 @@ export const cardRouter = createTRPCRouter({
         previousDueDate?.getTime() !== input.dueDate?.getTime()
       ) {
         webhookChanges.dueDate = { from: previousDueDate, to: input.dueDate };
+      }
+      if (
+        input.manualUpdatedOnly !== undefined &&
+        existingCard.manualUpdatedOnly !== input.manualUpdatedOnly
+      ) {
+        webhookChanges.manualUpdatedOnly = {
+          from: existingCard.manualUpdatedOnly,
+          to: input.manualUpdatedOnly,
+        };
       }
       const movedToNewList = Boolean(newListId && existingCard.listId !== newListId);
       const currentWebhookListPublicId = movedToNewList

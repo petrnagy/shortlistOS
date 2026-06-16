@@ -14,6 +14,7 @@ interface DueDateSelectorProps {
   dueDate: Date | null | undefined;
   isLoading?: boolean;
   disabled?: boolean;
+  popoverPosition?: "left" | "right";
 }
 
 export function DueDateSelector({
@@ -21,6 +22,7 @@ export function DueDateSelector({
   dueDate,
   isLoading = false,
   disabled = false,
+  popoverPosition = "left",
 }: DueDateSelectorProps) {
   const { showPopup } = usePopup();
   const { workspace } = useWorkspace();
@@ -126,7 +128,7 @@ export function DueDateSelector({
         <>
           <div className="fixed inset-0 z-10" onClick={handleBackdropClick} />
           <div
-            className="absolute -left-8 top-full z-20 mt-2 rounded-md border border-light-200 bg-light-50 shadow-lg dark:border-dark-200 dark:bg-dark-100"
+            className={`absolute top-full z-20 mt-2 rounded-md border border-light-200 bg-light-50 shadow-lg dark:border-dark-200 dark:bg-dark-100 ${popoverPosition === "right" ? "right-0" : "-left-8"}`}
             onClick={(e) => {
               e.stopPropagation();
             }}

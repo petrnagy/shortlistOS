@@ -253,6 +253,13 @@
       "when": 1781389727851,
       "tag": "20260613222847_AddShortlistModel",
       "breakpoints": true
+    },
+    {
+      "idx": 36,
+      "version": "7",
+      "when": 1781524800000,
+      "tag": "20260615120000_AddManualUpdatedOnlyToCard",
+      "breakpoints": true
     }
   ]
 }

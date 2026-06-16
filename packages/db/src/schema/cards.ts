@@ -2,6 +2,7 @@ import { relations } from "drizzle-orm";
 import {
   bigint,
   bigserial,
+  boolean,
   index,
   integer,
   json,
@@ -84,6 +85,7 @@ export const cards = pgTable(
       () => imports.id,
     ),
     dueDate: timestamp("dueDate"),
+    manualUpdatedOnly: boolean("manualUpdatedOnly").notNull().default(false),
     shortlistCompanyName: varchar("shortlist_companyName", { length: 255 }),
     shortlistJobPostingUrl: text("shortlist_jobPostingUrl"),
     shortlistSalaryMin: integer("shortlist_salaryMin"),

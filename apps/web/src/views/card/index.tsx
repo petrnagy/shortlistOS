@@ -3,7 +3,16 @@ import { useRouter } from "next/router";
 import { t } from "@lingui/core/macro";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { HiXMark } from "react-icons/hi2";
+import {
+  HiOutlineBars3BottomLeft,
+  HiOutlineBriefcase,
+  HiOutlineCalendarDays,
+  HiOutlineDocumentText,
+  HiOutlineLockClosed,
+  HiOutlineShieldCheck,
+  HiOutlineTag,
+  HiXMark,
+} from "react-icons/hi2";
 import { IoChevronForwardSharp } from "react-icons/io5";
 
 import { authClient } from "@kan/auth/client";
@@ -16,6 +25,7 @@ import LabelIcon from "~/components/LabelIcon";
 import Modal from "~/components/modal";
 import { NewWorkspaceForm } from "~/components/NewWorkspaceForm";
 import { PageHead } from "~/components/PageHead";
+import Toggle from "~/components/Toggle";
 import { EditYouTubeModal } from "~/components/YouTubeEmbed/EditYouTubeModal";
 import { usePermissions } from "~/hooks/usePermissions";
 import { useModal } from "~/providers/modal";
@@ -50,7 +60,9 @@ interface FormValues {
 export function CardRightPanel({ isTemplate }: { isTemplate?: boolean }) {
   const router = useRouter();
   const { canEditCard } = usePermissions();
+  const { showPopup } = usePopup();
   const { data: session } = authClient.useSession();
+  const utils = api.useUtils();
   const cardId = Array.isArray(router.query.cardId)
     ? router.query.cardId[0]
     : router.query.cardId;
@@ -68,6 +80,57 @@ export function CardRightPanel({ isTemplate }: { isTemplate?: boolean }) {
   const workspaceMembers = board?.workspace.members;
   const selectedLabels = card?.labels;
   const selectedMembers = card?.members;
+
+  const updateManualUpdatedOnly = api.card.update.useMutation({
+    onMutate: async (update) => {
+      await utils.card.byId.cancel();
+
+      const previousCard = utils.card.byId.getData({
+        cardPublicId: cardId ?? "",
+      });
+
+      if (cardId) {
+        utils.card.byId.setData({ cardPublicId: cardId }, (oldCard) => {
+          if (!oldCard || update.manualUpdatedOnly === undefined) return oldCard;
+
+          return {
+            ...oldCard,
+            manualUpdatedOnly: update.manualUpdatedOnly,
+          };
+        });
+      }
+
+      return { previousCard };
+    },
+    onError: (_error, _update, context) => {
+      if (cardId) {
+        utils.card.byId.setData(
+          { cardPublicId: cardId },
+          context?.previousCard,
+        );
+      }
+      showPopup({
+        header: t`Unable to update card`,
+        message: t`Please try again later, or contact customer support.`,
+        icon: "error",
+      });
+    },
+    onSettled: async () => {
+      if (cardId) {
+        await invalidateCard(utils, cardId);
+      }
+      await utils.board.byId.invalidate();
+    },
+  });
+
+  const handleManualUpdatedOnlyToggle = () => {
+    if (!cardId || !card || !canEdit) return;
+
+    updateManualUpdatedOnly.mutate({
+      cardPublicId: cardId,
+      manualUpdatedOnly: !card.manualUpdatedOnly,
+    });
+  };
 
   const formattedLabels =
     labels?.map((label) => {
@@ -120,45 +183,140 @@ export function CardRightPanel({ isTemplate }: { isTemplate?: boolean }) {
     }) ?? [];
 
   return (
-    <div className="h-full w-[360px] border-l-[1px] border-light-300 bg-light-50 p-8 text-light-900 dark:border-dark-300 dark:bg-dark-50 dark:text-dark-900">
-      <div className="mb-4 flex w-full flex-row pt-[18px]">
-        <p className="my-2 mb-2 w-[100px] text-sm font-medium">{t`List`}</p>
-        <ListSelector
-          cardPublicId={cardId ?? ""}
-          lists={formattedLists}
-          isLoading={!card}
-          disabled={!canEdit}
-        />
+    <div className="h-full w-[360px] overflow-y-auto border-l-[1px] border-light-300 bg-light-50 p-6 text-light-900 dark:border-dark-300 dark:bg-dark-50 dark:text-dark-900">
+      <div className="mb-10 flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="flex h-8 w-8 items-center justify-center rounded-[5px] border border-light-300 bg-light-100 text-light-900 dark:border-dark-300 dark:bg-dark-100 dark:text-dark-900">
+            <HiOutlineBriefcase className="h-5 w-5" />
+          </div>
+          <h2 className="text-base font-semibold text-light-1000 dark:text-dark-1000">
+            {t`Opportunity details`}
+          </h2>
+        </div>
+        {board?.publicId && (
+          <Link
+            href={`/${isTemplate ? "templates" : "boards"}/${board.publicId}`}
+            className="flex h-8 w-8 items-center justify-center rounded-[5px] text-light-700 hover:bg-light-200 dark:text-dark-800 dark:hover:bg-dark-200"
+            aria-label={t`Close`}
+          >
+            <HiXMark className="h-6 w-6" />
+          </Link>
+        )}
       </div>
-      <div className="mb-4 flex w-full flex-row">
-        <p className="my-2 mb-2 w-[100px] text-sm font-medium">{t`Labels`}</p>
+
+      <section>
+        <div className="mb-4 flex items-center gap-3">
+          <HiOutlineDocumentText className="h-5 w-5 text-light-900 dark:text-dark-900" />
+          <h3 className="text-sm font-semibold text-light-1000 dark:text-dark-1000">
+            {t`Details`}
+          </h3>
+        </div>
+        <div className="space-y-3">
+          <div className="grid min-h-[56px] grid-cols-[36px_1fr_1.3fr] items-center rounded-[8px] border border-light-300 px-4 dark:border-dark-300">
+            <HiOutlineBars3BottomLeft className="h-4 w-4 text-light-900 dark:text-dark-900" />
+            <span className="text-sm font-medium text-light-700 dark:text-dark-800">
+              {t`List`}
+            </span>
+            <ListSelector
+              cardPublicId={cardId ?? ""}
+              lists={formattedLists}
+              isLoading={!card}
+              disabled={!canEdit}
+              menuPosition="right"
+            />
+          </div>
+          <div className="grid min-h-[56px] grid-cols-[36px_1fr_1.3fr] items-center rounded-[8px] border border-light-300 px-4 dark:border-dark-300">
+            <HiOutlineCalendarDays className="h-4 w-4 text-light-900 dark:text-dark-900" />
+            <span className="text-sm font-medium text-light-700 dark:text-dark-800">
+              {t`Interview`}
+            </span>
+            <DueDateSelector
+              cardPublicId={cardId ?? ""}
+              dueDate={card?.dueDate}
+              isLoading={!card}
+              disabled={!canEdit}
+              popoverPosition="right"
+            />
+          </div>
+        </div>
+      </section>
+
+      <div className="my-8 border-t border-light-300 dark:border-dark-300" />
+
+      <section>
+        <div className="mb-4 flex items-center gap-3">
+          <HiOutlineTag className="h-5 w-5 text-light-900 dark:text-dark-900" />
+          <h3 className="text-sm font-semibold text-light-1000 dark:text-dark-1000">
+            {t`Labels`}
+          </h3>
+        </div>
         <LabelSelector
           cardPublicId={cardId ?? ""}
           labels={formattedLabels}
           isLoading={!card}
           disabled={!canEdit}
         />
-      </div>
+      </section>
+
       {!isTemplate && isSuperAdminHelper() && (
-        <div className="mb-4 flex w-full flex-row">
-          <p className="my-2 mb-2 w-[100px] text-sm font-medium">{t`Members`}</p>
-          <MemberSelector
-            cardPublicId={cardId ?? ""}
-            members={formattedMembers}
-            isLoading={!card}
-            disabled={!canEdit}
-          />
-        </div>
+        <>
+          <div className="my-8 border-t border-light-300 dark:border-dark-300" />
+          <section>
+            <h3 className="mb-4 text-sm font-semibold text-light-1000 dark:text-dark-1000">
+              {t`Members`}
+            </h3>
+            <MemberSelector
+              cardPublicId={cardId ?? ""}
+              members={formattedMembers}
+              isLoading={!card}
+              disabled={!canEdit}
+            />
+          </section>
+        </>
       )}
-      <div className="mb-4 flex w-full flex-row">
-        <p className="my-2 mb-2 w-[100px] text-sm font-medium">{t`Interview`}</p>
-        <DueDateSelector
-          cardPublicId={cardId ?? ""}
-          dueDate={card?.dueDate}
-          isLoading={!card}
-          disabled={!canEdit}
-        />
-      </div>
+
+      <div className="my-8 border-t border-light-300 dark:border-dark-300" />
+
+      <section>
+        <div className="mb-4 flex items-center gap-3">
+          <HiOutlineShieldCheck className="h-5 w-5 text-light-900 dark:text-dark-900" />
+          <h3 className="text-sm font-semibold text-light-1000 dark:text-dark-1000">
+            {t`Automation`}
+          </h3>
+        </div>
+        <div className="rounded-[8px] border border-light-300 p-5 dark:border-dark-300">
+          <div className="mb-3 flex items-start justify-between gap-4">
+            <div>
+              <p className="text-sm font-semibold text-light-1000 dark:text-dark-1000">
+                {t`Auto-updates`}
+              </p>
+              <span className="mt-3 inline-flex items-center gap-1.5 rounded-[5px] bg-light-200 px-2 py-1 text-sm font-medium text-light-900 dark:bg-dark-200 dark:text-dark-900">
+                {card?.manualUpdatedOnly ? (
+                  <>
+                    <HiOutlineLockClosed className="h-4 w-4" />
+                    {t`Manual`}
+                  </>
+                ) : (
+                  <>
+                    <HiOutlineShieldCheck className="h-4 w-4" />
+                    {t`Automatic`}
+                  </>
+                )}
+              </span>
+            </div>
+            <Toggle
+              label={t`Auto-updates`}
+              isChecked={!(card?.manualUpdatedOnly ?? false)}
+              onChange={handleManualUpdatedOnlyToggle}
+              disabled={!card || !canEdit || updateManualUpdatedOnly.isPending}
+              showLabel={false}
+            />
+          </div>
+          <p className="text-sm leading-6 text-light-700 dark:text-dark-800">
+            {t`When off, AI and background automations cannot edit this card.`}
+          </p>
+        </div>
+      </section>
     </div>
   );
 }
@@ -345,15 +503,10 @@ export default function CardPage({ isTemplate }: { isTemplate?: boolean }) {
                 >
                   {board?.name}
                 </Link>
-                {card.cardNumber != null &&
-                  card.list.board.workspace.cardPrefix && (
-                    <>
-                      <IoChevronForwardSharp className="h-[10px] w-[10px] text-light-900 dark:text-dark-900" />
-                      <span className="whitespace-nowrap text-sm font-bold leading-[1.5rem] text-light-700 dark:text-dark-800">
-                        {card.list.board.workspace.cardPrefix}-{card.cardNumber}
-                      </span>
-                    </>
-                  )}
+                <IoChevronForwardSharp className="h-[10px] w-[10px] flex-shrink-0 text-light-900 dark:text-dark-900" />
+                <span className="truncate text-sm font-bold leading-[1.5rem] text-light-700 dark:text-dark-800">
+                  {card.title}
+                </span>
               </div>
               <div className="flex items-center gap-2">
                 <Dropdown
