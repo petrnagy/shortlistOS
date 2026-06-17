@@ -55,6 +55,45 @@ const getUserDisplayName = (
   return t`Member`;
 };
 
+const formatEnumValue = (value: string) =>
+  value
+    .toLowerCase()
+    .split("_")
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(" ");
+
+const formatCardSourceValue = (value: string) => {
+  switch (value) {
+    case "MANUAL":
+      return t`Manually`;
+    case "EMAIL_INBOX":
+      return t`Magic Inbox`;
+    case "WEB_CLIPPER":
+    case "WEBCLIPPER":
+      return t`Web Clipper`;
+    case "LINK":
+      return t`Link`;
+    default:
+      return formatEnumValue(value);
+  }
+};
+
+const formatShortlistActivityValue = (
+  fieldName: string,
+  value: string | null | undefined,
+) => {
+  if (!value) return t`empty`;
+  if (fieldName === "Created") return formatCardSourceValue(value);
+  if (
+    fieldName === "Contract" ||
+    fieldName === "Location type" ||
+    fieldName === "Salary interval"
+  ) {
+    return formatEnumValue(value);
+  }
+  return value;
+};
+
 const getActivityText = ({
   type,
   toTitle,
@@ -65,6 +104,8 @@ const getActivityText = ({
   isSelf,
   label,
   fromTitle,
+  fromDescription,
+  toDescription,
   toDueDate,
   dateLocale,
   mergedLabels,
@@ -79,6 +120,8 @@ const getActivityText = ({
   isSelf: boolean;
   label: string | null;
   fromTitle?: string | null;
+  fromDescription?: string | null;
+  toDescription?: string | null;
   fromDueDate?: Date | null;
   toDueDate?: Date | null;
   dateLocale: DateFnsLocale;
@@ -142,6 +185,7 @@ const getActivityText = ({
     "card.updated.dueDate.added": t`set the due date`,
     "card.updated.dueDate.updated": t`updated the due date`,
     "card.updated.dueDate.removed": t`removed the due date`,
+    "card.updated.shortlistField": t`updated a custom field`,
   } as const;
 
   if (!(type in ACTIVITY_TYPE_MAP)) return null;
@@ -151,6 +195,21 @@ const getActivityText = ({
     return (
       <Trans>
         updated the title to <TextHighlight>{truncate(toTitle)}</TextHighlight>
+      </Trans>
+    );
+  }
+
+  if (type === "card.updated.shortlistField" && fromTitle) {
+    return (
+      <Trans>
+        updated <TextHighlight>{truncate(fromTitle)}</TextHighlight> from{" "}
+        <TextHighlight>
+          {truncate(formatShortlistActivityValue(fromTitle, fromDescription))}
+        </TextHighlight>{" "}
+        to{" "}
+        <TextHighlight>
+          {truncate(formatShortlistActivityValue(fromTitle, toDescription))}
+        </TextHighlight>
       </Trans>
     );
   }
@@ -349,6 +408,7 @@ const ACTIVITY_ICON_MAP: Partial<Record<ActivityType, React.ReactNode | null>> =
     "card.updated.dueDate.added": <HiOutlineClock />,
     "card.updated.dueDate.updated": <HiOutlineClock />,
     "card.updated.dueDate.removed": <HiOutlineClock />,
+    "card.updated.shortlistField": <HiOutlinePencil />,
   } as const;
 
 const getActivityIcon = (
@@ -367,21 +427,26 @@ const getActivityIcon = (
 };
 
 const ACTIVITIES_PAGE_SIZE = 20;
+const NOTES_PAGE_SIZE = 10;
 
 const ActivityList = ({
   cardPublicId,
   isLoading: cardIsLoading,
   isAdmin,
   isViewOnly,
+  mode = "history",
 }: {
   cardPublicId: string;
   isLoading: boolean;
   isAdmin?: boolean;
   isViewOnly?: boolean;
+  mode?: "history" | "notes";
 }) => {
   const { dateLocale } = useLocalisation();
   const { data: sessionData } = authClient.useSession();
   const utils = api.useUtils();
+  const commentsOnly = mode === "notes";
+  const pageSize = commentsOnly ? NOTES_PAGE_SIZE : ACTIVITIES_PAGE_SIZE;
   const [allActivities, setAllActivities] = useState<
     GetCardActivitiesOutput["activities"]
   >([]);
@@ -390,6 +455,7 @@ const ActivityList = ({
 
   const isFullyExpandedRef = useRef(false);
   const lastDataUpdatedAtRef = useRef<number | null>(null);
+  const previousQueryScopeRef = useRef(`${cardPublicId}:${mode}`);
 
   const {
     data: firstPageData,
@@ -398,12 +464,24 @@ const ActivityList = ({
   } = api.card.getActivities.useQuery(
     {
       cardPublicId,
-      limit: ACTIVITIES_PAGE_SIZE,
+      limit: pageSize,
+      commentsOnly,
     },
     {
       enabled: !!cardPublicId && cardPublicId.length >= 12,
     },
   );
+
+  useEffect(() => {
+    const queryScope = `${cardPublicId}:${mode}`;
+    if (previousQueryScopeRef.current === queryScope) return;
+
+    previousQueryScopeRef.current = queryScope;
+    isFullyExpandedRef.current = false;
+    lastDataUpdatedAtRef.current = null;
+    setHasMore(true);
+    setIsLoadingMore(false);
+  }, [cardPublicId, mode]);
 
   useEffect(() => {
     if (firstPageData && dataUpdatedAt !== lastDataUpdatedAtRef.current) {
@@ -425,8 +503,9 @@ const ActivityList = ({
             const nextCursor = new Date(lastActivity.createdAt).toISOString();
             const nextPage = await utils.card.getActivities.fetch({
               cardPublicId,
-              limit: ACTIVITIES_PAGE_SIZE,
+              limit: pageSize,
               cursor: nextCursor,
+              commentsOnly,
             });
 
             const existingIds = new Set(
@@ -453,7 +532,14 @@ const ActivityList = ({
         }
       }
     }
-  }, [firstPageData, dataUpdatedAt, cardPublicId, utils.card.getActivities]);
+  }, [
+    firstPageData,
+    dataUpdatedAt,
+    cardPublicId,
+    utils.card.getActivities,
+    pageSize,
+    commentsOnly,
+  ]);
 
   const handleLoadMore = async () => {
     if (isLoadingMore || !hasMore || allActivities.length === 0) return;
@@ -466,8 +552,9 @@ const ActivityList = ({
       const nextCursor = new Date(lastActivity.createdAt).toISOString();
       const nextPage = await utils.card.getActivities.fetch({
         cardPublicId,
-        limit: ACTIVITIES_PAGE_SIZE,
+        limit: pageSize,
         cursor: nextCursor,
+        commentsOnly,
       });
 
       const existingIds = new Set(allActivities.map((a) => a.publicId));
@@ -502,13 +589,15 @@ const ActivityList = ({
           isSelf: activity.member?.user?.id === sessionData?.user.id,
           label: activity.label?.name ?? null,
           fromTitle: activity.fromTitle ?? null,
+          fromDescription: activity.fromDescription ?? null,
+          toDescription: activity.toDescription ?? null,
           fromDueDate: activity.fromDueDate ?? null,
           toDueDate: activity.toDueDate ?? null,
           dateLocale: dateLocale,
           mergedLabels: (activity as ActivityWithMergedLabels).mergedLabels,
           attachmentName:
-            (activity as ActivityWithMergedLabels).attachment?.originalFilename ??
-            null,
+            (activity as ActivityWithMergedLabels).attachment
+              ?.originalFilename ?? null,
         });
 
         if (activity.type === "card.updated.comment.added")
@@ -541,7 +630,9 @@ const ActivityList = ({
                 size="sm"
                 name={activity.user?.name ?? ""}
                 email={activity.user?.email ?? ""}
-                imageUrl={getAvatarUrl(activity.user?.image ?? null) || undefined}
+                imageUrl={
+                  getAvatarUrl(activity.user?.image ?? null) || undefined
+                }
                 icon={getActivityIcon(
                   activity.type,
                   activity.fromList?.index,
@@ -576,7 +667,11 @@ const ActivityList = ({
             disabled={isFetching}
             className="text-sm font-medium text-light-900 hover:text-light-1000 disabled:opacity-50 dark:text-dark-800 dark:hover:text-dark-1000"
           >
-            {isFetching ? t`Loading...` : t`Load more activities`}
+            {isFetching
+              ? t`Loading...`
+              : commentsOnly
+                ? t`Load more notes`
+                : t`Load older updates`}
           </button>
         </div>
       )}

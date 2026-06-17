@@ -27,6 +27,11 @@ import {
   sendWebhooksForWorkspace,
 } from "../utils/webhook";
 
+const normalizeActivityValue = (value: unknown) => {
+  if (value === null || value === undefined || value === "") return undefined;
+  return String(value);
+};
+
 export const cardRouter = createTRPCRouter({
   create: protectedProcedure
     .meta({
@@ -751,6 +756,7 @@ export const cardRouter = createTRPCRouter({
         cardPublicId: z.string().min(12),
         limit: z.number().min(1).max(100).optional().default(10),
         cursor: z.string().datetime().optional(), // ISO datetime string
+        commentsOnly: z.boolean().optional().default(false),
       }),
     )
     .output(
@@ -791,6 +797,7 @@ export const cardRouter = createTRPCRouter({
         {
           limit: input.limit,
           cursor,
+          commentsOnly: input.commentsOnly,
         },
       );
 
@@ -826,7 +833,9 @@ export const cardRouter = createTRPCRouter({
         }),
       );
 
-      const mergedActivities = mergeActivities(activitiesWithAvatarUrls);
+      const mergedActivities = input.commentsOnly
+        ? activitiesWithAvatarUrls
+        : mergeActivities(activitiesWithAvatarUrls);
 
       return {
         activities: mergedActivities,
@@ -854,6 +863,40 @@ export const cardRouter = createTRPCRouter({
         listPublicId: z.string().min(12).optional(),
         dueDate: z.date().nullable().optional(),
         manualUpdatedOnly: z.boolean().optional(),
+        shortlistCompanyName: z.string().max(255).nullable().optional(),
+        shortlistJobPostingUrl: z.string().url().nullable().optional(),
+        shortlistSalaryMin: z.number().int().nonnegative().nullable().optional(),
+        shortlistSalaryMax: z.number().int().nonnegative().nullable().optional(),
+        shortlistSalaryCurrency: z.string().max(10).nullable().optional(),
+        shortlistSalaryInterval: z
+          .enum(["PER_MONTH", "PER_YEAR", "PER_WEEK", "PER_HOUR"])
+          .optional(),
+        shortlistCompanyRatingAggregated: z
+          .number()
+          .min(0)
+          .max(5)
+          .nullable()
+          .optional(),
+        shortlistCompanySentimentSummary: z.string().nullable().optional(),
+        shortlistCardSource: z
+          .enum(["MANUAL", "EMAIL_INBOX", "WEB_CLIPPER", "LINK"])
+          .optional(),
+        shortlistJobLocation: z.string().max(255).nullable().optional(),
+        shortlistJobLocationType: z
+          .enum(["onsite", "hybrid", "remote"])
+          .nullable()
+          .optional(),
+        shortlistJobType: z
+          .enum([
+            "FULL_TIME",
+            "PART_TIME",
+            "CONTRACT",
+            "INTERNSHIP",
+            "TEMPORARY",
+            "FREELANCE",
+          ])
+          .optional(),
+        shortlistCompanyLocation: z.string().max(255).nullable().optional(),
       }),
     )
     .output(cardUpdateResponseSchema)
@@ -931,16 +974,45 @@ export const cardRouter = createTRPCRouter({
             publicId: string;
             dueDate: Date | null;
             manualUpdatedOnly: boolean;
+            shortlistCompanyName: string | null;
+            shortlistJobPostingUrl: string | null;
+            shortlistSalaryMin: number | null;
+            shortlistSalaryMax: number | null;
+            shortlistSalaryCurrency: string | null;
+            shortlistSalaryInterval: string;
+            shortlistSalaryData: unknown;
+            shortlistCompanyRatingAggregated: string | null;
+            shortlistCompanySentimentSummary: string | null;
+            shortlistCardSource: string;
+            shortlistJobLocation: string | null;
+            shortlistJobLocationType: string | null;
+            shortlistJobType: string;
+            shortlistCompanyLocation: string | null;
           }
         | undefined;
 
       const previousDueDate = existingCard.dueDate;
+      const hasShortlistFieldUpdate =
+        input.shortlistCompanyName !== undefined ||
+        input.shortlistJobPostingUrl !== undefined ||
+        input.shortlistSalaryMin !== undefined ||
+        input.shortlistSalaryMax !== undefined ||
+        input.shortlistSalaryCurrency !== undefined ||
+        input.shortlistSalaryInterval !== undefined ||
+        input.shortlistCompanyRatingAggregated !== undefined ||
+        input.shortlistCompanySentimentSummary !== undefined ||
+        input.shortlistCardSource !== undefined ||
+        input.shortlistJobLocation !== undefined ||
+        input.shortlistJobLocationType !== undefined ||
+        input.shortlistJobType !== undefined ||
+        input.shortlistCompanyLocation !== undefined;
 
       if (
         input.title ||
         input.description ||
         input.dueDate !== undefined ||
-        input.manualUpdatedOnly !== undefined
+        input.manualUpdatedOnly !== undefined ||
+        hasShortlistFieldUpdate
       ) {
         result = await cardRepo.update(
           ctx.db,
@@ -950,6 +1022,49 @@ export const cardRouter = createTRPCRouter({
             ...(input.dueDate !== undefined && { dueDate: input.dueDate }),
             ...(input.manualUpdatedOnly !== undefined && {
               manualUpdatedOnly: input.manualUpdatedOnly,
+            }),
+            ...(input.shortlistCompanyName !== undefined && {
+              shortlistCompanyName: input.shortlistCompanyName,
+            }),
+            ...(input.shortlistJobPostingUrl !== undefined && {
+              shortlistJobPostingUrl: input.shortlistJobPostingUrl,
+            }),
+            ...(input.shortlistSalaryMin !== undefined && {
+              shortlistSalaryMin: input.shortlistSalaryMin,
+            }),
+            ...(input.shortlistSalaryMax !== undefined && {
+              shortlistSalaryMax: input.shortlistSalaryMax,
+            }),
+            ...(input.shortlistSalaryCurrency !== undefined && {
+              shortlistSalaryCurrency: input.shortlistSalaryCurrency,
+            }),
+            ...(input.shortlistSalaryInterval !== undefined && {
+              shortlistSalaryInterval: input.shortlistSalaryInterval,
+            }),
+            ...(input.shortlistCompanyRatingAggregated !== undefined && {
+              shortlistCompanyRatingAggregated:
+                input.shortlistCompanyRatingAggregated === null
+                  ? null
+                  : String(input.shortlistCompanyRatingAggregated),
+            }),
+            ...(input.shortlistCompanySentimentSummary !== undefined && {
+              shortlistCompanySentimentSummary:
+                input.shortlistCompanySentimentSummary,
+            }),
+            ...(input.shortlistCardSource !== undefined && {
+              shortlistCardSource: input.shortlistCardSource,
+            }),
+            ...(input.shortlistJobLocation !== undefined && {
+              shortlistJobLocation: input.shortlistJobLocation,
+            }),
+            ...(input.shortlistJobLocationType !== undefined && {
+              shortlistJobLocationType: input.shortlistJobLocationType,
+            }),
+            ...(input.shortlistJobType !== undefined && {
+              shortlistJobType: input.shortlistJobType,
+            }),
+            ...(input.shortlistCompanyLocation !== undefined && {
+              shortlistCompanyLocation: input.shortlistCompanyLocation,
             }),
           },
           { cardPublicId: input.cardPublicId },
@@ -1035,6 +1150,130 @@ export const cardRouter = createTRPCRouter({
           fromListId: existingCard.listId,
           toListId: newListId,
         });
+      }
+
+      const pushShortlistActivity = (
+        fieldName: string,
+        fromValue: unknown,
+        toValue: unknown,
+      ) => {
+        const normalizedFromValue = normalizeActivityValue(fromValue);
+        const normalizedToValue = normalizeActivityValue(toValue);
+
+        if (normalizedFromValue === normalizedToValue) return;
+
+        activities.push({
+          type: "card.updated.shortlistField" as const,
+          cardId: result.id,
+          createdBy: userId,
+          fromTitle: fieldName,
+          fromDescription: normalizedFromValue,
+          toDescription: normalizedToValue,
+        });
+      };
+
+      if (input.shortlistCompanyName !== undefined) {
+        pushShortlistActivity(
+          "Company name",
+          existingCard.shortlistCompanyName,
+          input.shortlistCompanyName,
+        );
+      }
+
+      if (input.shortlistJobPostingUrl !== undefined) {
+        pushShortlistActivity(
+          "Job URL",
+          existingCard.shortlistJobPostingUrl,
+          input.shortlistJobPostingUrl,
+        );
+      }
+
+      if (input.shortlistSalaryMin !== undefined) {
+        pushShortlistActivity(
+          "Salary minimum",
+          existingCard.shortlistSalaryMin,
+          input.shortlistSalaryMin,
+        );
+      }
+
+      if (input.shortlistSalaryMax !== undefined) {
+        pushShortlistActivity(
+          "Salary maximum",
+          existingCard.shortlistSalaryMax,
+          input.shortlistSalaryMax,
+        );
+      }
+
+      if (input.shortlistSalaryCurrency !== undefined) {
+        pushShortlistActivity(
+          "Salary currency",
+          existingCard.shortlistSalaryCurrency,
+          input.shortlistSalaryCurrency,
+        );
+      }
+
+      if (input.shortlistSalaryInterval !== undefined) {
+        pushShortlistActivity(
+          "Salary interval",
+          existingCard.shortlistSalaryInterval,
+          input.shortlistSalaryInterval,
+        );
+      }
+
+      if (input.shortlistCompanyRatingAggregated !== undefined) {
+        pushShortlistActivity(
+          "Company rating",
+          existingCard.shortlistCompanyRatingAggregated,
+          input.shortlistCompanyRatingAggregated,
+        );
+      }
+
+      if (input.shortlistCompanySentimentSummary !== undefined) {
+        pushShortlistActivity(
+          "Company sentiment",
+          existingCard.shortlistCompanySentimentSummary,
+          input.shortlistCompanySentimentSummary,
+        );
+      }
+
+      if (input.shortlistCardSource !== undefined) {
+        pushShortlistActivity(
+          "Created",
+          existingCard.shortlistCardSource,
+          input.shortlistCardSource,
+        );
+      }
+
+      if (input.shortlistJobLocation !== undefined) {
+        pushShortlistActivity(
+          "Job location",
+          existingCard.shortlistJobLocation,
+          input.shortlistJobLocation,
+        );
+      }
+
+      if (input.shortlistJobLocationType !== undefined) {
+        pushShortlistActivity(
+          "Location type",
+          existingCard.shortlistJobLocationType,
+          input.shortlistJobLocationType,
+        );
+      }
+
+      if (input.shortlistJobType !== undefined) {
+        pushShortlistActivity(
+          "Contract",
+          existingCard.shortlistJobType,
+          input.shortlistJobType,
+        );
+      }
+
+      if (input.shortlistCompanyLocation !== undefined) {
+        pushShortlistActivity(
+          "Company HQ",
+          existingCard.shortlistCompanyLocation,
+          input.shortlistCompanyLocation,
+        );
       }
 
       if (activities.length > 0) {
@@ -1291,13 +1530,30 @@ export const cardRouter = createTRPCRouter({
         });
 
       const newCard = await cardRepo.create(ctx.db, {
-        title: input.title ?? sourceCard.title,
+        title: `Copy of ${input.title ?? sourceCard.title}`,
         description: sourceCard.description ?? "",
         createdBy: userId,
         listId: targetList.id,
         workspaceId: targetList.workspaceId,
         position: "end",
         dueDate: sourceCard.dueDate ?? null,
+        shortlistCompanyName: sourceCard.shortlistCompanyName,
+        shortlistJobPostingUrl: sourceCard.shortlistJobPostingUrl,
+        shortlistSalaryMin: sourceCard.shortlistSalaryMin,
+        shortlistSalaryMax: sourceCard.shortlistSalaryMax,
+        shortlistSalaryCurrency: sourceCard.shortlistSalaryCurrency,
+        shortlistSalaryInterval: sourceCard.shortlistSalaryInterval,
+        shortlistSalaryData: sourceCard.shortlistSalaryData,
+        shortlistCompanyRatingAggregated:
+          sourceCard.shortlistCompanyRatingAggregated,
+        shortlistCompanySentimentBlob: sourceCard.shortlistCompanySentimentBlob,
+        shortlistCompanySentimentSummary:
+          sourceCard.shortlistCompanySentimentSummary,
+        shortlistCardSource: sourceCard.shortlistCardSource,
+        shortlistJobLocation: sourceCard.shortlistJobLocation,
+        shortlistJobLocationType: sourceCard.shortlistJobLocationType,
+        shortlistJobType: sourceCard.shortlistJobType,
+        shortlistCompanyLocation: sourceCard.shortlistCompanyLocation,
       });
 
       if (input.index !== undefined && input.index >= 0) {

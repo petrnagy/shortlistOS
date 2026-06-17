@@ -54,13 +54,13 @@ export function mergeActivities(activities: Activity[]): Activity[] {
       if (!next) break;
 
       const timeDiff =
-        new Date(next.createdAt).getTime() -
-        new Date(current.createdAt).getTime();
+        new Date(current.createdAt).getTime() -
+        new Date(next.createdAt).getTime();
 
       if (
         next.type === current.type &&
         next.user?.id === current.user?.id &&
-        timeDiff >= 0 && // next is newer or same time
+        timeDiff >= 0 && // next is older or same time in newest-first order
         timeDiff <= MERGE_TIME_WINDOW_MS
       ) {
         group.push(next);
@@ -71,8 +71,8 @@ export function mergeActivities(activities: Activity[]): Activity[] {
     }
 
     if (group.length > 1) {
-      const oldest = group[0];
-      const latest = group[group.length - 1];
+      const latest = group[0];
+      const oldest = group[group.length - 1];
 
       if (oldest && latest) {
         if (isListMergeable) {
@@ -81,15 +81,15 @@ export function mergeActivities(activities: Activity[]): Activity[] {
             .filter((name): name is string => !!name);
 
           merged.push({
-            ...oldest,
-            createdAt: oldest.createdAt,
+            ...latest,
+            createdAt: latest.createdAt,
             mergeCount: group.length,
             mergedLabels: labelNames,
           });
         } else {
           merged.push({
-            ...oldest,
-            createdAt: oldest.createdAt,
+            ...latest,
+            createdAt: latest.createdAt,
             toDescription: latest.toDescription,
             fromDescription: oldest.fromDescription,
             mergeCount: group.length,

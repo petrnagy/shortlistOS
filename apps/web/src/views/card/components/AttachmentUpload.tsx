@@ -1,10 +1,9 @@
 import { t } from "@lingui/core/macro";
 import { useRef, useState } from "react";
 import { HiOutlinePaperClip } from "react-icons/hi";
-import { HiCheckBadge } from "react-icons/hi2";
+import { HiPlus } from "react-icons/hi2";
 import { twMerge } from "tailwind-merge";
 
-import Button from "~/components/Button";
 import { useModal } from "~/providers/modal";
 import { usePopup } from "~/providers/popup";
 import { env } from "next-runtime-env";
@@ -118,28 +117,31 @@ export function AttachmentUpload({ cardPublicId }: { cardPublicId: string }) {
         )}
       >
         <div className="flex items-center justify-between p-2">
-          <Button
+          <button
             type="button"
-            variant="ghost"
-            iconLeft={
-              <HiCheckBadge className="h-4 w-4 text-light-950 dark:text-dark-950" />
-            }
-            iconOnly
-            size="sm"
+            className="flex items-center gap-1 rounded-md text-xs font-medium text-light-900 hover:bg-light-300 dark:text-dark-900 dark:hover:bg-dark-200"
             onClick={() => openModal("ADD_CHECKLIST")}
-          />
-          <Button
+          >
+            <span className="flex h-8 w-8 items-center justify-center">
+              <HiPlus className="h-4 w-4 text-light-950 dark:text-dark-950" />
+            </span>
+            <span className="pr-2 text-xs font-medium text-light-900 dark:text-dark-900">
+              {t`New checklist`}
+            </span>
+          </button>
+          <button
             type="button"
-            variant="ghost"
-            iconLeft={
-              <HiOutlinePaperClip className="h-4 w-4 text-light-950 dark:text-dark-950" />
-            }
-            isLoading={uploading}
-            disabled={uploading}
-            iconOnly
-            size="sm"
+            className="flex items-center gap-1 rounded-md text-xs font-medium text-light-900 hover:bg-light-300 disabled:cursor-not-allowed disabled:opacity-60 dark:text-dark-900 dark:hover:bg-dark-200"
             onClick={() => inputRef.current?.click()}
-          />
+            disabled={uploading}
+          >
+            <span className="pl-2 text-xs font-medium text-light-900 dark:text-dark-900">
+              {t`Upload attachment`}
+            </span>
+            <span className="flex h-8 w-8 items-center justify-center">
+              <HiOutlinePaperClip className="h-4 w-4 text-light-950 dark:text-dark-950" />
+            </span>
+          </button>
         </div>
       </div>
     </div>

@@ -10,7 +10,6 @@ import {
   pgEnum,
   pgTable,
   primaryKey,
-  smallint,
   text,
   timestamp,
   uuid,
@@ -53,6 +52,7 @@ export const activityTypes = [
   "card.updated.dueDate.added",
   "card.updated.dueDate.updated",
   "card.updated.dueDate.removed",
+  "card.updated.shortlistField",
   "card.archived",
 ] as const;
 
@@ -93,13 +93,12 @@ export const cards = pgTable(
     shortlistSalaryCurrency: varchar("shortlist_salaryCurrency", {
       length: 10,
     }),
-    shortlistSalaryPercentileUs: smallint("shortlist_salaryPercentileUS"),
-    shortlistSalaryPercentileEu: smallint("shortlist_salaryPercentileEU"),
-    shortlistSalaryPercentileApac: smallint("shortlist_salaryPercentileAPAC"),
-    shortlistSalaryPercentileUk: smallint("shortlist_salaryPercentileUK"),
-    shortlistSalaryPercentileGlobal: smallint(
-      "shortlist_salaryPercentileGlobal",
-    ),
+    shortlistSalaryInterval: varchar("shortlist_salaryInterval", {
+      length: 20,
+    })
+      .notNull()
+      .default("PER_MONTH"),
+    shortlistSalaryData: json("shortlist_salaryData"),
     shortlistCompanyRatingAggregated: numeric(
       "shortlist_companyRatingAggregated",
       {
@@ -118,6 +117,9 @@ export const cards = pgTable(
     shortlistJobLocationType: varchar("shortlist_jobLocationType", {
       length: 20,
     }),
+    shortlistJobType: varchar("shortlist_jobType", { length: 20 })
+      .notNull()
+      .default("FULL_TIME"),
     shortlistCompanyLocation: varchar("shortlist_companyLocation", {
       length: 255,
     }),

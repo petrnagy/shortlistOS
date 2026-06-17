@@ -260,6 +260,34 @@
       "when": 1781524800000,
       "tag": "20260615120000_AddManualUpdatedOnlyToCard",
       "breakpoints": true
+    },
+    {
+      "idx": 37,
+      "version": "7",
+      "when": 1781611200000,
+      "tag": "20260616120000_ReplaceSalaryPercentilesWithSalaryData",
+      "breakpoints": true
+    },
+    {
+      "idx": 38,
+      "version": "7",
+      "when": 1781613000000,
+      "tag": "20260616123000_AddShortlistJobTypeToCard",
+      "breakpoints": true
+    },
+    {
+      "idx": 39,
+      "version": "7",
+      "when": 1781614800000,
+      "tag": "20260616130000_AddShortlistFieldActivityType",
+      "breakpoints": true
+    },
+    {
+      "idx": 40,
+      "version": "7",
+      "when": 1781615700000,
+      "tag": "20260616131500_AddShortlistSalaryIntervalToCard",
+      "breakpoints": true
     }
   ]
 }

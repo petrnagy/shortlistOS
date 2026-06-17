@@ -1,8 +1,6 @@
 import { t } from "@lingui/core/macro";
 import {
   HiEllipsisHorizontal,
-  HiHashtag,
-  HiLink,
   HiOutlineCheckCircle,
   HiOutlineDocumentDuplicate,
   HiOutlineTrash,
@@ -18,18 +16,12 @@ import { api } from "~/utils/api";
 
 export default function CardDropdown({
   cardPublicId,
-  isTemplate,
-  boardPublicId,
   cardCreatedBy,
-  ticketNumber,
   listPublicId,
   cardIndex,
 }: {
   cardPublicId: string;
-  isTemplate?: boolean;
-  boardPublicId?: string;
   cardCreatedBy?: string | null;
-  ticketNumber?: string | null;
   listPublicId?: string;
   cardIndex?: number;
 }) {
@@ -43,14 +35,14 @@ export default function CardDropdown({
   const duplicateCard = api.card.duplicate.useMutation({
     onSuccess: () => {
       showPopup({
-        header: t`Card duplicated`,
+        header: t`Opportunity duplicated`,
         icon: "success",
-        message: t`Card duplicated successfully.`,
+        message: t`Opportunity duplicated successfully.`,
       });
     },
     onError: () => {
       showPopup({
-        header: t`Unable to duplicate card`,
+        header: t`Unable to duplicate opportunity`,
         icon: "error",
         message: t`Please try again.`,
       });
@@ -60,63 +52,7 @@ export default function CardDropdown({
     },
   });
 
-  const handleCopyCardLink = async () => {
-    const path =
-      isTemplate && boardPublicId
-        ? `/templates/${boardPublicId}/cards/${cardPublicId}`
-        : `/cards/${cardPublicId}`;
-    const url = `${window.location.origin}${path}`;
-    try {
-      await navigator.clipboard.writeText(url);
-      showPopup({
-        header: t`Link copied`,
-        icon: "success",
-        message: t`Card URL copied to clipboard`,
-      });
-    } catch (error) {
-      console.error(error);
-      showPopup({
-        header: t`Unable to copy link`,
-        icon: "error",
-        message: t`Please try again.`,
-      });
-    }
-  };
-
-  const handleCopyTicketId = async () => {
-    if (!ticketNumber) return;
-    try {
-      await navigator.clipboard.writeText(ticketNumber);
-      showPopup({
-        header: t`ID copied`,
-        icon: "success",
-        message: t`Ticket ID copied to clipboard`,
-      });
-    } catch (error) {
-      console.error(error);
-      showPopup({
-        header: t`Unable to copy ID`,
-        icon: "error",
-        message: t`Please try again.`,
-      });
-    }
-  };
-
   const items = [
-    {
-      label: t`Copy card link`,
-      action: handleCopyCardLink,
-      icon: <HiLink className="h-[16px] w-[16px] text-dark-900" />,
-    },
-    ...(ticketNumber
-      ? [
-          {
-            label: t`Copy ticket ID`,
-            action: handleCopyTicketId,
-            icon: <HiHashtag className="h-[16px] w-[16px] text-dark-900" />,
-          },
-        ]
-      : []),
     ...(canEditCard
       ? [
           {
@@ -127,7 +63,7 @@ export default function CardDropdown({
             ),
           },
           {
-            label: t`Duplicate card`,
+            label: t`Duplicate opportunity`,
             action: () => {
               if (!listPublicId || cardIndex === undefined) return;
               duplicateCard.mutate({
@@ -149,7 +85,7 @@ export default function CardDropdown({
     ...(canDeleteCard || isCreator
       ? [
           {
-            label: t`Delete card`,
+            label: t`Delete opportunity`,
             action: () => openModal("DELETE_CARD"),
             icon: (
               <HiOutlineTrash className="h-[16px] w-[16px] text-dark-900" />
