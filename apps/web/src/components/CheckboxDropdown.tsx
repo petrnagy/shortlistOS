@@ -60,33 +60,27 @@ export default function CheckboxDropdown({
       {items.length > 0 ? (
         items.map((item) => (
           <Menu.Item key={item.key}>
-              <div
-                className="group flex items-center rounded-[5px] p-2 hover:bg-light-200 dark:hover:bg-dark-300"
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleSelect(groupKey, { key: item.key, value: item.value });
-                }}
-              >
+            <div
+              className="group flex items-center rounded-[5px] p-2 hover:bg-light-200 dark:hover:bg-dark-300"
+              onClick={(e) => {
+                e.preventDefault();
+                handleSelect(groupKey, { key: item.key, value: item.value });
+              }}
+            >
               <input
                 id={item.key}
                 name={item.key}
                 type="checkbox"
-                className="h-[14px] w-[14px] rounded bg-transparent"
-                onClick={(event) => event.stopPropagation()}
-                onChange={() =>
-                  handleSelect(groupKey, { key: item.key, value: item.value })
-                }
+                className="pointer-events-none h-[14px] w-[14px] rounded bg-transparent"
+                readOnly
                 checked={item.selected}
               />
               {item.leftIcon && (
                 <span className="ml-3 flex items-center">{item.leftIcon}</span>
               )}
-              <label
-                htmlFor={item.key}
-                className="ml-3 text-[12px] text-dark-900"
-              >
+              <span className="ml-3 text-[12px] text-dark-900">
                 {item.value}
-              </label>
+              </span>
               {handleEdit && (
                 <button
                   type="button"

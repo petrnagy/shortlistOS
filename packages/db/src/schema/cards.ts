@@ -52,6 +52,7 @@ export const activityTypes = [
   "card.updated.dueDate.added",
   "card.updated.dueDate.updated",
   "card.updated.dueDate.removed",
+  "card.updated.shortlistField",
   "card.archived",
 ] as const;
 
@@ -92,6 +93,11 @@ export const cards = pgTable(
     shortlistSalaryCurrency: varchar("shortlist_salaryCurrency", {
       length: 10,
     }),
+    shortlistSalaryInterval: varchar("shortlist_salaryInterval", {
+      length: 20,
+    })
+      .notNull()
+      .default("PER_MONTH"),
     shortlistSalaryData: json("shortlist_salaryData"),
     shortlistCompanyRatingAggregated: numeric(
       "shortlist_companyRatingAggregated",

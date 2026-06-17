@@ -1,4 +1,4 @@
-import { and, asc, count, eq, gt, inArray, isNull, or } from "drizzle-orm";
+import { and, count, desc, eq, inArray, isNull, lt, or } from "drizzle-orm";
 
 import type { dbClient } from "@kan/db/client";
 import type { ActivityType } from "@kan/db/schema";
@@ -107,10 +107,12 @@ export const getPaginatedActivities = async (
   options?: {
     limit?: number;
     cursor?: Date; // createdAt cursor for pagination
+    commentsOnly?: boolean;
   },
 ) => {
   const limit = options?.limit ?? 20;
   const cursor = options?.cursor;
+  const commentsOnly = options?.commentsOnly ?? false;
 
   const validComments = await db
     .select({ id: comments.id })
@@ -135,7 +137,10 @@ export const getPaginatedActivities = async (
     },
     where: and(
       eq(cardActivities.cardId, cardId),
-      cursor ? gt(cardActivities.createdAt, cursor) : undefined,
+      cursor ? lt(cardActivities.createdAt, cursor) : undefined,
+      commentsOnly
+        ? eq(cardActivities.type, "card.updated.comment.added")
+        : undefined,
       or(
         isNull(cardActivities.commentId),
         inArray(cardActivities.commentId, validCommentIds),
@@ -202,7 +207,7 @@ export const getPaginatedActivities = async (
         },
       },
     },
-    orderBy: asc(cardActivities.createdAt), // required for merging and pagination
+    orderBy: desc(cardActivities.createdAt),
     limit: limit + 1, // fetch one extra to check if there are more
   });
 

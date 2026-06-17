@@ -274,6 +274,20 @@
       "when": 1781613000000,
       "tag": "20260616123000_AddShortlistJobTypeToCard",
       "breakpoints": true
+    },
+    {
+      "idx": 39,
+      "version": "7",
+      "when": 1781614800000,
+      "tag": "20260616130000_AddShortlistFieldActivityType",
+      "breakpoints": true
+    },
+    {
+      "idx": 40,
+      "version": "7",
+      "when": 1781615700000,
+      "tag": "20260616131500_AddShortlistSalaryIntervalToCard",
+      "breakpoints": true
     }
   ]
 }

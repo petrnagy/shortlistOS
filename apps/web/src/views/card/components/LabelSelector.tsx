@@ -14,6 +14,7 @@ interface LabelSelectorProps {
     key: string;
     value: string;
     selected: boolean;
+    colourCode: string | null;
     leftIcon: React.ReactNode;
   }[];
   isLoading: boolean;
@@ -43,8 +44,8 @@ export default function LabelSelector({
           (label) => label.publicId === update.labelPublicId,
         );
 
-        const labelToAdd = oldCard.labels.find(
-          (label) => label.publicId === update.labelPublicId,
+        const labelToAdd = labels.find(
+          (label) => label.key === update.labelPublicId,
         );
 
         const updatedLabels = hasLabel
@@ -55,8 +56,8 @@ export default function LabelSelector({
               ...oldCard.labels,
               {
                 publicId: update.labelPublicId,
-                name: labelToAdd?.name ?? "",
-                colourCode: labelToAdd?.colourCode ?? "",
+                name: labelToAdd?.value ?? "",
+                colourCode: labelToAdd?.colourCode ?? null,
               },
             ];
 
@@ -109,9 +110,14 @@ export default function LabelSelector({
                   key={label.key}
                   value={label.value}
                   iconLeft={label.leftIcon}
+                  size="sm"
                 />
               ))}
-              <Badge value={t`Add label`} iconLeft={<HiMiniPlus size={14} />} />
+              <Badge
+                value={t`Add label`}
+                iconLeft={<HiMiniPlus size={14} />}
+                size="sm"
+              />
             </div>
           ) : (
             <div className={`flex h-full w-full items-center rounded-[5px] border-[1px] border-light-50 pl-2 text-left text-sm text-neutral-900 dark:border-dark-50 dark:text-dark-1000 ${disabled ? "cursor-not-allowed opacity-60" : "hover:border-light-300 hover:bg-light-200 dark:hover:border-dark-200 dark:hover:bg-dark-100"}`}>

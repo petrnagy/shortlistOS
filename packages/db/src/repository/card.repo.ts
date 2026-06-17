@@ -210,6 +210,7 @@ export const update = async (
     shortlistSalaryMin?: number | null;
     shortlistSalaryMax?: number | null;
     shortlistSalaryCurrency?: string | null;
+    shortlistSalaryInterval?: string;
     shortlistCompanyRatingAggregated?: string | null;
     shortlistCompanySentimentSummary?: string | null;
     shortlistCardSource?: string;
@@ -234,6 +235,7 @@ export const update = async (
       shortlistSalaryMin: cardInput.shortlistSalaryMin,
       shortlistSalaryMax: cardInput.shortlistSalaryMax,
       shortlistSalaryCurrency: cardInput.shortlistSalaryCurrency,
+      shortlistSalaryInterval: cardInput.shortlistSalaryInterval,
       shortlistCompanyRatingAggregated:
         cardInput.shortlistCompanyRatingAggregated,
       shortlistCompanySentimentSummary:
@@ -258,6 +260,7 @@ export const update = async (
       shortlistSalaryMin: cards.shortlistSalaryMin,
       shortlistSalaryMax: cards.shortlistSalaryMax,
       shortlistSalaryCurrency: cards.shortlistSalaryCurrency,
+      shortlistSalaryInterval: cards.shortlistSalaryInterval,
       shortlistSalaryData: cards.shortlistSalaryData,
       shortlistCompanyRatingAggregated: cards.shortlistCompanyRatingAggregated,
       shortlistCompanySentimentSummary: cards.shortlistCompanySentimentSummary,
@@ -307,6 +310,7 @@ export const getByPublicId = (db: dbClient, cardPublicId: string) => {
       shortlistSalaryMin: true,
       shortlistSalaryMax: true,
       shortlistSalaryCurrency: true,
+      shortlistSalaryInterval: true,
       shortlistSalaryData: true,
       shortlistCompanyRatingAggregated: true,
       shortlistCompanySentimentSummary: true,
@@ -550,6 +554,7 @@ export const getWithListAndMembersByPublicId = async (
       shortlistSalaryMin: true,
       shortlistSalaryMax: true,
       shortlistSalaryCurrency: true,
+      shortlistSalaryInterval: true,
       shortlistSalaryData: true,
       shortlistCompanyRatingAggregated: true,
       shortlistCompanySentimentSummary: true,
@@ -955,6 +960,7 @@ export const reorder = async (
         shortlistSalaryMin: true,
         shortlistSalaryMax: true,
         shortlistSalaryCurrency: true,
+        shortlistSalaryInterval: true,
         shortlistSalaryData: true,
         shortlistCompanyRatingAggregated: true,
         shortlistCompanySentimentSummary: true,

@@ -1,12 +1,12 @@
+import type { KeyboardEvent } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { t } from "@lingui/core/macro";
-import type { KeyboardEvent } from "react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import {
-  HiOutlineBars3BottomLeft,
   HiOutlineBanknotes,
+  HiOutlineBars3BottomLeft,
   HiOutlineBriefcase,
   HiOutlineBuildingOffice2,
   HiOutlineCalendarDays,
@@ -65,7 +65,12 @@ interface FormValues {
   description: string;
 }
 
-const CARD_SOURCE_OPTIONS = ["MANUAL", "EMAIL", "WEB_CLIPPER", "LINK"] as const;
+const CARD_SOURCE_OPTIONS = [
+  "MANUAL",
+  "EMAIL_INBOX",
+  "WEB_CLIPPER",
+  "LINK",
+] as const;
 const JOB_LOCATION_TYPE_OPTIONS = ["onsite", "hybrid", "remote"] as const;
 const JOB_TYPE_OPTIONS = [
   "FULL_TIME",
@@ -76,6 +81,12 @@ const JOB_TYPE_OPTIONS = [
   "FREELANCE",
 ] as const;
 const SALARY_REGIONS = ["EU", "US", "UK", "APAC", "Global"] as const;
+const SALARY_INTERVAL_OPTIONS = [
+  { value: "PER_YEAR", label: t`per year` },
+  { value: "PER_MONTH", label: t`per month` },
+  { value: "PER_WEEK", label: t`per week` },
+  { value: "PER_HOUR", label: t`per hour` },
+] as const;
 const CURRENCY_OPTIONS = [
   { code: "AED", symbol: "د.إ" },
   { code: "AFN", symbol: "؋" },
@@ -253,6 +264,7 @@ type CardSource = (typeof CARD_SOURCE_OPTIONS)[number];
 type JobLocationType = (typeof JOB_LOCATION_TYPE_OPTIONS)[number];
 type JobType = (typeof JOB_TYPE_OPTIONS)[number];
 type SalaryRegion = (typeof SALARY_REGIONS)[number];
+type SalaryInterval = (typeof SALARY_INTERVAL_OPTIONS)[number]["value"];
 
 interface SalaryRange {
   min: number | null;
@@ -260,18 +272,25 @@ interface SalaryRange {
   currency: string | null;
 }
 
-type ShortlistUpdateFields = {
+interface SalaryComparisonRow {
+  label: string;
+  range: SalaryRange;
+  displayRange: SalaryRange;
+}
+
+interface ShortlistUpdateFields {
   shortlistCompanyName?: string | null;
   shortlistJobPostingUrl?: string | null;
   shortlistSalaryMin?: number | null;
   shortlistSalaryMax?: number | null;
   shortlistSalaryCurrency?: string | null;
+  shortlistSalaryInterval?: SalaryInterval;
   shortlistCardSource?: CardSource;
   shortlistJobLocation?: string | null;
   shortlistJobLocationType?: JobLocationType | null;
   shortlistJobType?: JobType;
   shortlistCompanyLocation?: string | null;
-};
+}
 
 const emptyToNull = (value: string) => {
   const trimmed = value.trim();
@@ -288,6 +307,7 @@ const formatSource = (source: string) => {
   switch (source) {
     case "MANUAL":
       return t`Manually`;
+    case "EMAIL_INBOX":
     case "EMAIL":
       return t`Magic Inbox`;
     case "WEB_CLIPPER":
@@ -307,11 +327,15 @@ const formatEnumLabel = (value: string) =>
     .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
     .join(" ");
 
-const formatCurrencyAmount = (amount: number | null, currency: string | null) => {
+const formatCurrencyAmount = (
+  amount: number | null,
+  currency: string | null,
+) => {
   if (amount === null) return "";
 
-  const symbol = CURRENCY_OPTIONS.find((option) => option.code === currency)
-    ?.symbol;
+  const symbol = CURRENCY_OPTIONS.find(
+    (option) => option.code === currency,
+  )?.symbol;
   const compact =
     Math.abs(amount) >= 1000 ? `${Math.round(amount / 1000)}k` : `${amount}`;
 
@@ -325,6 +349,21 @@ const formatSalaryRange = (range: SalaryRange) => {
   }
 
   return formatCurrencyAmount(range.min ?? range.max, range.currency);
+};
+
+const getOfferComparisonRange = (offer: SalaryRange) => {
+  const value = offer.min ?? offer.max;
+  if (value === null) return null;
+
+  if (offer.min !== null && offer.max !== null && offer.min !== offer.max) {
+    return offer;
+  }
+
+  return {
+    min: Math.round(value * 0.9),
+    max: Math.round(value * 1.1),
+    currency: offer.currency,
+  };
 };
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
@@ -371,10 +410,24 @@ function SalaryComparisonBars({
   salaryData: unknown;
 }) {
   const comparisonRanges = getSalaryComparisonRanges(salaryData);
-  const allRanges = [
-    offer.min !== null || offer.max !== null ? offer : null,
-    ...comparisonRanges.map((item) => item.range),
-  ].filter((range): range is SalaryRange => Boolean(range));
+  const offerComparisonRange = getOfferComparisonRange(offer);
+  const rows: SalaryComparisonRow[] = [
+    ...(offerComparisonRange
+      ? [
+          {
+            label: t`Offer`,
+            range: offerComparisonRange,
+            displayRange: offer,
+          },
+        ]
+      : []),
+    ...comparisonRanges.map((item) => ({
+      label: item.region,
+      range: item.range,
+      displayRange: item.range,
+    })),
+  ];
+  const allRanges = rows.map((item) => item.range);
 
   const values = allRanges.flatMap((range) =>
     [range.min, range.max].filter((value): value is number => value !== null),
@@ -383,7 +436,7 @@ function SalaryComparisonBars({
   const maxValue = values.length ? Math.max(...values) : 0;
   const span = Math.max(1, maxValue - minValue);
 
-  if (comparisonRanges.length === 0) {
+  if (rows.length === 0) {
     return (
       <p className="text-sm text-light-700 dark:text-dark-800">
         {t`No salary comparison data yet.`}
@@ -396,7 +449,7 @@ function SalaryComparisonBars({
       <p className="text-xs font-medium text-light-900 dark:text-dark-900">
         {t`Compared with`}
       </p>
-      {comparisonRanges.map(({ region, range }) => {
+      {rows.map(({ label, range, displayRange }) => {
         const rangeMin = range.min ?? range.max ?? minValue;
         const rangeMax = range.max ?? range.min ?? rangeMin;
         const left = ((rangeMin - minValue) / span) * 100;
@@ -404,11 +457,11 @@ function SalaryComparisonBars({
 
         return (
           <div
-            key={region}
+            key={label}
             className="grid grid-cols-[44px_1fr] items-center gap-2"
           >
             <span className="text-xs font-medium text-light-900 dark:text-dark-900">
-              {region}
+              {label}
             </span>
             <div>
               <div className="relative h-3 rounded-full bg-light-200 dark:bg-dark-200">
@@ -420,8 +473,8 @@ function SalaryComparisonBars({
                   }}
                 />
               </div>
-              <p className="mt-1 text-xs text-light-700 dark:text-dark-800">
-                {formatSalaryRange(range)}
+              <p className="mt-1 text-xs text-light-900 dark:text-dark-900">
+                {formatSalaryRange(displayRange)}
               </p>
             </div>
           </div>
@@ -465,6 +518,7 @@ export function CardRightPanel({ isTemplate }: { isTemplate?: boolean }) {
   });
   const [salaryIsRange, setSalaryIsRange] = useState(true);
   const [isEditingJobUrl, setIsEditingJobUrl] = useState(false);
+  const [isEditingSalaryInterval, setIsEditingSalaryInterval] = useState(false);
 
   const updateManualUpdatedOnly = api.card.update.useMutation({
     onMutate: async (update) => {
@@ -476,7 +530,8 @@ export function CardRightPanel({ isTemplate }: { isTemplate?: boolean }) {
 
       if (cardId) {
         utils.card.byId.setData({ cardPublicId: cardId }, (oldCard) => {
-          if (!oldCard || update.manualUpdatedOnly === undefined) return oldCard;
+          if (!oldCard || update.manualUpdatedOnly === undefined)
+            return oldCard;
 
           return {
             ...oldCard,
@@ -587,11 +642,6 @@ export function CardRightPanel({ isTemplate }: { isTemplate?: boolean }) {
       jobLocation: card.shortlistJobLocation ?? "",
       companyLocation: card.shortlistCompanyLocation ?? "",
     });
-    setSalaryIsRange(
-      card.shortlistSalaryMin !== null &&
-        card.shortlistSalaryMax !== null &&
-        card.shortlistSalaryMin !== card.shortlistSalaryMax,
-    );
   }, [
     card?.publicId,
     card?.shortlistCompanyName,
@@ -613,6 +663,7 @@ export function CardRightPanel({ isTemplate }: { isTemplate?: boolean }) {
         key: label.publicId,
         value: label.name,
         selected: isSelected ?? false,
+        colourCode: label.colourCode,
         leftIcon: <LabelIcon colourCode={label.colourCode} />,
       };
     }) ?? [];
@@ -674,10 +725,19 @@ export function CardRightPanel({ isTemplate }: { isTemplate?: boolean }) {
     max: card?.shortlistSalaryMax ?? null,
     currency: card?.shortlistSalaryCurrency ?? null,
   };
+  const salaryIntervalLabel =
+    SALARY_INTERVAL_OPTIONS.find(
+      (option) => option.value === card?.shortlistSalaryInterval,
+    )?.label ?? t`per month`;
 
   const commitSalaryFields = (currency = shortlistDraft.salaryCurrency) => {
-    const min = integerOrNull(shortlistDraft.salaryMin);
-    const max = salaryIsRange ? integerOrNull(shortlistDraft.salaryMax) : min;
+    const singleSalary = integerOrNull(shortlistDraft.salaryMax);
+    const min = salaryIsRange
+      ? integerOrNull(shortlistDraft.salaryMin)
+      : singleSalary;
+    const max = salaryIsRange
+      ? integerOrNull(shortlistDraft.salaryMax)
+      : singleSalary;
 
     commitShortlistFields({
       shortlistSalaryMin: min,
@@ -750,7 +810,7 @@ export function CardRightPanel({ isTemplate }: { isTemplate?: boolean }) {
           </div>
           <div className={detailRowClass}>
             <HiOutlineCalendarDays className={detailIconClass} />
-            <span className={detailLabelClass}>{t`Next interview`}</span>
+            <span className={detailLabelClass}>{t`Interview`}</span>
             <DueDateSelector
               cardPublicId={cardId ?? ""}
               dueDate={card?.dueDate}
@@ -762,9 +822,26 @@ export function CardRightPanel({ isTemplate }: { isTemplate?: boolean }) {
           <div className={detailRowClass}>
             <HiOutlineDocumentText className={detailIconClass} />
             <span className={detailLabelClass}>{t`Created`}</span>
-            <span className="text-sm text-light-1000 dark:text-dark-1000">
-              {formatSource(card?.shortlistCardSource ?? "MANUAL")}
-            </span>
+            <select
+              value={
+                card?.shortlistCardSource === "EMAIL"
+                  ? "EMAIL_INBOX"
+                  : (card?.shortlistCardSource ?? "MANUAL")
+              }
+              onChange={(event) =>
+                commitShortlistFields({
+                  shortlistCardSource: event.target.value as CardSource,
+                })
+              }
+              disabled={!canEdit}
+              className={inputClass}
+            >
+              {CARD_SOURCE_OPTIONS.map((option) => (
+                <option key={option} value={option}>
+                  {formatSource(option)}
+                </option>
+              ))}
+            </select>
           </div>
         </div>
       </section>
@@ -781,7 +858,7 @@ export function CardRightPanel({ isTemplate }: { isTemplate?: boolean }) {
         <div className={detailGroupClass}>
           <div className={detailRowClass}>
             <HiOutlineBuildingOffice2 className={detailIconClass} />
-            <span className={detailLabelClass}>{t`Company name`}</span>
+            <span className={detailLabelClass}>{t`Company`}</span>
             <input
               type="text"
               value={shortlistDraft.companyName}
@@ -790,9 +867,7 @@ export function CardRightPanel({ isTemplate }: { isTemplate?: boolean }) {
               }
               onBlur={() =>
                 commitShortlistFields({
-                  shortlistCompanyName: emptyToNull(
-                    shortlistDraft.companyName,
-                  ),
+                  shortlistCompanyName: emptyToNull(shortlistDraft.companyName),
                 })
               }
               onKeyDown={(event) =>
@@ -895,9 +970,7 @@ export function CardRightPanel({ isTemplate }: { isTemplate?: boolean }) {
                 }
                 onBlur={(event) => commitJobUrl(event.currentTarget)}
                 onKeyDown={(event) =>
-                  commitOnEnter(event, () =>
-                    commitJobUrl(event.currentTarget),
-                  )
+                  commitOnEnter(event, () => commitJobUrl(event.currentTarget))
                 }
                 disabled={!canEdit}
                 className={inputClass}
@@ -921,7 +994,7 @@ export function CardRightPanel({ isTemplate }: { isTemplate?: boolean }) {
                   <button
                     type="button"
                     onClick={() => setIsEditingJobUrl(true)}
-                    className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-[5px] text-light-700 hover:bg-light-200 dark:text-dark-800 dark:hover:bg-dark-200"
+                    className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-[5px] text-light-900 hover:bg-light-200 dark:text-dark-900 dark:hover:bg-dark-200"
                     aria-label={t`Edit job URL`}
                   >
                     <HiOutlinePencilSquare className="h-4 w-4" />
@@ -980,9 +1053,6 @@ export function CardRightPanel({ isTemplate }: { isTemplate?: boolean }) {
                 {"★".repeat(Math.round(ratingValue ?? 0))}
                 {"☆".repeat(5 - Math.round(ratingValue ?? 0))}
               </div>
-              <p className="text-xs text-light-700 dark:text-dark-800">
-                {ratingValue !== null ? ratingValue.toFixed(1) : "0.0"} / 5.0
-              </p>
             </div>
           </div>
           <div className={detailTextRowClass}>
@@ -1009,34 +1079,35 @@ export function CardRightPanel({ isTemplate }: { isTemplate?: boolean }) {
         <div className="space-y-3 rounded-[8px] border border-light-300 p-4 dark:border-dark-300">
           <div className="flex items-start justify-between gap-3">
             <div>
-              <p className="text-xs font-medium text-light-900 dark:text-dark-900">
-                {t`${card?.shortlistCompanyName || "Company"}'s offer`}
-              </p>
-              <p className="mt-1 text-sm font-semibold text-light-1000 dark:text-dark-1000">
-                {formatSalaryRange(salaryOffer)}
+              <p className="text-sm font-medium text-light-900 dark:text-dark-900">
+                {t`Company offers`}
               </p>
             </div>
-            <label className="flex cursor-pointer items-center gap-2 whitespace-nowrap text-xs font-medium text-light-1000 hover:text-light-900 dark:text-dark-1000 dark:hover:text-dark-900">
-              <input
-                type="checkbox"
-                checked={salaryIsRange}
-                onChange={(event) => {
-                  const nextIsRange = event.target.checked;
-                  setSalaryIsRange(nextIsRange);
+            <Toggle
+              label={t`As range`}
+              isChecked={salaryIsRange}
+              onChange={() => {
+                const nextIsRange = !salaryIsRange;
+                setSalaryIsRange(nextIsRange);
 
-                  if (!nextIsRange) {
-                    const salaryValue = integerOrNull(shortlistDraft.salaryMin);
-                    commitShortlistFields({
-                      shortlistSalaryMin: salaryValue,
-                      shortlistSalaryMax: salaryValue,
-                    });
-                  }
-                }}
-                disabled={!canEdit}
-                className="h-4 w-4 cursor-pointer rounded border-light-500 bg-transparent disabled:cursor-not-allowed dark:border-dark-500"
-              />
-              {t`Enter as range`}
-            </label>
+                if (!nextIsRange) {
+                  const salaryValue =
+                    integerOrNull(shortlistDraft.salaryMax) ??
+                    integerOrNull(shortlistDraft.salaryMin);
+                  setShortlistDraft((current) => ({
+                    ...current,
+                    salaryMin: salaryValue !== null ? String(salaryValue) : "",
+                    salaryMax: salaryValue !== null ? String(salaryValue) : "",
+                  }));
+                  commitShortlistFields({
+                    shortlistSalaryMin: salaryValue,
+                    shortlistSalaryMax: salaryValue,
+                  });
+                }
+              }}
+              disabled={!canEdit}
+              labelPosition="before"
+            />
           </div>
           <div
             className={`grid gap-2 ${salaryIsRange ? "grid-cols-3" : "grid-cols-2"}`}
@@ -1045,8 +1116,23 @@ export function CardRightPanel({ isTemplate }: { isTemplate?: boolean }) {
               type="number"
               min={0}
               placeholder={salaryIsRange ? t`Min` : t`Salary`}
-              value={shortlistDraft.salaryMin}
-              onChange={(event) => updateDraft("salaryMin", event.target.value)}
+              value={
+                salaryIsRange
+                  ? shortlistDraft.salaryMin
+                  : shortlistDraft.salaryMax
+              }
+              onChange={(event) => {
+                if (salaryIsRange) {
+                  updateDraft("salaryMin", event.target.value);
+                  return;
+                }
+
+                setShortlistDraft((current) => ({
+                  ...current,
+                  salaryMin: event.target.value,
+                  salaryMax: event.target.value,
+                }));
+              }}
               onBlur={() => commitSalaryFields()}
               onKeyDown={(event) => commitOnEnter(event, commitSalaryFields)}
               disabled={!canEdit}
@@ -1084,6 +1170,39 @@ export function CardRightPanel({ isTemplate }: { isTemplate?: boolean }) {
                 </option>
               ))}
             </select>
+          </div>
+          <div className="!-mt-1">
+            {isEditingSalaryInterval ? (
+              <select
+                value={card?.shortlistSalaryInterval ?? "PER_MONTH"}
+                onChange={(event) => {
+                  commitShortlistFields({
+                    shortlistSalaryInterval: event.target
+                      .value as SalaryInterval,
+                  });
+                  setIsEditingSalaryInterval(false);
+                }}
+                onBlur={() => setIsEditingSalaryInterval(false)}
+                disabled={!canEdit}
+                className={inputClass}
+                autoFocus
+              >
+                {SALARY_INTERVAL_OPTIONS.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            ) : (
+              <button
+                type="button"
+                onClick={() => canEdit && setIsEditingSalaryInterval(true)}
+                disabled={!canEdit}
+                className="text-xs font-medium text-light-900 underline underline-offset-2 hover:text-light-1000 disabled:cursor-not-allowed disabled:opacity-60 dark:text-dark-900 dark:hover:text-dark-1000"
+              >
+                {salaryIntervalLabel}
+              </button>
+            )}
           </div>
           <div className="border-t border-light-300 pt-4 dark:border-dark-300">
             <SalaryComparisonBars
@@ -1196,6 +1315,7 @@ export default function CardPage({ isTemplate }: { isTemplate?: boolean }) {
   const [activeChecklistForm, setActiveChecklistForm] = useState<string | null>(
     null,
   );
+  const [showOnlyComments, setShowOnlyComments] = useState(false);
 
   const cardId = Array.isArray(router.query.cardId)
     ? router.query.cardId[0]
@@ -1483,24 +1603,35 @@ export default function CardPage({ isTemplate }: { isTemplate?: boolean }) {
                     </>
                   )}
                   <div className="border-t-[1px] border-light-300 pt-12 dark:border-dark-300">
-                    <h2 className="text-md pb-4 font-medium text-light-1000 dark:text-dark-1000">
-                      {t`Activity`}
-                    </h2>
-                    <div>
-                      <ActivityList
-                        cardPublicId={cardId}
-                        isLoading={!card}
-                        isAdmin={workspace.role === "admin"}
-                      />
-                    </div>
                     {!isTemplate && (
-                      <div className="mt-6">
+                      <div className="mb-6">
                         <NewCommentForm
                           cardPublicId={cardId}
                           workspaceMembers={editorWorkspaceMembers}
                         />
                       </div>
                     )}
+                    <div className="flex items-center justify-between pb-4">
+                      <h2 className="text-md font-medium text-light-1000 dark:text-dark-1000">
+                        {t`History`}
+                      </h2>
+                      <Toggle
+                        label={t`Show only comments`}
+                        isChecked={showOnlyComments}
+                        onChange={() =>
+                          setShowOnlyComments((current) => !current)
+                        }
+                        labelPosition="before"
+                      />
+                    </div>
+                    <div>
+                      <ActivityList
+                        cardPublicId={cardId}
+                        isLoading={!card}
+                        isAdmin={workspace.role === "admin"}
+                        mode={showOnlyComments ? "notes" : "history"}
+                      />
+                    </div>
                   </div>
                 </>
               )}
