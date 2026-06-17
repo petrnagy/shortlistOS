@@ -1530,13 +1530,30 @@ export const cardRouter = createTRPCRouter({
         });
 
       const newCard = await cardRepo.create(ctx.db, {
-        title: input.title ?? sourceCard.title,
+        title: `Copy of ${input.title ?? sourceCard.title}`,
         description: sourceCard.description ?? "",
         createdBy: userId,
         listId: targetList.id,
         workspaceId: targetList.workspaceId,
         position: "end",
         dueDate: sourceCard.dueDate ?? null,
+        shortlistCompanyName: sourceCard.shortlistCompanyName,
+        shortlistJobPostingUrl: sourceCard.shortlistJobPostingUrl,
+        shortlistSalaryMin: sourceCard.shortlistSalaryMin,
+        shortlistSalaryMax: sourceCard.shortlistSalaryMax,
+        shortlistSalaryCurrency: sourceCard.shortlistSalaryCurrency,
+        shortlistSalaryInterval: sourceCard.shortlistSalaryInterval,
+        shortlistSalaryData: sourceCard.shortlistSalaryData,
+        shortlistCompanyRatingAggregated:
+          sourceCard.shortlistCompanyRatingAggregated,
+        shortlistCompanySentimentBlob: sourceCard.shortlistCompanySentimentBlob,
+        shortlistCompanySentimentSummary:
+          sourceCard.shortlistCompanySentimentSummary,
+        shortlistCardSource: sourceCard.shortlistCardSource,
+        shortlistJobLocation: sourceCard.shortlistJobLocation,
+        shortlistJobLocationType: sourceCard.shortlistJobLocationType,
+        shortlistJobType: sourceCard.shortlistJobType,
+        shortlistCompanyLocation: sourceCard.shortlistCompanyLocation,
       });
 
       if (input.index !== undefined && input.index >= 0) {

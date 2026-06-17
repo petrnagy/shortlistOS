@@ -16,7 +16,13 @@ const Toggle = ({
   showLabel?: boolean;
   labelPosition?: "before" | "after";
 }) => (
-  <div className="flex items-center">
+  <div
+    className={twMerge(
+      "flex items-center",
+      disabled ? "cursor-not-allowed" : "cursor-pointer",
+    )}
+    onClick={disabled ? undefined : onChange}
+  >
     {showLabel && labelPosition === "before" && (
       <span className="mr-2 text-xs text-light-900 dark:text-dark-900">
         {label}
@@ -25,6 +31,7 @@ const Toggle = ({
     <Switch
       checked={isChecked}
       onChange={onChange}
+      onClick={(event) => event.stopPropagation()}
       disabled={disabled}
       className={twMerge(
         "relative inline-flex h-4 w-6 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-light-800 transition-colors duration-200 ease-in-out focus:outline-none dark:bg-dark-800",

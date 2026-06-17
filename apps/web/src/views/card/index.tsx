@@ -19,9 +19,11 @@ import {
   HiOutlineShieldCheck,
   HiOutlineStar,
   HiOutlineTag,
+  HiStar,
   HiXMark,
 } from "react-icons/hi2";
 import { IoChevronForwardSharp } from "react-icons/io5";
+import { LuTreePalm } from "react-icons/lu";
 
 import { authClient } from "@kan/auth/client";
 
@@ -308,7 +310,6 @@ const formatSource = (source: string) => {
     case "MANUAL":
       return t`Manually`;
     case "EMAIL_INBOX":
-    case "EMAIL":
       return t`Magic Inbox`;
     case "WEB_CLIPPER":
     case "WEBCLIPPER":
@@ -350,6 +351,9 @@ const formatSalaryRange = (range: SalaryRange) => {
 
   return formatCurrencyAmount(range.min ?? range.max, range.currency);
 };
+
+const formatDisplayUrl = (url: string) =>
+  url.replace(/^https?:\/\//i, "").replace(/^www\./i, "");
 
 const getOfferComparisonRange = (offer: SalaryRange) => {
   const value = offer.min ?? offer.max;
@@ -519,6 +523,7 @@ export function CardRightPanel({ isTemplate }: { isTemplate?: boolean }) {
   const [salaryIsRange, setSalaryIsRange] = useState(true);
   const [isEditingJobUrl, setIsEditingJobUrl] = useState(false);
   const [isEditingSalaryInterval, setIsEditingSalaryInterval] = useState(false);
+  const [isSalaryComparisonOpen, setIsSalaryComparisonOpen] = useState(false);
 
   const updateManualUpdatedOnly = api.card.update.useMutation({
     onMutate: async (update) => {
@@ -709,12 +714,12 @@ export function CardRightPanel({ isTemplate }: { isTemplate?: boolean }) {
   const detailGroupClass =
     "space-y-1 rounded-[8px] border border-light-300 p-3 dark:border-dark-300";
   const detailRowClass =
-    "grid min-h-[48px] grid-cols-[28px_92px_1fr] items-center gap-2";
+    "grid min-h-[48px] grid-cols-[22px_92px_1fr] items-center gap-x-1 gap-y-2";
   const detailTextRowClass =
-    "grid grid-cols-[28px_92px_1fr] items-start gap-2 py-2";
+    "grid grid-cols-[22px_92px_1fr] items-start gap-x-1 gap-y-2 py-2";
   const detailIconClass = "h-4 w-4 text-light-900 dark:text-dark-900";
   const detailLabelClass =
-    "text-sm font-semibold text-light-900 dark:text-dark-900";
+    "text-sm font-medium text-light-900 dark:text-dark-900";
   const ratingValue =
     card?.shortlistCompanyRatingAggregated !== null &&
     card?.shortlistCompanyRatingAggregated !== undefined
@@ -778,19 +783,10 @@ export function CardRightPanel({ isTemplate }: { isTemplate?: boolean }) {
             {t`Opportunity details`}
           </h2>
         </div>
-        {board?.publicId && (
-          <Link
-            href={`/${isTemplate ? "templates" : "boards"}/${board.publicId}`}
-            className="flex h-8 w-8 items-center justify-center rounded-[5px] text-light-700 hover:bg-light-200 dark:text-dark-800 dark:hover:bg-dark-200"
-            aria-label={t`Close`}
-          >
-            <HiXMark className="h-6 w-6" />
-          </Link>
-        )}
       </div>
 
       <section>
-        <div className="mb-4 flex items-center gap-3">
+        <div className="mb-4 flex items-center gap-2">
           <HiOutlineDocumentText className="h-5 w-5 text-light-900 dark:text-dark-900" />
           <h3 className="text-sm font-semibold text-light-1000 dark:text-dark-1000">
             {t`Details`}
@@ -823,11 +819,7 @@ export function CardRightPanel({ isTemplate }: { isTemplate?: boolean }) {
             <HiOutlineDocumentText className={detailIconClass} />
             <span className={detailLabelClass}>{t`Created`}</span>
             <select
-              value={
-                card?.shortlistCardSource === "EMAIL"
-                  ? "EMAIL_INBOX"
-                  : (card?.shortlistCardSource ?? "MANUAL")
-              }
+              value={card?.shortlistCardSource ?? "MANUAL"}
               onChange={(event) =>
                 commitShortlistFields({
                   shortlistCardSource: event.target.value as CardSource,
@@ -846,10 +838,8 @@ export function CardRightPanel({ isTemplate }: { isTemplate?: boolean }) {
         </div>
       </section>
 
-      <div className="my-8 border-t border-light-300 dark:border-dark-300" />
-
-      <section>
-        <div className="mb-4 flex items-center gap-3">
+      <section className="mt-8">
+        <div className="mb-4 flex items-center gap-2">
           <HiOutlineBriefcase className="h-5 w-5 text-light-900 dark:text-dark-900" />
           <h3 className="text-sm font-semibold text-light-1000 dark:text-dark-1000">
             {t`Role`}
@@ -904,7 +894,7 @@ export function CardRightPanel({ isTemplate }: { isTemplate?: boolean }) {
             </select>
           </div>
           <div className={detailRowClass}>
-            <HiOutlineMapPin className={detailIconClass} />
+            <LuTreePalm className={detailIconClass} />
             <span className={detailLabelClass}>{t`Location type`}</span>
             <select
               value={card?.shortlistJobLocationType ?? ""}
@@ -985,7 +975,7 @@ export function CardRightPanel({ isTemplate }: { isTemplate?: boolean }) {
                     rel="noreferrer"
                     className="truncate text-xs font-medium text-light-1000 underline underline-offset-2 dark:text-dark-1000"
                   >
-                    {card.shortlistJobPostingUrl}
+                    {formatDisplayUrl(card.shortlistJobPostingUrl)}
                   </a>
                 ) : (
                   <span aria-hidden="true" />
@@ -1006,13 +996,11 @@ export function CardRightPanel({ isTemplate }: { isTemplate?: boolean }) {
         </div>
       </section>
 
-      <div className="my-8 border-t border-light-300 dark:border-dark-300" />
-
-      <section>
-        <div className="mb-4 flex items-center gap-3">
+      <section className="mt-8">
+        <div className="mb-4 flex items-center gap-2">
           <HiOutlineBuildingOffice2 className="h-5 w-5 text-light-900 dark:text-dark-900" />
           <h3 className="text-sm font-semibold text-light-1000 dark:text-dark-1000">
-            {t`Company insight`}
+            {t`Company insights`}
           </h3>
         </div>
         <div className={detailGroupClass}>
@@ -1049,9 +1037,13 @@ export function CardRightPanel({ isTemplate }: { isTemplate?: boolean }) {
             <HiOutlineStar className={detailIconClass} />
             <span className={detailLabelClass}>{t`Rating`}</span>
             <div className="flex items-center gap-2">
-              <div className="text-sm leading-none text-yellow-500">
-                {"★".repeat(Math.round(ratingValue ?? 0))}
-                {"☆".repeat(5 - Math.round(ratingValue ?? 0))}
+              <div className="flex items-center gap-0.5 text-yellow-500">
+                {Array.from({ length: 5 }, (_, index) => {
+                  const isFilled = index < Math.round(ratingValue ?? 0);
+                  const StarIcon = isFilled ? HiStar : HiOutlineStar;
+
+                  return <StarIcon key={index} className="h-3.5 w-3.5" />;
+                })}
               </div>
             </div>
           </div>
@@ -1067,10 +1059,8 @@ export function CardRightPanel({ isTemplate }: { isTemplate?: boolean }) {
         </div>
       </section>
 
-      <div className="my-8 border-t border-light-300 dark:border-dark-300" />
-
-      <section>
-        <div className="mb-4 flex items-center gap-3">
+      <section className="mt-8">
+        <div className="mb-4 flex items-center gap-2">
           <HiOutlineBanknotes className="h-5 w-5 text-light-900 dark:text-dark-900" />
           <h3 className="text-sm font-semibold text-light-1000 dark:text-dark-1000">
             {t`Salary`}
@@ -1171,7 +1161,7 @@ export function CardRightPanel({ isTemplate }: { isTemplate?: boolean }) {
               ))}
             </select>
           </div>
-          <div className="!-mt-1">
+          <div className="!mt-0">
             {isEditingSalaryInterval ? (
               <select
                 value={card?.shortlistSalaryInterval ?? "PER_MONTH"}
@@ -1198,27 +1188,41 @@ export function CardRightPanel({ isTemplate }: { isTemplate?: boolean }) {
                 type="button"
                 onClick={() => canEdit && setIsEditingSalaryInterval(true)}
                 disabled={!canEdit}
-                className="text-xs font-medium text-light-900 underline underline-offset-2 hover:text-light-1000 disabled:cursor-not-allowed disabled:opacity-60 dark:text-dark-900 dark:hover:text-dark-1000"
+                className="text-xs font-normal text-light-900 underline underline-offset-2 hover:text-light-1000 disabled:cursor-not-allowed disabled:opacity-60 dark:text-dark-900 dark:hover:text-dark-1000"
               >
                 {salaryIntervalLabel}
               </button>
             )}
           </div>
-          <div className="border-t border-light-300 pt-4 dark:border-dark-300">
-            <SalaryComparisonBars
-              offer={salaryOffer}
-              salaryData={
-                card?.shortlistSalaryData ?? TEST_SALARY_COMPARISON_DATA
-              }
-            />
+          <div className="border-t border-light-300 pt-3 dark:border-dark-300">
+            <button
+              type="button"
+              onClick={() => setIsSalaryComparisonOpen((current) => !current)}
+              className="flex w-full items-center justify-between rounded-[5px] py-1 text-left text-sm font-medium text-light-900 hover:text-light-1000 dark:text-dark-900 dark:hover:text-dark-1000"
+            >
+              <span>{t`Compare salary`}</span>
+              <IoChevronForwardSharp
+                className={`h-3 w-3 transition-transform ${
+                  isSalaryComparisonOpen ? "rotate-90" : ""
+                }`}
+              />
+            </button>
+            {isSalaryComparisonOpen && (
+              <div className="pt-3">
+                <SalaryComparisonBars
+                  offer={salaryOffer}
+                  salaryData={
+                    card?.shortlistSalaryData ?? TEST_SALARY_COMPARISON_DATA
+                  }
+                />
+              </div>
+            )}
           </div>
         </div>
       </section>
 
-      <div className="my-8 border-t border-light-300 dark:border-dark-300" />
-
-      <section>
-        <div className="mb-4 flex items-center gap-3">
+      <section className="mt-8">
+        <div className="mb-4 flex items-center gap-2">
           <HiOutlineTag className="h-5 w-5 text-light-900 dark:text-dark-900" />
           <h3 className="text-sm font-semibold text-light-1000 dark:text-dark-1000">
             {t`Labels`}
@@ -1236,8 +1240,7 @@ export function CardRightPanel({ isTemplate }: { isTemplate?: boolean }) {
 
       {!isTemplate && isSuperAdminHelper() && (
         <>
-          <div className="my-8 border-t border-light-300 dark:border-dark-300" />
-          <section>
+          <section className="mt-8">
             <h3 className="mb-4 text-sm font-semibold text-light-1000 dark:text-dark-1000">
               {t`Members`}
             </h3>
@@ -1251,10 +1254,8 @@ export function CardRightPanel({ isTemplate }: { isTemplate?: boolean }) {
         </>
       )}
 
-      <div className="my-8 border-t border-light-300 dark:border-dark-300" />
-
-      <section>
-        <div className="mb-4 flex items-center gap-3">
+      <section className="mt-8">
+        <div className="mb-4 flex items-center gap-2">
           <HiOutlineShieldCheck className="h-5 w-5 text-light-900 dark:text-dark-900" />
           <h3 className="text-sm font-semibold text-light-1000 dark:text-dark-1000">
             {t`Automation`}
@@ -1488,15 +1489,7 @@ export default function CardPage({ isTemplate }: { isTemplate?: boolean }) {
               <div className="flex items-center gap-2">
                 <Dropdown
                   cardPublicId={cardId}
-                  isTemplate={isTemplate}
-                  boardPublicId={boardId}
                   cardCreatedBy={card?.createdBy}
-                  ticketNumber={
-                    card.cardNumber != null &&
-                    card.list.board.workspace.cardPrefix
-                      ? `${card.list.board.workspace.cardPrefix}-${card.cardNumber}`
-                      : null
-                  }
                   listPublicId={card?.list.publicId}
                   cardIndex={card?.index}
                 />
@@ -1577,6 +1570,7 @@ export default function CardPage({ isTemplate }: { isTemplate?: boolean }) {
                       </div>
                     </form>
                   </div>
+                  <div className="mb-8 border-t border-light-300 dark:border-dark-300" />
                   <Checklists
                     checklists={card.checklists}
                     cardPublicId={cardId}

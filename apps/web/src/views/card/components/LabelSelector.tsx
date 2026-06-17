@@ -19,6 +19,8 @@ interface LabelSelectorProps {
   }[];
   isLoading: boolean;
   disabled?: boolean;
+  badgeSize?: "xs" | "sm";
+  badgePadding?: "sm" | "md";
 }
 
 export default function LabelSelector({
@@ -26,6 +28,8 @@ export default function LabelSelector({
   labels,
   isLoading,
   disabled = false,
+  badgeSize = "xs",
+  badgePadding = "sm",
 }: LabelSelectorProps) {
   const utils = api.useUtils();
   const { openModal } = useModal();
@@ -110,13 +114,15 @@ export default function LabelSelector({
                   key={label.key}
                   value={label.value}
                   iconLeft={label.leftIcon}
-                  size="sm"
+                  size={badgeSize}
+                  padding={badgePadding}
                 />
               ))}
               <Badge
                 value={t`Add label`}
                 iconLeft={<HiMiniPlus size={14} />}
-                size="sm"
+                size={badgeSize}
+                padding={badgePadding}
               />
             </div>
           ) : (

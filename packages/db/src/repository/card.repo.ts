@@ -45,6 +45,21 @@ export const create = async (
     workspaceId: number;
     position: "start" | "end";
     dueDate?: Date | null;
+    shortlistCompanyName?: string | null;
+    shortlistJobPostingUrl?: string | null;
+    shortlistSalaryMin?: number | null;
+    shortlistSalaryMax?: number | null;
+    shortlistSalaryCurrency?: string | null;
+    shortlistSalaryInterval?: string;
+    shortlistSalaryData?: unknown;
+    shortlistCompanyRatingAggregated?: string | null;
+    shortlistCompanySentimentBlob?: unknown;
+    shortlistCompanySentimentSummary?: string | null;
+    shortlistCardSource?: string;
+    shortlistJobLocation?: string | null;
+    shortlistJobLocationType?: string | null;
+    shortlistJobType?: string;
+    shortlistCompanyLocation?: string | null;
   },
 ) => {
   return db.transaction(async (tx) => {
@@ -106,6 +121,23 @@ export const create = async (
         index: index,
         cardNumber,
         dueDate: cardInput.dueDate ?? null,
+        shortlistCompanyName: cardInput.shortlistCompanyName,
+        shortlistJobPostingUrl: cardInput.shortlistJobPostingUrl,
+        shortlistSalaryMin: cardInput.shortlistSalaryMin,
+        shortlistSalaryMax: cardInput.shortlistSalaryMax,
+        shortlistSalaryCurrency: cardInput.shortlistSalaryCurrency,
+        shortlistSalaryInterval: cardInput.shortlistSalaryInterval,
+        shortlistSalaryData: cardInput.shortlistSalaryData,
+        shortlistCompanyRatingAggregated:
+          cardInput.shortlistCompanyRatingAggregated,
+        shortlistCompanySentimentBlob: cardInput.shortlistCompanySentimentBlob,
+        shortlistCompanySentimentSummary:
+          cardInput.shortlistCompanySentimentSummary,
+        shortlistCardSource: cardInput.shortlistCardSource,
+        shortlistJobLocation: cardInput.shortlistJobLocation,
+        shortlistJobLocationType: cardInput.shortlistJobLocationType,
+        shortlistJobType: cardInput.shortlistJobType,
+        shortlistCompanyLocation: cardInput.shortlistCompanyLocation,
       })
       .returning({
         id: cards.id,
@@ -313,6 +345,7 @@ export const getByPublicId = (db: dbClient, cardPublicId: string) => {
       shortlistSalaryInterval: true,
       shortlistSalaryData: true,
       shortlistCompanyRatingAggregated: true,
+      shortlistCompanySentimentBlob: true,
       shortlistCompanySentimentSummary: true,
       shortlistCardSource: true,
       shortlistJobLocation: true,
@@ -557,6 +590,7 @@ export const getWithListAndMembersByPublicId = async (
       shortlistSalaryInterval: true,
       shortlistSalaryData: true,
       shortlistCompanyRatingAggregated: true,
+      shortlistCompanySentimentBlob: true,
       shortlistCompanySentimentSummary: true,
       shortlistCardSource: true,
       shortlistJobLocation: true,

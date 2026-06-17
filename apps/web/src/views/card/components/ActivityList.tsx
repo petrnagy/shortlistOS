@@ -67,7 +67,6 @@ const formatCardSourceValue = (value: string) => {
     case "MANUAL":
       return t`Manually`;
     case "EMAIL_INBOX":
-    case "EMAIL":
       return t`Magic Inbox`;
     case "WEB_CLIPPER":
     case "WEBCLIPPER":
