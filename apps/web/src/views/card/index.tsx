@@ -450,9 +450,6 @@ function SalaryComparisonBars({
 
   return (
     <div className="space-y-2">
-      <p className="text-xs font-medium text-light-900 dark:text-dark-900">
-        {t`Compared with`}
-      </p>
       {rows.map(({ label, range, displayRange }) => {
         const rangeMin = range.min ?? range.max ?? minValue;
         const rangeMax = range.max ?? range.min ?? rangeMin;
@@ -464,7 +461,7 @@ function SalaryComparisonBars({
             key={label}
             className="grid grid-cols-[44px_1fr] items-center gap-2"
           >
-            <span className="text-xs font-medium text-light-900 dark:text-dark-900">
+            <span className="text-xs font-light text-light-900 dark:text-dark-900">
               {label}
             </span>
             <div>
@@ -719,7 +716,7 @@ export function CardRightPanel({ isTemplate }: { isTemplate?: boolean }) {
     "grid grid-cols-[22px_92px_1fr] items-start gap-x-1 gap-y-2 py-2";
   const detailIconClass = "h-4 w-4 text-light-900 dark:text-dark-900";
   const detailLabelClass =
-    "text-sm font-medium text-light-900 dark:text-dark-900";
+    "text-xs font-medium text-light-900 dark:text-dark-900";
   const ratingValue =
     card?.shortlistCompanyRatingAggregated !== null &&
     card?.shortlistCompanyRatingAggregated !== undefined
@@ -1069,7 +1066,7 @@ export function CardRightPanel({ isTemplate }: { isTemplate?: boolean }) {
         <div className="space-y-3 rounded-[8px] border border-light-300 p-4 dark:border-dark-300">
           <div className="flex items-start justify-between gap-3">
             <div>
-              <p className="text-sm font-medium text-light-900 dark:text-dark-900">
+              <p className="text-xs font-medium text-light-900 dark:text-dark-900">
                 {t`Company offers`}
               </p>
             </div>
@@ -1161,7 +1158,7 @@ export function CardRightPanel({ isTemplate }: { isTemplate?: boolean }) {
               ))}
             </select>
           </div>
-          <div className="!mt-0">
+          <div className="!mt-0 flex justify-end">
             {isEditingSalaryInterval ? (
               <select
                 value={card?.shortlistSalaryInterval ?? "PER_MONTH"}
@@ -1198,7 +1195,7 @@ export function CardRightPanel({ isTemplate }: { isTemplate?: boolean }) {
             <button
               type="button"
               onClick={() => setIsSalaryComparisonOpen((current) => !current)}
-              className="flex w-full items-center justify-between rounded-[5px] py-1 text-left text-sm font-medium text-light-900 hover:text-light-1000 dark:text-dark-900 dark:hover:text-dark-1000"
+              className="flex w-full items-center justify-between rounded-[5px] py-1 text-left text-xs font-medium text-light-900 hover:text-light-1000 dark:text-dark-900 dark:hover:text-dark-1000"
             >
               <span>{t`Compare salary`}</span>
               <IoChevronForwardSharp
