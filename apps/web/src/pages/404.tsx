@@ -3,7 +3,7 @@ import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 
 import { PageHead } from "~/components/PageHead";
-import PatternedBackground from "~/components/PatternedBackground";
+import PaperGrainBackground from "~/components/PaperGrainBackground";
 
 export default function NotFoundPage() {
   return (
@@ -47,7 +47,7 @@ export default function NotFoundPage() {
               </div>
             </div>
           </div>
-          <PatternedBackground />
+          <PaperGrainBackground />
         </div>
       </main>
     </>

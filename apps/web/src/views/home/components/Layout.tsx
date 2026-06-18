@@ -2,7 +2,7 @@ import { useTheme } from "next-themes";
 
 import { authClient } from "@kan/auth/client";
 
-import PatternedBackground from "~/components/PatternedBackground";
+import PaperGrainBackground from "~/components/PaperGrainBackground";
 import Footer from "./Footer";
 import Header from "./Header";
 
@@ -25,7 +25,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         }
       `}</style>
       <div className="mx-auto flex h-full min-h-screen min-w-[375px] flex-col items-center bg-light-100 dark:bg-dark-50">
-        <PatternedBackground />
+        <PaperGrainBackground />
         <Header isLoggedIn={isLoggedIn} />
         <div className="z-10 mx-auto h-full w-full max-w-[1100px]">
           {children}

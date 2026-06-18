@@ -9,7 +9,7 @@ import { HiLink, HiOutlineLockClosed } from "react-icons/hi2";
 import Button from "~/components/Button";
 import Modal from "~/components/modal";
 import { PageHead } from "~/components/PageHead";
-import PatternedBackground from "~/components/PatternedBackground";
+import PaperGrainBackground from "~/components/PaperGrainBackground";
 import Popup from "~/components/Popup";
 import ThemeToggle from "~/components/ThemeToggle";
 import { useDragToScroll } from "~/hooks/useDragToScroll";
@@ -133,7 +133,7 @@ export default function PublicBoardView() {
 
       <div className="relative flex h-screen flex-col bg-light-100 px-4 pt-4 dark:bg-dark-50">
         <div className="relative h-full overflow-hidden rounded-md border pb-8 dark:border-dark-200">
-          <PatternedBackground />
+          <PaperGrainBackground />
           <div className="z-10 flex w-full justify-between p-8">
             {isLoading || !router.isReady ? (
               <div className="flex space-x-2">

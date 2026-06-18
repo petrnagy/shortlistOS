@@ -9,7 +9,7 @@ import { authClient } from "@kan/auth/client";
 
 import { Auth } from "~/components/AuthForm";
 import { PageHead } from "~/components/PageHead";
-import PatternedBackground from "~/components/PatternedBackground";
+import PaperGrainBackground from "~/components/PaperGrainBackground";
 
 export default function PartnerActivatePage() {
   const router = useRouter();
@@ -109,7 +109,7 @@ export default function PartnerActivatePage() {
               </Trans>
             </p>
           </div>
-          <PatternedBackground />
+          <PaperGrainBackground />
         </div>
       </main>
     </>

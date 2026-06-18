@@ -8,7 +8,7 @@ import {
 } from "react-icons/hi2";
 
 import Button from "~/components/Button";
-import PatternedBackground from "~/components/PatternedBackground";
+import PaperGrainBackground from "~/components/PaperGrainBackground";
 import { Tooltip } from "~/components/Tooltip";
 import { usePermissions } from "~/hooks/usePermissions";
 import { useModal } from "~/providers/modal";
@@ -121,7 +121,7 @@ export function BoardsList({
             href={`${isTemplate ? "templates" : "boards"}/${board.publicId}`}
           >
             <div className="group relative mr-5 flex h-[150px] w-full items-center justify-center rounded-md border border-dashed border-light-400 bg-light-50 shadow-sm hover:bg-light-200 dark:border-dark-600 dark:bg-dark-50 dark:hover:bg-dark-100">
-              <PatternedBackground />
+              <PaperGrainBackground />
               <button
                 onClick={(e) =>
                   handleToggleFavorite(e, board.publicId, board.favorite)
@@ -141,7 +141,7 @@ export function BoardsList({
                   <HiOutlineStar className="h-5 w-5 text-neutral-700 dark:text-dark-800" />
                 )}
               </button>
-              <p className="px-4 text-[14px] font-bold text-neutral-700 dark:text-dark-1000">
+              <p className="relative z-10 px-4 text-[14px] font-bold text-neutral-700 dark:text-dark-1000">
                 {board.name}
               </p>
             </div>

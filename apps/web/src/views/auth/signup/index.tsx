@@ -9,7 +9,7 @@ import { authClient } from "@kan/auth/client";
 
 import { Auth } from "~/components/AuthForm";
 import { PageHead } from "~/components/PageHead";
-import PatternedBackground from "~/components/PatternedBackground";
+import PaperGrainBackground from "~/components/PaperGrainBackground";
 
 export default function SignUpPage() {
   const router = useRouter();
@@ -49,7 +49,7 @@ export default function SignUpPage() {
                 {t`Sign up is currently disabled. Please try again later.`}
               </p>
             </div>
-            <PatternedBackground />
+            <PaperGrainBackground />
           </div>
         </main>
       </>
@@ -97,7 +97,7 @@ export default function SignUpPage() {
               </Trans>
             </p>
           </div>
-          <PatternedBackground />
+          <PaperGrainBackground />
         </div>
       </main>
     </>

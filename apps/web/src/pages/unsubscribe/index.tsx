@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 
 import Button from "~/components/Button";
 import { PageHead } from "~/components/PageHead";
-import PatternedBackground from "~/components/PatternedBackground";
+import PaperGrainBackground from "~/components/PaperGrainBackground";
 
 type UnsubscribeStatus = "idle" | "processing" | "success" | "error";
 
@@ -71,7 +71,7 @@ export default function UnsubscribePage() {
     <>
       <PageHead title={`${title} | kan.bn`} />
       <div className="relative flex min-h-screen items-center justify-center px-4 py-12 sm:px-6 lg:px-8">
-        <PatternedBackground />
+        <PaperGrainBackground />
         <div className="z-10 w-full max-w-md space-y-6">
           <div>
             <h1 className="mt-6 text-center text-3xl font-bold tracking-tight text-light-1000 dark:text-dark-1000">
