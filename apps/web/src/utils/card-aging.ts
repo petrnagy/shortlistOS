@@ -2,9 +2,9 @@ import { differenceInDays } from "date-fns";
 
 export type CardAgingLevel =
   | "none"
-  | "aged-1-week"
-  | "aged-2-weeks"
-  | "aged-1-month";
+  | "aged-lvl-1"
+  | "aged-lvl-2"
+  | "aged-lvl-3";
 
 /**
  * Determine the aging level of a card based on lastActivity date
@@ -21,15 +21,15 @@ export function getCardAgingLevel(
   const daysAgo = differenceInDays(new Date(), new Date(lastActivity));
 
   if (daysAgo >= 30) {
-    return "aged-1-month";
+    return "aged-lvl-3";
   }
 
   if (daysAgo >= 14) {
-    return "aged-2-weeks";
+    return "aged-lvl-2";
   }
 
   if (daysAgo >= 7) {
-    return "aged-1-week";
+    return "aged-lvl-1";
   }
 
   return "none";
@@ -43,13 +43,13 @@ export function getCardAgingClasses(agingLevel: CardAgingLevel): string {
   const baseClasses = "";
 
   switch (agingLevel) {
-    case "aged-1-week":
+    case "aged-lvl-1":
       return "card-aging-tint-light opacity-90";
 
-    case "aged-2-weeks":
+    case "aged-lvl-2":
       return "card-aging-tint-medium opacity-80";
 
-    case "aged-1-month":
+    case "aged-lvl-3":
       return "card-aging-tint-heavy opacity-75";
 
     case "none":
