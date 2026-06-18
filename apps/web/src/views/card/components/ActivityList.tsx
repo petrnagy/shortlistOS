@@ -47,7 +47,7 @@ const truncate = (value: string | null, maxLength = 50) => {
   return value.length > maxLength ? `${value.slice(0, maxLength - 1)}…` : value;
 };
 
-const getUserDisplayName = (
+export const getUserDisplayName = (
   user: { name?: string | null; email?: string | null } | null | undefined,
 ): string => {
   if (user?.name?.trim()) return user.name;
@@ -94,7 +94,7 @@ const formatShortlistActivityValue = (
   return value;
 };
 
-const getActivityText = ({
+export const getActivityText = ({
   type,
   toTitle,
   fromList,
@@ -172,6 +172,9 @@ const getActivityText = ({
     "card.updated.label.removed": t`removed a label from the card`,
     "card.updated.member.added": t`added a member to the card`,
     "card.updated.member.removed": t`removed a member from the card`,
+    "card.updated.comment.added": t`added a comment`,
+    "card.updated.comment.updated": t`updated a comment`,
+    "card.updated.comment.deleted": t`deleted a comment`,
     "card.updated.checklist.added": t`added a checklist`,
     "card.updated.checklist.renamed": t`renamed a checklist`,
     "card.updated.checklist.deleted": t`deleted a checklist`,
@@ -411,7 +414,7 @@ const ACTIVITY_ICON_MAP: Partial<Record<ActivityType, React.ReactNode | null>> =
     "card.updated.shortlistField": <HiOutlinePencil />,
   } as const;
 
-const getActivityIcon = (
+export const getActivityIcon = (
   type: ActivityType,
   fromIndex?: number | null,
   toIndex?: number | null,

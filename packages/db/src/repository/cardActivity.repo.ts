@@ -2,7 +2,14 @@ import { and, count, desc, eq, inArray, isNull, lt, or } from "drizzle-orm";
 
 import type { dbClient } from "@kan/db/client";
 import type { ActivityType } from "@kan/db/schema";
-import { cardActivities, comments } from "@kan/db/schema";
+import {
+  boards,
+  cardActivities,
+  cards,
+  comments,
+  lists,
+  workspaceMembers,
+} from "@kan/db/schema";
 import { generateUID } from "@kan/shared/utils";
 
 export const getCount = async (db: dbClient) => {
@@ -123,6 +130,7 @@ export const getPaginatedActivities = async (
 
   const activities = await db.query.cardActivities.findMany({
     columns: {
+      id: true,
       publicId: true,
       type: true,
       createdAt: true,
@@ -225,3 +233,153 @@ export const getPaginatedActivities = async (
 export type PaginatedActivitiesResult = Awaited<
   ReturnType<typeof getPaginatedActivities>
 >;
+
+export const getPaginatedUserActivities = async (
+  db: dbClient,
+  userId: string,
+  options?: {
+    limit?: number;
+    cursor?: Date;
+  },
+) => {
+  const limit = options?.limit ?? 20;
+  const cursor = options?.cursor;
+
+  const activityRows = await db
+    .select({ id: cardActivities.id })
+    .from(cardActivities)
+    .innerJoin(cards, eq(cardActivities.cardId, cards.id))
+    .innerJoin(lists, eq(cards.listId, lists.id))
+    .innerJoin(boards, eq(lists.boardId, boards.id))
+    .innerJoin(
+      workspaceMembers,
+      eq(boards.workspaceId, workspaceMembers.workspaceId),
+    )
+    .leftJoin(comments, eq(cardActivities.commentId, comments.id))
+    .where(
+      and(
+        eq(workspaceMembers.userId, userId),
+        eq(workspaceMembers.status, "active"),
+        isNull(workspaceMembers.deletedAt),
+        isNull(cards.deletedAt),
+        isNull(lists.deletedAt),
+        isNull(boards.deletedAt),
+        cursor ? lt(cardActivities.createdAt, cursor) : undefined,
+        or(isNull(cardActivities.commentId), isNull(comments.deletedAt)),
+      ),
+    )
+    .orderBy(desc(cardActivities.createdAt))
+    .limit(limit + 1);
+
+  const hasMore = activityRows.length > limit;
+  const activityIds = activityRows.slice(0, limit).map((activity) => activity.id);
+
+  if (activityIds.length === 0) {
+    return {
+      activities: [],
+      hasMore: false,
+      nextCursor: undefined,
+    };
+  }
+
+  const activities = await db.query.cardActivities.findMany({
+    columns: {
+      id: true,
+      publicId: true,
+      type: true,
+      createdAt: true,
+      fromIndex: true,
+      toIndex: true,
+      fromTitle: true,
+      toTitle: true,
+      fromDescription: true,
+      toDescription: true,
+      fromDueDate: true,
+      toDueDate: true,
+    },
+    where: inArray(cardActivities.id, activityIds),
+    with: {
+      card: {
+        columns: {
+          publicId: true,
+          title: true,
+        },
+      },
+      fromList: {
+        columns: {
+          publicId: true,
+          name: true,
+          index: true,
+        },
+      },
+      toList: {
+        columns: {
+          publicId: true,
+          name: true,
+          index: true,
+        },
+      },
+      label: {
+        columns: {
+          publicId: true,
+          name: true,
+        },
+      },
+      member: {
+        columns: {
+          publicId: true,
+        },
+        with: {
+          user: {
+            columns: {
+              id: true,
+              name: true,
+              email: true,
+              image: true,
+            },
+          },
+        },
+      },
+      user: {
+        columns: {
+          id: true,
+          name: true,
+          email: true,
+          image: true,
+        },
+      },
+      comment: {
+        columns: {
+          publicId: true,
+          comment: true,
+          createdBy: true,
+          updatedAt: true,
+          deletedAt: true,
+        },
+      },
+      attachment: {
+        columns: {
+          publicId: true,
+          filename: true,
+          originalFilename: true,
+        },
+      },
+    },
+  });
+
+  const activityOrder = new Map(
+    activityIds.map((activityId, index) => [activityId, index]),
+  );
+  const items = activities.sort(
+    (a, b) =>
+      (activityOrder.get(a.id) ?? Number.MAX_SAFE_INTEGER) -
+      (activityOrder.get(b.id) ?? Number.MAX_SAFE_INTEGER),
+  );
+  const nextCursor = hasMore ? items[items.length - 1]?.createdAt : undefined;
+
+  return {
+    activities: items,
+    hasMore,
+    nextCursor,
+  };
+};

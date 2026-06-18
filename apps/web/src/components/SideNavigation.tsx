@@ -16,6 +16,8 @@ import type { Subscription } from "@kan/shared/utils";
 import { hasActiveSubscription } from "@kan/shared/utils";
 
 import type { KeyboardShortcut } from "~/providers/keyboard-shortcuts";
+import activityLogsIconDark from "~/assets/activity-logs-dark.json";
+import activityLogsIconLight from "~/assets/activity-logs-light.json";
 import boardsIconDark from "~/assets/boards-dark.json";
 import boardsIconLight from "~/assets/boards-light.json";
 // import membersIconDark from "~/assets/members-dark.json";
@@ -107,12 +109,26 @@ export default function SideNavigation({
       icon: isDarkMode ? boardsIconDark : boardsIconLight,
       keyboardShortcut: {
         type: "SEQUENCE",
-        strokes: [{ key: "G" }, { key: "B" }],
+        strokes: [{ key: "G" }, { key: "S" }],
         action: () => {
           void router.push("/boards");
         },
         group: "NAVIGATION",
         description: t`Go to shortlists`,
+      },
+    },
+    {
+      name: t`Activity log`,
+      href: "/activity-log",
+      icon: isDarkMode ? activityLogsIconDark : activityLogsIconLight,
+      keyboardShortcut: {
+        type: "SEQUENCE",
+        strokes: [{ key: "G" }, { key: "A" }],
+        action: () => {
+          void router.push("/activity-log");
+        },
+        group: "NAVIGATION",
+        description: t`Go to activity log`,
       },
     },
     // {
@@ -145,7 +161,7 @@ export default function SideNavigation({
       icon: isDarkMode ? settingsIconDark : settingsIconLight,
       keyboardShortcut: {
         type: "SEQUENCE",
-        strokes: [{ key: "G" }, { key: "S" }],
+        strokes: [{ key: "G" }, { key: "," }],
         action: () => {
           void router.push("/settings");
         },
