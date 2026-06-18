@@ -11,6 +11,7 @@ import {
   HiOutlinePaperClip,
   HiOutlinePencil,
   HiOutlinePlus,
+  HiOutlineStar,
   HiOutlineTag,
   HiOutlineTrash,
   HiOutlineUserMinus,
@@ -31,6 +32,9 @@ import Comment from "./Comment";
 
 type ActivityType =
   NonNullable<GetCardByIdOutput>["activities"][number]["type"];
+
+export const isMilestoneActivity = (type: ActivityType | string) =>
+  type === "card.updated.list";
 
 type ActivityWithMergedLabels =
   GetCardActivitiesOutput["activities"][number] & {
@@ -221,7 +225,7 @@ export const getActivityText = ({
     return (
       <Trans>
         moved the card from <TextHighlight>{truncate(fromList)}</TextHighlight>{" "}
-        to
+        to{" "}
         <TextHighlight>{truncate(toList)}</TextHighlight>
       </Trans>
     );
@@ -429,6 +433,13 @@ export const getActivityIcon = (
   return ACTIVITY_ICON_MAP[type] ?? null;
 };
 
+export const MilestoneBadge = () => (
+  <span className="inline-flex items-center gap-1 rounded-md border border-green-500/50 bg-green-50 px-2 py-0.5 text-xs font-medium text-green-700 dark:border-green-400/40 dark:bg-green-950/30 dark:text-green-300">
+    <HiOutlineStar className="h-3.5 w-3.5" />
+    {t`Milestone`}
+  </span>
+);
+
 const ACTIVITIES_PAGE_SIZE = 20;
 const NOTES_PAGE_SIZE = 10;
 
@@ -623,10 +634,20 @@ const ActivityList = ({
 
         if (!activityText) return null;
 
+        const isMilestone = isMilestoneActivity(activity.type);
+        const timestamp = formatDistanceToNow(new Date(activity.createdAt), {
+          addSuffix: true,
+          locale: dateLocale,
+        });
+
         return (
           <div
             key={activity.publicId}
-            className="relative flex items-center space-x-2"
+            className={
+              isMilestone
+                ? "relative flex items-center space-x-2 rounded-sm border-l-[3px] border-green-500 bg-green-50/80 px-3 py-2 dark:border-green-400 dark:bg-green-950/30"
+                : "relative flex items-center space-x-2 border-l-[3px] border-transparent px-3 py-0.5"
+            }
           >
             <div className="relative">
               <Avatar
@@ -647,19 +668,22 @@ const ActivityList = ({
                 <div className="absolute bottom-[-14px] left-1/2 top-[30px] w-0.5 -translate-x-1/2 bg-light-600 dark:bg-dark-600" />
               )}
             </div>
-            <p className="text-sm">
-              <span className="font-medium dark:text-dark-1000">{`${getUserDisplayName(activity.user)} `}</span>
-              <span className="space-x-1 text-light-900 dark:text-dark-800">
-                {activityText}
+            <div className="flex min-w-0 flex-1 items-center gap-3">
+              <p className="min-w-0 flex-1 text-sm">
+                <span className="font-medium dark:text-dark-1000">{`${getUserDisplayName(activity.user)} `}</span>
+                <span className="text-light-900 dark:text-dark-800">
+                  {activityText}
+                </span>
+              </p>
+              {isMilestone && (
+                <div className="flex-shrink-0">
+                  <MilestoneBadge />
+                </div>
+              )}
+              <span className="flex-shrink-0 whitespace-nowrap text-sm text-light-900 dark:text-dark-800">
+                {timestamp}
               </span>
-              <span className="mx-1 text-light-900 dark:text-dark-800">·</span>
-              <span className="space-x-1 text-light-900 dark:text-dark-800">
-                {formatDistanceToNow(new Date(activity.createdAt), {
-                  addSuffix: true,
-                  locale: dateLocale,
-                })}
-              </span>
-            </p>
+            </div>
           </div>
         );
       })}

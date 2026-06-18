@@ -15,6 +15,8 @@ import {
   getActivityIcon,
   getActivityText,
   getUserDisplayName,
+  isMilestoneActivity,
+  MilestoneBadge,
 } from "~/views/card/components/ActivityList";
 
 const ACTIVITY_LOG_PAGE_SIZE = 20;
@@ -139,11 +141,23 @@ export default function ActivityLog() {
                     const cardLinkConnector = getCardLinkConnector(
                       activity.type,
                     );
+                    const isMilestone = isMilestoneActivity(activity.type);
+                    const timestamp = formatDistanceToNow(
+                      new Date(activity.createdAt),
+                      {
+                        addSuffix: true,
+                        locale: dateLocale,
+                      },
+                    );
 
                     return (
                       <div
                         key={activity.publicId}
-                        className="relative flex items-center space-x-2"
+                        className={
+                          isMilestone
+                            ? "relative flex items-center gap-2 rounded-sm border-l-[3px] border-green-500 bg-green-50/80 px-3 py-2 dark:border-green-400 dark:bg-green-950/30"
+                            : "relative flex items-center gap-2 border-l-[3px] border-transparent px-3 py-0.5"
+                        }
                       >
                         <div className="relative">
                           <Avatar
@@ -165,32 +179,33 @@ export default function ActivityLog() {
                             <div className="absolute bottom-[-14px] left-1/2 top-[30px] w-0.5 -translate-x-1/2 bg-light-600 dark:bg-dark-600" />
                           )}
                         </div>
-                        <p className="text-sm">
-                          <span className="font-medium dark:text-dark-1000">{`${getUserDisplayName(activity.user)} `}</span>
-                          <span className="space-x-1 text-light-900 dark:text-dark-800">
-                            {activityText}
-                          </span>{" "}
-                          {cardLinkConnector && (
+                        <div className="flex min-w-0 flex-1 items-center gap-3">
+                          <p className="min-w-0 flex-1 text-sm">
+                            <span className="font-medium dark:text-dark-1000">{`${getUserDisplayName(activity.user)} `}</span>
                             <span className="text-light-900 dark:text-dark-800">
-                              {cardLinkConnector}{" "}
-                            </span>
+                              {activityText}
+                            </span>{" "}
+                            {cardLinkConnector && (
+                              <span className="text-light-900 dark:text-dark-800">
+                                {cardLinkConnector}{" "}
+                              </span>
+                            )}
+                            <Link
+                              href={`/cards/${activity.card.publicId}`}
+                              className="font-medium text-light-1000 underline underline-offset-2 hover:text-light-900 dark:text-dark-1000 dark:hover:text-dark-900"
+                            >
+                              {activity.card.title}
+                            </Link>
+                          </p>
+                          {isMilestone && (
+                            <div className="flex-shrink-0">
+                              <MilestoneBadge />
+                            </div>
                           )}
-                          <Link
-                            href={`/cards/${activity.card.publicId}`}
-                            className="font-medium text-light-1000 underline underline-offset-2 hover:text-light-900 dark:text-dark-1000 dark:hover:text-dark-900"
-                          >
-                            {activity.card.title}
-                          </Link>
-                          <span className="mx-1 text-light-900 dark:text-dark-800">
-                            ·
+                          <span className="flex-shrink-0 whitespace-nowrap text-sm text-light-900 dark:text-dark-800">
+                            {timestamp}
                           </span>
-                          <span className="space-x-1 text-light-900 dark:text-dark-800">
-                            {formatDistanceToNow(new Date(activity.createdAt), {
-                              addSuffix: true,
-                              locale: dateLocale,
-                            })}
-                          </span>
-                        </p>
+                        </div>
                       </div>
                     );
                   })}
