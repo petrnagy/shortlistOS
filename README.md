@@ -88,6 +88,7 @@ services:
       - .env
     environment:
       - NEXT_PUBLIC_BASE_URL=${NEXT_PUBLIC_BASE_URL}
+      - NEXT_PUBLIC_LANDING_PAGE_URL=${NEXT_PUBLIC_LANDING_PAGE_URL}
       - BETTER_AUTH_SECRET=${BETTER_AUTH_SECRET}
       - POSTGRES_URL=${POSTGRES_URL}
       - NEXT_PUBLIC_ALLOW_CREDENTIALS=true
@@ -183,6 +184,7 @@ pnpm dev
 | `SMTP_REJECT_UNAUTHORIZED`                | Reject invalid certificates (defaults to true if not set) | For Email                                   | `false`                                                     |
 | `NEXT_PUBLIC_DISABLE_EMAIL`               | To disable all email features                             | For Email                                   | `true`                                                      |
 | `NEXT_PUBLIC_BASE_URL`                    | Base URL of your installation                             | Yes                                         | `http://localhost:3000`                                     |
+| `NEXT_PUBLIC_LANDING_PAGE_URL`            | Public marketing/homepage URL for app links               | No                                          | `https://example.com`                                       |
 | `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`      | Stripe publishable key for client-side checkout redirect  | For Powerpack checkout                      | `pk_live_...`                                               |
 | `STRIPE_SECRET_KEY`                       | Stripe secret key for checkout session/webhook handling   | For Powerpack checkout                      | `sk_live_...`                                               |
 | `STRIPE_SHORTLIST_WEBHOOK_SECRET`         | Signing secret for `/api/shortlist_stripe/webhook`        | For Powerpack checkout                      | `whsec_...`                                                 |

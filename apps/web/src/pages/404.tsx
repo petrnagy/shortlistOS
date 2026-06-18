@@ -1,18 +1,21 @@
 import Link from "next/link";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
+import { env } from "next-runtime-env";
 
 import { PageHead } from "~/components/PageHead";
 import PaperGrainBackground from "~/components/PaperGrainBackground";
 
 export default function NotFoundPage() {
+  const landingPageUrl = env("NEXT_PUBLIC_LANDING_PAGE_URL") || "/";
+
   return (
     <>
       <PageHead title={t`404 - Page Not Found | shortlistOS`} />
       <main className="h-screen bg-light-100 pt-20 dark:bg-dark-50 sm:pt-0">
         <div className="justify-top flex h-full flex-col items-center px-4 sm:justify-center">
           <div className="z-10 flex w-full flex-col items-center">
-            <Link href="/">
+            <Link href={landingPageUrl}>
               <h1 className="mb-6 text-lg font-bold tracking-tight text-light-1000 dark:text-dark-1000">
                 shortlistOS
               </h1>
@@ -32,7 +35,7 @@ export default function NotFoundPage() {
                 </p>
                 <div className="flex flex-col gap-3">
                   <Link
-                    href="/"
+                    href={landingPageUrl}
                     className="flex w-full justify-center rounded-md bg-light-1000 px-3 py-2 text-sm font-semibold text-light-100 shadow-sm hover:bg-light-900 dark:bg-dark-1000 dark:text-dark-100 dark:hover:bg-dark-900"
                   >
                     <Trans>Go to homepage</Trans>

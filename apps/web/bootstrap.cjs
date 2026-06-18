@@ -25,6 +25,7 @@ if (!existsSync(publicDir)) {
   mkdirSync(publicDir, { recursive: true });
 }
 
+/** @type {Record<string, string | undefined>} */
 const envVars = {};
 for (const [key, value] of Object.entries(process.env)) {
   if (key.startsWith("NEXT_PUBLIC_")) {
