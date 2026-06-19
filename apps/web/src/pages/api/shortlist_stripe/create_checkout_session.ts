@@ -1,3 +1,11 @@
+/**
+ * Author: Petr Nagy / shortlistOS
+ * URL: https://petrnagy.cz
+ * Since: 2026-06-20
+ * License: No license. All rights reserved.
+ * Copyright: Copyright (c) 2026 Petr Nagy.
+ * Proprietary: shortlistOS Powerpack feature. Not part of the open-source distribution.
+ */
 import type { NextApiRequest, NextApiResponse } from "next";
 import { env } from "next-runtime-env";
 import Stripe from "stripe";
@@ -14,8 +22,9 @@ import {
   POWERPACK_PRICE_CURRENCY,
   POWERPACK_STRIPE_PRODUCT_ID,
 } from "~/config/pricing";
+import { env as serverEnv } from "~/env";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY ?? "");
+const stripe = new Stripe(serverEnv.STRIPE_SECRET_KEY ?? "");
 
 export default withRateLimit(
   { points: 100, duration: 60 },
@@ -24,7 +33,7 @@ export default withRateLimit(
       return res.status(405).json({ error: "Method not allowed" });
     }
 
-    if (!process.env.STRIPE_SECRET_KEY) {
+    if (!serverEnv.STRIPE_SECRET_KEY) {
       return res.status(500).json({ error: "Stripe is not configured" });
     }
 
@@ -58,10 +67,10 @@ export default withRateLimit(
       success_url: `${baseUrl}${POWERPACK_CHECKOUT_SUCCESS_PATH}?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${baseUrl}${POWERPACK_CHECKOUT_CANCEL_PATH}`,
       client_reference_id: user.id,
-      customer_email: user.email ?? undefined,
+      customer_email: user.email,
       metadata: {
         userId: user.id,
-        userEmail: user.email ?? "",
+        userEmail: user.email,
         membershipDurationDays: String(POWERPACK_MEMBERSHIP_DURATION_DAYS),
         productId: POWERPACK_STRIPE_PRODUCT_ID,
       },

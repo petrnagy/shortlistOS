@@ -1,3 +1,11 @@
+/**
+ * Author: Petr Nagy / shortlistOS
+ * URL: https://petrnagy.cz
+ * Since: 2026-06-20
+ * License: No license. All rights reserved.
+ * Copyright: Copyright (c) 2026 Petr Nagy.
+ * Proprietary: shortlistOS Powerpack feature. Not part of the open-source distribution.
+ */
 import { randomUUID } from "crypto";
 import type { NextApiRequest, NextApiResponse } from "next";
 import type { Readable } from "node:stream";
@@ -8,9 +16,10 @@ import * as userRepo from "@kan/db/repository/user.repo";
 import { createLogger } from "@kan/logger";
 
 import { POWERPACK_MEMBERSHIP_DURATION_DAYS } from "~/config/pricing";
+import { env } from "~/env";
 
 const log = createLogger("api");
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY ?? "");
+const stripe = new Stripe(env.STRIPE_SECRET_KEY ?? "");
 
 async function buffer(readable: Readable) {
   const chunks = [];
@@ -32,11 +41,11 @@ export default async function handler(
     return res.status(405).json({ message: "Method not allowed" });
   }
 
-  if (!process.env.STRIPE_SECRET_KEY) {
+  if (!env.STRIPE_SECRET_KEY) {
     return res.status(500).json({ message: "Stripe is not configured" });
   }
 
-  const webhookSecret = process.env.STRIPE_SHORTLIST_WEBHOOK_SECRET;
+  const webhookSecret = env.STRIPE_SHORTLIST_WEBHOOK_SECRET;
 
   if (!webhookSecret) {
     return res
