@@ -288,6 +288,13 @@
       "when": 1781615700000,
       "tag": "20260616131500_AddShortlistSalaryIntervalToCard",
       "breakpoints": true
+    },
+    {
+      "idx": 41,
+      "version": "7",
+      "when": 1781821706510,
+      "tag": "20260618222826_AddExternIdToShortlistInbox",
+      "breakpoints": true
     }
   ]
 }

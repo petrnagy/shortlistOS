@@ -10,6 +10,7 @@ import {
   smallint,
   text,
   timestamp,
+  uniqueIndex,
   uuid,
   varchar,
 } from "drizzle-orm/pg-core";
@@ -35,6 +36,7 @@ export const shortlistInbox = pgTable(
     updatedAt: timestamp("updatedAt"),
     processedAt: timestamp("processedAt"),
     processingTries: smallint("processingTries").notNull().default(0),
+    externId: varchar("externId", { length: 250 }).notNull(),
     rawContent: text("rawContent"),
     contentType: varchar("contentType", { length: 20 }).notNull(),
     source: varchar("source", { length: 20 }).notNull(),
@@ -45,6 +47,7 @@ export const shortlistInbox = pgTable(
     index("shortlist_inbox_created_at_idx").on(table.createdAt),
     index("shortlist_inbox_processed_at_idx").on(table.processedAt),
     index("shortlist_inbox_processing_result_idx").on(table.processingResult),
+    uniqueIndex("shortlist_inbox_extern_id_idx").on(table.externId),
   ],
 ).enableRLS();
 
