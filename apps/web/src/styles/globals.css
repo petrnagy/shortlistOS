@@ -14,13 +14,15 @@ html {
 }
 
 .gradient-border::before {
-  background: conic-gradient(from 0deg,
-      transparent 0deg,
-      transparent 45deg,
-      rgba(244, 114, 182, 0.4) 85deg,
-      rgba(192, 132, 252, 0.4) 95deg,
-      transparent 110deg,
-      transparent 360deg);
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    transparent 45deg,
+    rgba(244, 114, 182, 0.4) 85deg,
+    rgba(192, 132, 252, 0.4) 95deg,
+    transparent 110deg,
+    transparent 360deg
+  );
   content: "";
   position: absolute;
   inset: -50%;
@@ -29,27 +31,33 @@ html {
 }
 
 .card-aging-tint-light {
-  background-color: #fffefb !important;
-}
-
-.card-aging-tint-medium {
-  background-color: #fffef8 !important;
-}
-
-.card-aging-tint-heavy {
   background-color: #fffdf5 !important;
 }
 
+.card-aging-tint-medium {
+  background-color: #fffaf5 !important;
+}
+
+.card-aging-tint-heavy {
+  background-color: #fff5f5 !important;
+}
+
 .dark .card-aging-tint-light {
-  background-color: #22211f !important;
+  background-color: #24221f !important;
 }
 
 .dark .card-aging-tint-medium {
-  background-color: #23211f !important;
+  background-color: #24211f !important;
 }
 
 .dark .card-aging-tint-heavy {
-  background-color: #24221f !important;
+  background-color: #241f1f !important;
+}
+
+.noselect button,
+button.noselect {
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 @layer utilities {
@@ -71,10 +79,11 @@ html {
   @apply rounded-md border border-light-600 bg-white px-2 py-1 text-sm text-neutral-900 shadow-lg dark:border-dark-600 dark:bg-dark-100 dark:text-dark-1000;
 }
 
-.tippy-box[data-theme~="tooltip"]>.tippy-arrow::before {
+.tippy-box[data-theme~="tooltip"] > .tippy-arrow::before {
   @apply border-t-light-600 dark:border-t-dark-600;
 }
 
-.tippy-box[data-theme~="tooltip"][data-placement^="bottom"]>.tippy-arrow::before {
+.tippy-box[data-theme~="tooltip"][data-placement^="bottom"]
+  > .tippy-arrow::before {
   @apply border-b-light-600 dark:border-b-dark-600;
 }

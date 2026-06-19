@@ -87,6 +87,7 @@ const SALARY_INTERVAL_OPTIONS = [
   { value: "PER_YEAR", label: t`per year` },
   { value: "PER_MONTH", label: t`per month` },
   { value: "PER_WEEK", label: t`per week` },
+  { value: "PER_DAY", label: t`per day` },
   { value: "PER_HOUR", label: t`per hour` },
 ] as const;
 const CURRENCY_OPTIONS = [
@@ -1158,7 +1159,7 @@ export function CardRightPanel({ isTemplate }: { isTemplate?: boolean }) {
               ))}
             </select>
           </div>
-          <div className="!mt-0 flex justify-end">
+          <div className="!mt-1 flex justify-end">
             {isEditingSalaryInterval ? (
               <select
                 value={card?.shortlistSalaryInterval ?? "PER_MONTH"}
@@ -1454,7 +1455,7 @@ export default function CardPage({ isTemplate }: { isTemplate?: boolean }) {
       <PageHead
         title={t`${card?.title ?? t`Card`} | ${board?.name ?? t`Board`}`}
       />
-      <div className="flex h-full flex-1 flex-col overflow-hidden">
+      <div className="noselect flex h-full flex-1 flex-col overflow-hidden">
         {/* Full-width top strip with board link and dropdown */}
         <div className="flex w-full items-center justify-between border-b-[1px] border-light-300 bg-light-50 px-8 py-2 dark:border-dark-300 dark:bg-dark-50">
           {!card && isLoading && (

@@ -869,7 +869,7 @@ export const cardRouter = createTRPCRouter({
         shortlistSalaryMax: z.number().int().nonnegative().nullable().optional(),
         shortlistSalaryCurrency: z.string().max(10).nullable().optional(),
         shortlistSalaryInterval: z
-          .enum(["PER_MONTH", "PER_YEAR", "PER_WEEK", "PER_HOUR"])
+          .enum(["PER_MONTH", "PER_YEAR", "PER_WEEK", "PER_DAY", "PER_HOUR"])
           .optional(),
         shortlistCompanyRatingAggregated: z
           .number()
