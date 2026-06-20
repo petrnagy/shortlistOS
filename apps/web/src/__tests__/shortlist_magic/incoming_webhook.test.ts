@@ -2,8 +2,19 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const { mockDb, mockLogger } = vi.hoisted(() => {
+  const now = new Date();
+  const tomorrow = new Date(now);
+  tomorrow.setUTCDate(tomorrow.getUTCDate() + 1);
+
   const state = {
-    ownerRows: [{ userId: "owner-user-id" }],
+    accessRows: [
+      {
+        boardId: 123,
+        userId: "owner-user-id",
+        shortlistPowerpackActivatedAt: now,
+        shortlistPowerpackExpiresAt: tomorrow,
+      },
+    ],
     insertedRows: [{ id: "inbox-row-id" }],
     insertedValues: [] as unknown[],
   };
@@ -14,7 +25,7 @@ const { mockDb, mockLogger } = vi.hoisted(() => {
       from: vi.fn(() => ({
         innerJoin: vi.fn(() => ({
           where: vi.fn(() => ({
-            limit: vi.fn(() => Promise.resolve(state.ownerRows)),
+            limit: vi.fn(() => Promise.resolve(state.accessRows)),
           })),
         })),
       })),
@@ -45,6 +56,8 @@ const { mockDb, mockLogger } = vi.hoisted(() => {
 vi.mock("~/env", () => ({
   env: {
     BREVO_MAGIC_INBOX_WEBHOOK_SECRET: "test-webhook-secret",
+    SHORTLIST_MAGIC_CLIP_WEBHOOK_SECRET: "test-clip-secret",
+    SHORTLIST_MAGIC_LINK_WEBHOOK_SECRET: "test-link-secret",
     STRIPE_SECRET_KEY: "test-stripe-secret",
     STRIPE_SHORTLIST_WEBHOOK_SECRET: "test-stripe-webhook-secret",
   },
@@ -62,18 +75,18 @@ import { createDrizzleClient } from "@kan/db/client";
 
 import handler, {
   parseMagicInboxRecipientsFromBrevoEmail,
-} from "./incoming_webhook";
+} from "../../pages/api/shortlist_magic_inbox/incoming_webhook";
 
 const mockCreateDrizzleClient = createDrizzleClient as ReturnType<typeof vi.fn>;
 
 const createResponse = () => {
   const response = {
-    status: vi.fn<(code: number) => Partial<NextApiResponse>>(),
-    json: vi.fn<(body: unknown) => Partial<NextApiResponse>>(),
+    status: vi.fn<(code: number) => NextApiResponse>(),
+    json: vi.fn<(body: unknown) => NextApiResponse>(),
   };
 
-  response.status.mockReturnValue(response);
-  response.json.mockReturnValue(response);
+  response.status.mockReturnValue(response as unknown as NextApiResponse);
+  response.json.mockReturnValue(response as unknown as NextApiResponse);
 
   return response as unknown as NextApiResponse & {
     json: ReturnType<typeof vi.fn>;
@@ -143,19 +156,33 @@ const createBrevoPayload = () => ({
 describe("shortlist magic inbox webhook", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    mockDb._state.ownerRows = [{ userId: "owner-user-id" }];
+    const now = new Date();
+    const tomorrow = new Date(now);
+    tomorrow.setUTCDate(tomorrow.getUTCDate() + 1);
+
+    mockDb._state.accessRows = [
+      {
+        boardId: 123,
+        userId: "owner-user-id",
+        shortlistPowerpackActivatedAt: now,
+        shortlistPowerpackExpiresAt: tomorrow,
+      },
+    ];
     mockDb._state.insertedRows = [{ id: "inbox-row-id" }];
     mockDb._state.insertedValues = [];
   });
 
-  it("parses board id and user hash from the final magic inbox address", () => {
-    const [recipient] = parseMagicInboxRecipientsFromBrevoEmail(
-      createBrevoPayload().items[0],
-    );
+  it("parses board id and user public secret from the final magic inbox address", () => {
+    const item = createBrevoPayload().items.at(0);
+
+    expect(item).toBeDefined();
+    if (!item) return;
+
+    const [recipient] = parseMagicInboxRecipientsFromBrevoEmail(item);
 
     expect(recipient).toEqual({
       boardPublicId: "boardABC",
-      userHash: "userHash123",
+      userPublicSecret: "userHash123",
     });
   });
 
@@ -174,7 +201,7 @@ describe("shortlist magic inbox webhook", () => {
     expect(mockCreateDrizzleClient).toHaveBeenCalledTimes(1);
     expect(mockDb._state.insertedValues).toEqual([
       {
-        cardId: null,
+        boardId: 123,
         contentType: "application/json",
         createdBy: "owner-user-id",
         externId:
@@ -185,6 +212,7 @@ describe("shortlist magic inbox webhook", () => {
         processingTries: 0,
         rawContent: JSON.stringify(createBrevoPayload().items[0]),
         source: "BREVO",
+        userId: "owner-user-id",
       },
     ]);
   });
@@ -204,8 +232,8 @@ describe("shortlist magic inbox webhook", () => {
     });
   });
 
-  it("skips an email when the board owner cannot be resolved", async () => {
-    mockDb._state.ownerRows = [];
+  it("skips an email when board ownership or Powerpack access cannot be resolved", async () => {
+    mockDb._state.accessRows = [];
     const response = createResponse();
 
     await handler(createRequest({ body: createBrevoPayload() }), response);

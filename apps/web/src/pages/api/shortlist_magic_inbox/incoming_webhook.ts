@@ -6,14 +6,17 @@
  * Copyright: Copyright (c) 2026 Petr Nagy.
  * Proprietary: shortlistOS Powerpack feature. Not part of the open-source distribution.
  */
-import { and, eq, isNull } from "drizzle-orm";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 import { createDrizzleClient } from "@kan/db/client";
-import { boards, shortlistInbox, users } from "@kan/db/schema";
+import { shortlistInbox } from "@kan/db/schema";
 import { createLogger } from "@kan/logger";
 
 import { env } from "~/env";
+import {
+  getBearerToken,
+  resolveMagicInboxRecipientAccess,
+} from "../../../utils/shortlistMagic";
 
 const log = createLogger("api:shortlist-magic-inbox");
 
@@ -53,7 +56,7 @@ interface BrevoInboundPayload {
 
 interface MagicInboxRecipient {
   boardPublicId: string;
-  userHash: string;
+  userPublicSecret: string;
 }
 
 const isBrevoInboundPayload = (value: unknown): value is BrevoInboundPayload =>
@@ -61,27 +64,9 @@ const isBrevoInboundPayload = (value: unknown): value is BrevoInboundPayload =>
   value !== null &&
   Array.isArray((value as BrevoInboundPayload).items);
 
-const getHeaderValue = (value: string | string[] | undefined): string | null =>
-  Array.isArray(value) ? (value[0] ?? null) : (value ?? null);
-
-const getBearerToken = (req: NextApiRequest): string | null => {
-  const authorization = getHeaderValue(req.headers.authorization);
-
-  if (authorization?.toLowerCase().startsWith("bearer ")) {
-    return authorization.slice("bearer ".length).trim();
-  }
-
-  return getHeaderValue(req.headers.bearer)?.trim() ?? null;
-};
-
-const isAuthorizedBrevoWebhook = (req: NextApiRequest): boolean => {
-  const actualSecret = getBearerToken(req);
-
-  return (
-    !!env.BREVO_MAGIC_INBOX_WEBHOOK_SECRET &&
-    actualSecret === env.BREVO_MAGIC_INBOX_WEBHOOK_SECRET
-  );
-};
+const isAuthorizedBrevoWebhook = (req: NextApiRequest): boolean =>
+  !!env.BREVO_MAGIC_INBOX_WEBHOOK_SECRET &&
+  getBearerToken(req) === env.BREVO_MAGIC_INBOX_WEBHOOK_SECRET;
 
 const getAddress = (mailbox: BrevoMailbox | string): string | null => {
   if (typeof mailbox === "string") {
@@ -120,37 +105,24 @@ export const parseMagicInboxRecipientsFromBrevoEmail = (
       continue;
     }
 
-    const [boardPublicId, userHash, extraSegment] = localPart.split(".");
+    const [boardPublicId, userPublicSecret, extraSegment] =
+      localPart.split(".");
 
     if (
       boardPublicId &&
-      userHash &&
+      userPublicSecret &&
       !extraSegment &&
       /^[a-zA-Z0-9_-]{1,64}$/.test(boardPublicId) &&
-      /^[a-zA-Z0-9_-]{1,128}$/.test(userHash)
+      /^[a-zA-Z0-9_-]{1,128}$/.test(userPublicSecret)
     ) {
-      recipients.set(`${boardPublicId}.${userHash}`, {
+      recipients.set(`${boardPublicId}.${userPublicSecret}`, {
         boardPublicId,
-        userHash,
+        userPublicSecret,
       });
     }
   }
 
   return [...recipients.values()];
-};
-
-const resolveBoardOwner = async (
-  db: ReturnType<typeof createDrizzleClient>,
-  boardPublicId: string,
-) => {
-  const rows = await db
-    .select({ userId: users.id })
-    .from(boards)
-    .innerJoin(users, eq(boards.createdBy, users.id))
-    .where(and(eq(boards.publicId, boardPublicId), isNull(boards.deletedAt)))
-    .limit(1);
-
-  return rows[0]?.userId ?? null;
 };
 
 export default async function handler(
@@ -202,17 +174,17 @@ export default async function handler(
       }
 
       for (const recipient of magicInboxRecipients) {
-        const ownerId = await resolveBoardOwner(db, recipient.boardPublicId);
+        const access = await resolveMagicInboxRecipientAccess(db, recipient);
 
-        if (!ownerId) {
+        if (!access) {
           skipped += 1;
           log.warn(
             {
               boardPublicId: recipient.boardPublicId,
-              userHash: recipient.userHash,
+              userPublicSecret: recipient.userPublicSecret,
               externId: item.MessageId,
             },
-            "Skipping Brevo inbound email because board owner could not be resolved",
+            "Skipping Brevo inbound email because board ownership or Powerpack access could not be resolved",
           );
           continue;
         }
@@ -220,8 +192,9 @@ export default async function handler(
         const insertedRows = await db
           .insert(shortlistInbox)
           .values({
-            createdBy: ownerId,
-            cardId: null,
+            createdBy: access.userId,
+            userId: access.userId,
+            boardId: access.boardId,
             externId: item.MessageId,
             rawContent: JSON.stringify(item),
             contentType: BREVO_CONTENT_TYPE,

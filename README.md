@@ -169,6 +169,14 @@ pnpm db:migrate
 pnpm dev
 ```
 
+## Known Issues / TO FIX
+
+`pnpm --filter @kan/web typecheck` currently has existing project-level blockers:
+
+- `apps/web/src/pages/api/partner/_utils` is treated as a Next API route but has no default handler. Move it outside `pages/api` or wrap it as a valid route.
+- `bootstrap.cjs` imports `./apps/web/server.js`, which is not present in the local build state.
+- `apps/web/public/__ENV.js` is missing `NODE_ENV` for the checked `ProcessEnv` shape.
+
 ## Environment Variables 🔐
 
 | Variable                                  | Description                                               | Required                                    | Example                                                     |
@@ -189,6 +197,8 @@ pnpm dev
 | `STRIPE_SECRET_KEY`                       | Stripe secret key for proprietary shortlistOS Powerpack checkout/webhooks | For Powerpack checkout                      | `sk_live_...`                                               |
 | `STRIPE_SHORTLIST_WEBHOOK_SECRET`         | Signing secret for proprietary `/api/shortlist_stripe/webhook` | For Powerpack checkout                      | `whsec_...`                                                 |
 | `BREVO_MAGIC_INBOX_WEBHOOK_SECRET`        | Bearer secret for proprietary `/api/magic_inbox/incoming_webhook` | For Magic Inbox inbound email               | `random-secret`                                             |
+| `SHORTLIST_MAGIC_LINK_WEBHOOK_SECRET`     | Bearer secret for proprietary `/api/shortlist_magic_link` | For Magic Link capture                      | `random-secret`                                             |
+| `SHORTLIST_MAGIC_CLIP_WEBHOOK_SECRET`     | Bearer secret for proprietary `/api/shortlist_magic_clip` | For Magic Clip capture                      | `random-secret`                                             |
 | `NEXT_API_BODY_SIZE_LIMIT`                | Maximum API request body size (defaults to 1mb)           | No                                          | `50mb`                                                      |
 | `BETTER_AUTH_ALLOWED_DOMAINS`             | Comma-separated list of allowed domains for OIDC logins   | For OIDC/Social login                       | `example.com,subsidiary.com`                                |
 | `BETTER_AUTH_SECRET`                      | Auth encryption secret                                    | Yes                                         | Random 32+ char string                                      |

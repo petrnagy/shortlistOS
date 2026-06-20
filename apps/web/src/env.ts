@@ -32,6 +32,8 @@ export const env = createEnv({
     STRIPE_SECRET_KEY: z.string().optional(),
     STRIPE_SHORTLIST_WEBHOOK_SECRET: z.string().optional(),
     BREVO_MAGIC_INBOX_WEBHOOK_SECRET: z.string().optional(),
+    SHORTLIST_MAGIC_LINK_WEBHOOK_SECRET: z.string().optional(),
+    SHORTLIST_MAGIC_CLIP_WEBHOOK_SECRET: z.string().optional(),
     GOOGLE_CLIENT_ID: z.string().optional(),
     GOOGLE_CLIENT_SECRET: z.string().optional(),
     DISCORD_CLIENT_ID: z.string().optional(),
