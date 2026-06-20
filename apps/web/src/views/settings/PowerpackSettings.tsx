@@ -406,19 +406,6 @@ export default function PowerpackSettings() {
             }
           `}</style>
         </div>
-
-        <pre className="mt-4 overflow-x-auto rounded-md border border-light-300 bg-light-100 p-4 text-xs text-light-1000 dark:border-dark-300 dark:bg-dark-200 dark:text-dark-1000">
-          {JSON.stringify(
-            {
-              shortlistPowerpackActivatedAt:
-                user?.shortlistPowerpackActivatedAt?.toISOString() ?? null,
-              shortlistPowerpackExpiresAt:
-                user?.shortlistPowerpackExpiresAt?.toISOString() ?? null,
-            },
-            null,
-            2,
-          )}
-        </pre>
       </div>
     </>
   );
