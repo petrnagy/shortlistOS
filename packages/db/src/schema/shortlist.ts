@@ -3,7 +3,6 @@ import {
   bigint,
   index,
   integer,
-  json,
   jsonb,
   numeric,
   pgTable,
@@ -29,9 +28,12 @@ export const shortlistInbox = pgTable(
     createdBy: uuid("createdBy")
       .notNull()
       .references(() => users.id, { onDelete: "cascade" }),
-    cardId: bigint("cardId", { mode: "number" }).references(() => cards.id, {
-      onDelete: "set null",
-    }),
+    userId: uuid("userId")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    boardId: bigint("boardId", { mode: "number" })
+      .notNull()
+      .references(() => boards.id, { onDelete: "cascade" }),
     createdAt: timestamp("createdAt").notNull().defaultNow(),
     updatedAt: timestamp("updatedAt"),
     processedAt: timestamp("processedAt"),
@@ -44,6 +46,8 @@ export const shortlistInbox = pgTable(
     processingResult: varchar("processingResult", { length: 10 }).notNull(),
   },
   (table) => [
+    index("shortlist_inbox_user_idx").on(table.userId),
+    index("shortlist_inbox_board_idx").on(table.boardId),
     index("shortlist_inbox_created_at_idx").on(table.createdAt),
     index("shortlist_inbox_processed_at_idx").on(table.processedAt),
     index("shortlist_inbox_processing_result_idx").on(table.processingResult),
@@ -57,10 +61,90 @@ export const shortlistInboxRelations = relations(shortlistInbox, ({ one }) => ({
     references: [users.id],
     relationName: "shortlistInboxCreatedByUser",
   }),
-  card: one(cards, {
-    fields: [shortlistInbox.cardId],
-    references: [cards.id],
-    relationName: "shortlistInboxCard",
+  user: one(users, {
+    fields: [shortlistInbox.userId],
+    references: [users.id],
+    relationName: "shortlistInboxUser",
+  }),
+  board: one(boards, {
+    fields: [shortlistInbox.boardId],
+    references: [boards.id],
+    relationName: "shortlistInboxBoard",
+  }),
+}));
+
+export const shortlistLinks = pgTable(
+  "shortlist_link",
+  {
+    id: uuid("id")
+      .notNull()
+      .primaryKey()
+      .default(sql`uuid_generate_v4()`),
+    createdBy: uuid("createdBy")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    boardId: bigint("boardId", { mode: "number" })
+      .notNull()
+      .references(() => boards.id, { onDelete: "cascade" }),
+    url: text("url").notNull(),
+    createdAt: timestamp("createdAt").notNull().defaultNow(),
+    updatedAt: timestamp("updatedAt"),
+  },
+  (table) => [
+    index("shortlist_link_created_by_idx").on(table.createdBy),
+    index("shortlist_link_board_idx").on(table.boardId),
+    index("shortlist_link_created_at_idx").on(table.createdAt),
+  ],
+).enableRLS();
+
+export const shortlistLinksRelations = relations(shortlistLinks, ({ one }) => ({
+  createdByUser: one(users, {
+    fields: [shortlistLinks.createdBy],
+    references: [users.id],
+    relationName: "shortlistLinksCreatedByUser",
+  }),
+  board: one(boards, {
+    fields: [shortlistLinks.boardId],
+    references: [boards.id],
+    relationName: "shortlistLinksBoard",
+  }),
+}));
+
+export const shortlistClips = pgTable(
+  "shortlist_clip",
+  {
+    id: uuid("id")
+      .notNull()
+      .primaryKey()
+      .default(sql`uuid_generate_v4()`),
+    createdBy: uuid("createdBy")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    boardId: bigint("boardId", { mode: "number" })
+      .notNull()
+      .references(() => boards.id, { onDelete: "cascade" }),
+    url: text("url").notNull(),
+    rawHtml: text("rawHtml").notNull(),
+    createdAt: timestamp("createdAt").notNull().defaultNow(),
+    updatedAt: timestamp("updatedAt"),
+  },
+  (table) => [
+    index("shortlist_clip_created_by_idx").on(table.createdBy),
+    index("shortlist_clip_board_idx").on(table.boardId),
+    index("shortlist_clip_created_at_idx").on(table.createdAt),
+  ],
+).enableRLS();
+
+export const shortlistClipsRelations = relations(shortlistClips, ({ one }) => ({
+  createdByUser: one(users, {
+    fields: [shortlistClips.createdBy],
+    references: [users.id],
+    relationName: "shortlistClipsCreatedByUser",
+  }),
+  board: one(boards, {
+    fields: [shortlistClips.boardId],
+    references: [boards.id],
+    relationName: "shortlistClipsBoard",
   }),
 }));
 

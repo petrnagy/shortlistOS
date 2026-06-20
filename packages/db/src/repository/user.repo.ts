@@ -100,6 +100,7 @@ export const create = async (
       id: user.id ?? uuidv4(),
       email: user.email,
       stripeCustomerId: user.stripeCustomerId,
+      shortlistUserPublicSecret: uuidv4(),
       emailVerified: false,
     })
     .returning();

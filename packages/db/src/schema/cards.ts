@@ -21,7 +21,7 @@ import { checklists } from "./checklists";
 import { imports } from "./imports";
 import { labels } from "./labels";
 import { lists } from "./lists";
-import { shortlistActivityLogs, shortlistInbox } from "./shortlist";
+import { shortlistActivityLogs } from "./shortlist";
 import { users } from "./users";
 import { workspaceMembers } from "./workspaces";
 
@@ -158,7 +158,6 @@ export const cardsRelations = relations(cards, ({ one, many }) => ({
   checklists: many(checklists),
   attachments: many(cardAttachments),
   shortlistActivityLogs: many(shortlistActivityLogs),
-  shortlistInboxEntries: many(shortlistInbox),
 }));
 
 export const cardActivities = pgTable("card_activity", {

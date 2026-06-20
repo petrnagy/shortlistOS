@@ -14,7 +14,12 @@ import { cards } from "./cards";
 import { imports } from "./imports";
 import { integrations } from "./integrations";
 import { lists } from "./lists";
-import { shortlistActivityLogs, shortlistInbox } from "./shortlist";
+import {
+  shortlistActivityLogs,
+  shortlistClips,
+  shortlistInbox,
+  shortlistLinks,
+} from "./shortlist";
 import { workspaceMembers, workspaces } from "./workspaces";
 
 export const users = pgTable(
@@ -39,6 +44,9 @@ export const users = pgTable(
     shortlistIsicVerifiedAt: timestamp("shortlist_isicVerifiedAt"),
     shortlistIsicExpiresAt: timestamp("shortlist_isicExpiresAt"),
     shortlistFeedSecret: varchar("shortlist_feedSecret", { length: 255 }),
+    shortlistUserPublicSecret: varchar("shortlist_userPublicSecret", {
+      length: 255,
+    }),
     shortlistWeeklyDigestEnabled: boolean("shortlist_weeklyDigestEnabled")
       .notNull()
       .default(false),
@@ -50,6 +58,10 @@ export const users = pgTable(
   (table) => [
     index("user_shortlist_powerpack_expires_at_idx").on(
       table.shortlistPowerpackExpiresAt,
+    ),
+    index("user_shortlist_feed_secret_idx").on(table.shortlistFeedSecret),
+    index("user_shortlist_user_public_secret_idx").on(
+      table.shortlistUserPublicSecret,
     ),
   ],
 ).enableRLS();
@@ -76,6 +88,8 @@ export const usersRelations = relations(users, ({ many }) => ({
   }),
   shortlistActivityLogs: many(shortlistActivityLogs),
   shortlistInboxEntries: many(shortlistInbox),
+  shortlistLinks: many(shortlistLinks),
+  shortlistClips: many(shortlistClips),
   deletedWorkspaces: many(workspaces, {
     relationName: "workspaceDeletedByUser",
   }),
