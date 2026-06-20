@@ -1,7 +1,9 @@
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { t } from "@lingui/core/macro";
 import { motion } from "framer-motion";
 import {
+  HiOutlineCog6Tooth,
   HiOutlineRectangleStack,
   HiOutlineStar,
   HiStar,
@@ -22,6 +24,7 @@ export function BoardsList({
   isTemplate?: boolean;
   archived?: boolean;
 }) {
+  const router = useRouter();
   const { workspace } = useWorkspace();
   const { openModal } = useModal();
   const { canCreateBoard } = usePermissions();
@@ -53,6 +56,15 @@ export function BoardsList({
       boardPublicId,
       favorite: !currentFavorite,
     });
+  };
+
+  const handleOpenBoardSettings = (
+    e: React.MouseEvent,
+    boardPublicId: string,
+  ) => {
+    e.preventDefault();
+    e.stopPropagation();
+    void router.push(`/boards/${boardPublicId}/settings`);
   };
 
   if (isLoading)
@@ -122,6 +134,15 @@ export function BoardsList({
           >
             <div className="group relative mr-5 flex h-[150px] w-full items-center justify-center rounded-md border border-dashed border-light-400 bg-light-50 shadow-sm hover:bg-light-200 dark:border-dark-600 dark:bg-dark-50 dark:hover:bg-dark-100">
               <PaperGrainBackground />
+              {!archived && !isTemplate && (
+                <button
+                  onClick={(e) => handleOpenBoardSettings(e, board.publicId)}
+                  className="absolute right-10 top-3 z-10 rounded p-1 opacity-100 transition-all hover:bg-light-300 dark:hover:bg-dark-200 md:opacity-0 md:group-hover:opacity-100"
+                  aria-label="Open board settings"
+                >
+                  <HiOutlineCog6Tooth className="h-5 w-5 text-neutral-700 dark:text-dark-800" />
+                </button>
+              )}
               <button
                 onClick={(e) =>
                   handleToggleFavorite(e, board.publicId, board.favorite)
