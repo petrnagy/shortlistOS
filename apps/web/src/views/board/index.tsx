@@ -788,6 +788,9 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
                                             lastActivity={
                                               card.lastActivity ?? null
                                             }
+                                            isCardAgingEnabled={
+                                              boardData.shortlistIsCardAgingEnabled
+                                            }
                                           />
                                         </Link>
                                       )}

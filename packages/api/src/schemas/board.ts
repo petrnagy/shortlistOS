@@ -56,6 +56,7 @@ export const boardDetailSchema = z.object({
   slug: z.string(),
   visibility: z.string(),
   isArchived: z.boolean(),
+  shortlistIsCardAgingEnabled: z.boolean(),
   favorite: z.boolean(),
   workspace: z.object({
     publicId: z.string(),
@@ -130,5 +131,9 @@ export const boardCreateResponseSchema = z.object({
 // ─── board.update ────────────────────────────────────────────
 export const boardUpdateResponseSchema = z.union([
   z.object({ success: z.boolean() }),
-  z.object({ publicId: z.string(), name: z.string() }),
+  z.object({
+    publicId: z.string(),
+    name: z.string(),
+    shortlistIsCardAgingEnabled: z.boolean(),
+  }),
 ]);

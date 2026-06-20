@@ -1,4 +1,5 @@
 import { TRPCError } from "@trpc/server";
+import { eq } from "drizzle-orm";
 import { z } from "zod";
 
 import * as boardRepo from "@kan/db/repository/board.repo";
@@ -7,6 +8,7 @@ import * as activityRepo from "@kan/db/repository/cardActivity.repo";
 import * as labelRepo from "@kan/db/repository/label.repo";
 import * as listRepo from "@kan/db/repository/list.repo";
 import * as workspaceRepo from "@kan/db/repository/workspace.repo";
+import { users } from "@kan/db/schema";
 import { colours } from "@kan/shared/constants";
 import {
   convertDueDateFiltersToRanges,
@@ -24,6 +26,23 @@ import {
   boardUpdateResponseSchema,
 } from "../schemas";
 import { assertCanDelete, assertCanEdit, assertPermission } from "../utils/permissions";
+
+const hasActivePowerpack = (
+  user: {
+    shortlistPowerpackActivatedAt?: Date | null;
+    shortlistPowerpackExpiresAt?: Date | null;
+  },
+  now = new Date(),
+) => {
+  const { shortlistPowerpackActivatedAt, shortlistPowerpackExpiresAt } = user;
+
+  return (
+    !!shortlistPowerpackActivatedAt &&
+    !!shortlistPowerpackExpiresAt &&
+    now >= shortlistPowerpackActivatedAt &&
+    now <= shortlistPowerpackExpiresAt
+  );
+};
 
 export const boardRouter = createTRPCRouter({
   all: protectedProcedure
@@ -160,8 +179,7 @@ export const boardRouter = createTRPCRouter({
       }
 
       // Generate presigned URLs for workspace member avatars
-      const workspaceWithAvatarUrls = result.workspace
-        ? {
+      const workspaceWithAvatarUrls = {
           ...result.workspace,
           members: await Promise.all(
             result.workspace.members.map(async (member) => {
@@ -179,8 +197,7 @@ export const boardRouter = createTRPCRouter({
               };
             }),
           ),
-        }
-        : result.workspace;
+        };
 
       // Generate presigned URLs for card member avatars
       const listsWithAvatarUrls = await Promise.all(
@@ -472,6 +489,7 @@ export const boardRouter = createTRPCRouter({
         visibility: z.enum(["public", "private"]).optional(),
         favorite: z.boolean().optional(),
         isArchived: z.boolean().optional(),
+        shortlistIsCardAgingEnabled: z.boolean().optional(),
       }),
     )
     .output(boardUpdateResponseSchema)
@@ -512,8 +530,30 @@ export const boardRouter = createTRPCRouter({
         }
       }
 
+      if (input.shortlistIsCardAgingEnabled !== undefined) {
+        const user = await ctx.db.query.users.findFirst({
+          columns: {
+            shortlistPowerpackActivatedAt: true,
+            shortlistPowerpackExpiresAt: true,
+          },
+          where: eq(users.id, userId),
+        });
+
+        if (!user || !hasActivePowerpack(user)) {
+          throw new TRPCError({
+            message: `Card aging requires an active Powerpack`,
+            code: "FORBIDDEN",
+          });
+        }
+      }
+
       // Handle other updates (name, slug, visibility)
-      const hasOtherUpdates = input.name || input.slug || input.visibility !== undefined || input.isArchived !== undefined;
+      const hasOtherUpdates =
+        input.name !== undefined ||
+        input.slug !== undefined ||
+        input.visibility !== undefined ||
+        input.isArchived !== undefined ||
+        input.shortlistIsCardAgingEnabled !== undefined;
 
       if (!hasOtherUpdates) {
         // Only favorite was updated, return success
@@ -541,6 +581,7 @@ export const boardRouter = createTRPCRouter({
         boardPublicId: input.boardPublicId,
         visibility: input.visibility,
         isArchived: input.isArchived,
+        shortlistIsCardAgingEnabled: input.shortlistIsCardAgingEnabled,
       });
 
       if (!result)

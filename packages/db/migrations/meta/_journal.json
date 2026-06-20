@@ -302,6 +302,13 @@
       "when": 1781917200000,
       "tag": "20260620010000_AddShortlistMagicLinkAndClip",
       "breakpoints": true
+    },
+    {
+      "idx": 43,
+      "version": "7",
+      "when": 1781920800000,
+      "tag": "20260620020000_AddBoardCardAgingSetting",
+      "breakpoints": true
     }
   ]
 }

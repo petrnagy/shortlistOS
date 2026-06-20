@@ -32,7 +32,13 @@ const BoardSettingsPage: NextPageWithLayout = () => {
               </h1>
             </div>
 
-            <BoardsSettings />
+            <BoardsSettings
+              boardPublicId={boardId ?? ""}
+              isBoardLoaded={!!boardData}
+              isCardAgingEnabled={
+                boardData?.shortlistIsCardAgingEnabled ?? false
+              }
+            />
           </div>
         </div>
       </div>

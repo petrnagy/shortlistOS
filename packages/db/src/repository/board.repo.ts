@@ -200,6 +200,7 @@ export const getByPublicId = async (
       slug: true,
       visibility: true,
       isArchived: true,
+      shortlistIsCardAgingEnabled: true,
     },
     with: {
       userFavorites: {
@@ -656,6 +657,7 @@ export const update = async (
     visibility: BoardVisibilityStatus | undefined;
     boardPublicId: string;
     isArchived?: boolean;
+    shortlistIsCardAgingEnabled?: boolean;
   },
 ) => {
   const [result] = await db
@@ -668,11 +670,15 @@ export const update = async (
       ...(boardInput.isArchived !== undefined && {
         isArchived: boardInput.isArchived,
       }),
+      ...(boardInput.shortlistIsCardAgingEnabled !== undefined && {
+        shortlistIsCardAgingEnabled: boardInput.shortlistIsCardAgingEnabled,
+      }),
     })
     .where(eq(boards.publicId, boardInput.boardPublicId))
     .returning({
       publicId: boards.publicId,
       name: boards.name,
+      shortlistIsCardAgingEnabled: boards.shortlistIsCardAgingEnabled,
     });
 
   return result;

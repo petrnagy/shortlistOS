@@ -79,6 +79,9 @@ export const boards = pgTable(
     shortlistInactivityDigestAfterDays: smallint(
       "shortlist_inactivityDigestAfterDays",
     ),
+    shortlistIsCardAgingEnabled: boolean("shortlist_isCardAgingEnabled")
+      .notNull()
+      .default(false),
   },
   (table) => [
     index("board_is_archived_idx").on(table.isArchived),

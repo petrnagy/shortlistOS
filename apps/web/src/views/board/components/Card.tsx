@@ -20,7 +20,6 @@ import { getAvatarUrl } from "~/utils/helpers";
 
 const Card = ({
   title,
-  ticketNumber,
   labels,
   members,
   checklists,
@@ -29,6 +28,7 @@ const Card = ({
   attachments,
   dueDate,
   lastActivity,
+  isCardAgingEnabled = false,
 }: {
   title: string;
   ticketNumber?: string | null;
@@ -53,6 +53,7 @@ const Card = ({
   attachments?: { publicId: string }[];
   dueDate?: Date | null;
   lastActivity?: Date | null;
+  isCardAgingEnabled?: boolean;
 }) => {
   const { dateLocale } = useLocalisation();
   const showYear = dueDate ? !isSameYear(dueDate, new Date()) : false;
@@ -73,7 +74,9 @@ const Card = ({
   const hasAttachments = attachments && attachments.length > 0;
   const hasDueDate = !!dueDate;
   const formattedLastActivity = formatLastActivity(lastActivity, dateLocale);
-  const agingLevel = getCardAgingLevel(lastActivity);
+  const agingLevel = isCardAgingEnabled
+    ? getCardAgingLevel(lastActivity)
+    : "none";
   const agingClasses = getCardAgingClasses(agingLevel);
 
   return (
@@ -112,7 +115,7 @@ const Card = ({
                   <HiBars3BottomLeft className="h-4 w-4" />
                 </div>
               )}
-              {hasDueDate && dueDate && (
+              {dueDate ? (
                 <div
                   className={twMerge(
                     "flex items-center gap-1",
@@ -128,7 +131,7 @@ const Card = ({
                     })}
                   </span>
                 </div>
-              )}
+              ) : null}
               {comments.length > 0 && (
                 <div className="flex items-center gap-1 text-light-700 dark:text-dark-800">
                   <HiChatBubbleLeft className="h-4 w-4" />
