@@ -103,6 +103,8 @@ export const env = createEnv({
     NEXT_PUBLIC_AVATAR_BUCKET_NAME: z.string().optional(),
     NEXT_PUBLIC_ATTACHMENTS_BUCKET_NAME: z.string().optional(),
     NEXT_PUBLIC_STORAGE_DOMAIN: z.string().optional(),
+    // Proprietary shortlistOS Powerpack and Magic Inbox functionality.
+    NEXT_PUBLIC_MAGIC_INBOX_DOMAIN: z.string().optional(),
     NEXT_PUBLIC_USE_VIRTUAL_HOSTED_URLS: z
       .string()
       .transform((s) => (s === "" ? undefined : s))
@@ -151,6 +153,8 @@ export const env = createEnv({
     NEXT_PUBLIC_ATTACHMENTS_BUCKET_NAME:
       process.env.NEXT_PUBLIC_ATTACHMENTS_BUCKET_NAME,
     NEXT_PUBLIC_STORAGE_DOMAIN: process.env.NEXT_PUBLIC_STORAGE_DOMAIN,
+    NEXT_PUBLIC_MAGIC_INBOX_DOMAIN:
+      process.env.NEXT_PUBLIC_MAGIC_INBOX_DOMAIN,
     NEXT_PUBLIC_USE_VIRTUAL_HOSTED_URLS:
       process.env.NEXT_PUBLIC_USE_VIRTUAL_HOSTED_URLS,
     NEXT_PUBLIC_APP_VERSION: process.env.NEXT_PUBLIC_APP_VERSION,

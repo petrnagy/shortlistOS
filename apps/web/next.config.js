@@ -79,6 +79,10 @@ const config = {
         source: "/settings",
         destination: "/settings/account",
       },
+      {
+        source: "/calendar/shortlist/:boardPublicId.ics",
+        destination: "/api/shortlist_calendar/:boardPublicId",
+      },
     ];
   },
 };

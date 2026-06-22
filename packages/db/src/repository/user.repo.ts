@@ -24,6 +24,8 @@ export const getById = async (db: dbClient, userId: string) => {
         stripeCustomerId: true,
         shortlistPowerpackActivatedAt: true,
         shortlistPowerpackExpiresAt: true,
+        shortlistFeedSecret: true,
+        shortlistUserPublicSecret: true,
       },
       with: {
         apiKeys: {
@@ -100,6 +102,7 @@ export const create = async (
       id: user.id ?? uuidv4(),
       email: user.email,
       stripeCustomerId: user.stripeCustomerId,
+      shortlistFeedSecret: uuidv4(),
       shortlistUserPublicSecret: uuidv4(),
       emailVerified: false,
     })

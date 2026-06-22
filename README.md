@@ -222,6 +222,7 @@ pnpm dev
 | `S3_AVATAR_UPLOAD_LIMIT`                  | Maximum avatar file size in bytes                         | For file uploads                            | `2097152` (2MB)                                             |
 | `NEXT_PUBLIC_STORAGE_URL`                 | Storage service URL                                       | For file uploads                            | `https://storage.kanbn.com`                                 |
 | `NEXT_PUBLIC_STORAGE_DOMAIN`              | Storage domain name                                       | For file uploads                            | `kanbn.com`                                                 |
+| `NEXT_PUBLIC_MAGIC_INBOX_DOMAIN`          | Magic Inbox forwarding domain                             | Proprietary shortlistOS Powerpack feature   | `magic-inbox.shortlistos.co`                                |
 | `NEXT_PUBLIC_USE_VIRTUAL_HOSTED_URLS`     | Use virtual-hosted style URLs (bucket.domain.com)         | For file uploads (optional)                 | `true`                                                      |
 | `NEXT_PUBLIC_AVATAR_BUCKET_NAME`          | S3 bucket name for avatars                                | For file uploads                            | `avatars`                                                   |
 | `NEXT_PUBLIC_ATTACHMENTS_BUCKET_NAME`     | S3 bucket name for attachments                            | For file uploads                            | `attachments`                                               |

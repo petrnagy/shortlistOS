@@ -20,7 +20,7 @@ import {
 
 const log = createLogger("api:shortlist-magic-inbox");
 
-const MAGIC_INBOX_DOMAIN = "magic-inbox.shortlistos.co";
+const MAGIC_INBOX_DOMAIN = env.NEXT_PUBLIC_MAGIC_INBOX_DOMAIN?.toLowerCase();
 const BREVO_SOURCE = "BREVO";
 const BREVO_CONTENT_TYPE = "application/json";
 const INBOX_PROCESSING_RESULT_RETRY = "RETRY";
@@ -101,7 +101,11 @@ export const parseMagicInboxRecipientsFromBrevoEmail = (
   for (const address of extractRecipientAddresses(email)) {
     const [localPart, domain] = address.split("@");
 
-    if (!localPart || domain?.toLowerCase() !== MAGIC_INBOX_DOMAIN) {
+    if (
+      !MAGIC_INBOX_DOMAIN ||
+      !localPart ||
+      domain?.toLowerCase() !== MAGIC_INBOX_DOMAIN
+    ) {
       continue;
     }
 
@@ -137,6 +141,14 @@ export default async function handler(
     log.error("Brevo magic inbox webhook secret is not configured");
 
     return res.status(500).json({ message: "Webhook secret is not configured" });
+  }
+
+  if (!env.NEXT_PUBLIC_MAGIC_INBOX_DOMAIN) {
+    log.error("Magic inbox domain is not configured");
+
+    return res
+      .status(500)
+      .json({ message: "Magic inbox domain is not configured" });
   }
 
   if (!isAuthorizedBrevoWebhook(req)) {
