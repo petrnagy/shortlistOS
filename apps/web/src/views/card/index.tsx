@@ -1287,7 +1287,7 @@ export function CardRightPanel({ isTemplate }: { isTemplate?: boolean }) {
               showLabel={false}
             />
           </div>
-          <p className="text-sm leading-6 text-light-700 dark:text-dark-800">
+          <p className="text-sm leading-6 text-light-900 dark:text-dark-900">
             {t`When off, AI and background automations cannot edit this card.`}
           </p>
         </div>
