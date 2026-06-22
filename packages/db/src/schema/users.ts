@@ -47,9 +47,6 @@ export const users = pgTable(
     shortlistUserPublicSecret: varchar("shortlist_userPublicSecret", {
       length: 255,
     }),
-    shortlistWeeklyDigestEnabled: boolean("shortlist_weeklyDigestEnabled")
-      .notNull()
-      .default(false),
     shortlistTimezone: varchar("shortlist_timezone", { length: 255 })
       .notNull()
       .default("UTC"),

@@ -65,20 +65,83 @@ export const boards = pgTable(
     type: boardTypeEnum("type").notNull().default("regular"),
     isArchived: boolean("isArchived").notNull().default(false),
     sourceBoardId: bigint("sourceBoardId", { mode: "number" }),
-    shortlistAutoArchiveAfterDays: smallint("shortlist_autoArchiveAfterDays"),
-    shortlistAutoGhostedAfterDays: smallint("shortlist_autoGhostedAfterDays"),
+    shortlistIsSalaryDataEnabled: boolean("shortlist_isSalaryDataEnabled")
+      .notNull()
+      .default(false),
+    shortlistIsCompanySentimentEnabled: boolean(
+      "shortlist_isCompanySentimentEnabled",
+    )
+      .notNull()
+      .default(false),
+    shortlistIsMagicInboxEnabled: boolean("shortlist_isMagicInboxEnabled")
+      .notNull()
+      .default(false),
+    shortlistIsCalendarFeedEnabled: boolean("shortlist_isCalendarFeedEnabled")
+      .notNull()
+      .default(false),
+    shortlistIsSavedReminderEnabled: boolean(
+      "shortlist_isSavedReminderEnabled",
+    )
+      .notNull()
+      .default(false),
     shortlistSavedReminderAfterDays: smallint(
       "shortlist_savedReminderAfterDays",
-    ),
+    )
+      .notNull()
+      .default(7),
+    shortlistIsSavedAutoArchiveEnabled: boolean(
+      "shortlist_isSavedAutoArchiveEnabled",
+    )
+      .notNull()
+      .default(false),
+    shortlistSavedAutoArchiveAfterDays: smallint(
+      "shortlist_savedAutoArchiveAfterDays",
+    )
+      .notNull()
+      .default(14),
+    shortlistIsAppliedFollowUpReminderEnabled: boolean(
+      "shortlist_isAppliedFollowUpReminderEnabled",
+    )
+      .notNull()
+      .default(false),
+    shortlistAppliedFollowUpReminderAfterDays: smallint(
+      "shortlist_appliedFollowUpReminderAfterDays",
+    )
+      .notNull()
+      .default(7),
+    shortlistIsAppliedGhostedEnabled: boolean(
+      "shortlist_isAppliedGhostedEnabled",
+    )
+      .notNull()
+      .default(false),
+    shortlistAppliedGhostedAfterDays: smallint(
+      "shortlist_appliedGhostedAfterDays",
+    )
+      .notNull()
+      .default(14),
+    shortlistIsInterviewingNudgeEnabled: boolean(
+      "shortlist_isInterviewingNudgeEnabled",
+    )
+      .notNull()
+      .default(false),
     shortlistInterviewingNudgeAfterDays: smallint(
       "shortlist_interviewingNudgeAfterDays",
-    ),
+    )
+      .notNull()
+      .default(3),
+    shortlistIsNegotiatingNudgeEnabled: boolean(
+      "shortlist_isNegotiatingNudgeEnabled",
+    )
+      .notNull()
+      .default(false),
     shortlistNegotiatingNudgeAfterDays: smallint(
       "shortlist_negotiatingNudgeAfterDays",
-    ),
-    shortlistInactivityDigestAfterDays: smallint(
-      "shortlist_inactivityDigestAfterDays",
-    ),
+    )
+      .notNull()
+      .default(3),
+    shortlistIsWeeklyDigestEnabled: boolean("shortlist_isWeeklyDigestEnabled")
+      .notNull()
+      .default(false),
     shortlistIsCardAgingEnabled: boolean("shortlist_isCardAgingEnabled")
       .notNull()
       .default(false),

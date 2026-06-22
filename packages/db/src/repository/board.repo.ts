@@ -200,6 +200,23 @@ export const getByPublicId = async (
       slug: true,
       visibility: true,
       isArchived: true,
+      shortlistIsSalaryDataEnabled: true,
+      shortlistIsCompanySentimentEnabled: true,
+      shortlistIsMagicInboxEnabled: true,
+      shortlistIsCalendarFeedEnabled: true,
+      shortlistIsSavedReminderEnabled: true,
+      shortlistSavedReminderAfterDays: true,
+      shortlistIsSavedAutoArchiveEnabled: true,
+      shortlistSavedAutoArchiveAfterDays: true,
+      shortlistIsAppliedFollowUpReminderEnabled: true,
+      shortlistAppliedFollowUpReminderAfterDays: true,
+      shortlistIsAppliedGhostedEnabled: true,
+      shortlistAppliedGhostedAfterDays: true,
+      shortlistIsInterviewingNudgeEnabled: true,
+      shortlistInterviewingNudgeAfterDays: true,
+      shortlistIsNegotiatingNudgeEnabled: true,
+      shortlistNegotiatingNudgeAfterDays: true,
+      shortlistIsWeeklyDigestEnabled: true,
       shortlistIsCardAgingEnabled: true,
     },
     with: {
@@ -657,6 +674,23 @@ export const update = async (
     visibility: BoardVisibilityStatus | undefined;
     boardPublicId: string;
     isArchived?: boolean;
+    shortlistIsSalaryDataEnabled?: boolean;
+    shortlistIsCompanySentimentEnabled?: boolean;
+    shortlistIsMagicInboxEnabled?: boolean;
+    shortlistIsCalendarFeedEnabled?: boolean;
+    shortlistIsSavedReminderEnabled?: boolean;
+    shortlistSavedReminderAfterDays?: number;
+    shortlistIsSavedAutoArchiveEnabled?: boolean;
+    shortlistSavedAutoArchiveAfterDays?: number;
+    shortlistIsAppliedFollowUpReminderEnabled?: boolean;
+    shortlistAppliedFollowUpReminderAfterDays?: number;
+    shortlistIsAppliedGhostedEnabled?: boolean;
+    shortlistAppliedGhostedAfterDays?: number;
+    shortlistIsInterviewingNudgeEnabled?: boolean;
+    shortlistInterviewingNudgeAfterDays?: number;
+    shortlistIsNegotiatingNudgeEnabled?: boolean;
+    shortlistNegotiatingNudgeAfterDays?: number;
+    shortlistIsWeeklyDigestEnabled?: boolean;
     shortlistIsCardAgingEnabled?: boolean;
   },
 ) => {
@@ -670,6 +704,74 @@ export const update = async (
       ...(boardInput.isArchived !== undefined && {
         isArchived: boardInput.isArchived,
       }),
+      ...(boardInput.shortlistIsSalaryDataEnabled !== undefined && {
+        shortlistIsSalaryDataEnabled: boardInput.shortlistIsSalaryDataEnabled,
+      }),
+      ...(boardInput.shortlistIsCompanySentimentEnabled !== undefined && {
+        shortlistIsCompanySentimentEnabled:
+          boardInput.shortlistIsCompanySentimentEnabled,
+      }),
+      ...(boardInput.shortlistIsMagicInboxEnabled !== undefined && {
+        shortlistIsMagicInboxEnabled: boardInput.shortlistIsMagicInboxEnabled,
+      }),
+      ...(boardInput.shortlistIsCalendarFeedEnabled !== undefined && {
+        shortlistIsCalendarFeedEnabled:
+          boardInput.shortlistIsCalendarFeedEnabled,
+      }),
+      ...(boardInput.shortlistIsSavedReminderEnabled !== undefined && {
+        shortlistIsSavedReminderEnabled:
+          boardInput.shortlistIsSavedReminderEnabled,
+      }),
+      ...(boardInput.shortlistSavedReminderAfterDays !== undefined && {
+        shortlistSavedReminderAfterDays:
+          boardInput.shortlistSavedReminderAfterDays,
+      }),
+      ...(boardInput.shortlistIsSavedAutoArchiveEnabled !== undefined && {
+        shortlistIsSavedAutoArchiveEnabled:
+          boardInput.shortlistIsSavedAutoArchiveEnabled,
+      }),
+      ...(boardInput.shortlistSavedAutoArchiveAfterDays !== undefined && {
+        shortlistSavedAutoArchiveAfterDays:
+          boardInput.shortlistSavedAutoArchiveAfterDays,
+      }),
+      ...(boardInput.shortlistIsAppliedFollowUpReminderEnabled !==
+        undefined && {
+        shortlistIsAppliedFollowUpReminderEnabled:
+          boardInput.shortlistIsAppliedFollowUpReminderEnabled,
+      }),
+      ...(boardInput.shortlistAppliedFollowUpReminderAfterDays !==
+        undefined && {
+        shortlistAppliedFollowUpReminderAfterDays:
+          boardInput.shortlistAppliedFollowUpReminderAfterDays,
+      }),
+      ...(boardInput.shortlistIsAppliedGhostedEnabled !== undefined && {
+        shortlistIsAppliedGhostedEnabled:
+          boardInput.shortlistIsAppliedGhostedEnabled,
+      }),
+      ...(boardInput.shortlistAppliedGhostedAfterDays !== undefined && {
+        shortlistAppliedGhostedAfterDays:
+          boardInput.shortlistAppliedGhostedAfterDays,
+      }),
+      ...(boardInput.shortlistIsInterviewingNudgeEnabled !== undefined && {
+        shortlistIsInterviewingNudgeEnabled:
+          boardInput.shortlistIsInterviewingNudgeEnabled,
+      }),
+      ...(boardInput.shortlistInterviewingNudgeAfterDays !== undefined && {
+        shortlistInterviewingNudgeAfterDays:
+          boardInput.shortlistInterviewingNudgeAfterDays,
+      }),
+      ...(boardInput.shortlistIsNegotiatingNudgeEnabled !== undefined && {
+        shortlistIsNegotiatingNudgeEnabled:
+          boardInput.shortlistIsNegotiatingNudgeEnabled,
+      }),
+      ...(boardInput.shortlistNegotiatingNudgeAfterDays !== undefined && {
+        shortlistNegotiatingNudgeAfterDays:
+          boardInput.shortlistNegotiatingNudgeAfterDays,
+      }),
+      ...(boardInput.shortlistIsWeeklyDigestEnabled !== undefined && {
+        shortlistIsWeeklyDigestEnabled:
+          boardInput.shortlistIsWeeklyDigestEnabled,
+      }),
       ...(boardInput.shortlistIsCardAgingEnabled !== undefined && {
         shortlistIsCardAgingEnabled: boardInput.shortlistIsCardAgingEnabled,
       }),
@@ -678,6 +780,32 @@ export const update = async (
     .returning({
       publicId: boards.publicId,
       name: boards.name,
+      shortlistIsSalaryDataEnabled: boards.shortlistIsSalaryDataEnabled,
+      shortlistIsCompanySentimentEnabled:
+        boards.shortlistIsCompanySentimentEnabled,
+      shortlistIsMagicInboxEnabled: boards.shortlistIsMagicInboxEnabled,
+      shortlistIsCalendarFeedEnabled: boards.shortlistIsCalendarFeedEnabled,
+      shortlistIsSavedReminderEnabled: boards.shortlistIsSavedReminderEnabled,
+      shortlistSavedReminderAfterDays: boards.shortlistSavedReminderAfterDays,
+      shortlistIsSavedAutoArchiveEnabled:
+        boards.shortlistIsSavedAutoArchiveEnabled,
+      shortlistSavedAutoArchiveAfterDays:
+        boards.shortlistSavedAutoArchiveAfterDays,
+      shortlistIsAppliedFollowUpReminderEnabled:
+        boards.shortlistIsAppliedFollowUpReminderEnabled,
+      shortlistAppliedFollowUpReminderAfterDays:
+        boards.shortlistAppliedFollowUpReminderAfterDays,
+      shortlistIsAppliedGhostedEnabled: boards.shortlistIsAppliedGhostedEnabled,
+      shortlistAppliedGhostedAfterDays: boards.shortlistAppliedGhostedAfterDays,
+      shortlistIsInterviewingNudgeEnabled:
+        boards.shortlistIsInterviewingNudgeEnabled,
+      shortlistInterviewingNudgeAfterDays:
+        boards.shortlistInterviewingNudgeAfterDays,
+      shortlistIsNegotiatingNudgeEnabled:
+        boards.shortlistIsNegotiatingNudgeEnabled,
+      shortlistNegotiatingNudgeAfterDays:
+        boards.shortlistNegotiatingNudgeAfterDays,
+      shortlistIsWeeklyDigestEnabled: boards.shortlistIsWeeklyDigestEnabled,
       shortlistIsCardAgingEnabled: boards.shortlistIsCardAgingEnabled,
     });
 

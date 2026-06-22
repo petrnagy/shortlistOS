@@ -309,6 +309,13 @@
       "when": 1781920800000,
       "tag": "20260620020000_AddBoardCardAgingSetting",
       "breakpoints": true
+    },
+    {
+      "idx": 44,
+      "version": "7",
+      "when": 1782090000000,
+      "tag": "20260622090000_AddBoardPowerpackSettings",
+      "breakpoints": true
     }
   ]
 }

@@ -35,6 +35,57 @@ const BoardSettingsPage: NextPageWithLayout = () => {
             <BoardsSettings
               boardPublicId={boardId ?? ""}
               isBoardLoaded={!!boardData}
+              isSalaryDataEnabled={
+                boardData?.shortlistIsSalaryDataEnabled ?? false
+              }
+              isCompanySentimentEnabled={
+                boardData?.shortlistIsCompanySentimentEnabled ?? false
+              }
+              isMagicInboxEnabled={
+                boardData?.shortlistIsMagicInboxEnabled ?? false
+              }
+              isCalendarFeedEnabled={
+                boardData?.shortlistIsCalendarFeedEnabled ?? false
+              }
+              isSavedReminderEnabled={
+                boardData?.shortlistIsSavedReminderEnabled ?? false
+              }
+              savedReminderDays={
+                boardData?.shortlistSavedReminderAfterDays ?? 7
+              }
+              isSavedAutoArchiveEnabled={
+                boardData?.shortlistIsSavedAutoArchiveEnabled ?? false
+              }
+              savedAutoArchiveDays={
+                boardData?.shortlistSavedAutoArchiveAfterDays ?? 14
+              }
+              isAppliedFollowUpReminderEnabled={
+                boardData?.shortlistIsAppliedFollowUpReminderEnabled ?? false
+              }
+              appliedFollowUpReminderDays={
+                boardData?.shortlistAppliedFollowUpReminderAfterDays ?? 7
+              }
+              isAppliedGhostedEnabled={
+                boardData?.shortlistIsAppliedGhostedEnabled ?? false
+              }
+              appliedGhostedDays={
+                boardData?.shortlistAppliedGhostedAfterDays ?? 14
+              }
+              isInterviewingNudgeEnabled={
+                boardData?.shortlistIsInterviewingNudgeEnabled ?? false
+              }
+              interviewingNudgeDays={
+                boardData?.shortlistInterviewingNudgeAfterDays ?? 3
+              }
+              isNegotiatingNudgeEnabled={
+                boardData?.shortlistIsNegotiatingNudgeEnabled ?? false
+              }
+              negotiatingNudgeDays={
+                boardData?.shortlistNegotiatingNudgeAfterDays ?? 3
+              }
+              isWeeklyDigestEnabled={
+                boardData?.shortlistIsWeeklyDigestEnabled ?? false
+              }
               isCardAgingEnabled={
                 boardData?.shortlistIsCardAgingEnabled ?? false
               }

@@ -1,20 +1,48 @@
 import Link from "next/link";
 import { t } from "@lingui/core/macro";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import {
+  HiOutlineBellAlert,
+  HiOutlineCalendarDays,
+  HiOutlineChartBar,
   HiOutlineClipboardDocument,
+  HiOutlineClock,
+  HiOutlineCurrencyDollar,
+  HiOutlineEnvelope,
   HiOutlineShieldCheck,
+  HiOutlineSparkles,
 } from "react-icons/hi2";
 
 import Button from "~/components/Button";
 import Toggle from "~/components/Toggle";
+import { env } from "~/env";
 import { usePopup } from "~/providers/popup";
+import type { RouterInputs } from "~/utils/api";
 import { api } from "~/utils/api";
 import { hasActivePowerpack } from "~/utils/powerpack";
+
+type BoardUpdateInput = Omit<RouterInputs["board"]["update"], "boardPublicId">;
 
 interface BoardsSettingsProps {
   boardPublicId: string;
   isBoardLoaded: boolean;
+  isSalaryDataEnabled: boolean;
+  isCompanySentimentEnabled: boolean;
+  isMagicInboxEnabled: boolean;
+  isCalendarFeedEnabled: boolean;
+  isSavedReminderEnabled: boolean;
+  savedReminderDays: number;
+  isSavedAutoArchiveEnabled: boolean;
+  savedAutoArchiveDays: number;
+  isAppliedFollowUpReminderEnabled: boolean;
+  appliedFollowUpReminderDays: number;
+  isAppliedGhostedEnabled: boolean;
+  appliedGhostedDays: number;
+  isInterviewingNudgeEnabled: boolean;
+  interviewingNudgeDays: number;
+  isNegotiatingNudgeEnabled: boolean;
+  negotiatingNudgeDays: number;
+  isWeeklyDigestEnabled: boolean;
   isCardAgingEnabled: boolean;
 }
 
@@ -22,6 +50,7 @@ interface AutomationCardProps {
   children?: React.ReactNode;
   description: string;
   disabled?: boolean;
+  icon: React.ReactNode;
   isChecked: boolean;
   onToggle: () => void;
   title: string;
@@ -36,12 +65,21 @@ interface ReminderRowProps {
   onToggle: () => void;
 }
 
-const dayOptions = Array.from({ length: 14 }, (_, index) => index + 1);
+const dayOptions = [
+  ...Array.from({ length: 14 }, (_, index) => ({
+    label: index === 0 ? t`1 day` : t`${index + 1} days`,
+    value: index + 1,
+  })),
+  { label: t`3 weeks`, value: 21 },
+  { label: t`1 month`, value: 30 },
+  { label: t`2 months`, value: 60 },
+];
 
 const AutomationCard = ({
   children,
   description,
   disabled,
+  icon,
   isChecked,
   onToggle,
   title,
@@ -49,9 +87,10 @@ const AutomationCard = ({
   <div className="rounded-[8px] border border-light-300 p-5 dark:border-dark-300">
     <div className="mb-3 flex items-start justify-between gap-4">
       <div>
-        <p className="text-sm font-semibold text-light-1000 dark:text-dark-1000">
-          {title}
-        </p>
+        <div className="flex items-center gap-2 text-light-1000 dark:text-dark-1000">
+          {icon}
+          <p className="text-sm font-semibold">{title}</p>
+        </div>
         <span className="mt-3 inline-flex items-center rounded-[5px] bg-light-200 px-2 py-1 text-sm font-medium text-light-900 dark:bg-dark-200 dark:text-dark-900">
           {isChecked ? t`Enabled` : t`Disabled`}
         </span>
@@ -64,7 +103,7 @@ const AutomationCard = ({
         showLabel={false}
       />
     </div>
-    <p className="text-sm leading-6 text-light-700 dark:text-dark-800">
+    <p className="text-sm leading-6 text-light-900 dark:text-dark-900">
       {description}
     </p>
     {children ? <div className="mt-4">{children}</div> : null}
@@ -98,9 +137,9 @@ const ReminderRow = ({
       onChange={(event) => onDayChange(Number(event.target.value))}
       className="h-8 w-24 rounded-md border-0 bg-light-100 px-2 text-xs text-light-1000 shadow-sm ring-1 ring-inset ring-light-300 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-dark-200 dark:text-dark-1000 dark:ring-dark-400"
     >
-      {dayOptions.map((days) => (
-        <option key={days} value={days}>
-          {days === 1 ? t`1 day` : t`${days} days`}
+      {dayOptions.map((option) => (
+        <option key={option.value} value={option.value}>
+          {option.label}
         </option>
       ))}
     </select>
@@ -110,46 +149,55 @@ const ReminderRow = ({
 const BoardsSettings = ({
   boardPublicId,
   isBoardLoaded,
+  isSalaryDataEnabled,
+  isCompanySentimentEnabled,
+  isMagicInboxEnabled,
+  isCalendarFeedEnabled,
+  isSavedReminderEnabled,
+  savedReminderDays,
+  isSavedAutoArchiveEnabled,
+  savedAutoArchiveDays,
+  isAppliedFollowUpReminderEnabled,
+  appliedFollowUpReminderDays,
+  isAppliedGhostedEnabled,
+  appliedGhostedDays,
+  isInterviewingNudgeEnabled,
+  interviewingNudgeDays,
+  isNegotiatingNudgeEnabled,
+  negotiatingNudgeDays,
+  isWeeklyDigestEnabled,
   isCardAgingEnabled,
 }: BoardsSettingsProps) => {
   const { showPopup } = usePopup();
   const utils = api.useUtils();
   const { data: user } = api.user.getUser.useQuery();
   const userHasActivePowerpack = hasActivePowerpack(user);
-
-  const [salaryDataEnabled, setSalaryDataEnabled] = useState(false);
-  const [companySentimentEnabled, setCompanySentimentEnabled] = useState(false);
-  const [googleCalendarFeedEnabled, setGoogleCalendarFeedEnabled] =
-    useState(false);
-  const [savedReminderEnabled, setSavedReminderEnabled] = useState(false);
-  const [savedReminderDays, setSavedReminderDays] = useState(7);
-  const [savedArchiveEnabled, setSavedArchiveEnabled] = useState(false);
-  const [savedArchiveDays, setSavedArchiveDays] = useState(14);
-  const [appliedFollowUpEnabled, setAppliedFollowUpEnabled] = useState(false);
-  const [appliedReminderEnabled, setAppliedReminderEnabled] = useState(false);
-  const [appliedReminderDays, setAppliedReminderDays] = useState(7);
-  const [appliedGhostedEnabled, setAppliedGhostedEnabled] = useState(false);
-  const [appliedGhostedDays, setAppliedGhostedDays] = useState(14);
-  const [interviewingNudgeEnabled, setInterviewingNudgeEnabled] =
-    useState(false);
-  const [interviewingNudgeDays, setInterviewingNudgeDays] = useState(3);
-  const [negotiatingNudgeEnabled, setNegotiatingNudgeEnabled] = useState(false);
-  const [negotiatingNudgeDays, setNegotiatingNudgeDays] = useState(3);
-  const [weeklyDigestEnabled, setWeeklyDigestEnabled] = useState(false);
+  const displayPowerpackToggle = (isEnabled: boolean) =>
+    userHasActivePowerpack && isEnabled;
 
   const calendarFeedUrl = useMemo(() => {
     const origin =
-      typeof window === "undefined" ? "https://app.shortlistos.co" : window.location.origin;
+      typeof window === "undefined"
+        ? "https://app.shortlistos.co"
+        : window.location.origin;
+    const key = encodeURIComponent(user?.shortlistFeedSecret ?? "");
 
-    return `${origin}/api/shortlist_calendar/${boardPublicId || "board"}.ics`;
-  }, [boardPublicId]);
+    return `${origin}/calendar/shortlist/${boardPublicId || "board"}.ics?key=${key}`;
+  }, [boardPublicId, user?.shortlistFeedSecret]);
+
+  const magicInboxAddress = useMemo(() => {
+    const domain = env.NEXT_PUBLIC_MAGIC_INBOX_DOMAIN ?? "";
+
+    return `${boardPublicId || "board"}.${user?.shortlistUserPublicSecret ?? "user"}@${domain}`;
+  }, [boardPublicId, user?.shortlistUserPublicSecret]);
 
   const updateBoard = api.board.update.useMutation({
     onError: (error) => {
       showPopup({
         header: t`Unable to update board`,
         message:
-          error.message || t`Please try again later, or contact customer support.`,
+          error.message ||
+          t`Please try again later, or contact customer support.`,
         icon: "error",
       });
     },
@@ -164,7 +212,20 @@ const BoardsSettings = ({
     !userHasActivePowerpack ||
     updateBoard.isPending;
 
-  const mockupsDisabled = !boardPublicId || !isBoardLoaded || !userHasActivePowerpack;
+  const mockupsDisabled =
+    !boardPublicId ||
+    !isBoardLoaded ||
+    !userHasActivePowerpack ||
+    updateBoard.isPending;
+
+  const updatePowerpackSetting = (updates: BoardUpdateInput) => {
+    if (mockupsDisabled) return;
+
+    updateBoard.mutate({
+      boardPublicId,
+      ...updates,
+    });
+  };
 
   const handleCardAgingToggle = () => {
     if (isDisabled) return;
@@ -194,6 +255,25 @@ const BoardsSettings = ({
     );
   };
 
+  const handleCopyMagicInboxAddress = () => {
+    void navigator.clipboard.writeText(magicInboxAddress).then(
+      () => {
+        showPopup({
+          header: t`Magic Inbox address copied`,
+          message: t`Forward or send emails to this address to add them to this shortlist.`,
+          icon: "success",
+        });
+      },
+      () => {
+        showPopup({
+          header: t`Unable to copy address`,
+          message: t`Please copy it manually from the field.`,
+          icon: "error",
+        });
+      },
+    );
+  };
+
   return (
     <section className="mb-8 border-t border-light-300 pt-8 dark:border-dark-300">
       <div className="mb-4 flex items-center gap-2">
@@ -208,7 +288,7 @@ const BoardsSettings = ({
           {t`Get the Powerpack to automate your job search.`}{" "}
           <Link
             href="/settings/powerpack"
-            className="font-semibold text-brand-600 hover:underline dark:text-brand-500"
+            className="text-brand-600 dark:text-brand-500 font-semibold hover:underline"
           >
             {t`Upgrade now`}
           </Link>
@@ -217,61 +297,135 @@ const BoardsSettings = ({
 
       <div className="space-y-4">
         <AutomationCard
+          icon={<HiOutlineClock className="h-4 w-4" />}
           title={t`Card aging`}
           description={t`Show visual aging effects on cards based on last activity. Cards older than 1 week show progressive aging from faded to parchment style.`}
-          isChecked={isCardAgingEnabled}
+          isChecked={displayPowerpackToggle(isCardAgingEnabled)}
           onToggle={handleCardAgingToggle}
           disabled={isDisabled}
         />
 
         <AutomationCard
+          icon={<HiOutlineCurrencyDollar className="h-4 w-4" />}
           title={t`Automatic salary data`}
           description={t`Automatically enriches each opportunity with salary benchmarks across the US, EU, UK, APAC, and global markets, so you can quickly see how an offer compares locally and worldwide.`}
-          isChecked={salaryDataEnabled}
-          onToggle={() => setSalaryDataEnabled((value) => !value)}
+          isChecked={displayPowerpackToggle(isSalaryDataEnabled)}
+          onToggle={() =>
+            updatePowerpackSetting({
+              shortlistIsSalaryDataEnabled: !isSalaryDataEnabled,
+            })
+          }
           disabled={mockupsDisabled}
         />
 
         <AutomationCard
+          icon={<HiOutlineSparkles className="h-4 w-4" />}
           title={t`Company sentiment`}
           description={t`Automatically researches the company behind each opening across social networks, hiring portals, funding news, layoff signals, and other public sources, then summarizes the rating, risks, and recent context for you.`}
-          isChecked={companySentimentEnabled}
-          onToggle={() => setCompanySentimentEnabled((value) => !value)}
+          isChecked={displayPowerpackToggle(isCompanySentimentEnabled)}
+          onToggle={() =>
+            updatePowerpackSetting({
+              shortlistIsCompanySentimentEnabled: !isCompanySentimentEnabled,
+            })
+          }
           disabled={mockupsDisabled}
         />
 
         <AutomationCard
-          title={t`Google calendar feed`}
-          description={t`Export all planned interviews from this shortlist as an iCal feed for Google Calendar, Outlook, or any calendar app. Never miss an interview again.`}
-          isChecked={googleCalendarFeedEnabled}
-          onToggle={() => setGoogleCalendarFeedEnabled((value) => !value)}
+          icon={<HiOutlineEnvelope className="h-4 w-4" />}
+          title={t`Email to this shortlist`}
+          description={t`Get a personalized email address for this shortlist. Forward job leads or recruiter messages here and they will land in your shortlist inbox.`}
+          isChecked={displayPowerpackToggle(isMagicInboxEnabled)}
+          onToggle={() =>
+            updatePowerpackSetting({
+              shortlistIsMagicInboxEnabled: !isMagicInboxEnabled,
+            })
+          }
           disabled={mockupsDisabled}
         >
-          <div className="flex flex-col gap-2 sm:flex-row">
-            <input
-              readOnly
-              value={calendarFeedUrl}
-              className="min-w-0 flex-1 rounded-md border-0 bg-light-100 px-3 py-2 text-sm text-light-900 shadow-sm ring-1 ring-inset ring-light-300 dark:bg-dark-200 dark:text-dark-900 dark:ring-dark-400"
-            />
-            <Button
-              type="button"
-              variant="secondary"
-              size="sm"
-              disabled={mockupsDisabled}
-              onClick={handleCopyCalendarFeed}
-              iconLeft={<HiOutlineClipboardDocument className="h-4 w-4" />}
-            >
-              {t`Copy`}
-            </Button>
+          {displayPowerpackToggle(isMagicInboxEnabled) ? (
+            <div className="flex flex-col gap-2 sm:flex-row">
+              <input
+                readOnly
+                value={magicInboxAddress}
+                className="min-w-0 flex-1 rounded-md border-0 bg-light-100 px-3 py-2 text-sm text-light-900 shadow-sm ring-1 ring-inset ring-light-300 dark:bg-dark-200 dark:text-dark-900 dark:ring-dark-400"
+              />
+              <Button
+                type="button"
+                variant="secondary"
+                size="sm"
+                disabled={mockupsDisabled}
+                onClick={handleCopyMagicInboxAddress}
+                iconLeft={<HiOutlineClipboardDocument className="h-4 w-4" />}
+              >
+                {t`Copy`}
+              </Button>
+            </div>
+          ) : null}
+        </AutomationCard>
+
+        <AutomationCard
+          icon={<HiOutlineCalendarDays className="h-4 w-4" />}
+          title={t`Calendar feed`}
+          description={t`Export all planned interviews from this shortlist as an iCal feed for Google Calendar, Outlook, or any calendar app. Never miss an interview again.`}
+          isChecked={displayPowerpackToggle(isCalendarFeedEnabled)}
+          onToggle={() =>
+            updatePowerpackSetting({
+              shortlistIsCalendarFeedEnabled: !isCalendarFeedEnabled,
+            })
+          }
+          disabled={mockupsDisabled}
+        >
+          <div className="space-y-3">
+            {displayPowerpackToggle(isCalendarFeedEnabled) ? (
+              <div className="flex flex-col gap-2 sm:flex-row">
+                <input
+                  readOnly
+                  value={calendarFeedUrl}
+                  className="min-w-0 flex-1 rounded-md border-0 bg-light-100 px-3 py-2 text-sm text-light-900 shadow-sm ring-1 ring-inset ring-light-300 dark:bg-dark-200 dark:text-dark-900 dark:ring-dark-400"
+                />
+                <Button
+                  type="button"
+                  variant="secondary"
+                  size="sm"
+                  disabled={mockupsDisabled}
+                  onClick={handleCopyCalendarFeed}
+                  iconLeft={<HiOutlineClipboardDocument className="h-4 w-4" />}
+                >
+                  {t`Copy`}
+                </Button>
+              </div>
+            ) : null}
+            <div className="flex flex-wrap gap-x-4 gap-y-2 text-sm">
+              {t`How to subscribe in`}:
+              <Link
+                href="#google-calendar-ics-guide"
+                target="_blank"
+                rel="noreferrer"
+                className="text-light-900 underline underline-offset-4 dark:text-dark-900"
+              >
+                {t`Google Calendar`}
+              </Link>
+              ·
+              <Link
+                href="#outlook-calendar-ics-guide"
+                target="_blank"
+                rel="noreferrer"
+                className="text-light-900 underline underline-offset-4 dark:text-dark-900"
+              >
+                {t`Outlook.com`}
+              </Link>
+            </div>
           </div>
         </AutomationCard>
 
         <div className="rounded-[8px] border border-light-300 p-5 dark:border-dark-300">
           <div className="mb-4">
-            <p className="text-sm font-semibold text-light-1000 dark:text-dark-1000">
-              {t`Email reminders`}
-            </p>
-            <p className="mt-2 text-sm leading-6 text-light-700 dark:text-dark-800">
+            <div className="flex items-center gap-2 text-light-1000 dark:text-dark-1000">
+              <HiOutlineBellAlert className="h-4 w-4" />
+              <p className="text-sm font-semibold">{t`Email reminders`}</p>
+            </div>
+            <p className="mt-2 text-sm leading-6 text-light-900 dark:text-dark-900">
               {t`Stay on top of opportunities that have gone quiet before they slip through the cracks.`}
             </p>
           </div>
@@ -284,18 +438,36 @@ const BoardsSettings = ({
               <div className="space-y-2">
                 <ReminderRow
                   label={t`Send me an email reminder`}
-                  isChecked={savedReminderEnabled}
-                  onToggle={() => setSavedReminderEnabled((value) => !value)}
+                  isChecked={displayPowerpackToggle(isSavedReminderEnabled)}
+                  onToggle={() =>
+                    updatePowerpackSetting({
+                      shortlistIsSavedReminderEnabled:
+                        !isSavedReminderEnabled,
+                    })
+                  }
                   dayValue={savedReminderDays}
-                  onDayChange={setSavedReminderDays}
+                  onDayChange={(days) =>
+                    updatePowerpackSetting({
+                      shortlistSavedReminderAfterDays: days,
+                    })
+                  }
                   disabled={mockupsDisabled}
                 />
                 <ReminderRow
                   label={t`Automatically archive`}
-                  isChecked={savedArchiveEnabled}
-                  onToggle={() => setSavedArchiveEnabled((value) => !value)}
-                  dayValue={savedArchiveDays}
-                  onDayChange={setSavedArchiveDays}
+                  isChecked={displayPowerpackToggle(isSavedAutoArchiveEnabled)}
+                  onToggle={() =>
+                    updatePowerpackSetting({
+                      shortlistIsSavedAutoArchiveEnabled:
+                        !isSavedAutoArchiveEnabled,
+                    })
+                  }
+                  dayValue={savedAutoArchiveDays}
+                  onDayChange={(days) =>
+                    updatePowerpackSetting({
+                      shortlistSavedAutoArchiveAfterDays: days,
+                    })
+                  }
                   disabled={mockupsDisabled}
                 />
               </div>
@@ -306,34 +478,40 @@ const BoardsSettings = ({
                 {t`Stuck in Applied`}
               </h3>
               <div className="space-y-2">
-                <div className="flex items-center gap-3 rounded-[8px] border border-light-200 bg-light-50 p-3 dark:border-dark-300 dark:bg-dark-100">
-                  <Toggle
-                    isChecked={appliedFollowUpEnabled}
-                    onChange={() =>
-                      setAppliedFollowUpEnabled((value) => !value)
-                    }
-                    label={t`Follow-up reminder`}
-                    disabled={mockupsDisabled}
-                    showLabel={false}
-                  />
-                  <span className="text-sm leading-6 text-light-800 dark:text-dark-900">
-                    {t`Follow-up reminder`}
-                  </span>
-                </div>
                 <ReminderRow
-                  label={t`Remind me to ping the company`}
-                  isChecked={appliedReminderEnabled}
-                  onToggle={() => setAppliedReminderEnabled((value) => !value)}
-                  dayValue={appliedReminderDays}
-                  onDayChange={setAppliedReminderDays}
+                  label={t`Follow-up reminder`}
+                  isChecked={displayPowerpackToggle(
+                    isAppliedFollowUpReminderEnabled,
+                  )}
+                  onToggle={() =>
+                    updatePowerpackSetting({
+                      shortlistIsAppliedFollowUpReminderEnabled:
+                        !isAppliedFollowUpReminderEnabled,
+                    })
+                  }
+                  dayValue={appliedFollowUpReminderDays}
+                  onDayChange={(days) =>
+                    updatePowerpackSetting({
+                      shortlistAppliedFollowUpReminderAfterDays: days,
+                    })
+                  }
                   disabled={mockupsDisabled}
                 />
                 <ReminderRow
                   label={t`Mark the opportunity as ghosted`}
-                  isChecked={appliedGhostedEnabled}
-                  onToggle={() => setAppliedGhostedEnabled((value) => !value)}
+                  isChecked={displayPowerpackToggle(isAppliedGhostedEnabled)}
+                  onToggle={() =>
+                    updatePowerpackSetting({
+                      shortlistIsAppliedGhostedEnabled:
+                        !isAppliedGhostedEnabled,
+                    })
+                  }
                   dayValue={appliedGhostedDays}
-                  onDayChange={setAppliedGhostedDays}
+                  onDayChange={(days) =>
+                    updatePowerpackSetting({
+                      shortlistAppliedGhostedAfterDays: days,
+                    })
+                  }
                   disabled={mockupsDisabled}
                 />
               </div>
@@ -345,10 +523,19 @@ const BoardsSettings = ({
               </h3>
               <ReminderRow
                 label={t`Nudge me to follow up with the recruiter`}
-                isChecked={interviewingNudgeEnabled}
-                onToggle={() => setInterviewingNudgeEnabled((value) => !value)}
+                isChecked={displayPowerpackToggle(isInterviewingNudgeEnabled)}
+                onToggle={() =>
+                  updatePowerpackSetting({
+                    shortlistIsInterviewingNudgeEnabled:
+                      !isInterviewingNudgeEnabled,
+                  })
+                }
                 dayValue={interviewingNudgeDays}
-                onDayChange={setInterviewingNudgeDays}
+                onDayChange={(days) =>
+                  updatePowerpackSetting({
+                    shortlistInterviewingNudgeAfterDays: days,
+                  })
+                }
                 disabled={mockupsDisabled}
               />
             </div>
@@ -359,10 +546,19 @@ const BoardsSettings = ({
               </h3>
               <ReminderRow
                 label={t`Nudge me to revisit the negotiation`}
-                isChecked={negotiatingNudgeEnabled}
-                onToggle={() => setNegotiatingNudgeEnabled((value) => !value)}
+                isChecked={displayPowerpackToggle(isNegotiatingNudgeEnabled)}
+                onToggle={() =>
+                  updatePowerpackSetting({
+                    shortlistIsNegotiatingNudgeEnabled:
+                      !isNegotiatingNudgeEnabled,
+                  })
+                }
                 dayValue={negotiatingNudgeDays}
-                onDayChange={setNegotiatingNudgeDays}
+                onDayChange={(days) =>
+                  updatePowerpackSetting({
+                    shortlistNegotiatingNudgeAfterDays: days,
+                  })
+                }
                 disabled={mockupsDisabled}
               />
             </div>
@@ -370,10 +566,15 @@ const BoardsSettings = ({
         </div>
 
         <AutomationCard
+          icon={<HiOutlineChartBar className="h-4 w-4" />}
           title={t`Weekly digest`}
           description={t`Send me a weekly summary of every opportunity in this shortlist, including which ones need attention next.`}
-          isChecked={weeklyDigestEnabled}
-          onToggle={() => setWeeklyDigestEnabled((value) => !value)}
+          isChecked={displayPowerpackToggle(isWeeklyDigestEnabled)}
+          onToggle={() =>
+            updatePowerpackSetting({
+              shortlistIsWeeklyDigestEnabled: !isWeeklyDigestEnabled,
+            })
+          }
           disabled={mockupsDisabled}
         />
       </div>

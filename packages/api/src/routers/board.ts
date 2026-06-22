@@ -489,6 +489,53 @@ export const boardRouter = createTRPCRouter({
         visibility: z.enum(["public", "private"]).optional(),
         favorite: z.boolean().optional(),
         isArchived: z.boolean().optional(),
+        shortlistIsSalaryDataEnabled: z.boolean().optional(),
+        shortlistIsCompanySentimentEnabled: z.boolean().optional(),
+        shortlistIsMagicInboxEnabled: z.boolean().optional(),
+        shortlistIsCalendarFeedEnabled: z.boolean().optional(),
+        shortlistIsSavedReminderEnabled: z.boolean().optional(),
+        shortlistSavedReminderAfterDays: z
+          .number()
+          .int()
+          .min(1)
+          .max(60)
+          .optional(),
+        shortlistIsSavedAutoArchiveEnabled: z.boolean().optional(),
+        shortlistSavedAutoArchiveAfterDays: z
+          .number()
+          .int()
+          .min(1)
+          .max(60)
+          .optional(),
+        shortlistIsAppliedFollowUpReminderEnabled: z.boolean().optional(),
+        shortlistAppliedFollowUpReminderAfterDays: z
+          .number()
+          .int()
+          .min(1)
+          .max(60)
+          .optional(),
+        shortlistIsAppliedGhostedEnabled: z.boolean().optional(),
+        shortlistAppliedGhostedAfterDays: z
+          .number()
+          .int()
+          .min(1)
+          .max(60)
+          .optional(),
+        shortlistIsInterviewingNudgeEnabled: z.boolean().optional(),
+        shortlistInterviewingNudgeAfterDays: z
+          .number()
+          .int()
+          .min(1)
+          .max(60)
+          .optional(),
+        shortlistIsNegotiatingNudgeEnabled: z.boolean().optional(),
+        shortlistNegotiatingNudgeAfterDays: z
+          .number()
+          .int()
+          .min(1)
+          .max(60)
+          .optional(),
+        shortlistIsWeeklyDigestEnabled: z.boolean().optional(),
         shortlistIsCardAgingEnabled: z.boolean().optional(),
       }),
     )
@@ -530,7 +577,27 @@ export const boardRouter = createTRPCRouter({
         }
       }
 
-      if (input.shortlistIsCardAgingEnabled !== undefined) {
+      const hasPowerpackSettingsUpdate =
+        input.shortlistIsSalaryDataEnabled !== undefined ||
+        input.shortlistIsCompanySentimentEnabled !== undefined ||
+        input.shortlistIsMagicInboxEnabled !== undefined ||
+        input.shortlistIsCalendarFeedEnabled !== undefined ||
+        input.shortlistIsSavedReminderEnabled !== undefined ||
+        input.shortlistSavedReminderAfterDays !== undefined ||
+        input.shortlistIsSavedAutoArchiveEnabled !== undefined ||
+        input.shortlistSavedAutoArchiveAfterDays !== undefined ||
+        input.shortlistIsAppliedFollowUpReminderEnabled !== undefined ||
+        input.shortlistAppliedFollowUpReminderAfterDays !== undefined ||
+        input.shortlistIsAppliedGhostedEnabled !== undefined ||
+        input.shortlistAppliedGhostedAfterDays !== undefined ||
+        input.shortlistIsInterviewingNudgeEnabled !== undefined ||
+        input.shortlistInterviewingNudgeAfterDays !== undefined ||
+        input.shortlistIsNegotiatingNudgeEnabled !== undefined ||
+        input.shortlistNegotiatingNudgeAfterDays !== undefined ||
+        input.shortlistIsWeeklyDigestEnabled !== undefined ||
+        input.shortlistIsCardAgingEnabled !== undefined;
+
+      if (hasPowerpackSettingsUpdate) {
         const user = await ctx.db.query.users.findFirst({
           columns: {
             shortlistPowerpackActivatedAt: true,
@@ -541,7 +608,7 @@ export const boardRouter = createTRPCRouter({
 
         if (!user || !hasActivePowerpack(user)) {
           throw new TRPCError({
-            message: `Card aging requires an active Powerpack`,
+            message: `This shortlist setting requires an active Powerpack`,
             code: "FORBIDDEN",
           });
         }
@@ -553,6 +620,23 @@ export const boardRouter = createTRPCRouter({
         input.slug !== undefined ||
         input.visibility !== undefined ||
         input.isArchived !== undefined ||
+        input.shortlistIsSalaryDataEnabled !== undefined ||
+        input.shortlistIsCompanySentimentEnabled !== undefined ||
+        input.shortlistIsMagicInboxEnabled !== undefined ||
+        input.shortlistIsCalendarFeedEnabled !== undefined ||
+        input.shortlistIsSavedReminderEnabled !== undefined ||
+        input.shortlistSavedReminderAfterDays !== undefined ||
+        input.shortlistIsSavedAutoArchiveEnabled !== undefined ||
+        input.shortlistSavedAutoArchiveAfterDays !== undefined ||
+        input.shortlistIsAppliedFollowUpReminderEnabled !== undefined ||
+        input.shortlistAppliedFollowUpReminderAfterDays !== undefined ||
+        input.shortlistIsAppliedGhostedEnabled !== undefined ||
+        input.shortlistAppliedGhostedAfterDays !== undefined ||
+        input.shortlistIsInterviewingNudgeEnabled !== undefined ||
+        input.shortlistInterviewingNudgeAfterDays !== undefined ||
+        input.shortlistIsNegotiatingNudgeEnabled !== undefined ||
+        input.shortlistNegotiatingNudgeAfterDays !== undefined ||
+        input.shortlistIsWeeklyDigestEnabled !== undefined ||
         input.shortlistIsCardAgingEnabled !== undefined;
 
       if (!hasOtherUpdates) {
@@ -581,6 +665,33 @@ export const boardRouter = createTRPCRouter({
         boardPublicId: input.boardPublicId,
         visibility: input.visibility,
         isArchived: input.isArchived,
+        shortlistIsSalaryDataEnabled: input.shortlistIsSalaryDataEnabled,
+        shortlistIsCompanySentimentEnabled:
+          input.shortlistIsCompanySentimentEnabled,
+        shortlistIsMagicInboxEnabled: input.shortlistIsMagicInboxEnabled,
+        shortlistIsCalendarFeedEnabled: input.shortlistIsCalendarFeedEnabled,
+        shortlistIsSavedReminderEnabled: input.shortlistIsSavedReminderEnabled,
+        shortlistSavedReminderAfterDays: input.shortlistSavedReminderAfterDays,
+        shortlistIsSavedAutoArchiveEnabled:
+          input.shortlistIsSavedAutoArchiveEnabled,
+        shortlistSavedAutoArchiveAfterDays:
+          input.shortlistSavedAutoArchiveAfterDays,
+        shortlistIsAppliedFollowUpReminderEnabled:
+          input.shortlistIsAppliedFollowUpReminderEnabled,
+        shortlistAppliedFollowUpReminderAfterDays:
+          input.shortlistAppliedFollowUpReminderAfterDays,
+        shortlistIsAppliedGhostedEnabled:
+          input.shortlistIsAppliedGhostedEnabled,
+        shortlistAppliedGhostedAfterDays: input.shortlistAppliedGhostedAfterDays,
+        shortlistIsInterviewingNudgeEnabled:
+          input.shortlistIsInterviewingNudgeEnabled,
+        shortlistInterviewingNudgeAfterDays:
+          input.shortlistInterviewingNudgeAfterDays,
+        shortlistIsNegotiatingNudgeEnabled:
+          input.shortlistIsNegotiatingNudgeEnabled,
+        shortlistNegotiatingNudgeAfterDays:
+          input.shortlistNegotiatingNudgeAfterDays,
+        shortlistIsWeeklyDigestEnabled: input.shortlistIsWeeklyDigestEnabled,
         shortlistIsCardAgingEnabled: input.shortlistIsCardAgingEnabled,
       });
 
