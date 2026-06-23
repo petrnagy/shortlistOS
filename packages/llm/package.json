@@ -1,0 +1,47 @@
+{
+  "name": "@kan/llm",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Proprietary shortlistOS LLM connector and jobs. Not part of the open-source distribution.",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./src/index.ts"
+    },
+    "./jobs/classify-job-posting": {
+      "types": "./src/jobs/classify-job-posting.ts",
+      "default": "./src/jobs/classify-job-posting.ts"
+    }
+  },
+  "author": "Petr Nagy / shortlistOS",
+  "license": "UNLICENSED",
+  "scripts": {
+    "build": "tsc",
+    "clean": "git clean -xdf .cache .turbo dist node_modules",
+    "dev": "tsc",
+    "format": "prettier --check . --ignore-path ../../.gitignore",
+    "lint": "eslint",
+    "test": "vitest run",
+    "test:live": "dotenv -e ../../.env -- vitest run --config vitest.live.config.ts",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit --emitDeclarationOnly false"
+  },
+  "dependencies": {
+    "@mistralai/mistralai": "^2.2.6",
+    "turndown": "^7.2.4",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@kan/eslint-config": "workspace:*",
+    "@kan/prettier-config": "workspace:*",
+    "@kan/tsconfig": "workspace:*",
+    "@types/turndown": "^5.0.6",
+    "dotenv-cli": "^7.4.4",
+    "eslint": "catalog:",
+    "prettier": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "^3.0.0"
+  },
+  "prettier": "@kan/prettier-config"
+}

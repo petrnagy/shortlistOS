@@ -198,6 +198,8 @@ pnpm dev
 | `STRIPE_SHORTLIST_WEBHOOK_SECRET`         | Signing secret for proprietary `/api/shortlist_stripe/webhook` | For Powerpack checkout                      | `whsec_...`                                                 |
 | `BREVO_MAGIC_INBOX_WEBHOOK_SECRET`        | Bearer secret for proprietary `/api/magic_inbox/incoming_webhook` | For Magic Inbox inbound email               | `random-secret`                                             |
 | `SHORTLIST_MAGIC_CLIP_WEBHOOK_SECRET`     | Bearer secret for proprietary `/api/shortlist_magic_clip` | For Magic Clip capture                      | `random-secret`                                             |
+| `LLM_CONNECTOR_API_KEY`                   | API key for proprietary shortlistOS Powerpack LLM jobs      | For proprietary Powerpack LLM jobs          | `your-provider-api-key`                                     |
+| `LLM_CONNECTOR_MODEL`                     | Model name for proprietary shortlistOS Powerpack LLM jobs   | For proprietary Powerpack LLM jobs          | `mistral-small-latest`                                      |
 | `NEXT_API_BODY_SIZE_LIMIT`                | Maximum API request body size (defaults to 1mb)           | No                                          | `50mb`                                                      |
 | `BETTER_AUTH_ALLOWED_DOMAINS`             | Comma-separated list of allowed domains for OIDC logins   | For OIDC/Social login                       | `example.com,subsidiary.com`                                |
 | `BETTER_AUTH_SECRET`                      | Auth encryption secret                                    | Yes                                         | Random 32+ char string                                      |
