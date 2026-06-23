@@ -52,7 +52,6 @@ import Filters from "./components/Filters";
 import List from "./components/List";
 import { NewCardForm } from "./components/NewCardForm";
 import { NewListForm } from "./components/NewListForm";
-import { NewMagicLinkForm } from "./components/NewMagicLinkForm";
 import { NewTemplateForm } from "./components/NewTemplateForm";
 import UpdateBoardSlugButton from "./components/UpdateBoardSlugButton";
 import { UpdateBoardSlugForm } from "./components/UpdateBoardSlugForm";
@@ -406,13 +405,6 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
             listPublicId={selectedPublicListId}
             queryParams={queryParams}
           />
-        </Modal>
-
-        <Modal
-          modalSize="md"
-          isVisible={isOpen && modalContentType === "NEW_MAGIC_LINK"}
-        >
-          <NewMagicLinkForm boardPublicId={boardId ?? ""} />
         </Modal>
 
         <Modal

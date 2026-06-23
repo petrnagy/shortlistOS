@@ -18,7 +18,6 @@ import {
   shortlistActivityLogs,
   shortlistClips,
   shortlistInbox,
-  shortlistLinks,
 } from "./shortlist";
 import { workspaceMembers, workspaces } from "./workspaces";
 
@@ -85,7 +84,6 @@ export const usersRelations = relations(users, ({ many }) => ({
   }),
   shortlistActivityLogs: many(shortlistActivityLogs),
   shortlistInboxEntries: many(shortlistInbox),
-  shortlistLinks: many(shortlistLinks),
   shortlistClips: many(shortlistClips),
   deletedWorkspaces: many(workspaces, {
     relationName: "workspaceDeletedByUser",

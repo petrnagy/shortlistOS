@@ -73,43 +73,6 @@ export const shortlistInboxRelations = relations(shortlistInbox, ({ one }) => ({
   }),
 }));
 
-export const shortlistLinks = pgTable(
-  "shortlist_link",
-  {
-    id: uuid("id")
-      .notNull()
-      .primaryKey()
-      .default(sql`uuid_generate_v4()`),
-    createdBy: uuid("createdBy")
-      .notNull()
-      .references(() => users.id, { onDelete: "cascade" }),
-    boardId: bigint("boardId", { mode: "number" })
-      .notNull()
-      .references(() => boards.id, { onDelete: "cascade" }),
-    url: text("url").notNull(),
-    createdAt: timestamp("createdAt").notNull().defaultNow(),
-    updatedAt: timestamp("updatedAt"),
-  },
-  (table) => [
-    index("shortlist_link_created_by_idx").on(table.createdBy),
-    index("shortlist_link_board_idx").on(table.boardId),
-    index("shortlist_link_created_at_idx").on(table.createdAt),
-  ],
-).enableRLS();
-
-export const shortlistLinksRelations = relations(shortlistLinks, ({ one }) => ({
-  createdByUser: one(users, {
-    fields: [shortlistLinks.createdBy],
-    references: [users.id],
-    relationName: "shortlistLinksCreatedByUser",
-  }),
-  board: one(boards, {
-    fields: [shortlistLinks.boardId],
-    references: [boards.id],
-    relationName: "shortlistLinksBoard",
-  }),
-}));
-
 export const shortlistClips = pgTable(
   "shortlist_clip",
   {

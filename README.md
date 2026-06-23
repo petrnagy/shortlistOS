@@ -197,7 +197,6 @@ pnpm dev
 | `STRIPE_SECRET_KEY`                       | Stripe secret key for proprietary shortlistOS Powerpack checkout/webhooks | For Powerpack checkout                      | `sk_live_...`                                               |
 | `STRIPE_SHORTLIST_WEBHOOK_SECRET`         | Signing secret for proprietary `/api/shortlist_stripe/webhook` | For Powerpack checkout                      | `whsec_...`                                                 |
 | `BREVO_MAGIC_INBOX_WEBHOOK_SECRET`        | Bearer secret for proprietary `/api/magic_inbox/incoming_webhook` | For Magic Inbox inbound email               | `random-secret`                                             |
-| `SHORTLIST_MAGIC_LINK_WEBHOOK_SECRET`     | Bearer secret for proprietary `/api/shortlist_magic_link` | For Magic Link capture                      | `random-secret`                                             |
 | `SHORTLIST_MAGIC_CLIP_WEBHOOK_SECRET`     | Bearer secret for proprietary `/api/shortlist_magic_clip` | For Magic Clip capture                      | `random-secret`                                             |
 | `NEXT_API_BODY_SIZE_LIMIT`                | Maximum API request body size (defaults to 1mb)           | No                                          | `50mb`                                                      |
 | `BETTER_AUTH_ALLOWED_DOMAINS`             | Comma-separated list of allowed domains for OIDC logins   | For OIDC/Social login                       | `example.com,subsidiary.com`                                |

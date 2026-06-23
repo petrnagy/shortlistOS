@@ -316,6 +316,13 @@
       "when": 1782090000000,
       "tag": "20260622090000_AddBoardPowerpackSettings",
       "breakpoints": true
+    },
+    {
+      "idx": 45,
+      "version": "7",
+      "when": 1782176400000,
+      "tag": "20260623090000_DropShortlistMagicLink",
+      "breakpoints": true
     }
   ]
 }

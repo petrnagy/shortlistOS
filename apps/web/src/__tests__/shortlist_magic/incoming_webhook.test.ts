@@ -56,8 +56,8 @@ const { mockDb, mockLogger } = vi.hoisted(() => {
 vi.mock("~/env", () => ({
   env: {
     BREVO_MAGIC_INBOX_WEBHOOK_SECRET: "test-webhook-secret",
+    NEXT_PUBLIC_MAGIC_INBOX_DOMAIN: "magic-inbox.shortlistos.co",
     SHORTLIST_MAGIC_CLIP_WEBHOOK_SECRET: "test-clip-secret",
-    SHORTLIST_MAGIC_LINK_WEBHOOK_SECRET: "test-link-secret",
     STRIPE_SECRET_KEY: "test-stripe-secret",
     STRIPE_SHORTLIST_WEBHOOK_SECRET: "test-stripe-webhook-secret",
   },

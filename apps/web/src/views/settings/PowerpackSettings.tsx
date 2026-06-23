@@ -71,11 +71,6 @@ const featureGroups: { title: string; items: FeatureRow[] }[] = [
         inPowerpack: true,
       },
       {
-        label: t`Paste a job URL and auto-fill the card instantly`,
-        inFree: false,
-        inPowerpack: true,
-      },
-      {
         label: t`Magic Inbox: forward any job email and auto-create or update cards`,
         inFree: false,
         inPowerpack: true,

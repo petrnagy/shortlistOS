@@ -52,7 +52,6 @@ vi.mock("~/env", () => ({
   env: {
     BREVO_MAGIC_INBOX_WEBHOOK_SECRET: "test-inbox-secret",
     SHORTLIST_MAGIC_CLIP_WEBHOOK_SECRET: "test-clip-secret",
-    SHORTLIST_MAGIC_LINK_WEBHOOK_SECRET: "test-link-secret",
     STRIPE_SECRET_KEY: "test-stripe-secret",
     STRIPE_SHORTLIST_WEBHOOK_SECRET: "test-stripe-webhook-secret",
   },

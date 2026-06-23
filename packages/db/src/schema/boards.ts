@@ -22,7 +22,6 @@ import {
   shortlistActivityLogs,
   shortlistClips,
   shortlistInbox,
-  shortlistLinks,
 } from "./shortlist";
 import { users } from "./users";
 import { workspaces } from "./workspaces";
@@ -179,7 +178,6 @@ export const boardsRelations = relations(boards, ({ one, many }) => ({
   }),
   shortlistActivityLogs: many(shortlistActivityLogs),
   shortlistInboxEntries: many(shortlistInbox),
-  shortlistLinks: many(shortlistLinks),
   shortlistClips: many(shortlistClips),
   workspace: one(workspaces, {
     fields: [boards.workspaceId],
