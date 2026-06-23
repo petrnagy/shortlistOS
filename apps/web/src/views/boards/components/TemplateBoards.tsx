@@ -1,5 +1,5 @@
 import { t } from "@lingui/core/macro";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { HiCheckCircle } from "react-icons/hi2";
 
 export interface Template {
@@ -25,9 +25,6 @@ export const getTemplates = (): Template[] => [
       t`Withdrawn`,
     ],
     labels: [
-      t`Remote`,
-      t`Hybrid`,
-      t`On-site`,
       t`Referral`,
       t`Application confirmed`,
       t`Above market salary`,
@@ -146,19 +143,25 @@ export default function TemplateBoards({
   const [showFade, setShowFade] = useState(false);
   const [showTopFade, setShowTopFade] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const currentBoardId = currentBoard?.id;
 
-  const templates = [...(customTemplates ?? []), ...getTemplates()];
+  const templates = useMemo(
+    () => [...(customTemplates ?? []), ...getTemplates()],
+    [customTemplates],
+  );
 
-  const handleScroll = () => {
+  const handleScroll = useCallback(() => {
     if (!scrollRef.current) return;
 
     const { scrollTop, scrollHeight, clientHeight } = scrollRef.current;
     const isAtBottom = scrollTop + clientHeight >= scrollHeight - 5;
     const isAtTop = scrollTop <= 5;
 
-    setShowFade(!isAtBottom);
-    setShowTopFade(!isAtTop);
-  };
+    setShowFade((current) =>
+      current === !isAtBottom ? current : !isAtBottom,
+    );
+    setShowTopFade((current) => (current === !isAtTop ? current : !isAtTop));
+  }, []);
 
   useEffect(() => {
     const scrollElement = scrollRef.current;
@@ -168,18 +171,18 @@ export default function TemplateBoards({
 
     scrollElement.addEventListener("scroll", handleScroll);
     return () => scrollElement.removeEventListener("scroll", handleScroll);
-  }, [showTemplates]);
+  }, [handleScroll, showTemplates]);
 
   useEffect(() => {
-    if (showTemplates && currentBoard && scrollRef.current) {
+    if (showTemplates && currentBoardId && scrollRef.current) {
       const selectedElement = scrollRef.current.querySelector(
-        `[data-template-id="${currentBoard.id}"]`,
+        `[data-template-id="${currentBoardId}"]`,
       );
       if (selectedElement) {
         selectedElement.scrollIntoView({ behavior: "smooth", block: "center" });
       }
     }
-  }, [showTemplates, currentBoard]);
+  }, [showTemplates, currentBoardId]);
 
   const handleBoardSelect = (boardId: string) => {
     if (currentBoard?.id === boardId) {

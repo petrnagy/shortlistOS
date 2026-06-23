@@ -102,12 +102,19 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
 
   const updateBoard = api.board.update.useMutation();
 
-  const { register, handleSubmit, setValue } = useForm<UpdateBoardInput>({
-    values: {
-      boardPublicId: boardId ?? "",
-      name: "",
-    },
-  });
+  const { register, handleSubmit, setValue, watch } =
+    useForm<UpdateBoardInput>({
+      defaultValues: {
+        boardPublicId: "",
+        name: "",
+      },
+    });
+
+  useEffect(() => {
+    if (boardId) {
+      setValue("boardPublicId", boardId);
+    }
+  }, [boardId, setValue]);
 
   const onSubmit = (values: UpdateBoardInput) => {
     updateBoard.mutate({
@@ -115,6 +122,7 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
       name: values.name,
     });
   };
+
 
   const semanticFilters = formatToArray(router.query.dueDate) as (
     | "overdue"
@@ -281,11 +289,14 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
     },
   });
 
+  const boardName = boardData?.name ?? "";
+  const currentBoardName = watch("name");
+
   useEffect(() => {
-    if (isSuccess && boardData) {
-      setValue("name", boardData.name || "");
+    if (isSuccess && currentBoardName !== boardName) {
+      setValue("name", boardName);
     }
-  }, [isSuccess, boardData, setValue]);
+  }, [isSuccess, boardName, currentBoardName, setValue]);
 
   const openNewListForm = (publicBoardId: string) => {
     openModal("NEW_LIST");
@@ -779,6 +790,9 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
                                             dueDate={card.dueDate ?? null}
                                             lastActivity={
                                               card.lastActivity ?? null
+                                            }
+                                            shortlistJobLocationType={
+                                              card.shortlistJobLocationType
                                             }
                                             isCardAgingEnabled={
                                               boardData.shortlistIsCardAgingEnabled

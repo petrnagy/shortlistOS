@@ -18,6 +18,19 @@ import { getCardAgingClasses, getCardAgingLevel } from "~/utils/card-aging";
 import { formatLastActivity } from "~/utils/format-last-activity";
 import { getAvatarUrl } from "~/utils/helpers";
 
+interface CardLabel {
+  name: string;
+  colourCode: string | null;
+}
+
+type ShortlistJobLocationType = "remote" | "hybrid" | "onsite";
+
+const JOB_LOCATION_TYPE_LABELS: Record<ShortlistJobLocationType, CardLabel> = {
+  remote: { name: "Remote", colourCode: "#65a30d" },
+  hybrid: { name: "Hybrid", colourCode: "#ca8a04" },
+  onsite: { name: "On-site", colourCode: "#dc2626" },
+};
+
 const Card = ({
   title,
   labels,
@@ -29,10 +42,11 @@ const Card = ({
   dueDate,
   lastActivity,
   isCardAgingEnabled = false,
+  shortlistJobLocationType,
 }: {
   title: string;
   ticketNumber?: string | null;
-  labels: { name: string; colourCode: string | null }[];
+  labels: CardLabel[];
   members: {
     publicId: string;
     email: string;
@@ -54,6 +68,7 @@ const Card = ({
   dueDate?: Date | null;
   lastActivity?: Date | null;
   isCardAgingEnabled?: boolean;
+  shortlistJobLocationType?: unknown;
 }) => {
   const { dateLocale } = useLocalisation();
   const showYear = dueDate ? !isSameYear(dueDate, new Date()) : false;
@@ -78,6 +93,14 @@ const Card = ({
     ? getCardAgingLevel(lastActivity)
     : "none";
   const agingClasses = getCardAgingClasses(agingLevel);
+  const generatedLocationLabel = getJobLocationTypeLabel(
+    shortlistJobLocationType,
+  );
+  const displayLabels =
+    generatedLocationLabel &&
+    !labels.some((label) => label.name === generatedLocationLabel.name)
+      ? [...labels, generatedLocationLabel]
+      : labels;
 
   return (
     <div
@@ -92,7 +115,7 @@ const Card = ({
         </span>
       )} */}
       <span className="break-words">{title}</span>
-      {labels.length ||
+      {displayLabels.length ||
       members.length ||
       checklists.length > 0 ||
       hasDescription ||
@@ -101,7 +124,7 @@ const Card = ({
       hasAttachments ? (
         <div className="mt-2 flex flex-col justify-end">
           <div className="space-x-0.5">
-            {labels.map((label) => (
+            {displayLabels.map((label) => (
               <Badge
                 value={label.name}
                 iconLeft={<LabelIcon colourCode={label.colourCode} />}
@@ -186,5 +209,21 @@ const Card = ({
     </div>
   );
 };
+
+function getJobLocationTypeLabel(
+  value: unknown,
+): CardLabel | null {
+  if (typeof value !== "string" || !isShortlistJobLocationType(value)) {
+    return null;
+  }
+
+  return JOB_LOCATION_TYPE_LABELS[value];
+}
+
+function isShortlistJobLocationType(
+  value: string,
+): value is ShortlistJobLocationType {
+  return value === "remote" || value === "hybrid" || value === "onsite";
+}
 
 export default Card;

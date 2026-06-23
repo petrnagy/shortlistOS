@@ -277,6 +277,7 @@ export const getByPublicId = async (
               index: true,
               dueDate: true,
               cardNumber: true,
+              shortlistJobLocationType: true,
             },
             with: {
               labels: {
@@ -482,6 +483,7 @@ export const getBySlug = async (
               index: true,
               dueDate: true,
               cardNumber: true,
+              shortlistJobLocationType: true,
             },
             with: {
               labels: {

@@ -1102,6 +1102,7 @@ export function CardRightPanel({ isTemplate }: { isTemplate?: boolean }) {
           >
             <input
               type="number"
+              step="1000"
               min={0}
               placeholder={salaryIsRange ? t`Min` : t`Salary`}
               value={
@@ -1129,6 +1130,7 @@ export function CardRightPanel({ isTemplate }: { isTemplate?: boolean }) {
             {salaryIsRange && (
               <input
                 type="number"
+                step="1000"
                 min={0}
                 placeholder={t`Max`}
                 value={shortlistDraft.salaryMax}
