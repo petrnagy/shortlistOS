@@ -8,11 +8,7 @@ import Header from "./Header";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const { resolvedTheme } = useTheme();
-
   const { data: session } = authClient.useSession();
-
-  const isLoggedIn = !!session?.user;
-
   const isDarkMode = resolvedTheme === "dark";
 
   return (
@@ -21,15 +17,16 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         html {
           scroll-behavior: smooth;
           overflow: auto;
-          background-color: ${!isDarkMode ? "hsl(0deg 0% 97.3%)" : "#161616"};
+          background-color: ${!isDarkMode ? "#fafafa" : "#111111"};
         }
       `}</style>
-      <div className="mx-auto flex h-full min-h-screen min-w-[375px] flex-col items-center bg-light-100 dark:bg-dark-50">
+      <div className="relative min-h-screen min-w-[320px] overflow-hidden bg-light-100 text-light-1000 dark:bg-dark-50 dark:text-dark-1000">
         <PaperGrainBackground />
-        <Header isLoggedIn={isLoggedIn} />
-        <div className="z-10 mx-auto h-full w-full max-w-[1100px]">
-          {children}
+        <div className="pointer-events-none fixed inset-0 z-0 opacity-[0.18] dark:opacity-[0.08]">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,rgba(17,24,39,0.2)_1px,transparent_0)] [background-size:18px_18px]" />
         </div>
+        <Header isLoggedIn={!!session?.user} />
+        <div className="relative mx-auto w-full max-w-[1120px]">{children}</div>
         <Footer />
       </div>
     </>

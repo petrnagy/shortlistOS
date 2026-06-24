@@ -126,7 +126,10 @@ const Faqs = () => {
         <Text>
           <Trans>
             You can self-host by following the instructions in our{" "}
-            <Link href="https://github.com/kanbn/kan" className="underline">
+            <Link
+              href="https://github.com/petrnagy/shortlistOS"
+              className="underline"
+            >
               repo
             </Link>
             .
