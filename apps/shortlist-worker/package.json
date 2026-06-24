@@ -1,0 +1,41 @@
+{
+  "name": "@kan/shortlist-worker",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Proprietary shortlistOS background workers. Not part of the open-source distribution.",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "dev": "node -e \"console.log('shortlist-worker dev does not start processors. Run pnpm process-clip explicitly.')\"",
+    "format": "prettier --check . --ignore-path ../../.gitignore",
+    "lint": "eslint",
+    "process-clip": "dotenv -e ../../.env -- tsx src/jobs/process-clip.ts",
+    "process-inbox": "dotenv -e ../../.env -- tsx src/jobs/process-inbox.ts",
+    "start": "node -e \"console.log('shortlist-worker has no default daemon yet. Run pnpm process-clip or pnpm process-inbox.')\"",
+    "test:pipeline": "dotenv -e ../../.env -- vitest run live-tests",
+    "typecheck": "tsc --noEmit --emitDeclarationOnly false"
+  },
+  "author": "Petr Nagy / shortlistOS",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "@kan/db": "workspace:^",
+    "@kan/llm": "workspace:*",
+    "@kan/logger": "workspace:^",
+    "@kan/shared": "workspace:^",
+    "dotenv-cli": "^7.4.4",
+    "drizzle-orm": "^0.42.0",
+    "tsx": "^4.20.3",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@kan/eslint-config": "workspace:*",
+    "@kan/prettier-config": "workspace:*",
+    "@kan/tsconfig": "workspace:*",
+    "@types/node": "^20.17.7",
+    "eslint": "catalog:",
+    "prettier": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "^3.0.0"
+  },
+  "prettier": "@kan/prettier-config"
+}

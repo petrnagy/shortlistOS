@@ -323,6 +323,13 @@
       "when": 1782176400000,
       "tag": "20260623090000_DropShortlistMagicLink",
       "breakpoints": true
+    },
+    {
+      "idx": 46,
+      "version": "7",
+      "when": 1782262800000,
+      "tag": "20260624090000_AddProcessingFieldsToShortlistClip",
+      "breakpoints": true
     }
   ]
 }

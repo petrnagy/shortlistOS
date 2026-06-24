@@ -52,6 +52,7 @@ services:
       # Proprietary shortlistOS LLM connector for Powerpack background jobs
       - LLM_CONNECTOR_API_KEY=${LLM_CONNECTOR_API_KEY}
       - LLM_CONNECTOR_MODEL=${LLM_CONNECTOR_MODEL}
+      - INBOX_CLIP_RETRY_LIMIT=${INBOX_CLIP_RETRY_LIMIT}
 
       # Stripe (legacy workspace subscriptions)
       - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}

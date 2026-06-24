@@ -200,6 +200,7 @@ pnpm dev
 | `SHORTLIST_MAGIC_CLIP_WEBHOOK_SECRET`     | Bearer secret for proprietary `/api/shortlist_magic_clip` | For Magic Clip capture                      | `random-secret`                                             |
 | `LLM_CONNECTOR_API_KEY`                   | API key for proprietary shortlistOS Powerpack LLM jobs      | For proprietary Powerpack LLM jobs          | `your-provider-api-key`                                     |
 | `LLM_CONNECTOR_MODEL`                     | Model name for proprietary shortlistOS Powerpack LLM jobs   | For proprietary Powerpack LLM jobs          | `mistral-small-latest`                                      |
+| `INBOX_CLIP_RETRY_LIMIT`                  | Retry limit for proprietary shortlistOS Magic Clip processing | For proprietary Powerpack worker jobs       | `3`                                                         |
 | `NEXT_API_BODY_SIZE_LIMIT`                | Maximum API request body size (defaults to 1mb)           | No                                          | `50mb`                                                      |
 | `BETTER_AUTH_ALLOWED_DOMAINS`             | Comma-separated list of allowed domains for OIDC logins   | For OIDC/Social login                       | `example.com,subsidiary.com`                                |
 | `BETTER_AUTH_SECRET`                      | Auth encryption secret                                    | Yes                                         | Random 32+ char string                                      |

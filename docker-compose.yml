@@ -93,6 +93,7 @@ services:
       # Proprietary shortlistOS LLM connector for Powerpack background jobs (optional)
       - LLM_CONNECTOR_API_KEY=${LLM_CONNECTOR_API_KEY}
       - LLM_CONNECTOR_MODEL=${LLM_CONNECTOR_MODEL}
+      - INBOX_CLIP_RETRY_LIMIT=${INBOX_CLIP_RETRY_LIMIT}
 
       # Generic OIDC provider (optional)
       - OIDC_CLIENT_ID=${OIDC_CLIENT_ID}

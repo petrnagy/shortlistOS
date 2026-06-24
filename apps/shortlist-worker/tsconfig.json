@@ -1,0 +1,8 @@
+{
+  "extends": "@kan/tsconfig/base.json",
+  "compilerOptions": {
+    "noEmit": true
+  },
+  "include": ["src", "live-tests", "eslint.config.js"],
+  "exclude": ["node_modules"]
+}

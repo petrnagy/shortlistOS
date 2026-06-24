@@ -90,11 +90,17 @@ export const shortlistClips = pgTable(
     rawHtml: text("rawHtml").notNull(),
     createdAt: timestamp("createdAt").notNull().defaultNow(),
     updatedAt: timestamp("updatedAt"),
+    processedAt: timestamp("processedAt"),
+    processingTries: smallint("processingTries").notNull().default(0),
+    processingLog: text("processingLog"),
+    processingResult: varchar("processingResult", { length: 10 }),
   },
   (table) => [
     index("shortlist_clip_created_by_idx").on(table.createdBy),
     index("shortlist_clip_board_idx").on(table.boardId),
     index("shortlist_clip_created_at_idx").on(table.createdAt),
+    index("shortlist_clip_processed_at_idx").on(table.processedAt),
+    index("shortlist_clip_processing_result_idx").on(table.processingResult),
   ],
 ).enableRLS();
 
