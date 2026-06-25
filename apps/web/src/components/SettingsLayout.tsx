@@ -8,7 +8,7 @@ import {
 } from "@headlessui/react";
 import { t } from "@lingui/core/macro";
 import { env } from "next-runtime-env";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   HiChevronDown,
   HiOutlineBanknotes,
@@ -20,7 +20,9 @@ import {
 } from "react-icons/hi2";
 
 import { usePermissions } from "~/hooks/usePermissions";
+import { api } from "~/utils/api";
 import { isSuperAdmin as isSuperAdminHelper } from "~/utils/is-super-admin";
+import { hasActivePowerpack } from "~/utils/powerpack";
 
 interface SettingsLayoutProps {
   children: React.ReactNode;
@@ -29,10 +31,16 @@ interface SettingsLayoutProps {
 
 export function SettingsLayout({ children, currentTab }: SettingsLayoutProps) {
   const router = useRouter();
-  const { canViewWorkspace } = usePermissions();
+  const { canViewWorkspace, isLoading: permissionsLoading } = usePermissions();
+  const { data: user, isLoading: userLoading } = api.user.getUser.useQuery();
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
 
   const isSuperAdmin = isSuperAdminHelper();
+  const tabsLoading = permissionsLoading || userLoading;
+  const userHasActivePowerpack = hasActivePowerpack(user);
+  const powerpackIconClassName = userHasActivePowerpack
+    ? "h-4 w-4 text-yellow-500 dark:text-yellow-400"
+    : "h-4 w-4";
   const superAdminOnlyTabs = [
     "integrations",
     "webhooks",
@@ -48,62 +56,64 @@ export function SettingsLayout({ children, currentTab }: SettingsLayoutProps) {
     }
   }, [isSuperAdminOnlyTab, isSuperAdmin, router]);
 
-  if (isSuperAdminOnlyTab && !isSuperAdmin) {
-    return null;
-  }
+  const settingsTabs = useMemo(
+    () => [
+      {
+        key: "account",
+        icon: <HiOutlineUser />,
+        label: t`Account`,
+        condition: true,
+      },
+      {
+        key: "workspace",
+        icon: <HiOutlineRectangleGroup />,
+        label: t`Workspace`,
+        condition: canViewWorkspace,
+      },
+      {
+        key: "powerpack",
+        icon: <HiOutlineBolt className={powerpackIconClassName} />,
+        label: t`Powerpack`,
+        condition: true,
+      },
+      {
+        key: "permissions",
+        icon: <HiOutlineShieldCheck />,
+        label: t`Permissions`,
+        condition: isSuperAdmin,
+      },
+      {
+        key: "billing",
+        label: t`Billing`,
+        icon: <HiOutlineBanknotes />,
+        condition: env("NEXT_PUBLIC_KAN_ENV") === "cloud" && isSuperAdmin,
+      },
+      {
+        key: "api",
+        icon: <HiOutlineCodeBracketSquare />,
+        label: t`API`,
+        condition: isSuperAdmin,
+      },
+      {
+        key: "webhooks",
+        icon: <HiOutlineBolt />,
+        label: t`Webhooks`,
+        condition: isSuperAdmin,
+      },
+      {
+        key: "integrations",
+        icon: <HiOutlineCodeBracketSquare />,
+        label: t`Integrations`,
+        condition: isSuperAdmin,
+      },
+    ],
+    [canViewWorkspace, isSuperAdmin, powerpackIconClassName],
+  );
 
-  const settingsTabs = [
-    {
-      key: "account",
-      icon: <HiOutlineUser />,
-      label: t`Account`,
-      condition: true,
-    },
-    {
-      key: "workspace",
-      icon: <HiOutlineRectangleGroup />,
-      label: t`Workspace`,
-      condition: canViewWorkspace,
-    },
-    {
-      key: "powerpack",
-      icon: <HiOutlineBolt />,
-      label: t`Powerpack`,
-      condition: true,
-    },
-    {
-      key: "permissions",
-      icon: <HiOutlineShieldCheck />,
-      label: t`Permissions`,
-      condition: isSuperAdmin,
-    },
-    {
-      key: "billing",
-      label: t`Billing`,
-      icon: <HiOutlineBanknotes />,
-      condition: env("NEXT_PUBLIC_KAN_ENV") === "cloud" && isSuperAdmin,
-    },
-    {
-      key: "api",
-      icon: <HiOutlineCodeBracketSquare />,
-      label: t`API`,
-      condition: isSuperAdmin,
-    },
-    {
-      key: "webhooks",
-      icon: <HiOutlineBolt />,
-      label: t`Webhooks`,
-      condition: isSuperAdmin,
-    },
-    {
-      key: "integrations",
-      icon: <HiOutlineCodeBracketSquare />,
-      label: t`Integrations`,
-      condition: isSuperAdmin,
-    },
-  ];
-
-  const availableTabs = settingsTabs.filter((tab) => tab.condition);
+  const availableTabs = useMemo(
+    () => (tabsLoading ? [] : settingsTabs.filter((tab) => tab.condition)),
+    [settingsTabs, tabsLoading],
+  );
 
   // Update selected tab when currentTab prop changes
   useEffect(() => {
@@ -117,6 +127,10 @@ export function SettingsLayout({ children, currentTab }: SettingsLayoutProps) {
     return currentTab === tabKey;
   };
 
+  if (!tabsLoading && isSuperAdminOnlyTab && !isSuperAdmin) {
+    return null;
+  }
+
   return (
     <div className="flex h-full w-full flex-col overflow-hidden">
       <div className="h-full max-h-[calc(100vdh-3rem)] overflow-y-auto md:max-h-[calc(100vdh-4rem)]">
@@ -128,7 +142,11 @@ export function SettingsLayout({ children, currentTab }: SettingsLayoutProps) {
           </div>
 
           <div className="focus:outline-none">
-            <div className="sm:hidden">
+            {tabsLoading ? (
+              <div className="mb-8 h-[53px] animate-pulse rounded-lg bg-light-200 dark:bg-dark-200" />
+            ) : (
+              <>
+                <div className="sm:hidden">
               {/* Mobile dropdown */}
               <Listbox
                 value={selectedTabIndex}
@@ -144,7 +162,10 @@ export function SettingsLayout({ children, currentTab }: SettingsLayoutProps) {
                     <span className="inline-flex items-center gap-1">
                       {availableTabs[selectedTabIndex]?.label ?? "Select a tab"}
                       {availableTabs[selectedTabIndex]?.key === "powerpack" && (
-                        <HiOutlineBolt className="h-4 w-4" aria-hidden="true" />
+                        <HiOutlineBolt
+                          className={powerpackIconClassName}
+                          aria-hidden="true"
+                        />
                       )}
                     </span>
                     <HiChevronDown
@@ -163,7 +184,7 @@ export function SettingsLayout({ children, currentTab }: SettingsLayoutProps) {
                           {tab.label}
                           {tab.key === "powerpack" && (
                             <HiOutlineBolt
-                              className="h-4 w-4"
+                              className={powerpackIconClassName}
                               aria-hidden="true"
                             />
                           )}
@@ -173,8 +194,8 @@ export function SettingsLayout({ children, currentTab }: SettingsLayoutProps) {
                   </ListboxOptions>
                 </div>
               </Listbox>
-            </div>
-            <div className="hidden sm:block">
+                </div>
+                <div className="hidden sm:block">
               <div className="border-b border-gray-200 dark:border-white/10">
                 <nav
                   aria-label="Tabs"
@@ -194,7 +215,7 @@ export function SettingsLayout({ children, currentTab }: SettingsLayoutProps) {
                         {tab.label}
                         {tab.key === "powerpack" && (
                           <HiOutlineBolt
-                            className="h-4 w-4"
+                            className={powerpackIconClassName}
                             aria-hidden="true"
                           />
                         )}
@@ -203,7 +224,9 @@ export function SettingsLayout({ children, currentTab }: SettingsLayoutProps) {
                   ))}
                 </nav>
               </div>
-            </div>
+                </div>
+              </>
+            )}
             <div className="focus:outline-none">{children}</div>
           </div>
         </div>

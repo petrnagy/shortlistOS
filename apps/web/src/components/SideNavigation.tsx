@@ -59,7 +59,8 @@ export default function SideNavigation({
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isInitialised, setIsInitialised] = useState(false);
 
-  const { data: workspaceData } = api.workspace.byId.useQuery(
+  const { data: workspaceData, isLoading: workspaceDataLoading } =
+    api.workspace.byId.useQuery(
     { workspacePublicId: workspace.publicId },
     { enabled: !!workspace.publicId && workspace.publicId.length >= 12 },
   );
@@ -186,7 +187,7 @@ export default function SideNavigation({
         <div>
           <div className="hidden h-[45px] items-center justify-between pb-3 md:flex">
             {!isCollapsed && (
-              <Link href="/" className="block">
+              <Link href={env("NEXT_PUBLIC_BASE_URL")} className="block">
                 <h1 className="pl-2 text-[16px] font-bold tracking-tight text-neutral-900 dark:text-dark-1000">
                   {t`shortlistOS`}
                 </h1>
@@ -241,7 +242,7 @@ export default function SideNavigation({
             onCloseSideNav={onCloseSideNav}
           />
 
-          {!userHasActivePowerpack && (
+          {!isLoading && !userHasActivePowerpack && (
             <div
               className={twMerge(
                 "w-full",
@@ -271,6 +272,7 @@ export default function SideNavigation({
           )}
 
           {isCloudEnv &&
+            !workspaceDataLoading &&
             !hasActiveSubscription(subscriptions, "pro") &&
             !hasActiveSubscription(subscriptions, "team") && (
               <div

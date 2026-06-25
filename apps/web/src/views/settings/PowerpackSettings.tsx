@@ -1,12 +1,14 @@
 import { useRouter } from "next/router";
 import { t } from "@lingui/core/macro";
 import { loadStripe } from "@stripe/stripe-js";
+import { intervalToDuration } from "date-fns";
 import { env } from "next-runtime-env";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { HiCheck } from "react-icons/hi2";
 
 import { authClient } from "@kan/auth/client";
 
+import { Alert } from "~/components/Alert";
 import Button from "~/components/Button";
 import { PageHead } from "~/components/PageHead";
 import { POWERPACK_PRICE } from "~/config/pricing";
@@ -29,6 +31,44 @@ interface StripeCheckoutClient {
 const POWERPACK_INTENT_STORAGE_KEY = "shortlist_with_powerpack";
 const POWERPACK_CHECKOUT_COMPLETED_STORAGE_KEY =
   "shortlist_powerpack_checkout_completed";
+
+const formatPowerpackRemainingTime = (expiresAt: Date) => {
+  const now = new Date();
+
+  if (expiresAt <= now) return t`a little while`;
+
+  const duration = intervalToDuration({ start: now, end: expiresAt });
+  const parts: string[] = [];
+
+  if (duration.months) {
+    parts.push(
+      duration.months === 1
+        ? t`1 month`
+        : t`${duration.months} months`,
+    );
+  }
+
+  if (duration.days) {
+    parts.push(duration.days === 1 ? t`1 day` : t`${duration.days} days`);
+  }
+
+  if (duration.hours) {
+    parts.push(duration.hours === 1 ? t`1 hour` : t`${duration.hours} hours`);
+  }
+
+  if (!parts.length) {
+    return t`less than 1 hour`;
+  }
+
+  if (parts.length === 1) return parts[0] ?? t`less than 1 hour`;
+  if (parts.length === 2) return t`${parts[0]} and ${parts[1]}`;
+
+  const lastPart = parts[parts.length - 1];
+
+  if (!lastPart) return parts.join(", ");
+
+  return t`${parts.slice(0, -1).join(", ")}, and ${lastPart}`;
+};
 
 const featureGroups: { title: string; items: FeatureRow[] }[] = [
   {
@@ -203,6 +243,10 @@ export default function PowerpackSettings() {
         day: "numeric",
       }).format(user.shortlistPowerpackExpiresAt)
     : null;
+  const remainingPowerpackTime =
+    userHasActivePowerpack && user?.shortlistPowerpackExpiresAt
+      ? formatPowerpackRemainingTime(user.shortlistPowerpackExpiresAt)
+      : null;
   const loadStripeSafe = loadStripe as unknown as (
     publishableKey: string,
   ) => Promise<StripeCheckoutClient | null>;
@@ -348,6 +392,15 @@ export default function PowerpackSettings() {
         <h2 className="mb-4 mt-8 text-[14px] font-bold text-neutral-900 dark:text-dark-1000">
           {t`The Powerpack`}
         </h2>
+        {remainingPowerpackTime && (
+          <Alert
+            variant="success"
+            title={t`Powerpack active`}
+            className="mb-6"
+          >
+            {t`You are currently enjoying the full power of the Powerpack, and will continue to enjoy it for another ${remainingPowerpackTime}.`}
+          </Alert>
+        )}
         <p className="mb-3 text-sm text-neutral-500 dark:text-dark-900">
           {t`shortlistOS tracks your job search.`}
           <b>{t`The Powerpack runs it for you.`}</b>
