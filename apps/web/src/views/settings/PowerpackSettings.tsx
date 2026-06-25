@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import { t } from "@lingui/core/macro";
 import { loadStripe } from "@stripe/stripe-js";
 import { env } from "next-runtime-env";
-import { useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { HiCheck } from "react-icons/hi2";
 
 import { authClient } from "@kan/auth/client";
@@ -25,6 +25,10 @@ interface StripeCheckoutClient {
     sessionId: string;
   }) => Promise<{ error?: Error }>;
 }
+
+const POWERPACK_INTENT_STORAGE_KEY = "shortlist_with_powerpack";
+const POWERPACK_CHECKOUT_COMPLETED_STORAGE_KEY =
+  "shortlist_powerpack_checkout_completed";
 
 const featureGroups: { title: string; items: FeatureRow[] }[] = [
   {
@@ -187,6 +191,10 @@ export default function PowerpackSettings() {
     enabled: !!session?.user.id,
   });
   const [isCheckoutLoading, setIsCheckoutLoading] = useState(false);
+  const [hasPowerpackIntent, setHasPowerpackIntent] = useState(false);
+  const [hasCompletedPowerpackCheckout, setHasCompletedPowerpackCheckout] =
+    useState(false);
+  const autoCheckoutStartedRef = useRef(false);
   const userHasActivePowerpack = hasActivePowerpack(user);
   const formattedPowerpackExpiry = user?.shortlistPowerpackExpiresAt
     ? new Intl.DateTimeFormat(undefined, {
@@ -199,11 +207,34 @@ export default function PowerpackSettings() {
     publishableKey: string,
   ) => Promise<StripeCheckoutClient | null>;
 
-  const handleCheckout = async () => {
+  useEffect(() => {
+    if (!router.isReady) return;
+
+    const queryWithPowerpack = Array.isArray(router.query.withPowerpack)
+      ? router.query.withPowerpack[0]
+      : router.query.withPowerpack;
+    const hasQueryIntent = queryWithPowerpack === "yes";
+    const hasStoredIntent =
+      sessionStorage.getItem(POWERPACK_INTENT_STORAGE_KEY) === "yes";
+
+    if (hasQueryIntent) {
+      sessionStorage.setItem(POWERPACK_INTENT_STORAGE_KEY, "yes");
+    }
+
+    setHasPowerpackIntent(hasQueryIntent || hasStoredIntent);
+    setHasCompletedPowerpackCheckout(
+      sessionStorage.getItem(POWERPACK_CHECKOUT_COMPLETED_STORAGE_KEY) ===
+        "yes",
+    );
+  }, [router.isReady, router.query.withPowerpack]);
+
+  const handleCheckout = useCallback(async () => {
     if (!session?.user.id) {
-      await router.push(
-        `/login?next=${encodeURIComponent("/settings/powerpack")}`,
-      );
+      const nextPath = hasPowerpackIntent
+        ? "/settings/powerpack?withPowerpack=yes"
+        : "/settings/powerpack";
+
+      await router.push(`/login?next=${encodeURIComponent(nextPath)}`);
       return;
     }
 
@@ -231,6 +262,12 @@ export default function PowerpackSettings() {
         "/api/shortlist_stripe/create_checkout_session",
         {
           method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            withPowerpack: hasPowerpackIntent ? "yes" : "no",
+          }),
         },
       );
 
@@ -268,7 +305,41 @@ export default function PowerpackSettings() {
     } finally {
       setIsCheckoutLoading(false);
     }
-  };
+  }, [hasPowerpackIntent, loadStripeSafe, router, session?.user.id, showPopup]);
+
+  useEffect(() => {
+    if (!router.isReady || !hasPowerpackIntent || !session?.user.id || !user) {
+      return;
+    }
+
+    if (userHasActivePowerpack) {
+      sessionStorage.removeItem(POWERPACK_INTENT_STORAGE_KEY);
+      sessionStorage.removeItem(POWERPACK_CHECKOUT_COMPLETED_STORAGE_KEY);
+      void router.replace("/boards");
+      return;
+    }
+
+    if (
+      hasCompletedPowerpackCheckout ||
+      isCheckoutLoading ||
+      autoCheckoutStartedRef.current
+    ) {
+      return;
+    }
+
+    autoCheckoutStartedRef.current = true;
+    void handleCheckout();
+  }, [
+    handleCheckout,
+    hasCompletedPowerpackCheckout,
+    hasPowerpackIntent,
+    isCheckoutLoading,
+    router,
+    router.isReady,
+    session?.user.id,
+    user,
+    userHasActivePowerpack,
+  ]);
 
   return (
     <>

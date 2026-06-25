@@ -1,4 +1,4 @@
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { t } from "@lingui/core/macro";
 import { env } from "next-runtime-env";
 import { useTheme } from "next-themes";
@@ -52,6 +52,7 @@ export default function Dashboard({
   const { availableWorkspaces, hasLoaded } = useWorkspace();
   const { showPopup } = usePopup();
   const router = useRouter();
+  const pathname = usePathname();
   const searchParams = useSearchParams();
 
   const { data: session, isPending: sessionLoading } = authClient.useSession();
@@ -139,6 +140,8 @@ export default function Dashboard({
   }, [searchParams, showPopup, router]);
 
   useEffect(() => {
+    if (pathname !== "/boards") return;
+
     if (hasLoaded && availableWorkspaces.length === 0) {
       if (env("NEXT_PUBLIC_KAN_ENV") === "cloud") {
         router.push(
@@ -148,7 +151,7 @@ export default function Dashboard({
         openModal("NEW_WORKSPACE", undefined, undefined, false);
       }
     }
-  }, [hasLoaded, availableWorkspaces.length, openModal, router]);
+  }, [hasLoaded, availableWorkspaces.length, openModal, pathname, router]);
 
   useEffect(() => {
     const isCredentialsEnabled =

@@ -20,6 +20,7 @@ import Layout from "./components/Layout";
 
 const primaryCta = t`Get Powerpack - $29`;
 const secondaryCta = t`Start free`;
+const powerpackSignupHref = "/signup?withPowerpack=yes";
 
 export default function HomeView() {
   const workspaceFeatures = [
@@ -86,7 +87,7 @@ export default function HomeView() {
       price: t`$29`,
       detail: t`for 3 months`,
       cta: primaryCta,
-      href: "/settings/powerpack",
+      href: powerpackSignupHref,
       featured: true,
       badge: t`Recommended`,
       items: [
@@ -228,7 +229,7 @@ function Hero() {
           {t`Track every opportunity, interview, note and follow-up in one private workspace. Add Powerpack to automatically capture jobs, process emails and remind you what needs attention.`}
         </p>
         <div className="mt-7 flex flex-col items-center gap-3 sm:flex-row">
-          <LandingButton href="/settings/powerpack" variant="primary">
+          <LandingButton href={powerpackSignupHref} variant="primary">
             {primaryCta}
           </LandingButton>
           <LandingButton href="/signup" variant="secondary">
@@ -693,7 +694,7 @@ function FinalCta() {
           {t`Keep every opportunity organized and let Powerpack handle the repetitive parts.`}
         </p>
         <div className="mt-7 flex flex-col items-center justify-center gap-3 sm:flex-row">
-          <LandingButton href="/settings/powerpack" variant="primary">
+          <LandingButton href={powerpackSignupHref} variant="primary">
             {primaryCta}
           </LandingButton>
           <LandingButton href="/signup" variant="secondary">

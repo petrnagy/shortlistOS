@@ -26,6 +26,10 @@ import { env as serverEnv } from "~/env";
 
 const stripe = new Stripe(serverEnv.STRIPE_SECRET_KEY ?? "");
 
+interface CreatePowerpackCheckoutSessionBody {
+  withPowerpack?: string;
+}
+
 export default withRateLimit(
   { points: 100, duration: 60 },
   withApiLogging(async (req: NextApiRequest, res: NextApiResponse) => {
@@ -37,12 +41,21 @@ export default withRateLimit(
       return res.status(500).json({ error: "Stripe is not configured" });
     }
 
+    const body =
+      req.body && typeof req.body === "object"
+        ? (req.body as CreatePowerpackCheckoutSessionBody)
+        : {};
+    const withPowerpack = body.withPowerpack === "yes";
+    const powerpackSettingsPath = withPowerpack
+      ? "/settings/powerpack?withPowerpack=yes"
+      : "/settings/powerpack";
+
     const { user } = await createNextApiContext(req);
 
     if (!user?.id) {
       return res.status(401).json({
         error: "Unauthorized",
-        loginUrl: `/login?next=${encodeURIComponent("/settings/powerpack")}`,
+        loginUrl: `/login?next=${encodeURIComponent(powerpackSettingsPath)}`,
       });
     }
 
@@ -51,6 +64,11 @@ export default withRateLimit(
     if (!baseUrl) {
       return res.status(500).json({ error: "Missing NEXT_PUBLIC_BASE_URL" });
     }
+
+    const powerpackIntentQuery = withPowerpack ? "&withPowerpack=yes" : "";
+    const powerpackIntentCancelQuery = withPowerpack
+      ? "?withPowerpack=yes"
+      : "";
 
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
@@ -64,8 +82,8 @@ export default withRateLimit(
           },
         },
       ],
-      success_url: `${baseUrl}${POWERPACK_CHECKOUT_SUCCESS_PATH}?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${baseUrl}${POWERPACK_CHECKOUT_CANCEL_PATH}`,
+      success_url: `${baseUrl}${POWERPACK_CHECKOUT_SUCCESS_PATH}?session_id={CHECKOUT_SESSION_ID}${powerpackIntentQuery}`,
+      cancel_url: `${baseUrl}${POWERPACK_CHECKOUT_CANCEL_PATH}${powerpackIntentCancelQuery}`,
       client_reference_id: user.id,
       customer_email: user.email,
       metadata: {

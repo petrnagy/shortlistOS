@@ -3,7 +3,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { env } from "next-runtime-env";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { authClient } from "@kan/auth/client";
 
@@ -18,10 +18,16 @@ export default function SignUpPage() {
   const [magicLinkRecipient, setMagicLinkRecipient] = useState<string>("");
 
   const redirect = useSearchParams().get("next");
+  const withPowerpack = useSearchParams().get("withPowerpack");
+  const isPowerpackSignup = withPowerpack === "yes";
+  const powerpackRedirect = "/settings/powerpack?withPowerpack=yes";
+  const signupRedirect = isPowerpackSignup
+    ? powerpackRedirect
+    : (redirect ?? "/boards");
 
   const { data } = authClient.useSession();
 
-  if (data?.user.id) router.push(redirect ?? "/boards");
+  if (data?.user.id) router.push(signupRedirect);
 
   const handleMagicLinkSent = (value: boolean, recipient: string) => {
     setIsMagicLinkSent(value);
@@ -29,6 +35,12 @@ export default function SignUpPage() {
   };
 
   const isInviteFlow = redirect?.startsWith("/invite/");
+
+  useEffect(() => {
+    if (isPowerpackSignup) {
+      sessionStorage.setItem("shortlist_with_powerpack", "yes");
+    }
+  }, [isPowerpackSignup]);
 
   if (isSignUpDisabled && !isInviteFlow) {
     return (
@@ -82,7 +94,11 @@ export default function SignUpPage() {
             ) : (
               <div className="w-full rounded-lg border border-light-500 bg-light-300 px-4 py-10 dark:border-dark-400 dark:bg-dark-200 sm:max-w-md lg:px-10">
                 <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-                  <Auth setIsMagicLinkSent={handleMagicLinkSent} isSignUp />
+                  <Auth
+                    setIsMagicLinkSent={handleMagicLinkSent}
+                    isSignUp
+                    callbackURL={signupRedirect}
+                  />
                 </div>
               </div>
             )}
@@ -90,7 +106,15 @@ export default function SignUpPage() {
               <Trans>
                 Already have an account?{" "}
                 <span className="underline">
-                  <Link href={redirect ? `/login?next=${redirect}` : "/login"}>
+                  <Link
+                    href={
+                      isPowerpackSignup
+                        ? `/login?next=${encodeURIComponent(powerpackRedirect)}`
+                        : redirect
+                          ? `/login?next=${redirect}`
+                          : "/login"
+                    }
+                  >
                     Sign in
                   </Link>
                 </span>

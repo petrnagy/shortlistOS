@@ -20,8 +20,24 @@ const PowerpackSuccessPage: NextPageWithLayout = () => {
 
     if (!sessionId) {
       void router.replace("/settings/powerpack");
+      return;
     }
-  }, [router, router.isReady, router.query.session_id]);
+
+    const withPowerpack = Array.isArray(router.query.withPowerpack)
+      ? router.query.withPowerpack[0]
+      : router.query.withPowerpack;
+
+    if (withPowerpack === "yes") {
+      sessionStorage.setItem("shortlist_with_powerpack", "yes");
+      sessionStorage.setItem("shortlist_powerpack_checkout_completed", "yes");
+      void router.replace("/settings/powerpack?withPowerpack=yes");
+    }
+  }, [
+    router,
+    router.isReady,
+    router.query.session_id,
+    router.query.withPowerpack,
+  ]);
 
   return (
     <SettingsLayout currentTab="powerpack">
