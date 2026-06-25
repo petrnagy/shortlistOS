@@ -1,4 +1,5 @@
 import { stripe } from "@better-auth/stripe";
+import { APIError } from "better-auth";
 import { apiKey, genericOAuth } from "better-auth/plugins";
 import { magicLink } from "better-auth/plugins/magic-link";
 
@@ -194,13 +195,23 @@ export function createPlugins(db: dbClient) {
     magicLink({
       expiresIn: 60 * 60 * 24 * 7, // 7 days
       sendMagicLink: async ({ email, url }) => {
+        const normalizedEmail = email.trim().toLowerCase();
+        const decodedUrl = decodeURIComponent(url);
+        const isInvite = decodedUrl.includes("type=invite");
+
+        if (!isInvite) {
+          const existingUser = await userRepo.getByEmail(db, normalizedEmail);
+
+          if (!existingUser) {
+            throw new APIError("BAD_REQUEST", {
+              message: "this account does not exist, sign up first",
+            });
+          }
+        }
+
         try {
-          const decodedUrl = decodeURIComponent(url);
-          log.info(
-            { email, isInvite: decodedUrl.includes("type=invite") },
-            "Sending magic link",
-          );
-          if (decodedUrl.includes("type=invite")) {
+          log.info({ email: normalizedEmail, isInvite }, "Sending magic link");
+          if (isInvite) {
             let inviterName = "";
             let workspaceName = "";
 
@@ -235,7 +246,7 @@ export function createPlugins(db: dbClient) {
             }
 
             await sendEmail(
-              email,
+              normalizedEmail,
               workspaceName
                 ? `Invitation to join the workspace ${workspaceName}`
                 : "Invitation to join workspace",
@@ -248,7 +259,7 @@ export function createPlugins(db: dbClient) {
             );
           } else {
             await sendEmail(
-              email,
+              normalizedEmail,
               process.env.NEXT_PUBLIC_WHITE_LABEL_HIDE_POWERED_BY === "true"
                 ? "Sign in to your account"
                 : "Sign in to Kan",
@@ -259,7 +270,10 @@ export function createPlugins(db: dbClient) {
             );
           }
         } catch (error) {
-          log.error({ err: error, email }, "Error sending magic link");
+          log.error(
+            { err: error, email: normalizedEmail },
+            "Error sending magic link",
+          );
         }
       },
     }),
