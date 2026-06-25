@@ -96,6 +96,7 @@ export function BoardsList({
           content={!canCreateBoard ? t`You don't have permission` : undefined}
         >
           <Button
+            data-onboarding="new-shortlist-button"
             onClick={() => {
               if (canCreateBoard) openModal("NEW_BOARD");
             }}

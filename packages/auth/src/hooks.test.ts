@@ -1,4 +1,10 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { env } from "next-runtime-env";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+
+import * as memberRepo from "@kan/db/repository/member.repo";
+import * as workspaceRepo from "@kan/db/repository/workspace.repo";
+
+import { createDatabaseHooks, getWorkspaceNameForNewUser } from "./hooks";
 
 vi.mock("next-runtime-env", () => ({
   env: vi.fn(),
@@ -14,6 +20,10 @@ vi.mock("@kan/db/repository/user.repo", () => ({
   update: vi.fn(),
 }));
 
+vi.mock("@kan/db/repository/workspace.repo", () => ({
+  create: vi.fn(),
+}));
+
 vi.mock("@kan/email", () => ({
   notificationClient: null,
 }));
@@ -21,6 +31,7 @@ vi.mock("@kan/email", () => ({
 vi.mock("@kan/shared", () => ({
   createEmailUnsubscribeLink: vi.fn(),
   createS3Client: vi.fn(),
+  generateUID: vi.fn(() => "workspace-123"),
 }));
 
 vi.mock("@aws-sdk/client-s3", () => ({
@@ -31,13 +42,11 @@ vi.mock("@novu/api/models/components", () => ({
   ChatOrPushProviderEnum: { Discord: "discord" },
 }));
 
-import { env } from "next-runtime-env";
-import * as memberRepo from "@kan/db/repository/member.repo";
-import { createDatabaseHooks } from "./hooks";
-
 const mockEnv = env as ReturnType<typeof vi.fn>;
-const mockGetByEmailAndStatus =
-  memberRepo.getByEmailAndStatus as ReturnType<typeof vi.fn>;
+const mockGetByEmailAndStatus = memberRepo.getByEmailAndStatus as ReturnType<
+  typeof vi.fn
+>;
+const mockCreateWorkspace = workspaceRepo.create as ReturnType<typeof vi.fn>;
 
 const db = {} as Parameters<typeof createDatabaseHooks>[0];
 
@@ -190,6 +199,65 @@ describe("createDatabaseHooks", () => {
       expect(result).toBe(true);
 
       delete process.env.BETTER_AUTH_ALLOWED_DOMAINS;
+    });
+  });
+
+  describe("getWorkspaceNameForNewUser", () => {
+    it("uses the first name from a full name", () => {
+      expect(getWorkspaceNameForNewUser(fakeUser)).toBe("Test's");
+    });
+
+    it("prefers provider first-name fields when present", () => {
+      expect(
+        getWorkspaceNameForNewUser({
+          ...fakeUser,
+          name: "Ignored Name",
+          given_name: "Amanda",
+        }),
+      ).toBe("Amanda's");
+    });
+
+    it("falls back to My workspace when no name is available", () => {
+      expect(
+        getWorkspaceNameForNewUser({
+          ...fakeUser,
+          name: "",
+        }),
+      ).toBe("My workspace");
+    });
+  });
+
+  describe("user.create.after", () => {
+    it("creates a default workspace for new users", async () => {
+      mockGetByEmailAndStatus.mockResolvedValue(undefined);
+
+      await hooks.user.create.after(
+        {
+          ...fakeUser,
+          name: "Amanda Jones",
+        },
+        {},
+      );
+
+      expect(mockCreateWorkspace).toHaveBeenCalledWith(db, {
+        publicId: "workspace-123",
+        name: "Amanda's",
+        slug: "workspace-123",
+        createdBy: "user-1",
+        createdByEmail: "test@example.com",
+      });
+    });
+
+    it("does not create a default workspace for invited users", async () => {
+      mockGetByEmailAndStatus.mockResolvedValue({
+        id: "member-1",
+        email: "test@example.com",
+        status: "invited",
+      });
+
+      await hooks.user.create.after(fakeUser, {});
+
+      expect(mockCreateWorkspace).not.toHaveBeenCalled();
     });
   });
 });

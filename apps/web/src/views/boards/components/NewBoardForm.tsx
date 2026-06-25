@@ -14,6 +14,11 @@ import { useModal } from "~/providers/modal";
 import { usePopup } from "~/providers/popup";
 import { useWorkspace } from "~/providers/workspace";
 import { api } from "~/utils/api";
+import {
+  SHORTLIST_TUTORIAL_ACTIVE_KEY,
+  SHORTLIST_TUTORIAL_SEEN_KEY,
+  SHORTLIST_TUTORIAL_SUBMITTED_KEY,
+} from "~/utils/onboarding";
 import TemplateBoards, { getTemplates } from "./TemplateBoards";
 
 const schema = z.object({
@@ -39,7 +44,7 @@ export function NewBoardForm({ isTemplate }: { isTemplate?: boolean }) {
   const { workspace } = useWorkspace();
   const [showTemplates, setShowTemplates] = useState(true);
   const { data: templates } = api.board.all.useQuery(
-    { workspacePublicId: workspace.publicId ?? "", type: "template" },
+    { workspacePublicId: workspace.publicId, type: "template" },
     { enabled: !!workspace.publicId },
   );
 
@@ -64,7 +69,7 @@ export function NewBoardForm({ isTemplate }: { isTemplate?: boolean }) {
     resolver: zodResolver(schema),
     defaultValues: {
       name: t`Job hunt` + " " + new Date().getFullYear(),
-      workspacePublicId: workspace.publicId || "",
+      workspacePublicId: workspace.publicId,
       template: defaultTemplate,
     },
   });
@@ -75,17 +80,17 @@ export function NewBoardForm({ isTemplate }: { isTemplate?: boolean }) {
 
   const createBoard = api.board.create.useMutation({
     onSuccess: async (board) => {
-      if (!board) {
-        showPopup({
-          header: t`Error`,
-          message: t`Failed to create a list`,
-          icon: "error",
-        });
-      } else {
-        router.push(
-          `${isTemplate ? "/templates" : "/boards"}/${board.publicId}`,
-        );
+      const isTutorialActive =
+        localStorage.getItem(SHORTLIST_TUTORIAL_ACTIVE_KEY) === "1";
+
+      if (!isTemplate && isTutorialActive) {
+        localStorage.setItem(SHORTLIST_TUTORIAL_SEEN_KEY, "1");
+        localStorage.setItem(SHORTLIST_TUTORIAL_SUBMITTED_KEY, "1");
+        localStorage.removeItem(SHORTLIST_TUTORIAL_ACTIVE_KEY);
       }
+
+      router.push(`${isTemplate ? "/templates" : "/boards"}/${board.publicId}`);
+
       closeModal();
 
       await refetchBoards();
@@ -164,14 +169,18 @@ export function NewBoardForm({ isTemplate }: { isTemplate?: boolean }) {
               onChange={() => {
                 setShowTemplates(!showTemplates);
                 if (!showTemplates && !currentTemplate) {
-                  setValue("template", (templates?.[0] as any) ?? null);
+                  setValue("template", formattedTemplates?.[0] ?? null);
                 }
               }}
             />
           )}
         </div>
         <div>
-          <Button type="submit" isLoading={createBoard.isPending}>
+          <Button
+            data-onboarding="create-shortlist-submit"
+            type="submit"
+            isLoading={createBoard.isPending}
+          >
             {t`Create ${isTemplate ? "template" : "shortlist"}`}
           </Button>
         </div>

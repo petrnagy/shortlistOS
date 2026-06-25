@@ -24,6 +24,7 @@ import { useModal } from "~/providers/modal";
 import { useWorkspace } from "~/providers/workspace";
 import { isSuperAdmin } from "~/utils/is-super-admin";
 import { BoardsList } from "./components/BoardsList";
+import { BoardsTutorial } from "./components/BoardsTutorial";
 import { ImportBoardsForm } from "./components/ImportBoardsForm";
 import { NewBoardForm } from "./components/NewBoardForm";
 
@@ -50,9 +51,10 @@ export default function BoardsPage({ isTemplate }: { isTemplate?: boolean }) {
   return (
     <>
       <PageHead
-        title={t`${isTemplate ? "Templates" : "Shortlists"} | ${workspace.name ?? t`Workspace`}`}
+        title={t`${isTemplate ? "Templates" : "Shortlists"} | ${workspace.name}`}
       />
       <div className="m-auto h-full max-w-[1100px] p-8 px-5 md:px-28 md:py-12">
+        <BoardsTutorial isTemplate={isTemplate} />
         <div className="relative z-10 mb-8 flex w-full items-center justify-between">
           <h1 className="font-bold tracking-tight text-neutral-900 dark:text-dark-1000 sm:text-[1.2rem]">
             {t`${isTemplate ? "Templates" : "Shortlists"}`}
@@ -87,6 +89,7 @@ export default function BoardsPage({ isTemplate }: { isTemplate?: boolean }) {
               }
             >
               <Button
+                data-onboarding="new-shortlist-button"
                 type="button"
                 variant="primary"
                 onClick={() => {

@@ -14,6 +14,11 @@ import { useIsMobile } from "~/hooks/useMediaQuery";
 import { useKeyboardShortcuts } from "~/providers/keyboard-shortcuts";
 import { useModal } from "~/providers/modal";
 import { getAvatarUrl } from "~/utils/helpers";
+import {
+  SHORTLIST_TUTORIAL_FORCE_KEY,
+  SHORTLIST_TUTORIAL_SEEN_KEY,
+  START_SHORTLIST_TUTORIAL_EVENT,
+} from "~/utils/onboarding";
 
 interface UserMenuProps {
   imageUrl: string | undefined;
@@ -59,7 +64,24 @@ export default function UserMenu({
     openModal(modalType);
   };
 
+  const handleStartTutorial = () => {
+    if (onCloseSideNav && isMobile) {
+      onCloseSideNav();
+    }
+
+    localStorage.removeItem(SHORTLIST_TUTORIAL_SEEN_KEY);
+    localStorage.setItem(SHORTLIST_TUTORIAL_FORCE_KEY, "1");
+
+    if (window.location.pathname === "/boards") {
+      window.dispatchEvent(new Event(START_SHORTLIST_TUTORIAL_EVENT));
+      return;
+    }
+
+    router.push("/boards");
+  };
+
   const avatarUrl = imageUrl ? getAvatarUrl(imageUrl) : null;
+  const displayLabel = displayName?.trim() ? displayName : email;
 
   return (
     <Menu as="div" className="relative inline-block w-full text-left">
@@ -77,7 +99,7 @@ export default function UserMenu({
         ) : (
           <Menu.Button
             className="flex w-full items-center rounded-md p-1.5 text-neutral-900 hover:bg-light-200 dark:text-dark-900 dark:hover:bg-dark-200 dark:hover:text-dark-1000"
-            title={isCollapsed ? (displayName || email) : undefined}
+            title={isCollapsed ? displayLabel : undefined}
           >
             {avatarUrl ? (
               <Image
@@ -104,7 +126,7 @@ export default function UserMenu({
                 isCollapsed && "md:hidden",
               )}
             >
-              {displayName || email}
+              {displayLabel}
             </span>
           </Menu.Button>
         )}
@@ -185,6 +207,14 @@ export default function UserMenu({
                   className="flex w-full items-center rounded-[5px] px-3 py-2 text-left text-xs hover:bg-light-200 dark:hover:bg-dark-400"
                 >
                   {t`Shortcuts`}
+                </button>
+              </Menu.Item>
+              <Menu.Item>
+                <button
+                  onClick={handleStartTutorial}
+                  className="flex w-full items-center rounded-[5px] px-3 py-2 text-left text-xs hover:bg-light-200 dark:hover:bg-dark-400"
+                >
+                  {t`Run tutorial`}
                 </button>
               </Menu.Item>
               <Menu.Item>

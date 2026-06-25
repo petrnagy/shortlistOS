@@ -4,6 +4,8 @@
 
 - Use WSL for shell commands in this workspace.
 - Do not use PowerShell for repository inspection, editing, tests, or git operations unless the user explicitly asks for it.
+- If both WSL and PowerShell tool calls fail with `CreateProcessAsUserW failed: 1312`, avoid retrying the same shell command repeatedly. Use the Node REPL MCP for read-only inspection, and use `apply_patch` for edits.
+- The user keeps the `pnpm dev` web server running separately. Do not start, restart, or background a web dev server unless the user explicitly asks.
 
 ## Project Overview
 

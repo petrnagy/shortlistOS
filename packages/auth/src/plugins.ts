@@ -204,7 +204,7 @@ export function createPlugins(db: dbClient) {
 
           if (!existingUser) {
             throw new APIError("BAD_REQUEST", {
-              message: "this account does not exist, sign up first",
+              message: "This account does not exist, sign up first",
             });
           }
         }

@@ -6,13 +6,18 @@ import { env } from "next-runtime-env";
 import type { dbClient } from "@kan/db/client";
 import * as memberRepo from "@kan/db/repository/member.repo";
 import * as userRepo from "@kan/db/repository/user.repo";
+import * as workspaceRepo from "@kan/db/repository/workspace.repo";
 import { notificationClient } from "@kan/email";
 import { createLogger } from "@kan/logger";
-import { createEmailUnsubscribeLink, createS3Client } from "@kan/shared";
-
-const log = createLogger("auth");
+import {
+  createEmailUnsubscribeLink,
+  createS3Client,
+  generateUID,
+} from "@kan/shared";
 
 import { downloadImage } from "./utils";
+
+const log = createLogger("auth");
 
 type BetterAuthUser = {
   id: string;
@@ -24,6 +29,20 @@ type BetterAuthUser = {
   image?: string | null | undefined;
   stripeCustomerId?: string | null | undefined;
 } & Record<string, unknown>;
+
+const getStringValue = (value: unknown) =>
+  typeof value === "string" ? value.trim() : "";
+
+export const getWorkspaceNameForNewUser = (user: BetterAuthUser) => {
+  const explicitFirstName =
+    getStringValue(user.firstName) ||
+    getStringValue(user.givenName) ||
+    getStringValue(user.given_name);
+  const fullName = explicitFirstName || getStringValue(user.name);
+  const firstName = fullName.split(/\s+/).filter(Boolean)[0];
+
+  return firstName ? `${firstName}'s` : "My workspace";
+};
 
 export function createDatabaseHooks(db: dbClient) {
   return {
@@ -56,6 +75,30 @@ export function createDatabaseHooks(db: dbClient) {
           return Promise.resolve(true);
         },
         async after(user: BetterAuthUser, _context: unknown) {
+          try {
+            const pendingInvitation = await memberRepo.getByEmailAndStatus(
+              db,
+              user.email,
+              "invited",
+            );
+
+            if (!pendingInvitation) {
+              const workspacePublicId = generateUID();
+              await workspaceRepo.create(db, {
+                publicId: workspacePublicId,
+                name: getWorkspaceNameForNewUser(user),
+                slug: workspacePublicId,
+                createdBy: user.id,
+                createdByEmail: user.email,
+              });
+            }
+          } catch (error) {
+            log.error(
+              { err: error, userId: user.id },
+              "Error creating default workspace",
+            );
+          }
+
           let avatarKey = user.image;
           const storageDomain = process.env.NEXT_PUBLIC_STORAGE_DOMAIN;
           if (
@@ -106,7 +149,14 @@ export function createDatabaseHooks(db: dbClient) {
 
               const unsubscribeUrl = await createEmailUnsubscribeLink(user.id);
 
-              log.info({ workflowId: "user-signup", userId: user.id, email: user.email }, "Triggering Novu workflow");
+              log.info(
+                {
+                  workflowId: "user-signup",
+                  userId: user.id,
+                  email: user.email,
+                },
+                "Triggering Novu workflow",
+              );
               await notificationClient.trigger({
                 to: {
                   subscriberId: user.id,
@@ -126,7 +176,10 @@ export function createDatabaseHooks(db: dbClient) {
                 },
                 workflowId: "user-signup",
               });
-              log.info({ workflowId: "user-signup", userId: user.id }, "Novu workflow triggered");
+              log.info(
+                { workflowId: "user-signup", userId: user.id },
+                "Novu workflow triggered",
+              );
 
               await notificationClient.subscribers.credentials.update(
                 {
@@ -139,7 +192,10 @@ export function createDatabaseHooks(db: dbClient) {
                 user.id,
               );
             } catch (error) {
-              log.error({ err: error }, "Error adding user to notification client");
+              log.error(
+                { err: error },
+                "Error adding user to notification client",
+              );
             }
           }
         },

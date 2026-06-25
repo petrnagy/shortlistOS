@@ -1,4 +1,4 @@
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { t } from "@lingui/core/macro";
 import { env } from "next-runtime-env";
 import { useTheme } from "next-themes";
@@ -15,7 +15,7 @@ import { authClient } from "@kan/auth/client";
 import { useClickOutside } from "~/hooks/useClickOutside";
 import { useModal } from "~/providers/modal";
 import { usePopup } from "~/providers/popup";
-import { useWorkspace, WorkspaceProvider } from "~/providers/workspace";
+import { WorkspaceProvider } from "~/providers/workspace";
 import { api } from "~/utils/api";
 import { ChangePasswordFormConfirmation } from "~/views/settings/components/ChangePasswordConfirmation";
 import Button from "./Button";
@@ -49,10 +49,8 @@ export default function Dashboard({
 }: DashboardProps) {
   const { resolvedTheme } = useTheme();
   const { openModal, closeModal, modalContentType } = useModal();
-  const { availableWorkspaces, hasLoaded } = useWorkspace();
   const { showPopup } = usePopup();
   const router = useRouter();
-  const pathname = usePathname();
   const searchParams = useSearchParams();
 
   const { data: session, isPending: sessionLoading } = authClient.useSession();
@@ -138,20 +136,6 @@ export default function Dashboard({
       router.replace(`?${params.toString()}`);
     }
   }, [searchParams, showPopup, router]);
-
-  useEffect(() => {
-    if (pathname !== "/boards") return;
-
-    if (hasLoaded && availableWorkspaces.length === 0) {
-      if (env("NEXT_PUBLIC_KAN_ENV") === "cloud") {
-        router.push(
-          `/onboarding/select-plan?returnUrl=${encodeURIComponent(window.location.pathname)}`,
-        );
-      } else {
-        openModal("NEW_WORKSPACE", undefined, undefined, false);
-      }
-    }
-  }, [hasLoaded, availableWorkspaces.length, openModal, pathname, router]);
 
   useEffect(() => {
     const isCredentialsEnabled =
