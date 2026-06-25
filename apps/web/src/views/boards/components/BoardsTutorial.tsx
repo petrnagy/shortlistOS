@@ -100,7 +100,7 @@ function BoardsTutorialTooltip({
 
 export function BoardsTutorial({ isTemplate }: { isTemplate?: boolean }) {
   const { workspace } = useWorkspace();
-  const { openModal } = useModal();
+  const { modalContentType, openModal } = useModal();
   const { canCreateBoard } = usePermissions();
   const [run, setRun] = useState(false);
   const [stepIndex, setStepIndex] = useState(0);
@@ -188,6 +188,12 @@ export function BoardsTutorial({ isTemplate }: { isTemplate?: boolean }) {
     workspace.name,
   ]);
 
+  useEffect(() => {
+    if (!run || stepIndex !== 0 || modalContentType !== "NEW_BOARD") return;
+
+    window.setTimeout(() => setStepIndex(1), 150);
+  }, [modalContentType, run, stepIndex]);
+
   const finishTutorial = () => {
     localStorage.setItem(SHORTLIST_TUTORIAL_SEEN_KEY, "1");
     localStorage.removeItem(SHORTLIST_TUTORIAL_ACTIVE_KEY);
@@ -211,7 +217,9 @@ export function BoardsTutorial({ isTemplate }: { isTemplate?: boolean }) {
 
     if (data.type === EVENTS.STEP_AFTER && data.action === ACTIONS.NEXT) {
       if (data.index === 0) {
-        openModal("NEW_BOARD");
+        if (modalContentType !== "NEW_BOARD") {
+          openModal("NEW_BOARD");
+        }
         window.setTimeout(() => setStepIndex(1), 150);
         return;
       }
