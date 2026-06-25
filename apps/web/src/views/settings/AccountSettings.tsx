@@ -42,7 +42,9 @@ export default function AccountSettings() {
           <h2 className="mb-4 mt-8 text-[14px] font-bold text-neutral-900 dark:text-dark-1000">
             {t`Email`}
           </h2>
-          <p className="text-sm text-neutral-700 dark:text-dark-900">{data?.email}</p>
+          <p className="text-sm text-neutral-700 dark:text-dark-900">
+            {data?.email}
+          </p>
         </div>
 
         <div className="mb-8 border-t border-light-300 dark:border-dark-300">
@@ -65,23 +67,6 @@ export default function AccountSettings() {
           <FontSizeSelector />
         </div>
 
-        <div className="mb-8 border-t border-light-300 dark:border-dark-300">
-          <h2 className="mb-4 mt-8 text-[14px] font-bold text-neutral-900 dark:text-dark-1000">
-            {t`Delete account`}
-          </h2>
-          <p className="mb-8 text-sm text-neutral-500 dark:text-dark-900">
-            {t`Once you delete your account, there is no going back. This action cannot be undone.`}
-          </p>
-          <div className="mt-4">
-            <Button
-              variant="secondary"
-              onClick={() => openModal("DELETE_ACCOUNT")}
-            >
-              {t`Delete account`}
-            </Button>
-          </div>
-        </div>
-
         {isCredentialsEnabled && (
           <div className="mb-8 border-t border-light-300 dark:border-dark-300">
             <h2 className="mb-4 mt-8 text-[14px] font-bold text-neutral-900 dark:text-dark-1000">
@@ -102,6 +87,31 @@ export default function AccountSettings() {
             </div>
           </div>
         )}
+
+        <div className="mt-8 rounded-lg border border-red-300 bg-red-50/30 dark:border-red-900/60 dark:bg-red-950/10">
+          <div className="border-b border-red-200 px-4 py-3 dark:border-red-900/50">
+            <div className="flex flex-wrap items-center gap-2">
+              <h2 className="text-[14px] font-bold text-neutral-900 dark:text-dark-1000">
+                {t`Delete account`}
+              </h2>
+              <span className="rounded-full bg-red-100 px-2 py-0.5 text-xs font-semibold text-red-700 dark:bg-red-950/60 dark:text-red-300">
+                {t`Danger`}
+              </span>
+            </div>
+          </div>
+          <div className="flex flex-col gap-4 px-4 py-4 sm:flex-row sm:items-center sm:justify-between">
+            <p className="text-sm leading-6 text-light-900 dark:text-dark-900">
+              {t`Once you delete your account, there is no going back. This action cannot be undone.`}
+            </p>
+            <Button
+              variant="secondary"
+              onClick={() => openModal("DELETE_ACCOUNT")}
+              className="border-red-300 text-red-700 shadow-none hover:bg-red-50 dark:border-red-900/60 dark:text-red-300 dark:hover:bg-red-950/20"
+            >
+              {t`Delete account`}
+            </Button>
+          </div>
+        </div>
       </div>
 
       {/* Account-specific modals */}
@@ -115,7 +125,9 @@ export default function AccountSettings() {
         modalSize="sm"
         isVisible={isOpen && modalContentType === "CHANGE_PASSWORD"}
       >
-        <ChangePasswordFormConfirmation hasPassword={data?.hasPassword ?? false} />
+        <ChangePasswordFormConfirmation
+          hasPassword={data?.hasPassword ?? false}
+        />
       </Modal>
 
       {/* Global modals */}

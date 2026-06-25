@@ -20,7 +20,7 @@ import UpdateWorkspaceUrlForm from "./components/UpdateWorkspaceUrlForm";
 export default function WorkspaceSettings() {
   const { modalContentType, openModal, isOpen } = useModal();
   const { workspace } = useWorkspace();
-  const { canEditWorkspace } = usePermissions();
+  const { canDeleteWorkspace, canEditWorkspace } = usePermissions();
   const isSuperAdmin = isSuperAdminHelper();
   const { data: workspaceData } = api.workspace.byId.useQuery(
     { workspacePublicId: workspace.publicId },
@@ -110,7 +110,7 @@ export default function WorkspaceSettings() {
             <Button
               variant="secondary"
               onClick={() => openModal("DELETE_WORKSPACE")}
-              disabled={!isSuperAdmin}
+              disabled={!canDeleteWorkspace}
               className="border-red-300 text-red-700 shadow-none hover:bg-red-50 dark:border-red-900/60 dark:text-red-300 dark:hover:bg-red-950/20"
             >
               {t`Delete workspace`}
