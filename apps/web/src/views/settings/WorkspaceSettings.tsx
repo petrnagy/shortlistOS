@@ -1,7 +1,5 @@
 import { t } from "@lingui/core/macro";
 
-import type { Subscription } from "@kan/shared/utils";
-
 import Button from "~/components/Button";
 import FeedbackModal from "~/components/FeedbackModal";
 import Modal from "~/components/modal";
@@ -94,18 +92,26 @@ export default function WorkspaceSettings() {
           </div>
         )}
 
-        <div className="border-t border-light-300 dark:border-dark-300">
-          <h2 className="mb-4 mt-8 text-[14px] font-bold text-neutral-900 dark:text-dark-1000">
-            {t`Delete workspace`}
-          </h2>
-          <p className="mb-8 text-sm text-neutral-500 dark:text-dark-900">
-            {t`Once you delete your workspace, there is no going back. This action cannot be undone.`}
-          </p>
-          <div className="mt-4">
+        <div className="mt-8 rounded-lg border border-red-300 bg-red-50/30 dark:border-red-900/60 dark:bg-red-950/10">
+          <div className="border-b border-red-200 px-4 py-3 dark:border-red-900/50">
+            <div className="flex flex-wrap items-center gap-2">
+              <h2 className="text-[14px] font-bold text-neutral-900 dark:text-dark-1000">
+                {t`Delete workspace`}
+              </h2>
+              <span className="rounded-full bg-red-100 px-2 py-0.5 text-xs font-semibold text-red-700 dark:bg-red-950/60 dark:text-red-300">
+                {t`Danger`}
+              </span>
+            </div>
+          </div>
+          <div className="flex flex-col gap-4 px-4 py-4 sm:flex-row sm:items-center sm:justify-between">
+            <p className="text-sm leading-6 text-light-900 dark:text-dark-900">
+              {t`Once you delete your workspace, there is no going back. This action cannot be undone.`}
+            </p>
             <Button
               variant="secondary"
               onClick={() => openModal("DELETE_WORKSPACE")}
               disabled={!isSuperAdmin}
+              className="border-red-300 text-red-700 shadow-none hover:bg-red-50 dark:border-red-900/60 dark:text-red-300 dark:hover:bg-red-950/20"
             >
               {t`Delete workspace`}
             </Button>

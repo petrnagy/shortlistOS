@@ -43,7 +43,11 @@ export function DeleteBoardConfirmation({
         <Button onClick={() => closeModal()} variant="secondary">
           {t`Cancel`}
         </Button>
-        <Button onClick={handleDeleteBoard} isLoading={deleteBoard.isPending}>
+        <Button
+          variant="danger"
+          onClick={handleDeleteBoard}
+          isLoading={deleteBoard.isPending}
+        >
           {t`Delete`}
         </Button>
       </div>
