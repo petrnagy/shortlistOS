@@ -6,6 +6,7 @@ import {
   HiOutlineCog6Tooth,
   HiOutlineRectangleStack,
   HiOutlineStar,
+  HiOutlineTrash,
   HiStar,
 } from "react-icons/hi2";
 
@@ -27,7 +28,7 @@ export function BoardsList({
   const router = useRouter();
   const { workspace } = useWorkspace();
   const { openModal } = useModal();
-  const { canCreateBoard } = usePermissions();
+  const { canCreateBoard, canDeleteBoard } = usePermissions();
 
   const utils = api.useUtils();
   const updateBoard = api.board.update.useMutation({
@@ -65,6 +66,15 @@ export function BoardsList({
     e.preventDefault();
     e.stopPropagation();
     void router.push(`/boards/${boardPublicId}/settings`);
+  };
+
+  const handleOpenDeleteBoard = (
+    e: React.MouseEvent,
+    boardPublicId: string,
+  ) => {
+    e.preventDefault();
+    e.stopPropagation();
+    openModal("DELETE_BOARD", boardPublicId);
   };
 
   if (isLoading)
@@ -135,7 +145,7 @@ export function BoardsList({
           >
             <div className="group relative mr-5 flex h-[150px] w-full items-center justify-center rounded-md border border-dashed border-light-400 bg-light-50 shadow-sm hover:bg-light-200 dark:border-dark-600 dark:bg-dark-50 dark:hover:bg-dark-100">
               <PaperGrainBackground />
-              {!archived && !isTemplate && (
+              {!isTemplate && (
                 <button
                   onClick={(e) => handleOpenBoardSettings(e, board.publicId)}
                   className="absolute right-10 top-3 z-10 rounded p-1 opacity-100 transition-all hover:bg-light-300 dark:hover:bg-dark-200 md:opacity-0 md:group-hover:opacity-100"
@@ -144,25 +154,38 @@ export function BoardsList({
                   <HiOutlineCog6Tooth className="h-5 w-5 text-neutral-700 dark:text-dark-800" />
                 </button>
               )}
-              <button
-                onClick={(e) =>
-                  handleToggleFavorite(e, board.publicId, board.favorite)
-                }
-                className={`absolute right-3 top-3 z-10 rounded p-1 transition-all hover:bg-light-300 dark:hover:bg-dark-200 ${
-                  board.favorite
-                    ? ""
-                    : "md:opacity-0 md:group-hover:opacity-100"
-                }`}
-                aria-label={
-                  board.favorite ? "Remove from favorites" : "Add to favorites"
-                }
-              >
-                {board.favorite ? (
-                  <HiStar className="h-5 w-5 text-neutral-700 dark:text-dark-1000" />
-                ) : (
-                  <HiOutlineStar className="h-5 w-5 text-neutral-700 dark:text-dark-800" />
-                )}
-              </button>
+              {archived && !isTemplate && canDeleteBoard ? (
+                <button
+                  onClick={(e) => handleOpenDeleteBoard(e, board.publicId)}
+                  className="absolute right-3 top-3 z-10 rounded p-1 opacity-100 transition-all hover:bg-light-300 dark:hover:bg-dark-200 md:opacity-0 md:group-hover:opacity-100"
+                  aria-label="Delete shortlist"
+                >
+                  <HiOutlineTrash className="h-5 w-5 text-neutral-700 dark:text-dark-800" />
+                </button>
+              ) : null}
+              {!archived ? (
+                <button
+                  onClick={(e) =>
+                    handleToggleFavorite(e, board.publicId, board.favorite)
+                  }
+                  className={`absolute right-3 top-3 z-10 rounded p-1 transition-all hover:bg-light-300 dark:hover:bg-dark-200 ${
+                    board.favorite
+                      ? ""
+                      : "md:opacity-0 md:group-hover:opacity-100"
+                  }`}
+                  aria-label={
+                    board.favorite
+                      ? "Remove from favorites"
+                      : "Add to favorites"
+                  }
+                >
+                  {board.favorite ? (
+                    <HiStar className="h-5 w-5 text-neutral-700 dark:text-dark-1000" />
+                  ) : (
+                    <HiOutlineStar className="h-5 w-5 text-neutral-700 dark:text-dark-800" />
+                  )}
+                </button>
+              ) : null}
               <p className="relative z-10 px-4 text-[14px] font-bold text-neutral-700 dark:text-dark-1000">
                 {board.name}
               </p>

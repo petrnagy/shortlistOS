@@ -23,6 +23,7 @@ import { useKeyboardShortcut } from "~/providers/keyboard-shortcuts";
 import { useModal } from "~/providers/modal";
 import { useWorkspace } from "~/providers/workspace";
 import { isSuperAdmin } from "~/utils/is-super-admin";
+import { DeleteBoardConfirmation } from "../board/components/DeleteBoardConfirmation";
 import { BoardsList } from "./components/BoardsList";
 import { BoardsTutorial } from "./components/BoardsTutorial";
 import { ImportBoardsForm } from "./components/ImportBoardsForm";
@@ -34,7 +35,7 @@ const boardsTabs = [
 ];
 
 export default function BoardsPage({ isTemplate }: { isTemplate?: boolean }) {
-  const { openModal, modalContentType, isOpen } = useModal();
+  const { openModal, modalContentType, isOpen, entityId } = useModal();
   const { workspace } = useWorkspace();
   const [activeTab, setActiveTab] = useState<"boards" | "archived">("boards");
   const { canCreateBoard } = usePermissions();
@@ -133,6 +134,16 @@ export default function BoardsPage({ isTemplate }: { isTemplate?: boolean }) {
             isVisible={isOpen && modalContentType === "NEW_WORKSPACE"}
           >
             <NewWorkspaceForm />
+          </Modal>
+
+          <Modal
+            modalSize="sm"
+            isVisible={isOpen && modalContentType === "DELETE_BOARD"}
+          >
+            <DeleteBoardConfirmation
+              isTemplate={!!isTemplate}
+              boardPublicId={entityId}
+            />
           </Modal>
         </>
 

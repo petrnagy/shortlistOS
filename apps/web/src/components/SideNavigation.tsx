@@ -61,9 +61,9 @@ export default function SideNavigation({
 
   const { data: workspaceData, isLoading: workspaceDataLoading } =
     api.workspace.byId.useQuery(
-    { workspacePublicId: workspace.publicId },
-    { enabled: !!workspace.publicId && workspace.publicId.length >= 12 },
-  );
+      { workspacePublicId: workspace.publicId },
+      { enabled: !!workspace.publicId && workspace.publicId.length >= 12 },
+    );
 
   const subscriptions = workspaceData?.subscriptions as
     | Subscription[]
@@ -187,7 +187,10 @@ export default function SideNavigation({
         <div>
           <div className="hidden h-[45px] items-center justify-between pb-3 md:flex">
             {!isCollapsed && (
-              <Link href={env("NEXT_PUBLIC_BASE_URL")} className="block">
+              <Link
+                href={`${env("NEXT_PUBLIC_BASE_URL") ?? ""}/boards`}
+                className="block"
+              >
                 <h1 className="pl-2 text-[16px] font-bold tracking-tight text-neutral-900 dark:text-dark-1000">
                   {t`shortlistOS`}
                 </h1>

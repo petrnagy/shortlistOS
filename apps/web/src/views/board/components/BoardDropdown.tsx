@@ -125,15 +125,19 @@ export default function BoardDropdown({
           },
         ]
       : []),
-    {
-      label: isFavorite ? t`Remove from favorites` : t`Add to favorites`,
-      action: handleToggleFavorite,
-      icon: isFavorite ? (
-        <HiStar className="h-[16px] w-[16px] text-dark-900" />
-      ) : (
-        <HiOutlineStar className="h-[16px] w-[16px] text-dark-900" />
-      ),
-    },
+    ...(!isArchived
+      ? [
+          {
+            label: isFavorite ? t`Remove from favorites` : t`Add to favorites`,
+            action: handleToggleFavorite,
+            icon: isFavorite ? (
+              <HiStar className="h-[16px] w-[16px] text-dark-900" />
+            ) : (
+              <HiOutlineStar className="h-[16px] w-[16px] text-dark-900" />
+            ),
+          },
+        ]
+      : []),
     ...(!isTemplate && canArchiveBoard
       ? [
           {
