@@ -10,6 +10,7 @@ import { t } from "@lingui/core/macro";
 import Link from "@tiptap/extension-link";
 import Mention from "@tiptap/extension-mention";
 import Placeholder from "@tiptap/extension-placeholder";
+import Typography from "@tiptap/extension-typography";
 import {
   BubbleMenu,
   EditorContent,
@@ -17,7 +18,6 @@ import {
   ReactRenderer,
   useEditor,
 } from "@tiptap/react";
-import Typography from "@tiptap/extension-typography";
 import StarterKit from "@tiptap/starter-kit";
 import Suggestion from "@tiptap/suggestion";
 import {
@@ -478,8 +478,8 @@ export default function Editor({
         Placeholder.configure({
           placeholder: readOnly
             ? ""
-            : placeholder ??
-              t`Add description... (type '/' to open commands or '@' to mention)`,
+            : (placeholder ??
+              t`Add description... (type '/' for formatting options)`),
         }),
         SlashCommands.configure({
           commandItems: getCommandItems(disableHeadings),
@@ -497,24 +497,26 @@ export default function Editor({
           suggestion: {
             char: "@",
             items: ({ query }: { query: string }) => {
-              const withEmail = workspaceMembers.filter((member) => member.email);
-              
+              const withEmail = workspaceMembers.filter(
+                (member) => member.email,
+              );
+
               const mapped = withEmail.map((member: WorkspaceMember) => ({
                 id: member.publicId,
                 label: member?.user?.name?.trim() || member.email || "",
                 image: member?.user?.image ?? null,
               }));
-              
+
               const all: MentionItem[] = mapped.filter(
                 (item) => item.label && item.label.length > 0,
               );
-              
+
               const q = query.toLowerCase().trim();
-              
+
               if (q === "") {
                 return all;
               }
-              
+
               const filtered = all.filter((u) =>
                 u.label.toLowerCase().includes(q),
               );
@@ -540,15 +542,15 @@ export default function Editor({
           },
         }),
         Typography.configure({
-            openDoubleQuote: false,
-            closeDoubleQuote: false,
-            openSingleQuote: false,
-            closeSingleQuote: false,
-            oneHalf: false,
-            oneQuarter: false,
-            threeQuarters: false,
-            superscriptTwo: false,
-            superscriptThree: false,
+          openDoubleQuote: false,
+          closeDoubleQuote: false,
+          openSingleQuote: false,
+          closeSingleQuote: false,
+          oneHalf: false,
+          oneQuarter: false,
+          threeQuarters: false,
+          superscriptTwo: false,
+          superscriptThree: false,
         }),
         ...(enableYouTubeEmbed ? [YouTubeNode] : []),
       ],
