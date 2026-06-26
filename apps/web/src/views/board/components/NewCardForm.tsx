@@ -27,6 +27,11 @@ import { usePopup } from "~/providers/popup";
 import { useWorkspace } from "~/providers/workspace";
 import { api } from "~/utils/api";
 import { formatMemberDisplayName, getAvatarUrl } from "~/utils/helpers";
+import {
+  OPPORTUNITY_TUTORIAL_ACTIVE_KEY,
+  OPPORTUNITY_TUTORIAL_CARD_CREATED_EVENT,
+  OPPORTUNITY_TUTORIAL_CREATED_CARD_KEY,
+} from "~/utils/onboarding";
 
 type NewCardFormInput = NewCardInput & {
   isCreateAnotherEnabled: boolean;
@@ -47,6 +52,18 @@ interface NewCardFormProps {
   queryParams: QueryParams;
 }
 
+const normalizeOptionalString = (
+  value: string | null | undefined,
+): string | null => {
+  if (!value) return null;
+
+  const trimmedValue = value.trim();
+
+  if (trimmedValue.length === 0) return null;
+
+  return trimmedValue;
+};
+
 export function NewCardForm({
   isTemplate,
   boardPublicId,
@@ -64,6 +81,8 @@ export function NewCardForm({
     modalType: "NEW_CARD",
     initialValues: {
       title: "",
+      shortlistCompanyName: "",
+      shortlistJobPostingUrl: "",
       description: "",
       listPublicId,
       labelPublicIds: [],
@@ -193,7 +212,20 @@ export function NewCardForm({
         icon: "error",
       });
     },
-    onSuccess: async () => {
+    onSuccess: async (createdCard) => {
+      const isOpportunityTutorialActive =
+        localStorage.getItem(OPPORTUNITY_TUTORIAL_ACTIVE_KEY) === "1";
+      const opportunityTutorialCreatedCardPublicId = isOpportunityTutorialActive
+        ? createdCard.publicId
+        : null;
+
+      if (opportunityTutorialCreatedCardPublicId) {
+        localStorage.setItem(
+          OPPORTUNITY_TUTORIAL_CREATED_CARD_KEY,
+          opportunityTutorialCreatedCardPublicId,
+        );
+      }
+
       const isCreateAnotherEnabled = watch("isCreateAnotherEnabled");
       if (!isCreateAnotherEnabled) {
         // close modal (state will auto-clear due to resetOnClose: true)
@@ -202,6 +234,8 @@ export function NewCardForm({
         // reset form for creating another card
         const newFormState = {
           title: "",
+          shortlistCompanyName: "",
+          shortlistJobPostingUrl: "",
           description: "",
           listPublicId: watch("listPublicId"),
           labelPublicIds: [],
@@ -214,6 +248,12 @@ export function NewCardForm({
         saveFormState(newFormState);
       }
       await utils.board.byId.invalidate(queryParams);
+
+      if (opportunityTutorialCreatedCardPublicId) {
+        window.dispatchEvent(
+          new Event(OPPORTUNITY_TUTORIAL_CARD_CREATED_EVENT),
+        );
+      }
     },
   });
 
@@ -261,6 +301,10 @@ export function NewCardForm({
   const onSubmit = (data: NewCardFormInput) => {
     createCard.mutate({
       title: data.title,
+      shortlistCompanyName: normalizeOptionalString(data.shortlistCompanyName),
+      shortlistJobPostingUrl: normalizeOptionalString(
+        data.shortlistJobPostingUrl,
+      ),
       description: data.description,
       listPublicId: data.listPublicId,
       labelPublicIds: data.labelPublicIds,
@@ -303,11 +347,11 @@ export function NewCardForm({
   const selectedList = formattedLists.find((item) => item.selected);
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(onSubmit)} data-onboarding="new-card-form">
       <div className="px-5 pt-5">
         <div className="flex w-full items-center justify-between pb-5">
           <h2 className="text-sm font-bold text-neutral-900 dark:text-dark-1000">
-            {t`New card`}
+            {t`New opportunity`}
           </h2>
           <button
             type="button"
@@ -321,20 +365,40 @@ export function NewCardForm({
           </button>
         </div>
 
-        <div>
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+          <div className="w-full sm:flex-[2]" data-onboarding="new-card-title">
+            <Input
+              id="title"
+              placeholder={t`Job title`}
+              {...register("title")}
+              onKeyDown={async (e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  await handleSubmit(onSubmit)();
+                }
+              }}
+            />
+          </div>
+          <span className="hidden text-sm text-light-900 dark:text-dark-900 sm:block">
+            {t`at`}
+          </span>
+          <div className="w-full sm:flex-1" data-onboarding="new-card-company">
+            <Input
+              id="shortlistCompanyName"
+              placeholder={t`Company`}
+              {...register("shortlistCompanyName")}
+            />
+          </div>
+        </div>
+        <div className="mt-2" data-onboarding="new-card-url">
           <Input
-            id="title"
-            placeholder={t`Card title`}
-            {...register("title")}
-            onKeyDown={async (e) => {
-              if (e.key === "Enter") {
-                e.preventDefault();
-                await handleSubmit(onSubmit)();
-              }
-            }}
+            id="shortlistJobPostingUrl"
+            placeholder={t`Job posting URL`}
+            type="url"
+            {...register("shortlistJobPostingUrl")}
           />
         </div>
-        <div className="mt-2">
+        <div className="mt-2" data-onboarding="new-card-description">
           <div className="block max-h-48 min-h-24 w-full overflow-y-auto rounded-md border-0 bg-dark-300 bg-white/5 px-3 py-2 text-sm shadow-sm ring-1 ring-inset ring-light-600 focus-within:ring-2 focus-within:ring-inset focus-within:ring-light-700 dark:ring-dark-700 dark:focus-within:ring-dark-700 sm:leading-6">
             <Editor
               content={description}
@@ -361,7 +425,7 @@ export function NewCardForm({
             />
           </div>
         </div>
-        <div className="mt-2 flex space-x-1">
+        <div className="mt-2 flex space-x-1" data-onboarding="new-card-controls">
           <div className="w-fit">
             <CheckboxDropdown
               items={formattedLists}
@@ -373,7 +437,7 @@ export function NewCardForm({
             </CheckboxDropdown>
           </div>
           {!isTemplate && (
-            <div className="w-fit">
+            <div className="hidden w-fit">
               <CheckboxDropdown
                 items={formattedMembers}
                 handleSelect={(_groupKey, item) =>
@@ -475,7 +539,7 @@ export function NewCardForm({
               {dueDate ? (
                 <span>{format(dueDate, "MMM d, yyyy")}</span>
               ) : (
-                <>{t`Due date`}</>
+                <>{t`Interview`}</>
               )}
             </button>
             {isDateSelectorOpen && (
@@ -530,10 +594,11 @@ export function NewCardForm({
 
         <div>
           <Button
+            data-onboarding="create-card-submit"
             type="submit"
             disabled={title.length === 0 || createCard.isPending}
           >
-            {t`Create card`}
+            {t`Create`}
           </Button>
         </div>
       </div>

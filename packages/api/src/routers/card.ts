@@ -53,6 +53,8 @@ export const cardRouter = createTRPCRouter({
         memberPublicIds: z.array(z.string().min(12)),
         position: z.enum(["start", "end"]),
         dueDate: z.date().nullable().optional(),
+        shortlistCompanyName: z.string().max(255).nullable().optional(),
+        shortlistJobPostingUrl: z.string().url().nullable().optional(),
       }),
     )
     .output(cardCreateResponseSchema)
@@ -86,6 +88,8 @@ export const cardRouter = createTRPCRouter({
         workspaceId: list.workspaceId,
         position: input.position,
         dueDate: input.dueDate ?? null,
+        shortlistCompanyName: input.shortlistCompanyName ?? null,
+        shortlistJobPostingUrl: input.shortlistJobPostingUrl ?? null,
       });
 
       const newCardId = newCard.id;

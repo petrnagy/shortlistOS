@@ -67,12 +67,6 @@ interface FormValues {
   description: string;
 }
 
-const CARD_SOURCE_OPTIONS = [
-  "MANUAL",
-  "EMAIL_INBOX",
-  "WEB_CLIPPER",
-  "LINK",
-] as const;
 const JOB_LOCATION_TYPE_OPTIONS = ["onsite", "hybrid", "remote"] as const;
 const JOB_TYPE_OPTIONS = [
   "FULL_TIME",
@@ -263,7 +257,6 @@ const TEST_SALARY_COMPARISON_DATA = {
   Global: { min: 50000, max: 90000, currency: "USD" },
 } as const;
 
-type CardSource = (typeof CARD_SOURCE_OPTIONS)[number];
 type JobLocationType = (typeof JOB_LOCATION_TYPE_OPTIONS)[number];
 type JobType = (typeof JOB_TYPE_OPTIONS)[number];
 type SalaryRegion = (typeof SALARY_REGIONS)[number];
@@ -288,7 +281,6 @@ interface ShortlistUpdateFields {
   shortlistSalaryMax?: number | null;
   shortlistSalaryCurrency?: string | null;
   shortlistSalaryInterval?: SalaryInterval;
-  shortlistCardSource?: CardSource;
   shortlistJobLocation?: string | null;
   shortlistJobLocationType?: JobLocationType | null;
   shortlistJobType?: JobType;
@@ -816,22 +808,9 @@ export function CardRightPanel({ isTemplate }: { isTemplate?: boolean }) {
           <div className={detailRowClass}>
             <HiOutlineDocumentText className={detailIconClass} />
             <span className={detailLabelClass}>{t`Created`}</span>
-            <select
-              value={card?.shortlistCardSource ?? "MANUAL"}
-              onChange={(event) =>
-                commitShortlistFields({
-                  shortlistCardSource: event.target.value as CardSource,
-                })
-              }
-              disabled={!canEdit}
-              className={inputClass}
-            >
-              {CARD_SOURCE_OPTIONS.map((option) => (
-                <option key={option} value={option}>
-                  {formatSource(option)}
-                </option>
-              ))}
-            </select>
+            <span className="text-sm text-light-1000 dark:text-dark-1000">
+              {formatSource(card?.shortlistCardSource ?? "MANUAL")}
+            </span>
           </div>
         </div>
       </section>
