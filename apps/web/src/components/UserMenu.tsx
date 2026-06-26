@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Menu, Transition } from "@headlessui/react";
 import { t } from "@lingui/core/macro";
 import { useTheme } from "next-themes";
@@ -15,9 +15,15 @@ import { useKeyboardShortcuts } from "~/providers/keyboard-shortcuts";
 import { useModal } from "~/providers/modal";
 import { getAvatarUrl } from "~/utils/helpers";
 import {
+  getTutorialJourneyForPathname,
+  OPPORTUNITY_TUTORIAL_CREATED_CARD_KEY,
+  OPPORTUNITY_TUTORIAL_FORCE_KEY,
+  OPPORTUNITY_TUTORIAL_SEEN_KEY,
   SHORTLIST_TUTORIAL_FORCE_KEY,
   SHORTLIST_TUTORIAL_SEEN_KEY,
+  START_OPPORTUNITY_TUTORIAL_EVENT,
   START_SHORTLIST_TUTORIAL_EVENT,
+  TUTORIAL_JOURNEYS,
 } from "~/utils/onboarding";
 
 interface UserMenuProps {
@@ -38,10 +44,15 @@ export default function UserMenu({
   onCloseSideNav,
 }: UserMenuProps) {
   const router = useRouter();
+  const pathname = usePathname();
   const { theme, setTheme } = useTheme();
   const { openModal } = useModal();
   const { openLegend } = useKeyboardShortcuts();
   const isMobile = useIsMobile();
+  const tutorialJourney = getTutorialJourneyForPathname(pathname);
+  const tutorialJourneyName = tutorialJourney
+    ? TUTORIAL_JOURNEYS[tutorialJourney].name.toLowerCase()
+    : null;
 
   const handleLogout = async () => {
     if (onCloseSideNav && isMobile) {
@@ -69,15 +80,19 @@ export default function UserMenu({
       onCloseSideNav();
     }
 
-    localStorage.removeItem(SHORTLIST_TUTORIAL_SEEN_KEY);
-    localStorage.setItem(SHORTLIST_TUTORIAL_FORCE_KEY, "1");
-
-    if (window.location.pathname === "/boards") {
+    if (tutorialJourney === "create-shortlist") {
+      localStorage.removeItem(SHORTLIST_TUTORIAL_SEEN_KEY);
+      localStorage.setItem(SHORTLIST_TUTORIAL_FORCE_KEY, "1");
       window.dispatchEvent(new Event(START_SHORTLIST_TUTORIAL_EVENT));
       return;
     }
 
-    router.push("/boards");
+    if (tutorialJourney === "create-opportunity") {
+      localStorage.removeItem(OPPORTUNITY_TUTORIAL_SEEN_KEY);
+      localStorage.removeItem(OPPORTUNITY_TUTORIAL_CREATED_CARD_KEY);
+      localStorage.setItem(OPPORTUNITY_TUTORIAL_FORCE_KEY, "1");
+      window.dispatchEvent(new Event(START_OPPORTUNITY_TUTORIAL_EVENT));
+    }
   };
 
   const avatarUrl = imageUrl ? getAvatarUrl(imageUrl) : null;
@@ -209,14 +224,16 @@ export default function UserMenu({
                   {t`Shortcuts`}
                 </button>
               </Menu.Item>
-              <Menu.Item>
-                <button
-                  onClick={handleStartTutorial}
-                  className="flex w-full items-center rounded-[5px] px-3 py-2 text-left text-xs hover:bg-light-200 dark:hover:bg-dark-400"
-                >
-                  {t`Run tutorial`}
-                </button>
-              </Menu.Item>
+              {tutorialJourney && (
+                <Menu.Item>
+                  <button
+                    onClick={handleStartTutorial}
+                    className="flex w-full items-center rounded-[5px] px-3 py-2 text-left text-xs hover:bg-light-200 dark:hover:bg-dark-400"
+                  >
+                    {t`Run tutorial (${tutorialJourneyName})`}
+                  </button>
+                </Menu.Item>
+              )}
               <Menu.Item>
                 <Link
                   href="mailto:support@kan.bn"

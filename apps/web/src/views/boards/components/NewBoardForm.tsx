@@ -15,6 +15,8 @@ import { usePopup } from "~/providers/popup";
 import { useWorkspace } from "~/providers/workspace";
 import { api } from "~/utils/api";
 import {
+  OPPORTUNITY_TUTORIAL_FORCE_KEY,
+  OPPORTUNITY_TUTORIAL_SEEN_KEY,
   SHORTLIST_TUTORIAL_ACTIVE_KEY,
   SHORTLIST_TUTORIAL_SEEN_KEY,
   SHORTLIST_TUTORIAL_SUBMITTED_KEY,
@@ -87,6 +89,8 @@ export function NewBoardForm({ isTemplate }: { isTemplate?: boolean }) {
         localStorage.setItem(SHORTLIST_TUTORIAL_SEEN_KEY, "1");
         localStorage.setItem(SHORTLIST_TUTORIAL_SUBMITTED_KEY, "1");
         localStorage.removeItem(SHORTLIST_TUTORIAL_ACTIVE_KEY);
+        localStorage.removeItem(OPPORTUNITY_TUTORIAL_SEEN_KEY);
+        localStorage.setItem(OPPORTUNITY_TUTORIAL_FORCE_KEY, "1");
       }
 
       router.push(`${isTemplate ? "/templates" : "/boards"}/${board.publicId}`);

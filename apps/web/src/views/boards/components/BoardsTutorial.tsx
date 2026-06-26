@@ -16,7 +16,13 @@ import {
   START_SHORTLIST_TUTORIAL_EVENT,
 } from "~/utils/onboarding";
 
-function BoardsTutorialTooltip({
+interface TutorialStepData {
+  learnMoreHref?: string;
+  learnMoreLabel?: string;
+  onLearnMore?: () => void;
+}
+
+export function BoardsTutorialTooltip({
   backProps,
   closeProps,
   index,
@@ -31,6 +37,7 @@ function BoardsTutorialTooltip({
   const showSkip = step.buttons.includes("skip") && !isLastStep;
   const showClose = step.buttons.includes("close");
   const showPrimary = step.buttons.includes("primary");
+  const stepData = step.data as TutorialStepData | undefined;
 
   return (
     <div
@@ -82,6 +89,18 @@ function BoardsTutorialTooltip({
             {t`Close`}
           </Button>
         )}
+        {stepData?.learnMoreHref && (
+          <Button
+            href={stepData.learnMoreHref}
+            onClick={stepData.onLearnMore}
+            type="button"
+            variant="secondary"
+            size="sm"
+            className="shadow-none"
+          >
+            {stepData.learnMoreLabel ?? t`Learn more`}
+          </Button>
+        )}
         {showPrimary && (
           <Button
             {...primaryProps}
@@ -90,7 +109,7 @@ function BoardsTutorialTooltip({
             size="sm"
             className="shadow-none"
           >
-            {isLastStep ? t`Done` : step.locale.next}
+            {isLastStep ? (step.locale.last ?? t`Done`) : step.locale.next}
           </Button>
         )}
       </div>
@@ -100,10 +119,12 @@ function BoardsTutorialTooltip({
 
 export function BoardsTutorial({ isTemplate }: { isTemplate?: boolean }) {
   const { workspace } = useWorkspace();
-  const { modalContentType, openModal } = useModal();
+  const { closeModal, modalContentType, openModal } = useModal();
   const { canCreateBoard } = usePermissions();
   const [run, setRun] = useState(false);
   const [stepIndex, setStepIndex] = useState(0);
+  const [isModalAdvanceSuppressed, setIsModalAdvanceSuppressed] =
+    useState(false);
 
   const { data: boards, isLoading } = api.board.all.useQuery(
     {
@@ -190,9 +211,16 @@ export function BoardsTutorial({ isTemplate }: { isTemplate?: boolean }) {
 
   useEffect(() => {
     if (!run || stepIndex !== 0 || modalContentType !== "NEW_BOARD") return;
+    if (isModalAdvanceSuppressed) return;
 
-    window.setTimeout(() => setStepIndex(1), 150);
-  }, [modalContentType, run, stepIndex]);
+    setStepIndex(1);
+  }, [isModalAdvanceSuppressed, modalContentType, run, stepIndex]);
+
+  useEffect(() => {
+    if (!isModalAdvanceSuppressed || modalContentType === "NEW_BOARD") return;
+
+    setIsModalAdvanceSuppressed(false);
+  }, [isModalAdvanceSuppressed, modalContentType]);
 
   const finishTutorial = () => {
     localStorage.setItem(SHORTLIST_TUTORIAL_SEEN_KEY, "1");
@@ -217,10 +245,11 @@ export function BoardsTutorial({ isTemplate }: { isTemplate?: boolean }) {
 
     if (data.type === EVENTS.STEP_AFTER && data.action === ACTIONS.NEXT) {
       if (data.index === 0) {
+        setIsModalAdvanceSuppressed(true);
+        setStepIndex(1);
         if (modalContentType !== "NEW_BOARD") {
           openModal("NEW_BOARD");
         }
-        window.setTimeout(() => setStepIndex(1), 150);
         return;
       }
 
@@ -228,6 +257,13 @@ export function BoardsTutorial({ isTemplate }: { isTemplate?: boolean }) {
     }
 
     if (data.type === EVENTS.STEP_AFTER && data.action === ACTIONS.PREV) {
+      if (data.index === 1 && modalContentType === "NEW_BOARD") {
+        setIsModalAdvanceSuppressed(true);
+        closeModal();
+        setStepIndex(0);
+        return;
+      }
+
       setStepIndex(Math.max(data.index - 1, 0));
     }
   };

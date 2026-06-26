@@ -10,6 +10,8 @@ import { useModal } from "~/providers/modal";
 interface ListProps {
   children: ReactNode;
   index: number;
+  isArchived?: boolean;
+  isTutorialTarget?: boolean;
   list: List;
   setSelectedPublicListId: (publicListId: PublicListId) => void;
 }
@@ -25,14 +27,17 @@ type PublicListId = string;
 export default function List({
   children,
   index,
+  isArchived = false,
+  isTutorialTarget = false,
   list,
   setSelectedPublicListId,
 }: ListProps) {
   const { openModal } = useModal();
   const { canCreateCard } = usePermissions();
+  const canAddCard = canCreateCard && !isArchived;
 
   const openNewCardForm = (publicListId: PublicListId) => {
-    if (!canCreateCard) return;
+    if (!canAddCard) return;
     openModal("NEW_CARD");
     setSelectedPublicListId(publicListId);
   };
@@ -59,13 +64,20 @@ export default function List({
             <div className="flex items-center">
               <Tooltip
                 content={
-                  !canCreateCard ? t`You don't have permission` : undefined
+                  isArchived
+                    ? t`Archived shortlists are read-only`
+                    : !canCreateCard
+                      ? t`You don't have permission`
+                      : undefined
                 }
               >
                 <button
+                  data-onboarding={
+                    isTutorialTarget ? "saved-list-add-card-button" : undefined
+                  }
                   className="mx-1 inline-flex h-fit items-center rounded-md p-1 px-1 text-sm font-semibold text-dark-50 hover:bg-light-400 disabled:opacity-60 disabled:cursor-not-allowed dark:hover:bg-dark-200"
                   onClick={() => openNewCardForm(list.publicId)}
-                  disabled={!canCreateCard}
+                  disabled={!canAddCard}
                 >
                   <HiOutlinePlusSmall
                     className="h-5 w-5 text-dark-900"

@@ -39,6 +39,7 @@ import { formatToArray } from "~/utils/helpers";
 import { isSuperAdmin } from "~/utils/is-super-admin";
 import { DeleteCardConfirmation } from "~/views/card/components/DeleteCardConfirmation";
 import BoardDropdown from "./components/BoardDropdown";
+import { BoardOpportunityTutorial } from "./components/BoardOpportunityTutorial";
 import Card from "./components/Card";
 import { CardContextDueDateModal } from "./components/CardContextDueDateModal";
 import { CardContextDuplicateModal } from "./components/CardContextDuplicateModal";
@@ -290,6 +291,11 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
   });
 
   const boardName = boardData?.name ?? "";
+  const isBoardArchived = boardData?.isArchived ?? false;
+  const canRenameBoard = canEditBoard && !isBoardArchived;
+  const tutorialSavedListPublicId = boardData?.lists.find(
+    (list) => list.name.trim().toLowerCase() === "saved",
+  )?.publicId;
   const currentBoardName = watch("name");
 
   useEffect(() => {
@@ -301,6 +307,11 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
   const openNewListForm = (publicBoardId: string) => {
     openModal("NEW_LIST");
     setSelectedPublicListId(publicBoardId);
+  };
+
+  const openNewCardForm = (publicListId: string) => {
+    openModal("NEW_CARD");
+    setSelectedPublicListId(publicListId);
   };
 
   const handleCardContextMenuAction = (action: CardContextMenuAction) => {
@@ -546,6 +557,12 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
       />
       <div className="relative flex h-full flex-col">
         <PaperGrainBackground />
+        <BoardOpportunityTutorial
+          isTemplate={isTemplate}
+          isLoading={isLoading}
+          lists={boardData?.lists ?? []}
+          openNewCardForm={openNewCardForm}
+        />
         <div className="z-10 flex w-full flex-col justify-between p-6 md:flex-row md:p-8">
           {isLoading && !boardData && (
             <div className="flex space-x-2">
@@ -561,8 +578,9 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
                 id="name"
                 type="text"
                 {...register("name")}
-                onBlur={canEditBoard ? handleSubmit(onSubmit) : undefined}
-                readOnly={!canEditBoard}
+                onBlur={canRenameBoard ? handleSubmit(onSubmit) : undefined}
+                readOnly={!canRenameBoard}
+                disabled={!canRenameBoard}
                 className="block border-0 bg-transparent p-0 py-0 font-bold leading-[2.3rem] tracking-tight text-neutral-900 focus:ring-0 focus-visible:outline-none disabled:cursor-not-allowed dark:text-dark-1000 sm:text-[1.2rem]"
               />
             </form>
@@ -706,6 +724,10 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
                         {boardData.lists.map((list, index) => (
                           <List
                             index={index}
+                            isArchived={isBoardArchived}
+                            isTutorialTarget={
+                              list.publicId === tutorialSavedListPublicId
+                            }
                             key={index}
                             list={list}
                             setSelectedPublicListId={(publicListId) =>
@@ -727,12 +749,15 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
                                       key={card.publicId}
                                       draggableId={card.publicId}
                                       index={index}
-                                      isDragDisabled={!canEditCard}
+                                      isDragDisabled={
+                                        !canEditCard || isBoardArchived
+                                      }
                                     >
                                       {(provided) => (
                                         <Link
                                           onClick={(e) => {
                                             if (
+                                              isBoardArchived ||
                                               card.publicId.startsWith(
                                                 "PLACEHOLDER",
                                               )
@@ -741,6 +766,7 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
                                           }}
                                           onContextMenu={(e) => {
                                             if (
+                                              isBoardArchived ||
                                               card.publicId.startsWith(
                                                 "PLACEHOLDER",
                                               ) ||
@@ -756,6 +782,10 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
                                             });
                                           }}
                                           key={card.publicId}
+                                          data-onboarding="board-card"
+                                          data-onboarding-card-public-id={
+                                            card.publicId
+                                          }
                                           href={
                                             isTemplate
                                               ? `/templates/${boardId}/cards/${card.publicId}`
@@ -767,7 +797,7 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
                                             )
                                               ? "pointer-events-none"
                                               : ""
-                                          }`}
+                                          } ${isBoardArchived ? "!cursor-not-allowed" : ""}`}
                                           ref={provided.innerRef}
                                           {...provided.draggableProps}
                                           {...provided.dragHandleProps}
