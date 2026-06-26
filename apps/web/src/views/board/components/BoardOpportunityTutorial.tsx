@@ -32,6 +32,19 @@ interface BoardOpportunityTutorialProps {
   openNewCardForm: (listPublicId: string) => void;
 }
 
+interface OpportunityTutorialDebugEvent {
+  at: string;
+  event: string;
+  modalContentType: string;
+  stepIndex: number;
+  run: boolean;
+  details?: Record<string, unknown>;
+}
+
+type OpportunityTutorialDebugWindow = typeof window & {
+  __shortlistOpportunityTutorialDebug?: OpportunityTutorialDebugEvent[];
+};
+
 export function BoardOpportunityTutorial({
   isTemplate,
   isLoading,
@@ -47,6 +60,32 @@ export function BoardOpportunityTutorial({
   );
   const [isModalAdvanceSuppressed, setIsModalAdvanceSuppressed] =
     useState(false);
+
+  const recordDebugEvent = useCallback(
+    (event: string, details?: Record<string, unknown>) => {
+      const debugEvent: OpportunityTutorialDebugEvent = {
+        at: new Date().toISOString(),
+        event,
+        modalContentType,
+        stepIndex,
+        run,
+        details,
+      };
+
+      const debugWindow = window as OpportunityTutorialDebugWindow;
+      debugWindow.__shortlistOpportunityTutorialDebug = [
+        ...(debugWindow.__shortlistOpportunityTutorialDebug ?? []),
+        debugEvent,
+      ];
+
+      window.dispatchEvent(
+        new CustomEvent("shortlist:opportunity-tutorial-debug", {
+          detail: debugEvent,
+        }),
+      );
+    },
+    [modalContentType, run, stepIndex],
+  );
 
   const savedList = lists.find(
     (list) => list.name.trim().toLowerCase() === "saved",
@@ -141,22 +180,35 @@ export function BoardOpportunityTutorial({
     [createdCardTarget, finishTutorial],
   );
 
-  const startTutorial = useCallback(() => {
+  const startTutorial = useCallback((source: "event" | "force") => {
+    recordDebugEvent("startTutorial:attempt", {
+      source,
+      canCreateCard,
+      hasSavedList: !!savedList,
+      forceKey:
+        localStorage.getItem(OPPORTUNITY_TUTORIAL_FORCE_KEY) === "1",
+    });
+
     if (!canCreateCard || !savedList) return;
 
     const storedCreatedCardPublicId = localStorage.getItem(
       OPPORTUNITY_TUTORIAL_CREATED_CARD_KEY,
     );
 
+    recordDebugEvent("startTutorial:accepted", {
+      source,
+      storedCreatedCardPublicId,
+    });
+
     localStorage.setItem(OPPORTUNITY_TUTORIAL_ACTIVE_KEY, "1");
     localStorage.removeItem(OPPORTUNITY_TUTORIAL_SEEN_KEY);
     setCreatedCardPublicId(storedCreatedCardPublicId);
     setStepIndex(storedCreatedCardPublicId ? 7 : 0);
     setRun(true);
-  }, [canCreateCard, savedList]);
+  }, [canCreateCard, recordDebugEvent, savedList]);
 
   useEffect(() => {
-    const handleStartTutorial = () => startTutorial();
+    const handleStartTutorial = () => startTutorial("event");
 
     window.addEventListener(
       START_OPPORTUNITY_TUTORIAL_EVENT,
@@ -176,23 +228,39 @@ export function BoardOpportunityTutorial({
     const shouldForceRun =
       localStorage.getItem(OPPORTUNITY_TUTORIAL_FORCE_KEY) === "1";
     if (shouldForceRun) {
+      recordDebugEvent("forceEffect:consume");
       localStorage.removeItem(OPPORTUNITY_TUTORIAL_FORCE_KEY);
-      startTutorial();
+      startTutorial("force");
     }
-  }, [canCreateCard, isLoading, isTemplate, savedList, startTutorial]);
+  }, [
+    canCreateCard,
+    isLoading,
+    isTemplate,
+    recordDebugEvent,
+    savedList,
+    startTutorial,
+  ]);
 
   useEffect(() => {
     if (!run || stepIndex !== 0 || modalContentType !== "NEW_CARD") return;
     if (isModalAdvanceSuppressed) return;
 
+    recordDebugEvent("modalWatcher:advanceToStep1");
     setStepIndex(1);
-  }, [isModalAdvanceSuppressed, modalContentType, run, stepIndex]);
+  }, [
+    isModalAdvanceSuppressed,
+    modalContentType,
+    recordDebugEvent,
+    run,
+    stepIndex,
+  ]);
 
   useEffect(() => {
     if (!isModalAdvanceSuppressed || modalContentType === "NEW_CARD") return;
 
+    recordDebugEvent("modalSuppression:release");
     setIsModalAdvanceSuppressed(false);
-  }, [isModalAdvanceSuppressed, modalContentType]);
+  }, [isModalAdvanceSuppressed, modalContentType, recordDebugEvent]);
 
   useEffect(() => {
     const handleCardCreated = () => {
@@ -202,6 +270,7 @@ export function BoardOpportunityTutorial({
 
       if (!cardPublicId) return;
 
+      recordDebugEvent("cardCreated:advanceToCreatedCard", { cardPublicId });
       setCreatedCardPublicId(cardPublicId);
       setStepIndex(7);
     };
@@ -216,7 +285,7 @@ export function BoardOpportunityTutorial({
         OPPORTUNITY_TUTORIAL_CARD_CREATED_EVENT,
         handleCardCreated,
       );
-  }, []);
+  }, [recordDebugEvent]);
 
   const handleEvent = (data: EventData) => {
     const finishedStatuses: string[] = [STATUS.FINISHED, STATUS.SKIPPED];
@@ -233,6 +302,11 @@ export function BoardOpportunityTutorial({
     if (data.type === EVENTS.STEP_AFTER && data.action === ACTIONS.NEXT) {
       if (data.index === 0) {
         if (!savedList) return;
+        recordDebugEvent("joyride:openForm", {
+          savedListPublicId: savedList.publicId,
+          action: data.action,
+          type: data.type,
+        });
         setIsModalAdvanceSuppressed(true);
         setStepIndex(1);
         if (modalContentType !== "NEW_CARD") {
