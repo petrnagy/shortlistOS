@@ -1,7 +1,7 @@
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { t } from "@lingui/core/macro";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { HiXMark } from "react-icons/hi2";
 import { z } from "zod";
@@ -38,6 +38,22 @@ interface NewBoardInputWithTemplate {
   template: Template | null;
 }
 
+const getUniqueBoardName = (baseName: string, existingNames: string[]) => {
+  const usedNames = new Set(existingNames);
+
+  if (!usedNames.has(baseName)) return baseName;
+
+  let suffix = 2;
+  let candidate = `${baseName} #${suffix}`;
+
+  while (usedNames.has(candidate)) {
+    suffix += 1;
+    candidate = `${baseName} #${suffix}`;
+  }
+
+  return candidate;
+};
+
 export function NewBoardForm({ isTemplate }: { isTemplate?: boolean }) {
   const utils = api.useUtils();
   const { closeModal } = useModal();
@@ -48,6 +64,22 @@ export function NewBoardForm({ isTemplate }: { isTemplate?: boolean }) {
   const { data: templates } = api.board.all.useQuery(
     { workspacePublicId: workspace.publicId, type: "template" },
     { enabled: !!workspace.publicId },
+  );
+  const { data: activeBoards } = api.board.all.useQuery(
+    {
+      workspacePublicId: workspace.publicId,
+      type: "regular",
+      archived: false,
+    },
+    { enabled: !isTemplate && !!workspace.publicId },
+  );
+  const { data: archivedBoards } = api.board.all.useQuery(
+    {
+      workspacePublicId: workspace.publicId,
+      type: "regular",
+      archived: true,
+    },
+    { enabled: !isTemplate && !!workspace.publicId },
   );
 
   const formattedTemplates = templates?.map((template) => ({
@@ -60,17 +92,26 @@ export function NewBoardForm({ isTemplate }: { isTemplate?: boolean }) {
 
   const defaultTemplate =
     getTemplates().find((tpl) => tpl.id === "shortlist") ?? null;
+  const baseBoardName = t`Job hunt` + " " + new Date().getFullYear();
+  const defaultBoardName = useMemo(() => {
+    if (isTemplate) return baseBoardName;
+
+    return getUniqueBoardName(baseBoardName, [
+      ...(activeBoards?.map((board) => board.name) ?? []),
+      ...(archivedBoards?.map((board) => board.name) ?? []),
+    ]);
+  }, [activeBoards, archivedBoards, baseBoardName, isTemplate]);
 
   const {
     register,
     handleSubmit,
     watch,
     setValue,
-    formState: { errors },
+    formState: { dirtyFields, errors },
   } = useForm<NewBoardInputWithTemplate>({
     resolver: zodResolver(schema),
     defaultValues: {
-      name: t`Job hunt` + " " + new Date().getFullYear(),
+      name: defaultBoardName,
       workspacePublicId: workspace.publicId,
       template: defaultTemplate,
     },
@@ -126,6 +167,12 @@ export function NewBoardForm({ isTemplate }: { isTemplate?: boolean }) {
       titleElement.select();
     }
   }, []);
+
+  useEffect(() => {
+    if (dirtyFields.name) return;
+
+    setValue("name", defaultBoardName);
+  }, [defaultBoardName, dirtyFields.name, setValue]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
