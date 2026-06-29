@@ -6,6 +6,13 @@ const PaperGrainBackground = () => (
         "linear-gradient(180deg, rgba(255, 255, 255, 0.45) 0%, rgba(246, 244, 239, 0.25) 100%), #faf9f6",
     }}
   >
+    <div
+      className="absolute inset-0"
+      style={{
+        background:
+          "linear-gradient(180deg, rgba(255, 255, 255, 0.45) 0%, rgba(246, 244, 239, 0.25) 100%)",
+      }}
+    />
     <svg
       className="absolute inset-0 h-full w-full"
       preserveAspectRatio="none"
@@ -39,6 +46,21 @@ const PaperGrainBackground = () => (
         fill="#fffaf0"
         filter="url(#paper-grain-noise)"
         opacity="0.2"
+        style={{ mixBlendMode: "overlay" }}
+      />
+    </svg>
+    <div className="absolute inset-0 hidden bg-[rgba(0,0,0,0.85)] dark:block" />
+    <svg
+      className="absolute inset-0 hidden h-full w-full dark:block"
+      preserveAspectRatio="none"
+      aria-hidden="true"
+    >
+      <rect
+        width="100%"
+        height="100%"
+        fill="#ffffff"
+        filter="url(#paper-grain-noise)"
+        opacity="0.16"
         style={{ mixBlendMode: "overlay" }}
       />
     </svg>

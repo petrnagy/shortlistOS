@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { t } from "@lingui/core/macro";
+import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
-import { FaGithub } from "react-icons/fa";
+import { FaDesktop, FaGithub, FaMoon, FaSun } from "react-icons/fa";
 import { twMerge } from "tailwind-merge";
 
 const navigation = [
@@ -16,8 +17,11 @@ const navigation = [
   },
 ];
 
-const Header = ({ isLoggedIn: _isLoggedIn }: { isLoggedIn: boolean }) => {
+const Header = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { theme, setTheme } = useTheme();
+  const appHref = isLoggedIn ? "/boards" : "/login";
+  const appLabel = isLoggedIn ? t`Go to app` : t`Log in`;
 
   useEffect(() => {
     document.documentElement.classList.toggle("overflow-hidden", isMenuOpen);
@@ -54,12 +58,13 @@ const Header = ({ isLoggedIn: _isLoggedIn }: { isLoggedIn: boolean }) => {
           </nav>
 
           <div className="hidden items-center justify-end gap-3 lg:flex">
+            <ThemeModeToggle theme={theme} setTheme={setTheme} />
             <Link
-              href="/boards"
+              href={appHref}
               className="inline-flex items-center justify-center whitespace-nowrap rounded-md bg-light-1000 px-3 py-2 text-sm font-semibold text-light-50 shadow-sm focus-visible:outline-none dark:bg-dark-1000 dark:text-dark-50"
             >
               <span className="relative flex items-center justify-center">
-                <span className="flex items-center">{t`Go to app`}</span>
+                <span className="flex items-center">{appLabel}</span>
               </span>
             </Link>
           </div>
@@ -107,17 +112,70 @@ const Header = ({ isLoggedIn: _isLoggedIn }: { isLoggedIn: boolean }) => {
               {item.external && <FaGithub className="h-4 w-4" />}
             </Link>
           ))}
+          <ThemeModeToggle
+            theme={theme}
+            setTheme={setTheme}
+            className="w-full justify-center rounded-xl border border-light-300 bg-light-100 p-2 dark:border-dark-300 dark:bg-dark-100"
+          />
           <Link
-            href="/boards"
+            href={appHref}
             onClick={() => setIsMenuOpen(false)}
             className="flex rounded-xl bg-light-1000 px-4 py-4 text-base font-bold text-light-50 dark:bg-dark-1000 dark:text-dark-50"
           >
-            {t`Go to app`}
+            {appLabel}
           </Link>
         </div>
       </div>
     </>
   );
 };
+
+function ThemeModeToggle({
+  theme,
+  setTheme,
+  className,
+}: {
+  theme: string | undefined;
+  setTheme: (theme: string) => void;
+  className?: string;
+}) {
+  const currentTheme = theme ?? "system";
+  const modes = [
+    { value: "light", label: t`Light`, icon: FaSun },
+    { value: "dark", label: t`Dark`, icon: FaMoon },
+    { value: "system", label: t`Auto`, icon: FaDesktop },
+  ];
+
+  return (
+    <div
+      className={twMerge(
+        "inline-flex items-center gap-1 rounded-md border border-light-300 bg-light-50 p-1 dark:border-dark-300 dark:bg-dark-100",
+        className,
+      )}
+    >
+      {modes.map((mode) => {
+        const Icon = mode.icon;
+        const isActive = currentTheme === mode.value;
+
+        return (
+          <button
+            key={mode.value}
+            type="button"
+            onClick={() => setTheme(mode.value)}
+            className={twMerge(
+              "inline-flex h-8 w-8 items-center justify-center rounded text-light-900 transition hover:bg-light-200 hover:text-light-1000 dark:text-dark-900 dark:hover:bg-dark-200 dark:hover:text-dark-1000",
+              isActive &&
+                "bg-light-1000 text-light-50 hover:bg-light-1000 hover:text-light-50 dark:bg-dark-1000 dark:text-dark-50 dark:hover:bg-dark-1000 dark:hover:text-dark-50",
+            )}
+            aria-label={mode.label}
+            title={mode.label}
+          >
+            <Icon className="h-3.5 w-3.5" />
+          </button>
+        );
+      })}
+    </div>
+  );
+}
 
 export default Header;

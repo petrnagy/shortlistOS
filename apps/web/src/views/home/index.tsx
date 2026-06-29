@@ -18,8 +18,8 @@ import {
 import { PageHead } from "~/components/PageHead";
 import Layout from "./components/Layout";
 
-const primaryCta = t`Get Powerpack - $29`;
-const secondaryCta = t`Start free`;
+const primaryCta = t`Get the Powerpack`;
+const secondaryCta = t`Start for Free`;
 const powerpackSignupHref = "/signup?withPowerpack=yes";
 
 export default function HomeView() {
@@ -28,7 +28,7 @@ export default function HomeView() {
       title: t`A pipeline that matches your process`,
       description: t`Create your own stages and move opportunities through them as the search progresses.`,
       accent:
-        "bg-violet-100 text-violet-700 dark:bg-violet-500/15 dark:text-violet-300",
+        "bg-brand-100 text-brand-800 dark:bg-brand-500/15 dark:text-brand-300",
       icon: FaChartLine,
     },
     {
@@ -59,7 +59,7 @@ export default function HomeView() {
       title: t`Save jobs without copying everything manually`,
       description: t`Clip a job posting or paste its URL. ShortlistOS extracts the useful details and creates the opportunity for you.`,
       icon: FaLink,
-      accent: "text-violet-600 dark:text-violet-300",
+      accent: "text-brand-700 dark:text-brand-300",
     },
     {
       title: t`Turn job emails into organized opportunities`,
@@ -169,7 +169,7 @@ export default function HomeView() {
 
   return (
     <Layout>
-      <PageHead title="ShortlistOS | A better way to manage your job search" />
+      <PageHead title="ShortlistOS | Job hunting is hard. Tracking it shouldn't be." />
       <main className="relative z-10 flex w-full flex-col">
         <Hero />
         <TrustStrip />
@@ -213,26 +213,26 @@ function Hero() {
   return (
     <section className="px-4 pt-28 sm:pt-32 lg:pt-36">
       <div className="mx-auto flex max-w-[900px] flex-col items-center text-center">
-        <Link
-          href="https://github.com/petrnagy/shortlistOS"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 rounded-full border border-light-300 bg-light-50 px-3 py-1.5 text-xs font-medium text-light-950 shadow-sm hover:bg-light-100 dark:border-dark-300 dark:bg-dark-100 dark:text-dark-950 dark:hover:bg-dark-200"
-        >
-          <FaGithub className="h-3.5 w-3.5" />
-          {t`Open source core`} [todo:shortlistos]
-        </Link>
         <h1 className="mt-5 max-w-[900px] text-balance text-5xl font-bold leading-[1.06] tracking-normal text-light-1000 dark:text-dark-1000 sm:text-6xl lg:text-7xl">
-          {t`A better way to manage your job search.`}
+          {t`Job hunting is hard. Tracking it shouldn't be.`}
         </h1>
         <p className="mt-5 max-w-[620px] text-base leading-[1.95rem] text-light-950 dark:text-dark-900 sm:text-lg sm:leading-[2.15rem]">
-          {t`Track every opportunity, interview, note and follow-up in one private workspace. Add Powerpack to automatically capture jobs, process emails and remind you what needs attention.`}
+          {t`Track every opportunity, email, scheduled interview, and follow-up in one private workspace. Get the Powerpack to automate your search.`}
         </p>
         <div className="mt-7 flex flex-col items-center gap-3 sm:flex-row">
-          <LandingButton href={powerpackSignupHref} variant="primary">
+          <LandingButton
+            href={powerpackSignupHref}
+            variant="primary"
+            dynamicBackground
+            className="w-full sm:w-44"
+          >
             {primaryCta}
           </LandingButton>
-          <LandingButton href="/signup" variant="secondary">
+          <LandingButton
+            href="/signup"
+            variant="secondary"
+            className="w-full sm:w-44"
+          >
             {secondaryCta}
           </LandingButton>
         </div>
@@ -255,20 +255,20 @@ function Hero() {
 function TrustStrip() {
   const items = [
     { label: t`Open source core`, icon: FaGithub },
-    { label: t`Made and hosted in the EU`, icon: FaGlobeEurope },
-    { label: t`No tracking cookies`, icon: FaShieldAlt },
-    { label: t`Export your data anytime`, icon: FaArrowDown },
+    { label: t`Made & hosted in EU`, icon: FaGlobeEurope },
+    { label: t`Privacy friendly`, icon: FaShieldAlt },
+    { label: t`Own your data`, icon: FaLock },
   ];
 
   return (
     <section className="px-4 pt-10">
-      <div className="mx-auto grid max-w-[960px] gap-px overflow-hidden rounded-xl border border-light-300 bg-light-300 shadow-sm dark:border-dark-300 dark:bg-dark-300 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="mx-auto grid max-w-[850px] gap-px overflow-hidden rounded-xl border border-light-300 bg-light-300 shadow-sm dark:border-dark-300 dark:bg-dark-300 sm:grid-cols-2 lg:grid-cols-4">
         {items.map((item) => (
           <div
             key={item.label}
             className="flex items-center justify-center gap-3 bg-light-50 px-5 py-4 text-sm font-medium text-light-950 dark:bg-dark-100 dark:text-dark-950"
           >
-            <item.icon className="h-4 w-4 text-violet-600 dark:text-violet-300" />
+            <item.icon className="text-brand-700 dark:text-brand-300 h-4 w-4" />
             {item.label}
           </div>
         ))}
@@ -323,7 +323,7 @@ function ProductPreview() {
             </p>
           </div>
           <div className="hidden items-center gap-2 text-xs text-light-900 dark:text-dark-800 sm:flex">
-            <span className="rounded-md bg-violet-100 px-2 py-1 font-medium text-violet-700 dark:bg-violet-500/15 dark:text-violet-300">
+            <span className="bg-brand-100 text-brand-800 dark:bg-brand-500/15 dark:text-brand-300 rounded-md px-2 py-1 font-medium">
               {t`Board`}
             </span>
             <span>{t`List`}</span>
@@ -342,7 +342,7 @@ function ProductPreview() {
                     key={item}
                     className={`rounded-md px-3 py-2 ${
                       index === 2
-                        ? "bg-violet-100 font-semibold text-violet-700 dark:bg-violet-500/15 dark:text-violet-300"
+                        ? "bg-brand-100 text-brand-800 dark:bg-brand-500/15 dark:text-brand-300 font-semibold"
                         : ""
                     }`}
                   >
@@ -403,7 +403,7 @@ function ProblemSection() {
     <section className="px-4 py-14">
       <div className="mx-auto grid max-w-[980px] gap-8 rounded-2xl border border-light-300 bg-light-50 p-6 shadow-sm dark:border-dark-300 dark:bg-dark-100 md:grid-cols-[2fr_1fr] md:p-9">
         <div>
-          <p className="text-sm font-semibold text-violet-600 dark:text-violet-300">
+          <p className="inline-flex rounded-full bg-brand-700 px-3 py-1 text-sm font-semibold text-white">
             {t`The problem`}
           </p>
           <h2 className="mt-3 text-3xl font-bold leading-[1.35] text-light-1000 dark:text-dark-1000 md:text-4xl">
@@ -453,7 +453,7 @@ function PricingSection({
     <Section
       id="pricing"
       eyebrow={t`Pricing`}
-      title={t`Use ShortlistOS your way.`}
+      title={t`Use shortlistOS your way.`}
       description={t`Choose the hosted workspace with automation, keep it manual for free, or run the open-source core yourself.`}
     >
       <div className="grid gap-5 lg:grid-cols-3">
@@ -462,12 +462,12 @@ function PricingSection({
             key={plan.title}
             className={`relative flex min-h-[420px] flex-col rounded-2xl border p-6 shadow-sm ${
               plan.featured
-                ? "border-violet-300 bg-light-50 shadow-[0_16px_50px_rgba(124,58,237,0.18)] dark:border-violet-500/50 dark:bg-dark-100"
+                ? "border-brand-500 dark:border-brand-400/60 bg-light-50 shadow-[0_16px_50px_rgba(17,24,39,0.14)] dark:bg-dark-100"
                 : "border-light-300 bg-light-50 dark:border-dark-300 dark:bg-dark-100"
             }`}
           >
             {plan.badge && (
-              <span className="absolute right-5 top-5 rounded-full bg-violet-100 px-3 py-1 text-xs font-semibold text-violet-700 dark:bg-violet-500/15 dark:text-violet-300">
+              <span className="bg-brand-100 text-brand-800 dark:bg-brand-500/15 dark:text-brand-300 absolute right-5 top-5 rounded-full px-3 py-1 text-xs font-semibold">
                 {plan.badge}
               </span>
             )}
@@ -517,7 +517,7 @@ function PrivacySection() {
     <section id="privacy" className="px-4 py-14">
       <div className="mx-auto grid max-w-[980px] items-center gap-8 md:grid-cols-2">
         <div>
-          <p className="text-sm font-semibold text-violet-600 dark:text-violet-300">
+          <p className="inline-flex rounded-full bg-brand-700 px-3 py-1 text-sm font-semibold text-white">
             {t`Privacy`}
           </p>
           <h2 className="mt-3 text-3xl font-bold leading-[1.35] text-light-1000 dark:text-dark-1000 md:text-4xl">
@@ -544,16 +544,16 @@ function PrivacySection() {
         <div className="rounded-2xl border border-light-300 bg-light-50 p-6 shadow-sm dark:border-dark-300 dark:bg-dark-100">
           <div className="grid grid-cols-2 gap-3">
             {[
-              { label: t`Hosted in Germany`, icon: FaGlobeEurope },
+              { label: t`Hosted in the EU`, icon: FaGlobeEurope },
               { label: t`EU file storage`, icon: FaShieldAlt },
-              { label: t`No ad tracking`, icon: FaLock },
+              { label: t`No tracking`, icon: FaLock },
               { label: t`Export anytime`, icon: FaArrowDown },
             ].map((item) => (
               <div
                 key={item.label}
                 className="rounded-xl bg-light-100 p-5 dark:bg-dark-50"
               >
-                <item.icon className="h-5 w-5 text-violet-600 dark:text-violet-300" />
+                <item.icon className="text-brand-700 dark:text-brand-300 h-5 w-5" />
                 <p className="mt-4 text-sm font-semibold text-light-1000 dark:text-dark-1000">
                   {item.label}
                 </p>
@@ -571,7 +571,7 @@ function OpenSourceSection() {
     <section className="px-4 py-14">
       <div className="mx-auto grid max-w-[980px] gap-8 rounded-2xl border border-light-300 bg-light-50 p-6 shadow-sm dark:border-dark-300 dark:bg-dark-100 md:grid-cols-[2fr_1fr] md:p-9">
         <div>
-          <p className="text-sm font-semibold text-violet-600 dark:text-violet-300">
+          <p className="inline-flex rounded-full bg-brand-700 px-3 py-1 text-sm font-semibold text-white">
             {t`Open source`}
           </p>
           <h2 className="mt-3 text-3xl font-bold leading-[1.35] text-light-1000 dark:text-dark-1000 md:text-4xl">
@@ -596,7 +596,7 @@ function OpenSourceSection() {
                 key={item}
                 className="flex items-center gap-3 rounded-xl bg-light-100 p-4 text-sm font-semibold text-light-1000 dark:bg-dark-50 dark:text-dark-1000"
               >
-                <FaCode className="h-4 w-4 text-violet-600 dark:text-violet-300" />
+                <FaCode className="text-brand-700 dark:text-brand-300 h-4 w-4" />
                 {item}
               </div>
             ),
@@ -612,7 +612,7 @@ function FounderSection() {
     <section className="px-4 py-14">
       <div className="mx-auto grid max-w-[980px] items-center gap-8 md:grid-cols-[1fr_0.9fr]">
         <div>
-          <p className="text-sm font-semibold text-violet-600 dark:text-violet-300">
+          <p className="inline-flex rounded-full bg-brand-700 px-3 py-1 text-sm font-semibold text-white">
             {t`Indie`}
           </p>
           <h2 className="mt-3 text-3xl font-bold leading-[1.35] text-light-1000 dark:text-dark-1000 md:text-4xl">
@@ -684,7 +684,7 @@ function FinalCta() {
   return (
     <section className="px-4 py-20 text-center">
       <div className="mx-auto max-w-[680px]">
-        <p className="text-sm font-semibold text-violet-600 dark:text-violet-300">
+        <p className="bg-brand-700 inline-flex rounded-full px-3 py-1 text-sm font-semibold text-white">
           {t`Get started`}
         </p>
         <h2 className="mt-3 text-4xl font-bold leading-[1.35] text-light-1000 dark:text-dark-1000 md:text-5xl">
@@ -694,10 +694,19 @@ function FinalCta() {
           {t`Keep every opportunity organized and let Powerpack handle the repetitive parts.`}
         </p>
         <div className="mt-7 flex flex-col items-center justify-center gap-3 sm:flex-row">
-          <LandingButton href={powerpackSignupHref} variant="primary">
+          <LandingButton
+            href={powerpackSignupHref}
+            variant="primary"
+            dynamicBackground
+            className="w-full sm:w-44"
+          >
             {primaryCta}
           </LandingButton>
-          <LandingButton href="/signup" variant="secondary">
+          <LandingButton
+            href="/signup"
+            variant="secondary"
+            className="w-full sm:w-44"
+          >
             {secondaryCta}
           </LandingButton>
         </div>
@@ -726,7 +735,7 @@ function Section({
     <section id={id} className="px-4 py-14">
       <div className="mx-auto max-w-[980px]">
         <div className="mx-auto max-w-[680px] text-center">
-          <p className="text-sm font-semibold text-violet-600 dark:text-violet-300">
+          <p className="bg-brand-700 inline-flex rounded-full px-3 py-1 text-sm font-semibold text-white">
             {eyebrow}
           </p>
           <h2 className="mt-3 text-3xl font-bold leading-[1.35] text-light-1000 dark:text-dark-1000 md:text-4xl">
@@ -800,26 +809,63 @@ function LandingButton({
   children,
   className = "",
   external = false,
+  dynamicBackground = false,
 }: {
   href: string;
   variant: "primary" | "secondary";
   children: React.ReactNode;
   className?: string;
   external?: boolean;
+  dynamicBackground?: boolean;
 }) {
   const classes =
     variant === "primary"
-      ? "rounded-lg bg-violet-600 px-5 py-3 text-sm font-bold text-white shadow-lg shadow-violet-600/20 transition hover:bg-violet-500"
+      ? `rounded-lg px-5 py-3 text-sm font-bold text-white shadow-lg shadow-black/20 transition ${
+          dynamicBackground
+            ? "landing-powerpack-cta hover:brightness-110"
+            : "bg-brand-700 hover:bg-brand-600"
+        }`
       : "rounded-lg border border-light-400 bg-light-50 px-5 py-3 text-sm font-bold text-light-1000 shadow-sm transition hover:bg-light-100 dark:border-dark-400 dark:bg-dark-100 dark:text-dark-1000 dark:hover:bg-dark-200";
 
   return (
-    <Link
-      href={href}
-      target={external ? "_blank" : undefined}
-      rel={external ? "noopener noreferrer" : undefined}
-      className={`${classes} ${className}`}
-    >
-      {children}
-    </Link>
+    <>
+      <Link
+        href={href}
+        target={external ? "_blank" : undefined}
+        rel={external ? "noopener noreferrer" : undefined}
+        className={`inline-flex items-center justify-center text-center ${classes} ${className}`}
+      >
+        {children}
+      </Link>
+      {dynamicBackground && (
+        <style jsx global>{`
+          .landing-powerpack-cta {
+            background: linear-gradient(
+              -45deg,
+              #06b6d4,
+              #e73c7e,
+              #ee7752,
+              #10b981
+            );
+            background-size: 400% 400%;
+            animation: landing-powerpack-gradient 6s ease infinite;
+          }
+
+          @keyframes landing-powerpack-gradient {
+            0% {
+              background-position: 0% 50%;
+            }
+
+            50% {
+              background-position: 100% 50%;
+            }
+
+            100% {
+              background-position: 0% 50%;
+            }
+          }
+        `}</style>
+      )}
+    </>
   );
 }
