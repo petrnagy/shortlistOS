@@ -28,11 +28,8 @@ export default function WorkspaceMenu({
 
   const { tooltipContent: commandPaletteShortcutTooltipContent } =
     useKeyboardShortcut({
-      type: "PRESS",
-      stroke: {
-        key: "k",
-        modifiers: ["META"],
-      },
+      type: "SEQUENCE",
+      strokes: [{ key: "G" }, { key: "F" }],
       action: () => setIsOpen(true),
       description: t`Open command menu`,
       group: "GENERAL",
