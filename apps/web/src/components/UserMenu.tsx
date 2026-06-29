@@ -50,8 +50,8 @@ export default function UserMenu({
   const { openLegend } = useKeyboardShortcuts();
   const isMobile = useIsMobile();
   const tutorialJourney = getTutorialJourneyForPathname(pathname);
-  const tutorialJourneyName = tutorialJourney
-    ? TUTORIAL_JOURNEYS[tutorialJourney].name.toLowerCase()
+  const tutorialJourneyConfig = tutorialJourney
+    ? TUTORIAL_JOURNEYS[tutorialJourney]
     : null;
 
   const handleLogout = async () => {
@@ -230,7 +230,9 @@ export default function UserMenu({
                     onClick={handleStartTutorial}
                     className="flex w-full items-center rounded-[5px] px-3 py-2 text-left text-xs hover:bg-light-200 dark:hover:bg-dark-400"
                   >
-                    {t`Run tutorial (${tutorialJourneyName})`}
+                    {tutorialJourneyConfig
+                      ? t`Run tutorial (${tutorialJourneyConfig.index}/${tutorialJourneyConfig.total}) - ${tutorialJourneyConfig.name}`
+                      : t`Run tutorial`}
                   </button>
                 </Menu.Item>
               )}

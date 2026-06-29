@@ -1,6 +1,6 @@
+import type { EventData, Step, TooltipRenderProps } from "react-joyride";
 import { t } from "@lingui/core/macro";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import type { EventData, Step, TooltipRenderProps } from "react-joyride";
 import { ACTIONS, EVENTS, Joyride, STATUS } from "react-joyride";
 
 import Button from "~/components/Button";
@@ -140,14 +140,14 @@ export function BoardsTutorial({ isTemplate }: { isTemplate?: boolean }) {
       {
         target: "[data-onboarding='new-shortlist-button']",
         title: t`Create your first shortlist`,
-        content: t`A shortlist is where your job opportunities will live. Start with one board and keep the preset if it already feels right.`,
+        content: t`A shortlist is where your job opportunities will live. Start with one for your current job search. You can create more later for other searches or fields.`,
         placement: "bottom-end",
         buttons: ["primary", "skip"],
       },
       {
         target: "#name",
         title: t`Name your shortlist`,
-        content: t`You can keep the suggested name, or change it to whatever fits this search.`,
+        content: t`You can keep the suggested name, or change it to whatever fits your job search.`,
         placement: "bottom",
       },
       {
@@ -174,7 +174,10 @@ export function BoardsTutorial({ isTemplate }: { isTemplate?: boolean }) {
   useEffect(() => {
     const handleStartTutorial = () => startTutorial();
 
-    window.addEventListener(START_SHORTLIST_TUTORIAL_EVENT, handleStartTutorial);
+    window.addEventListener(
+      START_SHORTLIST_TUTORIAL_EVENT,
+      handleStartTutorial,
+    );
 
     return () =>
       window.removeEventListener(

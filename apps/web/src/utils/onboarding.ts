@@ -34,13 +34,17 @@ export type TutorialJourney = "create-shortlist" | "create-opportunity";
 
 export const TUTORIAL_JOURNEYS: Record<
   TutorialJourney,
-  { name: "Shortlists" | "Opportunities" }
+  { name: "Shortlists" | "Opportunities"; index: 1 | 2; total: 2 }
 > = {
   "create-shortlist": {
+    index: 1,
     name: "Shortlists",
+    total: 2,
   },
   "create-opportunity": {
+    index: 2,
     name: "Opportunities",
+    total: 2,
   },
 };
 

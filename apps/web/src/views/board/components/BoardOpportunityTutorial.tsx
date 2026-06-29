@@ -1,6 +1,6 @@
+import type { EventData, Step } from "react-joyride";
 import { t } from "@lingui/core/macro";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import type { EventData, Step } from "react-joyride";
 import { ACTIONS, EVENTS, Joyride, STATUS } from "react-joyride";
 
 import { usePermissions } from "~/hooks/usePermissions";
@@ -109,7 +109,7 @@ export function BoardOpportunityTutorial({
       {
         target: "[data-onboarding='saved-list-add-card-button']",
         title: t`Add your first opportunity`,
-        content: t`Start in Saved. Use this button whenever you find a job worth tracking, even before you apply.`,
+        content: t`Use this button whenever you find a job worth tracking, even before you apply.`,
         placement: "left",
         buttons: ["primary", "skip"],
       },
@@ -144,7 +144,7 @@ export function BoardOpportunityTutorial({
       {
         target: "[data-onboarding='new-card-controls']",
         title: t`Set the quick details`,
-        content: t`This row lets you choose the list, labels, interview date, and where the new opportunity should land in the list.`,
+        content: t`This row lets you choose the opportunity status, labels, interview date, and where in the column the card should land (up or down).`,
         placement: "bottom",
         buttons: ["back", "primary", "skip"],
       },
@@ -180,32 +180,34 @@ export function BoardOpportunityTutorial({
     [createdCardTarget, finishTutorial],
   );
 
-  const startTutorial = useCallback((source: "event" | "force") => {
-    recordDebugEvent("startTutorial:attempt", {
-      source,
-      canCreateCard,
-      hasSavedList: !!savedList,
-      forceKey:
-        localStorage.getItem(OPPORTUNITY_TUTORIAL_FORCE_KEY) === "1",
-    });
+  const startTutorial = useCallback(
+    (source: "event" | "force") => {
+      recordDebugEvent("startTutorial:attempt", {
+        source,
+        canCreateCard,
+        hasSavedList: !!savedList,
+        forceKey: localStorage.getItem(OPPORTUNITY_TUTORIAL_FORCE_KEY) === "1",
+      });
 
-    if (!canCreateCard || !savedList) return;
+      if (!canCreateCard || !savedList) return;
 
-    const storedCreatedCardPublicId = localStorage.getItem(
-      OPPORTUNITY_TUTORIAL_CREATED_CARD_KEY,
-    );
+      const storedCreatedCardPublicId = localStorage.getItem(
+        OPPORTUNITY_TUTORIAL_CREATED_CARD_KEY,
+      );
 
-    recordDebugEvent("startTutorial:accepted", {
-      source,
-      storedCreatedCardPublicId,
-    });
+      recordDebugEvent("startTutorial:accepted", {
+        source,
+        storedCreatedCardPublicId,
+      });
 
-    localStorage.setItem(OPPORTUNITY_TUTORIAL_ACTIVE_KEY, "1");
-    localStorage.removeItem(OPPORTUNITY_TUTORIAL_SEEN_KEY);
-    setCreatedCardPublicId(storedCreatedCardPublicId);
-    setStepIndex(storedCreatedCardPublicId ? 7 : 0);
-    setRun(true);
-  }, [canCreateCard, recordDebugEvent, savedList]);
+      localStorage.setItem(OPPORTUNITY_TUTORIAL_ACTIVE_KEY, "1");
+      localStorage.removeItem(OPPORTUNITY_TUTORIAL_SEEN_KEY);
+      setCreatedCardPublicId(storedCreatedCardPublicId);
+      setStepIndex(storedCreatedCardPublicId ? 7 : 0);
+      setRun(true);
+    },
+    [canCreateCard, recordDebugEvent, savedList],
+  );
 
   useEffect(() => {
     const handleStartTutorial = () => startTutorial("event");
