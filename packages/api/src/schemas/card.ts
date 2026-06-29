@@ -61,6 +61,7 @@ export const cardDetailSchema = z.object({
   publicId: z.string(),
   title: z.string(),
   description: z.string().nullable(),
+  createdAt: z.date(),
   cardNumber: z.number().nullable(),
   index: z.number(),
   dueDate: z.date().nullable(),

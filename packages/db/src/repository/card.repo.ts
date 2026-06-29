@@ -580,6 +580,7 @@ export const getWithListAndMembersByPublicId = async (
       publicId: true,
       title: true,
       description: true,
+      createdAt: true,
       dueDate: true,
       manualUpdatedOnly: true,
       shortlistCompanyName: true,

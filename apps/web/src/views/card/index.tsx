@@ -35,6 +35,7 @@ import LabelIcon from "~/components/LabelIcon";
 import Modal from "~/components/modal";
 import { NewWorkspaceForm } from "~/components/NewWorkspaceForm";
 import { PageHead } from "~/components/PageHead";
+import { Tooltip } from "~/components/Tooltip";
 import Toggle from "~/components/Toggle";
 import { EditYouTubeModal } from "~/components/YouTubeEmbed/EditYouTubeModal";
 import { usePermissions } from "~/hooks/usePermissions";
@@ -298,19 +299,28 @@ const integerOrNull = (value: string) => {
   return Number.isFinite(parsed) ? Math.round(parsed) : null;
 };
 
-const formatSource = (source: string) => {
+const formatCreatedAt = (createdAt: Date | string) => {
+  return new Intl.DateTimeFormat(undefined, {
+    month: "short",
+    day: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+  }).format(new Date(createdAt));
+};
+
+const formatCreatedSourceTooltip = (source: string) => {
   switch (source) {
     case "MANUAL":
-      return t`Manually`;
+      return t`Created manually`;
     case "EMAIL_INBOX":
-      return t`Magic Inbox`;
+      return t`Created via Magic Inbox`;
     case "WEB_CLIPPER":
     case "WEBCLIPPER":
-      return t`Web Clipper`;
+      return t`Created via Web Clipper`;
     case "LINK":
-      return t`Link`;
+      return t`Created via link`;
     default:
-      return source;
+      return t`Created from another source`;
   }
 };
 
@@ -809,7 +819,18 @@ export function CardRightPanel({ isTemplate }: { isTemplate?: boolean }) {
             <HiOutlineDocumentText className={detailIconClass} />
             <span className={detailLabelClass}>{t`Created`}</span>
             <span className="text-sm text-light-1000 dark:text-dark-1000">
-              {formatSource(card?.shortlistCardSource ?? "MANUAL")}
+              {card?.createdAt ? (
+                <Tooltip
+                  content={formatCreatedSourceTooltip(
+                    card.shortlistCardSource ?? "MANUAL",
+                  )}
+                  placement="top"
+                >
+                  <span className="cursor-help">
+                    {formatCreatedAt(card.createdAt)}
+                  </span>
+                </Tooltip>
+              ) : null}
             </span>
           </div>
         </div>
