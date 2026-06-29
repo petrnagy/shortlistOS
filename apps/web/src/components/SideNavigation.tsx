@@ -188,7 +188,7 @@ export default function SideNavigation({
           <div className="hidden h-[45px] items-center justify-between pb-3 md:flex">
             {!isCollapsed && (
               <Link
-                href={`${env("NEXT_PUBLIC_BASE_URL") ?? ""}/boards`}
+                href={`${env("NEXT_PUBLIC_BASE_URL") ?? ""}`}
                 className="block"
               >
                 <h1 className="pl-2 text-[16px] font-bold tracking-tight text-neutral-900 dark:text-dark-1000">
