@@ -6,10 +6,11 @@ import {
 } from "@headlessui/react";
 import { t } from "@lingui/core/macro";
 import {
-  FaArrowDown,
   FaBell,
   FaChartLine,
   FaCheck,
+  FaFilter,
+  FaFolderOpen,
   FaGithub,
   FaGlobeEurope,
   FaInbox,
@@ -34,59 +35,63 @@ const githubUrl = env.NEXT_PUBLIC_GITHUB_URL ?? "#";
 export default function HomeView() {
   const workspaceFeatures = [
     {
-      title: t`A pipeline that matches your process`,
-      description: t`Create your own stages and move opportunities through them as the search progresses.`,
+      title: t`A pipeline built for job hunting`,
+      description: t`Every opportunity follows a clear path from inbox to application, interview, offer, and final outcome. No setup or workflow design required.`,
       accent:
         "bg-brand-100 text-brand-700 dark:bg-brand-500/15 dark:text-brand-300",
+      icon: FaFilter,
+    },
+    {
+      title: t`Everything about each opportunity`,
+      description: t`Keep the job description, company details, salary, contacts, emails, notes, attachments, and interview dates together.`,
+      accent:
+        "bg-blue-100 text-blue-700 dark:bg-blue-500/15 dark:text-blue-300",
+      icon: FaFolderOpen,
+    },
+    {
+      title: t`Your whole search at a glance`,
+      description: t`See every active opportunity, where it stands, and which roles need your attention without digging through spreadsheets, tabs, or email threads.`,
+      accent:
+        "bg-emerald-100 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300",
       icon: FaChartLine,
     },
     {
-      title: t`One complete record per opportunity`,
-      description: t`Keep the job description, company, salary, contacts, notes, attachments and interview dates together.`,
-      accent:
-        "bg-blue-100 text-blue-700 dark:bg-blue-500/15 dark:text-blue-300",
-      icon: FaInbox,
-    },
-    {
-      title: t`A timeline you can trust`,
-      description: t`See every update, note and status change in chronological order.`,
-      accent:
-        "bg-emerald-100 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300",
-      icon: FaRegClock,
-    },
-    {
-      title: t`Your data stays portable`,
-      description: t`Export your complete account whenever you need it. No lock-in.`,
+      title: t`A complete history for every role`,
+      description: t`Review every email, comment, update, and status change in chronological order—per opportunity or across your entire workspace.`,
       accent:
         "bg-amber-100 text-amber-700 dark:bg-amber-500/15 dark:text-amber-300",
-      icon: FaArrowDown,
+      icon: FaRegClock,
     },
   ];
 
   const powerpackFeatures = [
     {
-      title: t`Save jobs without copying everything manually`,
-      description: t`Clip a job posting or paste its URL. shortlistOS extracts the useful details and creates the opportunity for you.`,
+      title: t`Save jobs in seconds`,
+      description: t`Use the browser clipper on a job posting. shortlistOS extracts the important details and creates a complete opportunity for you.`,
       icon: FaLink,
-      accent: "text-brand-600 dark:text-brand-300",
+      accent:
+        "bg-brand-100 text-brand-700 dark:bg-brand-500/15 dark:text-brand-300",
     },
     {
       title: t`Turn job emails into organized opportunities`,
-      description: t`Forward job alerts and recruiter emails to your Magic Inbox. shortlistOS can create new opportunities or update existing ones.`,
+      description: t`Forward job alerts and recruiter emails to your Magic Inbox. shortlistOS can create new opportunities or update existing ones automatically.`,
       icon: FaInbox,
-      accent: "text-blue-600 dark:text-blue-300",
+      accent:
+        "bg-blue-100 text-blue-700 dark:bg-blue-500/15 dark:text-blue-300",
     },
     {
-      title: t`Know when something needs attention`,
-      description: t`Get reminders for interviews, unanswered applications, overdue follow-ups and opportunities that have gone quiet.`,
+      title: t`Know what needs your attention`,
+      description: t`Get reminders for upcoming interviews, unanswered applications, overdue follow-ups, and opportunities that have gone quiet.`,
       icon: FaBell,
-      accent: "text-emerald-600 dark:text-emerald-300",
+      accent:
+        "bg-emerald-100 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300",
     },
     {
-      title: t`Understand the offer`,
-      description: t`See indicative salary ranges based on the role and location when data is available.`,
+      title: t`Know what the role is worth`,
+      description: t`See indicative salary ranges based on the role and location, with regional comparisons when data is available.`,
       icon: FaChartLine,
-      accent: "text-amber-600 dark:text-amber-300",
+      accent:
+        "bg-amber-100 text-amber-700 dark:bg-amber-500/15 dark:text-amber-300",
     },
   ];
 
@@ -196,7 +201,7 @@ export default function HomeView() {
         <Section
           eyebrow={t`Workspace`}
           title={t`Your entire job search in one place.`}
-          description={t`Move opportunities through your own pipeline, keep notes and files attached to the right role, and see every update in a clear activity timeline.`}
+          description={t`Keep every opportunity, email, note, and file together. Follow a purpose-built pipeline and see exactly where your search stands.`}
         >
           <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-4">
             {workspaceFeatures.map((feature) => (
@@ -209,7 +214,7 @@ export default function HomeView() {
           id="powerpack"
           eyebrow={t`Powerpack`}
           title={t`Let Powerpack handle the repetitive work.`}
-          description={t`Powerpack adds automation and AI to the complete shortlistOS workspace.`}
+          description={t`Powerpack adds automation and AI to your shortlistOS workspace, so you spend less time copying information and more time moving your search forward.`}
         >
           <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-4">
             {powerpackFeatures.map((feature) => (
@@ -763,7 +768,7 @@ function FeatureCard({
   icon: React.ComponentType<{ className?: string }>;
 }) {
   return (
-    <div className="rounded-2xl border border-light-300 bg-light-50 p-5 shadow-sm dark:border-dark-300 dark:bg-dark-100">
+    <div className="rounded-2xl border border-light-300 bg-light-50 p-5 shadow-sm transition-transform hover:-translate-y-1 dark:border-dark-300 dark:bg-dark-100">
       <div
         className={`flex h-12 w-12 items-center justify-center rounded-xl ${accent}`}
       >
@@ -792,7 +797,11 @@ function AutomationCard({
 }) {
   return (
     <div className="rounded-2xl border border-light-300 bg-light-50 p-5 shadow-sm transition-transform hover:-translate-y-1 dark:border-dark-300 dark:bg-dark-100">
-      <Icon className={`h-7 w-7 ${accent}`} />
+      <div
+        className={`flex h-12 w-12 items-center justify-center rounded-xl ${accent}`}
+      >
+        <Icon className="h-5 w-5" />
+      </div>
       <h3 className="mt-5 text-base font-bold leading-[1.45] text-light-1000 dark:text-dark-1000">
         {title}
       </h3>
