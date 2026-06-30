@@ -2,7 +2,7 @@ import Link from "next/link";
 import { t } from "@lingui/core/macro";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
-import { FaDesktop, FaGithub, FaMoon, FaSun } from "react-icons/fa";
+import { FaDesktop, FaMoon, FaSun } from "react-icons/fa";
 import { twMerge } from "tailwind-merge";
 
 const navigation = [
@@ -10,11 +10,7 @@ const navigation = [
   { label: t`Powerpack`, href: "/#powerpack" },
   { label: t`Pricing`, href: "/#pricing" },
   { label: t`Privacy`, href: "/#privacy" },
-  {
-    label: t`GitHub`,
-    href: "https://github.com/petrnagy/shortlistOS",
-    external: true,
-  },
+  { label: t`FAQ`, href: "/#faq" },
 ];
 
 const Header = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
@@ -109,14 +105,8 @@ const Header = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
               className="flex items-center justify-between rounded-xl border border-light-300 bg-light-100 px-4 py-4 text-base font-bold text-light-1000 dark:border-dark-300 dark:bg-dark-100 dark:text-dark-1000"
             >
               {item.label}
-              {item.external && <FaGithub className="h-4 w-4" />}
             </Link>
           ))}
-          <ThemeModeToggle
-            theme={theme}
-            setTheme={setTheme}
-            className="w-full justify-center rounded-xl border border-light-300 bg-light-100 p-2 dark:border-dark-300 dark:bg-dark-100"
-          />
           <Link
             href={appHref}
             onClick={() => setIsMenuOpen(false)}

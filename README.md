@@ -193,6 +193,7 @@ pnpm dev
 | `NEXT_PUBLIC_DISABLE_EMAIL`               | To disable all email features                             | For Email                                   | `true`                                                      |
 | `NEXT_PUBLIC_BASE_URL`                    | Base URL of your installation                             | Yes                                         | `http://localhost:3000`                                     |
 | `NEXT_PUBLIC_LANDING_PAGE_URL`            | Public marketing/homepage URL for app links               | No                                          | `https://example.com`                                       |
+| `NEXT_PUBLIC_GITHUB_URL`                  | Public source repository URL for homepage links           | No                                          | `https://github.com/petrnagy/shortlistOS`                   |
 | `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`      | Stripe publishable key for proprietary shortlistOS Powerpack checkout | For Powerpack checkout                      | `pk_live_...`                                               |
 | `STRIPE_SECRET_KEY`                       | Stripe secret key for proprietary shortlistOS Powerpack checkout/webhooks | For Powerpack checkout                      | `sk_live_...`                                               |
 | `STRIPE_SHORTLIST_WEBHOOK_SECRET`         | Signing secret for proprietary `/api/shortlist_stripe/webhook` | For Powerpack checkout                      | `whsec_...`                                                 |

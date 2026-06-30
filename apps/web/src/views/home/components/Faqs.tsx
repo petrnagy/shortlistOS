@@ -8,6 +8,10 @@ import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { HiMiniMinusSmall, HiMiniPlusSmall } from "react-icons/hi2";
 
+import { env } from "~/env";
+
+const githubUrl = env.NEXT_PUBLIC_GITHUB_URL || "#";
+
 const Text = ({ children }: { children: React.ReactNode }) => {
   return (
     <p className="text-[14px] leading-[1.7rem] text-light-800 dark:text-dark-800">
@@ -127,7 +131,7 @@ const Faqs = () => {
           <Trans>
             You can self-host by following the instructions in our{" "}
             <Link
-              href="https://github.com/petrnagy/shortlistOS"
+              href={githubUrl}
               className="underline"
             >
               repo

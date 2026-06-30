@@ -12,22 +12,22 @@ export default {
     extend: {
       colors: {
         brand: {
-          DEFAULT: "#10B981", // emerald-500
-          light: "#D1FAE5", // emerald-100
-          dark: "#065F46", // emerald-900
-          hover: "#34D399", // emerald-400
-          focus: "#34D399", // emerald-400
-          bg: "#10B981",
-          50: "#ECFDF5",
-          100: "#D1FAE5",
-          200: "#A7F3D0",
-          300: "#6EE7B7",
-          400: "#34D399",
-          500: "#10B981",
-          600: "#059669",
-          700: "#047857",
-          800: "#065F46",
-          900: "#064E3B",
+          DEFAULT: "#8B5CF6", // violet-500
+          light: "#EDE9FE", // violet-100
+          dark: "#4C1D95", // violet-900
+          hover: "#A78BFA", // violet-400
+          focus: "#A78BFA", // violet-400
+          bg: "#8B5CF6",
+          50: "#F5F3FF",
+          100: "#EDE9FE",
+          200: "#DDD6FE",
+          300: "#C4B5FD",
+          400: "#A78BFA",
+          500: "#8B5CF6",
+          600: "#7C3AED",
+          700: "#6D28D9",
+          800: "#5B21B6",
+          900: "#4C1D95",
         },
       },
       fontFamily: {

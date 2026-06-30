@@ -3,6 +3,10 @@ import { t } from "@lingui/core/macro";
 import { FaGithub } from "react-icons/fa";
 
 import { LanguageSelector } from "~/components/LanguageSelector";
+import { env } from "~/env";
+
+const githubUrl =
+  env.NEXT_PUBLIC_GITHUB_URL || "#";
 
 const Footer = () => {
   const groups = [
@@ -19,7 +23,7 @@ const Footer = () => {
       links: [
         {
           label: t`GitHub`,
-          href: "https://github.com/petrnagy/shortlistOS",
+          href: githubUrl,
           external: true,
         },
         { label: t`FAQ`, href: "/#faq" },
@@ -50,7 +54,7 @@ const Footer = () => {
             {t`Open-source job search CRM with optional automation for the repetitive parts.`}
           </p>
           <Link
-            href="https://github.com/petrnagy/shortlistOS"
+            href={githubUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="mt-4 inline-flex h-9 w-9 items-center justify-center rounded-lg border border-light-300 text-light-1000 hover:bg-light-100 dark:border-dark-300 dark:text-dark-1000 dark:hover:bg-dark-100"

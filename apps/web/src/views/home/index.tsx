@@ -1,26 +1,35 @@
 import Link from "next/link";
+import {
+  Disclosure,
+  DisclosureButton,
+  DisclosurePanel,
+} from "@headlessui/react";
 import { t } from "@lingui/core/macro";
 import {
   FaArrowDown,
   FaBell,
   FaChartLine,
   FaCheck,
-  FaCode,
   FaGithub,
   FaGlobeEurope,
   FaInbox,
+  FaInfoCircle,
   FaLink,
   FaLock,
   FaRegClock,
   FaShieldAlt,
 } from "react-icons/fa";
+import { HiMiniMinusSmall, HiMiniPlusSmall } from "react-icons/hi2";
 
 import { PageHead } from "~/components/PageHead";
+import { Tooltip } from "~/components/Tooltip";
+import { env } from "~/env";
 import Layout from "./components/Layout";
 
 const primaryCta = t`Get the Powerpack`;
 const secondaryCta = t`Start for Free`;
 const powerpackSignupHref = "/signup?withPowerpack=yes";
+const githubUrl = env.NEXT_PUBLIC_GITHUB_URL ?? "#";
 
 export default function HomeView() {
   const workspaceFeatures = [
@@ -28,7 +37,7 @@ export default function HomeView() {
       title: t`A pipeline that matches your process`,
       description: t`Create your own stages and move opportunities through them as the search progresses.`,
       accent:
-        "bg-brand-100 text-brand-800 dark:bg-brand-500/15 dark:text-brand-300",
+        "bg-brand-100 text-brand-700 dark:bg-brand-500/15 dark:text-brand-300",
       icon: FaChartLine,
     },
     {
@@ -57,13 +66,13 @@ export default function HomeView() {
   const powerpackFeatures = [
     {
       title: t`Save jobs without copying everything manually`,
-      description: t`Clip a job posting or paste its URL. ShortlistOS extracts the useful details and creates the opportunity for you.`,
+      description: t`Clip a job posting or paste its URL. shortlistOS extracts the useful details and creates the opportunity for you.`,
       icon: FaLink,
-      accent: "text-brand-700 dark:text-brand-300",
+      accent: "text-brand-600 dark:text-brand-300",
     },
     {
       title: t`Turn job emails into organized opportunities`,
-      description: t`Forward job alerts and recruiter emails to your Magic Inbox. ShortlistOS can create new opportunities or update existing ones.`,
+      description: t`Forward job alerts and recruiter emails to your Magic Inbox. shortlistOS can create new opportunities or update existing ones.`,
       icon: FaInbox,
       accent: "text-blue-600 dark:text-blue-300",
     },
@@ -85,34 +94,44 @@ export default function HomeView() {
     {
       title: t`Powerpack`,
       price: t`$29`,
-      detail: t`for 3 months`,
+      detail: t`One-time payment`,
       cta: primaryCta,
       href: powerpackSignupHref,
       featured: true,
       badge: t`Recommended`,
       items: [
-        t`Job-posting import`,
-        t`Browser clipper`,
-        t`Magic Inbox`,
-        t`Salary insights`,
-        t`Reminders and nudges`,
-        t`Weekly activity digest`,
+        {
+          label: t`Magic Inbox`,
+          info: t`Email jobs and job updates to your account. Magic Inbox AI will automatically create or update your job opportunities.`,
+        },
+        {
+          label: t`Job posting Web Clipper`,
+          info: t`Grab any interesting job opening on the internet, and send it to your shortlist without manually copy-pasting anything.`,
+        },
+        { label: t`Company online sentiment` },
+        { label: t`Salary insights for each job` },
+        { label: t`Automatic reminders and nudges` },
+        {
+          label: t`Google calendar`,
+          info: t`Automatic feed you can import into your Google or Outlook calendar to keep track of upcoming interviews or follow-ups.`,
+        },
+        { label: t`Weekly digest` },
       ],
     },
     {
       title: t`Free`,
       price: t`$0`,
-      detail: t`manual workspace`,
+      detail: t`forever free`,
       cta: secondaryCta,
       href: "/signup",
       featured: false,
       items: [
-        t`Unlimited shortlists`,
-        t`Unlimited opportunities`,
-        t`Custom pipelines`,
-        t`Notes and attachments`,
-        t`Activity timelines`,
-        t`Full data export`,
+        { label: t`Unlimited shortlists` },
+        { label: t`Unlimited opportunities` },
+        { label: t`Custom pipelines` },
+        { label: t`Notes and attachments` },
+        { label: t`Activity timelines` },
+        { label: t`Full data export` },
       ],
     },
     {
@@ -120,21 +139,21 @@ export default function HomeView() {
       price: t`Open source`,
       detail: t`run it yourself`,
       cta: t`View on GitHub`,
-      href: "https://github.com/petrnagy/shortlistOS",
+      href: githubUrl,
       compactPrice: true,
       featured: false,
       items: [
-        t`Free core application`,
-        t`GitHub setup instructions`,
-        t`You manage hosting`,
-        t`You control updates`,
+        { label: t`Free core application` },
+        { label: t`GitHub setup instructions` },
+        { label: t`You manage hosting` },
+        { label: t`You control updates` },
       ],
     },
   ];
 
   const faqs = [
     {
-      question: t`Is ShortlistOS really free?`,
+      question: t`Is shortlistOS really free?`,
       answer: t`Yes. The full manual job-search workspace is free to use. Powerpack is optional and adds AI-powered importing, email processing, reminders and automation.`,
     },
     {
@@ -147,10 +166,10 @@ export default function HomeView() {
     },
     {
       question: t`Can I export my data?`,
-      answer: t`Yes. You can export your complete ShortlistOS account as a JSON file at any time.`,
+      answer: t`Yes. You can export your complete shortlistOS account as a JSON file at any time.`,
     },
     {
-      question: t`Can I self-host ShortlistOS?`,
+      question: t`Can I self-host shortlistOS?`,
       answer: t`Yes. The open-source core can be installed from GitHub using the provided setup instructions.`,
     },
     {
@@ -158,8 +177,8 @@ export default function HomeView() {
       answer: t`Account data is hosted in Germany. Uploaded files and attachments are stored in AWS EU North in Stockholm.`,
     },
     {
-      question: t`Does ShortlistOS use tracking cookies?`,
-      answer: t`No third-party advertising or analytics cookies are used. ShortlistOS may use essential cookies required for authentication and normal application functionality.`,
+      question: t`Does shortlistOS use tracking cookies?`,
+      answer: t`No third-party advertising or analytics cookies are used. shortlistOS may use essential cookies required for authentication and normal application functionality.`,
     },
     {
       question: t`What does the AI process?`,
@@ -169,7 +188,7 @@ export default function HomeView() {
 
   return (
     <Layout>
-      <PageHead title="ShortlistOS | Job hunting is hard. Tracking it shouldn't be." />
+      <PageHead title="shortlistOS | Job hunting is hard. Tracking it shouldn't be." />
       <main className="relative z-10 flex w-full flex-col">
         <Hero />
         <TrustStrip />
@@ -185,12 +204,12 @@ export default function HomeView() {
             ))}
           </div>
         </Section>
-        <ProblemSection />
+
         <Section
           id="powerpack"
           eyebrow={t`Powerpack`}
           title={t`Let Powerpack handle the repetitive work.`}
-          description={t`Powerpack adds automation and AI to the complete ShortlistOS workspace.`}
+          description={t`Powerpack adds automation and AI to the complete shortlistOS workspace.`}
         >
           <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-4">
             {powerpackFeatures.map((feature) => (
@@ -199,8 +218,7 @@ export default function HomeView() {
           </div>
         </Section>
         <PricingSection plans={pricingPlans} />
-        <PrivacySection />
-        <OpenSourceSection />
+        <PrivacyOpenSourceSection />
         <FounderSection />
         <FaqSection faqs={faqs} />
         <FinalCta />
@@ -240,7 +258,7 @@ function Hero() {
           {t`3 months of automation & AI for $29 · No recurring payments`}
         </p>
         <Link
-          href="https://github.com/petrnagy/shortlistOS"
+          href={githubUrl}
           target="_blank"
           rel="noopener noreferrer"
           className="mt-4 text-sm font-medium text-light-1000 underline decoration-light-500 underline-offset-4 hover:decoration-light-1000 dark:text-dark-1000 dark:decoration-dark-500 dark:hover:decoration-dark-1000"
@@ -268,7 +286,7 @@ function TrustStrip() {
             key={item.label}
             className="flex items-center justify-center gap-3 bg-light-50 px-5 py-4 text-sm font-medium text-light-950 dark:bg-dark-100 dark:text-dark-950"
           >
-            <item.icon className="text-brand-700 dark:text-brand-300 h-4 w-4" />
+            <item.icon className="text-brand-600 dark:text-brand-300 h-4 w-4" />
             {item.label}
           </div>
         ))}
@@ -311,7 +329,7 @@ function ProductPreview() {
   ];
 
   return (
-    <section id="product" className="px-4 py-10 lg:py-14">
+    <section id="product" className="scroll-mt-20 px-4 py-10 lg:py-14">
       <div className="mx-auto overflow-hidden rounded-2xl border border-light-300 bg-light-50 shadow-[0_20px_80px_rgba(15,23,42,0.10)] dark:border-dark-300 dark:bg-dark-100 dark:shadow-[0_20px_80px_rgba(0,0,0,0.25)]">
         <div className="flex items-center justify-between border-b border-light-300 px-5 py-4 dark:border-dark-300">
           <div>
@@ -323,7 +341,7 @@ function ProductPreview() {
             </p>
           </div>
           <div className="hidden items-center gap-2 text-xs text-light-900 dark:text-dark-800 sm:flex">
-            <span className="bg-brand-100 text-brand-800 dark:bg-brand-500/15 dark:text-brand-300 rounded-md px-2 py-1 font-medium">
+            <span className="bg-brand-100 text-brand-700 dark:bg-brand-500/15 dark:text-brand-300 rounded-md px-2 py-1 font-medium">
               {t`Board`}
             </span>
             <span>{t`List`}</span>
@@ -342,7 +360,7 @@ function ProductPreview() {
                     key={item}
                     className={`rounded-md px-3 py-2 ${
                       index === 2
-                        ? "bg-brand-100 text-brand-800 dark:bg-brand-500/15 dark:text-brand-300 font-semibold"
+                        ? "bg-brand-100 text-brand-700 dark:bg-brand-500/15 dark:text-brand-300 font-semibold"
                         : ""
                     }`}
                   >
@@ -398,42 +416,6 @@ function ProductPreview() {
   );
 }
 
-function ProblemSection() {
-  return (
-    <section className="px-4 py-14">
-      <div className="mx-auto grid max-w-[980px] gap-8 rounded-2xl border border-light-300 bg-light-50 p-6 shadow-sm dark:border-dark-300 dark:bg-dark-100 md:grid-cols-[2fr_1fr] md:p-9">
-        <div>
-          <p className="inline-flex rounded-full bg-brand-700 px-3 py-1 text-sm font-semibold text-white">
-            {t`The problem`}
-          </p>
-          <h2 className="mt-3 text-3xl font-bold leading-[1.35] text-light-1000 dark:text-dark-1000 md:text-4xl">
-            {t`Job searching becomes chaotic surprisingly quickly.`}
-          </h2>
-          <p className="mt-4 text-base leading-[1.95rem] text-light-950 dark:text-dark-900">
-            {t`A few applications turn into dozens of tabs, emails, documents, interview dates and half-finished follow-ups.`}
-          </p>
-        </div>
-        <div className="grid gap-3">
-          {[
-            t`what you applied for`,
-            t`where each opportunity stands`,
-            t`what happened last`,
-            t`what you need to do next`,
-          ].map((item) => (
-            <div
-              key={item}
-              className="flex items-center gap-3 rounded-xl border border-light-300 bg-light-100 p-4 text-sm font-medium text-light-1000 dark:border-dark-300 dark:bg-dark-50 dark:text-dark-1000"
-            >
-              <FaCheck className="h-4 w-4 text-emerald-600 dark:text-emerald-300" />
-              {item}
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
 function PricingSection({
   plans,
 }: {
@@ -446,7 +428,11 @@ function PricingSection({
     featured: boolean;
     compactPrice?: boolean;
     badge?: string;
-    items: string[];
+    note?: string;
+    items: {
+      label: string;
+      info?: string;
+    }[];
   }[];
 }) {
   return (
@@ -462,18 +448,20 @@ function PricingSection({
             key={plan.title}
             className={`relative flex min-h-[420px] flex-col rounded-2xl border p-6 shadow-sm ${
               plan.featured
-                ? "border-brand-500 dark:border-brand-400/60 bg-light-50 shadow-[0_16px_50px_rgba(17,24,39,0.14)] dark:bg-dark-100"
+                ? "border-brand-300 dark:border-brand-500/50 bg-light-50 shadow-[0_16px_50px_rgba(124,58,237,0.18)] dark:bg-dark-100"
                 : "border-light-300 bg-light-50 dark:border-dark-300 dark:bg-dark-100"
             }`}
           >
-            {plan.badge && (
-              <span className="bg-brand-100 text-brand-800 dark:bg-brand-500/15 dark:text-brand-300 absolute right-5 top-5 rounded-full px-3 py-1 text-xs font-semibold">
-                {plan.badge}
-              </span>
-            )}
-            <h3 className="text-xl font-bold text-light-1000 dark:text-dark-1000">
-              {plan.title}
-            </h3>
+            <div className="flex items-center justify-between gap-3">
+              <h3 className="text-xl font-bold text-light-1000 dark:text-dark-1000">
+                {plan.title}
+              </h3>
+              {plan.badge && (
+                <span className="bg-brand-100 text-brand-700 dark:bg-brand-500/15 dark:text-brand-300 rounded-full px-3 py-1 text-xs font-semibold">
+                  {plan.badge}
+                </span>
+              )}
+            </div>
             <div className="mt-5 flex flex-wrap items-end gap-x-2 gap-y-1">
               <span
                 className={`font-bold leading-[1.1] text-light-1000 dark:text-dark-1000 ${
@@ -489,11 +477,24 @@ function PricingSection({
             <ul className="mt-6 space-y-3 pb-6">
               {plan.items.map((item) => (
                 <li
-                  key={item}
+                  key={item.label}
                   className="flex gap-3 text-sm leading-[1.55rem] text-light-950 dark:text-dark-900"
                 >
                   <FaCheck className="mt-0.5 h-3.5 w-3.5 shrink-0 text-emerald-600 dark:text-emerald-300" />
-                  {item}
+                  <span className="inline-flex items-center gap-1.5">
+                    {item.label}
+                    {item.info ? (
+                      <Tooltip content={item.info} placement="top">
+                        <span
+                          className="inline-flex cursor-help text-light-800 dark:text-dark-800"
+                          aria-label={item.info}
+                          title={item.info}
+                        >
+                          <FaInfoCircle className="h-3 w-3" />
+                        </span>
+                      </Tooltip>
+                    ) : null}
+                  </span>
                 </li>
               ))}
             </ul>
@@ -505,6 +506,11 @@ function PricingSection({
             >
               {plan.cta}
             </LandingButton>
+            {plan.note ? (
+              <p className="mt-3 text-center text-xs font-medium text-light-900 dark:text-dark-800">
+                {plan.note}
+              </p>
+            ) : null}
           </div>
         ))}
       </div>
@@ -512,138 +518,103 @@ function PricingSection({
   );
 }
 
-function PrivacySection() {
-  return (
-    <section id="privacy" className="px-4 py-14">
-      <div className="mx-auto grid max-w-[980px] items-center gap-8 md:grid-cols-2">
-        <div>
-          <p className="inline-flex rounded-full bg-brand-700 px-3 py-1 text-sm font-semibold text-white">
-            {t`Privacy`}
-          </p>
-          <h2 className="mt-3 text-3xl font-bold leading-[1.35] text-light-1000 dark:text-dark-1000 md:text-4xl">
-            {t`Your job search is personal. Your data should be too.`}
-          </h2>
-          <div className="mt-5 space-y-4 text-base leading-[1.95rem] text-light-950 dark:text-dark-900">
-            <p>
-              {t`ShortlistOS does not use advertising trackers or third-party analytics cookies. Your data is not sold to advertisers.`}
-            </p>
-            <p>
-              {t`Account data is hosted in Germany. Uploaded files are stored in AWS EU North, Stockholm.`}
-            </p>
-            <p>
-              {t`Powerpack uses Mistral, a European AI provider, to process supported automation features.`}
-            </p>
-          </div>
-          <Link
-            href="/privacy"
-            className="mt-5 inline-flex text-sm font-semibold text-light-1000 underline decoration-light-500 underline-offset-4 hover:decoration-light-1000 dark:text-dark-1000 dark:decoration-dark-500"
-          >
-            {t`Read the privacy details`}
-          </Link>
-        </div>
-        <div className="rounded-2xl border border-light-300 bg-light-50 p-6 shadow-sm dark:border-dark-300 dark:bg-dark-100">
-          <div className="grid grid-cols-2 gap-3">
-            {[
-              { label: t`Hosted in the EU`, icon: FaGlobeEurope },
-              { label: t`EU file storage`, icon: FaShieldAlt },
-              { label: t`No tracking`, icon: FaLock },
-              { label: t`Export anytime`, icon: FaArrowDown },
-            ].map((item) => (
-              <div
-                key={item.label}
-                className="rounded-xl bg-light-100 p-5 dark:bg-dark-50"
-              >
-                <item.icon className="text-brand-700 dark:text-brand-300 h-5 w-5" />
-                <p className="mt-4 text-sm font-semibold text-light-1000 dark:text-dark-1000">
-                  {item.label}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
+function PrivacyOpenSourceSection() {
+  const privacyItems = [
+    t`Account data hosted in Germany`,
+    t`Attachments stored in Stockholm`,
+    t`No advertising or analytics tracking`,
+    t`Powerpack uses Mistral`,
+    t`Export your data anytime`,
+  ];
+  const openSourceItems = [
+    t`Inspect how the product works`,
+    t`Self-host on your own infrastructure`,
+    t`Fork or modify the code`,
+    t`Contribute improvements`,
+    t`Avoid vendor lock-in`,
+  ];
 
-function OpenSourceSection() {
   return (
-    <section className="px-4 py-14">
-      <div className="mx-auto grid max-w-[980px] gap-8 rounded-2xl border border-light-300 bg-light-50 p-6 shadow-sm dark:border-dark-300 dark:bg-dark-100 md:grid-cols-[2fr_1fr] md:p-9">
-        <div>
-          <p className="inline-flex rounded-full bg-brand-700 px-3 py-1 text-sm font-semibold text-white">
-            {t`Open source`}
+    <section id="privacy" className="scroll-mt-20 px-4 py-14">
+      <div className="mx-auto max-w-[980px]">
+        <div className="mx-auto max-w-[720px] text-center">
+          <p className="bg-brand-600 inline-flex rounded-full px-3 py-1 text-sm font-semibold text-white">
+            {t`Privacy & open source`}
           </p>
           <h2 className="mt-3 text-3xl font-bold leading-[1.35] text-light-1000 dark:text-dark-1000 md:text-4xl">
-            {t`Trust the code, not just the promises.`}
+            {t`Private by design. Open by default.`}
           </h2>
           <p className="mt-5 text-base leading-[1.95rem] text-light-950 dark:text-dark-900">
-            {t`The ShortlistOS core is open source. You can inspect the code, review how the product works, contribute improvements, or host it yourself.`}
+            {t`shortlistOS is built and hosted in the EU, uses no tracking cookies, and lets you export your data at any time. The core application is open source, so you can inspect the code or host it yourself.`}
           </p>
-          <LandingButton
-            href="https://github.com/petrnagy/shortlistOS"
-            external
-            variant="secondary"
-            className="mt-6"
-          >
+        </div>
+        <div className="mx-auto mt-9 grid w-fit gap-9 text-left md:grid-cols-[auto_1px_auto] md:gap-10">
+          <div className="w-fit md:ps-2">
+            <h3 className="text-base font-bold text-light-1000 dark:text-dark-1000">
+              {t`Privacy`}
+            </h3>
+            <div className="mt-4 space-y-3">
+              {privacyItems.map((item) => (
+                <div
+                  key={item}
+                  className="flex items-center gap-3 text-sm leading-[1.55rem] text-light-950 dark:text-dark-900"
+                >
+                  <FaCheck className="h-3.5 w-3.5 shrink-0 text-emerald-600 dark:text-emerald-300" />
+                  {item}
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="hidden bg-light-500 dark:bg-dark-500 md:block" />
+          <div className="w-fit md:ps-2">
+            <h3 className="text-base font-bold text-light-1000 dark:text-dark-1000">
+              {t`Open source`}
+            </h3>
+            <div className="mt-4 space-y-3">
+              {openSourceItems.map((item) => (
+                <div
+                  key={item}
+                  className="flex items-center gap-3 text-sm leading-[1.55rem] text-light-950 dark:text-dark-900"
+                >
+                  <FaCheck className="h-3.5 w-3.5 shrink-0 text-emerald-600 dark:text-emerald-300" />
+                  {item}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+        <div className="mt-8 flex justify-center">
+          <LandingButton href={githubUrl} external variant="secondary">
             {t`Explore the source code`}
           </LandingButton>
         </div>
-        <div className="grid content-center gap-3">
-          {[t`Open source core`, t`Self-hostable`, t`Portable data`].map(
-            (item) => (
-              <div
-                key={item}
-                className="flex items-center gap-3 rounded-xl bg-light-100 p-4 text-sm font-semibold text-light-1000 dark:bg-dark-50 dark:text-dark-1000"
-              >
-                <FaCode className="text-brand-700 dark:text-brand-300 h-4 w-4" />
-                {item}
-              </div>
-            ),
-          )}
-        </div>
       </div>
     </section>
   );
 }
-
 function FounderSection() {
   return (
     <section className="px-4 py-14">
-      <div className="mx-auto grid max-w-[980px] items-center gap-8 md:grid-cols-[1fr_0.9fr]">
-        <div>
-          <p className="inline-flex rounded-full bg-brand-700 px-3 py-1 text-sm font-semibold text-white">
-            {t`Indie`}
-          </p>
-          <h2 className="mt-3 text-3xl font-bold leading-[1.35] text-light-1000 dark:text-dark-1000 md:text-4xl">
-            {t`Built independently, for people doing an already difficult job.`}
-          </h2>
-          <p className="mt-5 text-base leading-[1.95rem] text-light-950 dark:text-dark-900">
-            {t`ShortlistOS is an independent product made in the EU by a real person, not a venture-backed recruitment platform, advertising network or data-harvesting business.`}
-          </p>
-          <p className="mt-4 text-base leading-[1.95rem] text-light-950 dark:text-dark-900">
-            {t`The goal is simple: make the process calmer, clearer and easier to control.`}
-          </p>
-          <p className="mt-5 text-sm font-semibold text-light-1000 dark:text-dark-1000">
-            {t`Petr Nagy, creator of ShortlistOS`}
-          </p>
-        </div>
-        <div className="rounded-2xl border border-light-300 bg-light-50 p-6 shadow-sm dark:border-dark-300 dark:bg-dark-100">
-          {[
-            t`Independently built and funded`,
-            t`Privacy-first by design`,
-            t`Open source core`,
-            t`Made in the EU`,
-          ].map((item) => (
-            <div
-              key={item}
-              className="flex items-center gap-3 border-b border-light-300 py-4 text-sm font-medium text-light-950 last:border-0 dark:border-dark-300 dark:text-dark-900"
-            >
-              <FaCheck className="h-4 w-4 text-emerald-600 dark:text-emerald-300" />
-              {item}
-            </div>
-          ))}
-        </div>
+      <div className="mx-auto max-w-[720px] text-center">
+        <p className="bg-brand-600 inline-flex rounded-full px-3 py-1 text-sm font-semibold text-white">
+          {t`Indie`}
+        </p>
+        <h2 className="mt-3 text-3xl font-bold leading-[1.35] text-light-1000 dark:text-dark-1000 md:text-4xl">
+          {t`Built independently, for people doing an already difficult job.`}
+        </h2>
+        <p className="mt-5 text-base leading-[1.95rem] text-light-950 dark:text-dark-900">
+          {t`shortlistOS is an independent product made in the EU by a real person, not a venture-backed recruitment platform, advertising network, or data-harvesting business.`}
+        </p>
+        <p className="mt-4 text-base leading-[1.95rem] text-light-950 dark:text-dark-900">
+          {t`The goal is simple: Help job seekers get control of the process.`}
+        </p>
+        <p>
+          TODO: You don't have to worry this will shut down due to lack of
+          funding or VC money.
+        </p>
+        <p className="mt-5 text-sm font-semibold text-light-1000 dark:text-dark-1000">
+          {t`Petr Nagy, creator of shortlistOS`}
+        </p>
       </div>
     </section>
   );
@@ -655,28 +626,57 @@ function FaqSection({
   faqs: { question: string; answer: string }[];
 }) {
   return (
-    <Section
-      id="faq"
-      eyebrow={t`Questions`}
-      title={t`FAQ`}
-      description={t`The practical things people usually want to know before trusting a product with their job search.`}
-    >
-      <div className="grid gap-4 md:grid-cols-2">
-        {faqs.map((faq) => (
-          <div
-            key={faq.question}
-            className="rounded-2xl border border-light-300 bg-light-50 p-5 shadow-sm dark:border-dark-300 dark:bg-dark-100"
-          >
-            <h3 className="text-base font-bold text-light-1000 dark:text-dark-1000">
-              {faq.question}
-            </h3>
-            <p className="mt-3 text-sm leading-[1.65rem] text-light-950 dark:text-dark-900">
-              {faq.answer}
-            </p>
+    <section id="faq" className="scroll-mt-20 px-4 py-14">
+      <div className="mx-auto max-w-[900px]">
+        <div className="flex flex-col items-center justify-center pb-12 text-center">
+          <p className="bg-brand-600 inline-flex rounded-full px-3 py-1 text-sm font-semibold text-white">
+            {t`FAQs`}
+          </p>
+          <h2 className="mt-3 text-3xl font-bold leading-[1.35] text-light-1000 dark:text-dark-1000 md:text-4xl">
+            {t`Questions?`}
+          </h2>
+          <p className="mt-3 max-w-[560px] text-base leading-[1.75rem] text-light-950 dark:text-dark-900">
+            {t`Find answers to common questions about shortlistOS before trusting it with your job search.`}
+          </p>
+        </div>
+        <div className="rounded-2xl bg-light-50 ring-1 ring-light-300 dark:bg-dark-50 dark:ring-dark-200">
+          <div className="mx-auto px-6 py-10 lg:px-16 lg:py-16">
+            <dl className="divide-y divide-light-300 dark:divide-dark-200">
+              {faqs.map((faq) => (
+                <Disclosure
+                  key={faq.question}
+                  as="div"
+                  className="py-5 first:pt-0 last:pb-0"
+                >
+                  <dt>
+                    <DisclosureButton className="group flex w-full items-center justify-between text-left text-light-1000 dark:text-dark-1000">
+                      <span className="text-[14px] font-semibold">
+                        {faq.question}
+                      </span>
+                      <span className="ml-6 flex h-7 items-center text-light-800 dark:text-dark-800">
+                        <HiMiniPlusSmall
+                          aria-hidden="true"
+                          className="size-6 group-data-[open]:hidden"
+                        />
+                        <HiMiniMinusSmall
+                          aria-hidden="true"
+                          className="size-6 group-[&:not([data-open])]:hidden"
+                        />
+                      </span>
+                    </DisclosureButton>
+                  </dt>
+                  <DisclosurePanel as="dd" className="mt-2 pr-12">
+                    <p className="text-[14px] leading-[1.7rem] text-light-800 dark:text-dark-800">
+                      {faq.answer}
+                    </p>
+                  </DisclosurePanel>
+                </Disclosure>
+              ))}
+            </dl>
           </div>
-        ))}
+        </div>
       </div>
-    </Section>
+    </section>
   );
 }
 
@@ -684,7 +684,7 @@ function FinalCta() {
   return (
     <section className="px-4 py-20 text-center">
       <div className="mx-auto max-w-[680px]">
-        <p className="bg-brand-700 inline-flex rounded-full px-3 py-1 text-sm font-semibold text-white">
+        <p className="bg-brand-600 inline-flex rounded-full px-3 py-1 text-sm font-semibold text-white">
           {t`Get started`}
         </p>
         <h2 className="mt-3 text-4xl font-bold leading-[1.35] text-light-1000 dark:text-dark-1000 md:text-5xl">
@@ -711,7 +711,7 @@ function FinalCta() {
           </LandingButton>
         </div>
         <p className="mt-4 text-sm text-light-900 dark:text-dark-800">
-          {t`One payment. 3 months of Powerpack. No automatic renewal.`}
+          {t`3 months of automation & AI for $29 · No recurring payments`}
         </p>
       </div>
     </section>
@@ -732,10 +732,10 @@ function Section({
   children: React.ReactNode;
 }) {
   return (
-    <section id={id} className="px-4 py-14">
+    <section id={id} className="scroll-mt-20 px-4 py-14">
       <div className="mx-auto max-w-[980px]">
         <div className="mx-auto max-w-[680px] text-center">
-          <p className="bg-brand-700 inline-flex rounded-full px-3 py-1 text-sm font-semibold text-white">
+          <p className="bg-brand-600 inline-flex rounded-full px-3 py-1 text-sm font-semibold text-white">
             {eyebrow}
           </p>
           <h2 className="mt-3 text-3xl font-bold leading-[1.35] text-light-1000 dark:text-dark-1000 md:text-4xl">
@@ -823,7 +823,7 @@ function LandingButton({
       ? `rounded-lg px-5 py-3 text-sm font-bold text-white shadow-lg shadow-black/20 transition ${
           dynamicBackground
             ? "landing-powerpack-cta hover:brightness-110"
-            : "bg-brand-700 hover:bg-brand-600"
+            : "bg-brand-600 hover:bg-brand-500"
         }`
       : "rounded-lg border border-light-400 bg-light-50 px-5 py-3 text-sm font-bold text-light-1000 shadow-sm transition hover:bg-light-100 dark:border-dark-400 dark:bg-dark-100 dark:text-dark-1000 dark:hover:bg-dark-200";
 
