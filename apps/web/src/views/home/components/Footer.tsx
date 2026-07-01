@@ -65,23 +65,12 @@ function CzechiaIcon() {
   );
 }
 
-function InsuranceIcon() {
+function VerticalPipe() {
   return (
-    <svg
-      aria-label={t`GDPR compliant`}
-      role="img"
-      viewBox="0 0 512 512"
-      className="h-[18px] w-[18px] drop-shadow-[0_0_0.5px_rgba(0,0,0,0.45)]"
-    >
-      <path
-        fill="#10B981"
-        d="M256 20c-56 39-127 61-216 64v160c0 125 86 220 216 252 130-32 216-127 216-252V84c-89-3-160-25-216-64z"
-      />
-      <path
-        fill="#FFFFFF"
-        d="M226 318c-8 0-15-3-21-8l-58-58c-12-12-12-32 0-44s32-12 44 0l35 35 96-96c12-12 32-12 44 0s12 32 0 44L248 310c-6 5-14 8-22 8z"
-      />
-    </svg>
+    <span
+      aria-hidden="true"
+      className="mx-1 h-4 border-l border-light-300 dark:border-dark-300"
+    />
   );
 }
 
@@ -146,7 +135,9 @@ const Footer = () => {
                 <Link
                   key={link.label}
                   href={link.href}
-                  target={link.href.startsWith("mailto:") ? undefined : "_blank"}
+                  target={
+                    link.href.startsWith("mailto:") ? undefined : "_blank"
+                  }
                   rel={
                     link.href.startsWith("mailto:")
                       ? undefined
@@ -189,17 +180,20 @@ const Footer = () => {
               </div>
             ))}
           </div>
-          <p className="mt-12 flex flex-wrap items-center gap-x-1.5 gap-y-2 text-xs text-light-900 dark:text-dark-800">
-            <span>© {currentYear} {t`Petr Nagy`}</span>
-            <span aria-hidden="true">·</span>
+        </div>
+      </div>
+      <div className="border-t border-light-300 dark:border-dark-300">
+        <div className="mx-auto grid max-w-[1120px] gap-4 px-4 py-5 text-xs text-light-900 dark:text-dark-800 md:grid-cols-[1.2fr_2fr]">
+          <p>
+            © {currentYear} {t`Petr Nagy`}
+          </p>
+          <p className="flex flex-wrap items-center gap-x-1.5 gap-y-2 md:justify-end">
             <span>{t`Made in`}</span>
             <CzechiaIcon />
-            <span>{t`hosted in`}</span>
+            <VerticalPipe />
+            <span>{t`Hosted in`}</span>
             <EuFlagIcon />
-            <span aria-hidden="true">·</span>
-            <InsuranceIcon />
-            <span>{t`GDPR compliant`}</span>
-            <span aria-hidden="true">·</span>
+            <VerticalPipe />
             <span>{t`No ads, no tracking`}</span>
           </p>
         </div>
