@@ -1,14 +1,99 @@
 import Link from "next/link";
 import { t } from "@lingui/core/macro";
-import { FaGithub } from "react-icons/fa";
+import { FaEnvelope, FaGithub, FaLinkedin } from "react-icons/fa";
+import { FaXTwitter } from "react-icons/fa6";
 
 import { LanguageSelector } from "~/components/LanguageSelector";
 import { env } from "~/env";
 
-const githubUrl =
-  env.NEXT_PUBLIC_GITHUB_URL || "#";
+const githubUrl = env.NEXT_PUBLIC_GITHUB_URL ?? "#";
+const xUrl = "https://x.com/petrnagy";
+const linkedinUrl = "https://www.linkedin.com/in/petrnagy/";
+const emailUrl = "mailto:petr@shortlistos.co";
+
+function EuFlagIcon() {
+  return (
+    <svg
+      aria-label={t`European Union`}
+      role="img"
+      viewBox="0 0 512 512"
+      className="h-4 w-4 drop-shadow-[0_0_0.5px_rgba(0,0,0,0.45)]"
+    >
+      <circle cx="256" cy="256" r="256" fill="#294695" />
+      {Array.from({ length: 12 }).map((_, index) => {
+        const angle = (index * Math.PI) / 6;
+        const cx = 256 + Math.sin(angle) * 168;
+        const cy = 256 - Math.cos(angle) * 168;
+
+        return (
+          <text
+            key={index}
+            x={cx}
+            y={cy}
+            fill="#FFDA44"
+            fontSize="58"
+            textAnchor="middle"
+            dominantBaseline="middle"
+          >
+            ★
+          </text>
+        );
+      })}
+    </svg>
+  );
+}
+
+function CzechiaIcon() {
+  return (
+    <svg
+      aria-label={t`Czechia`}
+      role="img"
+      viewBox="0 0 512 512"
+      className="h-4 w-4 drop-shadow-[0_0_0.5px_rgba(0,0,0,0.45)]"
+    >
+      <defs>
+        <clipPath id="czechia-heart">
+          <path d="M471.7 73.7C417.7 19.7 330.3 19.7 276.3 73.7L256 94l-20.3-20.3c-54-54-141.4-54-195.4 0s-54 141.4 0 195.4L256 484.8l215.7-215.7c54-54 54-141.4 0-195.4z" />
+        </clipPath>
+      </defs>
+      <g clipPath="url(#czechia-heart)">
+        <rect width="512" height="256" fill="#F5F5F5" />
+        <rect y="256" width="512" height="256" fill="#E4001B" />
+        <path d="M0 0 256 256 0 512z" fill="#11457E" />
+      </g>
+    </svg>
+  );
+}
+
+function InsuranceIcon() {
+  return (
+    <svg
+      aria-label={t`GDPR compliant`}
+      role="img"
+      viewBox="0 0 512 512"
+      className="h-[18px] w-[18px] drop-shadow-[0_0_0.5px_rgba(0,0,0,0.45)]"
+    >
+      <path
+        fill="#10B981"
+        d="M256 20c-56 39-127 61-216 64v160c0 125 86 220 216 252 130-32 216-127 216-252V84c-89-3-160-25-216-64z"
+      />
+      <path
+        fill="#FFFFFF"
+        d="M226 318c-8 0-15-3-21-8l-58-58c-12-12-12-32 0-44s32-12 44 0l35 35 96-96c12-12 32-12 44 0s12 32 0 44L248 310c-6 5-14 8-22 8z"
+      />
+    </svg>
+  );
+}
 
 const Footer = () => {
+  const currentYear = new Date().getFullYear();
+  const socialLinks = [
+    { label: t`GitHub`, href: githubUrl, icon: FaGithub },
+    { label: t`X`, href: xUrl, icon: FaXTwitter },
+    { label: t`LinkedIn`, href: linkedinUrl, icon: FaLinkedin },
+    { label: t`Email`, href: emailUrl, icon: FaEnvelope },
+  ];
+
   const groups = [
     {
       title: t`Product`,
@@ -27,7 +112,7 @@ const Footer = () => {
           external: true,
         },
         { label: t`FAQ`, href: "/#faq" },
-        { label: t`Help`, href: "mailto:support@shortlistos.co" },
+        { label: t`Help`, href: "mailto:support[at]shortlistos[dot]co" },
       ],
     },
     {
@@ -35,7 +120,7 @@ const Footer = () => {
       links: [
         { label: t`Privacy`, href: "/privacy" },
         { label: t`Terms`, href: "/terms" },
-        { label: t`Contact`, href: "mailto:petr@shortlistos.co" },
+        { label: t`Contact`, href: "mailto:petr[at]shortlistos[dot]co" },
       ],
     },
   ];
@@ -53,46 +138,71 @@ const Footer = () => {
           <p className="mt-3 max-w-[260px] text-sm leading-[1.65rem] text-light-900 dark:text-dark-800">
             {t`Open-source job search CRM with optional automation for the repetitive parts.`}
           </p>
-          <Link
-            href={githubUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-4 inline-flex h-9 w-9 items-center justify-center rounded-lg border border-light-300 text-light-1000 hover:bg-light-100 dark:border-dark-300 dark:text-dark-1000 dark:hover:bg-dark-100"
-            aria-label={t`GitHub`}
-          >
-            <FaGithub />
-          </Link>
+          <div className="mt-4 flex items-center gap-2">
+            {socialLinks.map((link) => {
+              const Icon = link.icon;
+
+              return (
+                <Link
+                  key={link.label}
+                  href={link.href}
+                  target={link.href.startsWith("mailto:") ? undefined : "_blank"}
+                  rel={
+                    link.href.startsWith("mailto:")
+                      ? undefined
+                      : "noopener noreferrer"
+                  }
+                  className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-light-300 text-light-1000 hover:bg-light-100 dark:border-dark-300 dark:text-dark-1000 dark:hover:bg-dark-100"
+                  aria-label={link.label}
+                >
+                  <Icon />
+                </Link>
+              );
+            })}
+          </div>
           <div className="mt-5">
             <LanguageSelector />
           </div>
         </div>
 
-        <div className="grid gap-8 sm:grid-cols-3">
-          {groups.map((group) => (
-            <div key={group.title}>
-              <h3 className="text-sm font-bold text-light-1000 dark:text-dark-1000">
-                {group.title}
-              </h3>
-              <ul className="mt-4 space-y-3">
-                {group.links.map((link) => (
-                  <li key={link.label}>
-                    <Link
-                      href={link.href}
-                      target={link.external ? "_blank" : undefined}
-                      rel={link.external ? "noopener noreferrer" : undefined}
-                      className="text-sm text-light-900 hover:text-light-1000 dark:text-dark-800 dark:hover:text-dark-1000"
-                    >
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+        <div>
+          <div className="grid gap-8 sm:grid-cols-3">
+            {groups.map((group) => (
+              <div key={group.title}>
+                <h3 className="text-sm font-bold text-light-1000 dark:text-dark-1000">
+                  {group.title}
+                </h3>
+                <ul className="mt-4 space-y-3">
+                  {group.links.map((link) => (
+                    <li key={link.label}>
+                      <Link
+                        href={link.href}
+                        target={link.external ? "_blank" : undefined}
+                        rel={link.external ? "noopener noreferrer" : undefined}
+                        className="text-sm text-light-900 hover:text-light-1000 dark:text-dark-800 dark:hover:text-dark-1000"
+                      >
+                        {link.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+          <p className="mt-12 flex flex-wrap items-center gap-x-1.5 gap-y-2 text-xs text-light-900 dark:text-dark-800">
+            <span>© {currentYear} {t`Petr Nagy`}</span>
+            <span aria-hidden="true">·</span>
+            <span>{t`Made in`}</span>
+            <CzechiaIcon />
+            <span>{t`hosted in`}</span>
+            <EuFlagIcon />
+            <span aria-hidden="true">·</span>
+            <InsuranceIcon />
+            <span>{t`GDPR compliant`}</span>
+            <span aria-hidden="true">·</span>
+            <span>{t`No ads, no tracking`}</span>
+          </p>
         </div>
-      </div>
-      <div className="border-t border-light-300 py-5 text-center text-xs text-light-900 dark:border-dark-300 dark:text-dark-800">
-        {t`(c) 2026 shortlistOS`}
       </div>
     </footer>
   );

@@ -9,17 +9,20 @@ import {
   FaBell,
   FaChartLine,
   FaCheck,
-  FaFilter,
-  FaFolderOpen,
   FaGithub,
   FaGlobeEurope,
-  FaInbox,
+  FaHistory,
   FaInfoCircle,
   FaLink,
   FaLock,
-  FaRegClock,
   FaShieldAlt,
 } from "react-icons/fa";
+import {
+  FaArrowsToCircle,
+  FaFolderTree,
+  FaTimeline,
+  FaTrello,
+} from "react-icons/fa6";
 import { HiMiniMinusSmall, HiMiniPlusSmall } from "react-icons/hi2";
 
 import { PageHead } from "~/components/PageHead";
@@ -35,32 +38,32 @@ const githubUrl = env.NEXT_PUBLIC_GITHUB_URL ?? "#";
 export default function HomeView() {
   const workspaceFeatures = [
     {
-      title: t`A pipeline built for job hunting`,
-      description: t`Every opportunity follows a clear path from inbox to application, interview, offer, and final outcome. No setup or workflow design required.`,
+      title: t`A pipeline built specifically for job hunting`,
+      description: t`Every opportunity follows a clear path from inbox to application, interview, offer, and final outcome.`,
       accent:
         "bg-brand-100 text-brand-700 dark:bg-brand-500/15 dark:text-brand-300",
-      icon: FaFilter,
+      icon: FaTimeline,
     },
     {
-      title: t`Everything about each opportunity`,
-      description: t`Keep the job description, company details, salary, contacts, emails, notes, attachments, and interview dates together.`,
+      title: t`One source of truth for every opportunity`,
+      description: t`Keep the job description, company details, salary, contacts, notes, files, and interview dates together.`,
       accent:
         "bg-blue-100 text-blue-700 dark:bg-blue-500/15 dark:text-blue-300",
-      icon: FaFolderOpen,
+      icon: FaArrowsToCircle,
     },
     {
       title: t`Your whole search at a glance`,
-      description: t`See every active opportunity, where it stands, and which roles need your attention without digging through spreadsheets, tabs, or email threads.`,
+      description: t`See every active opportunity, where it stands, and what needs attention.`,
       accent:
         "bg-emerald-100 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300",
-      icon: FaChartLine,
+      icon: FaTrello,
     },
     {
-      title: t`A complete history for every role`,
-      description: t`Review every email, comment, update, and status change in chronological order—per opportunity or across your entire workspace.`,
+      title: t`A complete history of what happened`,
+      description: t`Review emails, comments, milestones, and status changes in chronological order without losing context.`,
       accent:
         "bg-amber-100 text-amber-700 dark:bg-amber-500/15 dark:text-amber-300",
-      icon: FaRegClock,
+      icon: FaHistory,
     },
   ];
 
@@ -75,7 +78,7 @@ export default function HomeView() {
     {
       title: t`Turn job emails into organized opportunities`,
       description: t`Forward job alerts and recruiter emails to your Magic Inbox. shortlistOS can create new opportunities or update existing ones automatically.`,
-      icon: FaInbox,
+      icon: FaFolderTree,
       accent:
         "bg-blue-100 text-blue-700 dark:bg-blue-500/15 dark:text-blue-300",
     },
@@ -159,35 +162,35 @@ export default function HomeView() {
   const faqs = [
     {
       question: t`Is shortlistOS really free?`,
-      answer: t`Yes. The full manual job-search workspace is free to use. Powerpack is optional and adds AI-powered importing, email processing, reminders and automation.`,
+      answer: t`Yes. The base version is completely free, including unlimited shortlists, unlimited opportunities, notes, attachments, activity history, and data export. Powerpack is optional and adds automation and AI features.`,
     },
     {
-      question: t`What happens when Powerpack expires?`,
-      answer: t`Your account and opportunities remain available. Powerpack automation stops until it is activated again.`,
+      question: t`What does Powerpack add?`,
+      answer: t`Powerpack adds the browser clipper, Magic Inbox, reminders and follow-up nudges, salary insights, and automatic opportunity updates.`,
     },
     {
       question: t`Is Powerpack a subscription?`,
-      answer: t`No. Powerpack costs $29 and remains active for 3 months. It does not renew automatically.`,
+      answer: t`No. Powerpack costs $29 and remains active for three months. There is no automatic renewal or recurring payment.`,
+    },
+    {
+      question: t`What happens when Powerpack expires?`,
+      answer: t`Your account, opportunities, notes, and files remain available. Your account returns to the base version, and Powerpack features stop until you activate it again.`,
     },
     {
       question: t`Can I export my data?`,
-      answer: t`Yes. You can export your complete shortlistOS account as a JSON file at any time.`,
+      answer: t`Yes. You can export your complete account as a JSON file at any time.`,
     },
     {
       question: t`Can I self-host shortlistOS?`,
-      answer: t`Yes. The open-source core can be installed from GitHub using the provided setup instructions.`,
+      answer: t`Yes. The open-source core can be installed and run on your own infrastructure using the instructions on GitHub. You are responsible for hosting, configuration, updates, and backups.`,
+    },
+    {
+      question: t`Can I use Powerpack with a self-hosted installation?`,
+      answer: t`No. Powerpack is currently available only with the hosted version of shortlistOS. Self-hosted installations include the open-source core without the hosted automation and AI features.`,
     },
     {
       question: t`Where is my data hosted?`,
-      answer: t`Account data is hosted in Germany. Uploaded files and attachments are stored in AWS EU North in Stockholm.`,
-    },
-    {
-      question: t`Does shortlistOS use tracking cookies?`,
-      answer: t`No third-party advertising or analytics cookies are used. shortlistOS may use essential cookies required for authentication and normal application functionality.`,
-    },
-    {
-      question: t`What does the AI process?`,
-      answer: t`Powerpack sends only the information required to perform the requested automation, such as extracting structured details from a job posting or processing a forwarded job email.`,
+      answer: t`Account data is hosted in Germany. Uploaded files and attachments are stored on AWS in Stockholm. Some Powerpack features send the relevant content to Mistral for processing, such as the contents of a clipped job posting or an email forwarded to Magic Inbox.`,
     },
   ];
 
@@ -445,7 +448,7 @@ function PricingSection({
       id="pricing"
       eyebrow={t`Pricing`}
       title={t`Use shortlistOS your way.`}
-      description={t`Choose the hosted workspace with automation, keep it manual for free, or run the open-source core yourself.`}
+      description={t`Choose Powerpack for automation, use the full workspace for free, or self-host the open-source core.`}
     >
       <div className="grid gap-5 lg:grid-cols-3">
         {plans.map((plan) => (
@@ -525,17 +528,15 @@ function PricingSection({
 
 function PrivacyOpenSourceSection() {
   const privacyItems = [
-    t`Account data hosted in Germany`,
-    t`Attachments stored in Stockholm`,
     t`No advertising or analytics tracking`,
-    t`Powerpack uses Mistral`,
-    t`Export your data anytime`,
+    t`Your data is never sold`,
+    t`Export your complete account anytime`,
+    t`Account data hosted in the EU`,
   ];
   const openSourceItems = [
-    t`Inspect how the product works`,
-    t`Self-host on your own infrastructure`,
-    t`Fork or modify the code`,
-    t`Contribute improvements`,
+    t`Inspect exactly how the product works`,
+    t`Self-host the core application`,
+    t`Modify it for your own needs`,
     t`Avoid vendor lock-in`,
   ];
 
@@ -550,7 +551,7 @@ function PrivacyOpenSourceSection() {
             {t`Private by design. Open by default.`}
           </h2>
           <p className="mt-5 text-base leading-[1.95rem] text-light-950 dark:text-dark-900">
-            {t`shortlistOS is built and hosted in the EU, uses no tracking cookies, and lets you export your data at any time. The core application is open source, so you can inspect the code or host it yourself.`}
+            {t`shortlistOS does not track you, sell your data, or lock it away. Export your account whenever you want, inspect the source code, or run the core application yourself.`}
           </p>
         </div>
         <div className="mx-auto mt-9 grid w-fit gap-9 text-left md:grid-cols-[auto_1px_auto] md:gap-10">
@@ -608,17 +609,13 @@ function FounderSection() {
           {t`Built independently, for people doing an already difficult job.`}
         </h2>
         <p className="mt-5 text-base leading-[1.95rem] text-light-950 dark:text-dark-900">
-          {t`shortlistOS is an independent product made in the EU by a real person, not a venture-backed recruitment platform, advertising network, or data-harvesting business.`}
+          {t`shortlistOS is an independent product—not a recruitment platform, advertising network, or venture-backed growth company.`}
         </p>
         <p className="mt-4 text-base leading-[1.95rem] text-light-950 dark:text-dark-900">
-          {t`The goal is simple: Help job seekers get control of the process.`}
+          {t`There are no ads, no data sales, and no incentive to keep you job hunting longer than necessary. The goal is simple: make your search easier, respect your privacy, and get out of the way.`}
         </p>
-        <p>
-          TODO: You don't have to worry this will shut down due to lack of
-          funding or VC money.
-        </p>
-        <p className="mt-5 text-sm font-semibold text-light-1000 dark:text-dark-1000">
-          {t`Petr Nagy, creator of shortlistOS`}
+        <p className="mt-5 text-right text-sm font-semibold text-light-1000 dark:text-dark-1000">
+          {t`— Petr, maker of shortlistOS`}
         </p>
       </div>
     </section>
