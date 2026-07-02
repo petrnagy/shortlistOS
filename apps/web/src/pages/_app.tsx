@@ -106,6 +106,7 @@ const MyApp: AppType = ({ Component, pageProps }: AppPropsWithLayout) => {
           </LinguiProviderWrapper>
         </KeyboardShortcutProvider>
       </main>
+      <Script src="https://scripts.simpleanalyticscdn.com/latest.js" />
     </>
   );
 };

@@ -194,7 +194,7 @@ const Footer = () => {
             <span>{t`Hosted in`}</span>
             <EuFlagIcon />
             <VerticalPipe />
-            <span>{t`No ads, no tracking`}</span>
+            <span>{t`No ads, no personal tracking, GDPR compliant.`}</span>
           </p>
         </div>
       </div>

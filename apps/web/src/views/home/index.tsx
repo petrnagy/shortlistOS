@@ -129,32 +129,35 @@ export default function HomeView() {
     {
       title: t`Free`,
       price: t`$0`,
-      detail: t`forever free`,
-      cta: secondaryCta,
+      detail: t`forever`,
+      description: t`The hosted base version, without Powerpack.`,
+      cta: t`Start for free`,
       href: "/signup",
       featured: false,
       items: [
         { label: t`Unlimited shortlists` },
         { label: t`Unlimited opportunities` },
-        { label: t`Custom pipelines` },
+        { label: t`Job-search pipeline` },
         { label: t`Notes and attachments` },
-        { label: t`Activity timelines` },
+        { label: t`Activity history` },
         { label: t`Full data export` },
       ],
     },
     {
       title: t`Self-hosted`,
       price: t`Open source`,
-      detail: t`run it yourself`,
+      description: t`Run the base version on your own infrastructure.`,
       cta: t`View on GitHub`,
       href: githubUrl,
       compactPrice: true,
       featured: false,
       items: [
-        { label: t`Free core application` },
-        { label: t`GitHub setup instructions` },
-        { label: t`You manage hosting` },
-        { label: t`You control updates` },
+        { label: t`Full source code` },
+        { label: t`Your own hosting and database` },
+        { label: t`Full control over your data` },
+        { label: t`No hosted account required` },
+        { label: t`You manage setup, updates, backups` },
+        { label: t`Powerpack not included` },
       ],
     },
   ];
@@ -430,7 +433,8 @@ function PricingSection({
   plans: {
     title: string;
     price: string;
-    detail: string;
+    detail?: string;
+    description?: string;
     cta: string;
     href: string;
     featured: boolean;
@@ -478,10 +482,17 @@ function PricingSection({
               >
                 {plan.price}
               </span>
-              <span className="pb-1 text-sm leading-[1.55] text-light-900 dark:text-dark-800">
-                {plan.detail}
-              </span>
+              {plan.detail ? (
+                <span className="pb-1 text-sm leading-[1.55] text-light-900 dark:text-dark-800">
+                  {plan.detail}
+                </span>
+              ) : null}
             </div>
+            {plan.description ? (
+              <p className="mt-4 text-sm leading-[1.65] text-light-900 dark:text-dark-800">
+                {plan.description}
+              </p>
+            ) : null}
             <ul className="mt-6 space-y-3 pb-6">
               {plan.items.map((item) => (
                 <li
@@ -528,7 +539,7 @@ function PricingSection({
 
 function PrivacyOpenSourceSection() {
   const privacyItems = [
-    t`No advertising or analytics tracking`,
+    t`No advertising or personal tracking`,
     t`Your data is never sold`,
     t`Export your complete account anytime`,
     t`Account data hosted in the EU`,
@@ -602,9 +613,6 @@ function FounderSection() {
   return (
     <section className="px-4 py-14">
       <div className="mx-auto max-w-[720px] text-center">
-        <p className="bg-brand-600 inline-flex rounded-full px-3 py-1 text-sm font-semibold text-white">
-          {t`Indie`}
-        </p>
         <h2 className="mt-3 text-3xl font-bold leading-[1.35] text-light-1000 dark:text-dark-1000 md:text-4xl">
           {t`Built independently, for people doing an already difficult job.`}
         </h2>
@@ -686,9 +694,6 @@ function FinalCta() {
   return (
     <section className="px-4 py-20 text-center">
       <div className="mx-auto max-w-[680px]">
-        <p className="bg-brand-600 inline-flex rounded-full px-3 py-1 text-sm font-semibold text-white">
-          {t`Get started`}
-        </p>
         <h2 className="mt-3 text-4xl font-bold leading-[1.35] text-light-1000 dark:text-dark-1000 md:text-5xl">
           {t`Stop managing your job search from memory.`}
         </h2>
