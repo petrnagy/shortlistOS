@@ -101,7 +101,7 @@ const Footer = () => {
           external: true,
         },
         { label: t`FAQ`, href: "/#faq" },
-        { label: t`Help`, href: "mailto:support[at]shortlistos[dot]co" },
+        { label: t`Help`, href: "mailto:support@shortlistos.co" },
       ],
     },
     {
@@ -109,7 +109,7 @@ const Footer = () => {
       links: [
         { label: t`Privacy`, href: "/privacy" },
         { label: t`Terms`, href: "/terms" },
-        { label: t`Contact`, href: "mailto:petr[at]shortlistos[dot]co" },
+        { label: t`Contact`, href: "mailto:petr@shortlistos.co" },
       ],
     },
   ];
