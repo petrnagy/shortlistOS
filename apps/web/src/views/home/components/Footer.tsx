@@ -3,7 +3,6 @@ import { t } from "@lingui/core/macro";
 import { FaEnvelope, FaGithub, FaLinkedin } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 
-import { LanguageSelector } from "~/components/LanguageSelector";
 import { env } from "~/env";
 
 const githubUrl = env.NEXT_PUBLIC_GITHUB_URL ?? "#";
@@ -150,9 +149,6 @@ const Footer = () => {
                 </Link>
               );
             })}
-          </div>
-          <div className="mt-5">
-            <LanguageSelector />
           </div>
         </div>
 

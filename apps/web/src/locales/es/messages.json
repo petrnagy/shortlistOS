@@ -12,7 +12,7 @@
     "translation": " (editado)"
   },
   "Eq8k2s": {
-    "translation": "",
+    "translation": "— Petr, creador de shortlistOS",
     "message": "— Petr, maker of shortlistOS",
     "placeholders": {},
     "comments": [],
@@ -77,7 +77,7 @@
     "translation": "{0} | {1}"
   },
   "1N/Dz7": {
-    "translation": "",
+    "translation": "{0} y {1}",
     "message": "{0} and {1}",
     "placeholders": {
       "0": [
@@ -96,7 +96,7 @@
     ]
   },
   "QpgBEp": {
-    "translation": "",
+    "translation": "{0} días",
     "message": "{0} days",
     "placeholders": {
       "0": [
@@ -149,7 +149,7 @@
     "translation": "{0} se ha eliminado de tus favoritos."
   },
   "Z9yB9J": {
-    "translation": "",
+    "translation": "{0} horas",
     "message": "{0} hours",
     "placeholders": {
       "0": [
@@ -181,7 +181,7 @@
     "translation": "{0} etiquetas"
   },
   "qFT9sS": {
-    "translation": "",
+    "translation": "{0} meses",
     "message": "{0} months",
     "placeholders": {
       "0": [
@@ -213,7 +213,7 @@
     "translation": "{0} no encontrado"
   },
   "qmnsVl": {
-    "translation": "",
+    "translation": "{0} de {size}",
     "message": "{0} of {size}",
     "placeholders": {
       "0": [
@@ -232,7 +232,7 @@
     ]
   },
   "gp5YuB": {
-    "translation": "",
+    "translation": "{0} y {lastPart}",
     "message": "{0}, and {lastPart}",
     "placeholders": {
       "0": [
@@ -283,7 +283,7 @@
     "translation": "{projectCount, plural, one {Importar proyecto (1)} other {Importar proyectos ({projectCount})}}"
   },
   "9+DcTE": {
-    "translation": "",
+    "translation": "Ajustes de {shortlistName}",
     "message": "{shortlistName} settings",
     "placeholders": {
       "shortlistName": [
@@ -351,7 +351,7 @@
     "translation": "$10/mes"
   },
   "yisGeJ": {
-    "translation": "",
+    "translation": "29 $",
     "message": "$29",
     "placeholders": {},
     "comments": [],
@@ -375,7 +375,7 @@
     "translation": "$8/mes"
   },
   "gphxoA": {
-    "translation": "",
+    "translation": "1 día",
     "message": "1 day",
     "placeholders": {},
     "comments": [],
@@ -391,7 +391,7 @@
     ]
   },
   "vp5vfW": {
-    "translation": "",
+    "translation": "1 hora",
     "message": "1 hour",
     "placeholders": {},
     "comments": [],
@@ -403,7 +403,7 @@
     ]
   },
   "voMgY+": {
-    "translation": "",
+    "translation": "1 mes",
     "message": "1 month",
     "placeholders": {},
     "comments": [],
@@ -471,7 +471,7 @@
     "translation": "Prueba gratuita de 14 días · Cambia de plan o cancela en cualquier momento"
   },
   "HCLj1r": {
-    "translation": "",
+    "translation": "2 meses",
     "message": "2 months",
     "placeholders": {},
     "comments": [],
@@ -483,7 +483,7 @@
     ]
   },
   "tX9HsP": {
-    "translation": "",
+    "translation": "3 meses por {POWERPACK_PRICE}",
     "message": "3 months for {POWERPACK_PRICE}",
     "placeholders": {
       "POWERPACK_PRICE": [
@@ -499,7 +499,7 @@
     ]
   },
   "B/nzVv": {
-    "translation": "",
+    "translation": "3 meses de automatización e IA por 29 $ · Sin pagos recurrentes",
     "message": "3 months of automation & AI for $29 · No recurring payments",
     "placeholders": {},
     "comments": [],
@@ -515,7 +515,7 @@
     ]
   },
   "B/1Qzd": {
-    "translation": "",
+    "translation": "3 semanas",
     "message": "3 weeks",
     "placeholders": {},
     "comments": [],
@@ -540,7 +540,7 @@
     "obsolete": true
   },
   "uciTZ9": {
-    "translation": "",
+    "translation": "404 - Página no encontrada | shortlistOS",
     "message": "404 - Page Not Found | shortlistOS",
     "placeholders": {},
     "comments": [],
@@ -552,7 +552,7 @@
     ]
   },
   "W10crv": {
-    "translation": "",
+    "translation": "Un historial completo de lo ocurrido",
     "message": "A complete history of what happened",
     "placeholders": {},
     "comments": [],
@@ -564,7 +564,7 @@
     ]
   },
   "do8QCa": {
-    "translation": "",
+    "translation": "un rato",
     "message": "a little while",
     "placeholders": {},
     "comments": [],
@@ -576,7 +576,7 @@
     ]
   },
   "t3bceZ": {
-    "translation": "",
+    "translation": "Un proceso diseñado específicamente para buscar empleo",
     "message": "A pipeline built specifically for job hunting",
     "placeholders": {},
     "comments": [],
@@ -601,7 +601,7 @@
     "obsolete": true
   },
   "SQTFgv": {
-    "translation": "",
+    "translation": "Una lista es donde se guardan tus oportunidades de empleo. Empieza con una para tu búsqueda actual. Más adelante podrás crear otras para distintas búsquedas o sectores.",
     "message": "A shortlist is where your job opportunities will live. Start with one for your current job search. You can create more later for other searches or fields.",
     "placeholders": {},
     "comments": [],
@@ -613,7 +613,7 @@
     ]
   },
   "DuJqb4": {
-    "translation": "",
+    "translation": "Salario por encima del mercado",
     "message": "Above market salary",
     "placeholders": {},
     "comments": [],
@@ -625,7 +625,7 @@
     ]
   },
   "bzMKg7": {
-    "translation": "",
+    "translation": "Aceptada",
     "message": "Accepted",
     "placeholders": {},
     "comments": [],
@@ -649,7 +649,7 @@
     "translation": "Cuenta"
   },
   "QwStW9": {
-    "translation": "",
+    "translation": "Datos de la cuenta alojados en la UE",
     "message": "Account data hosted in the EU",
     "placeholders": {},
     "comments": [],
@@ -661,7 +661,7 @@
     ]
   },
   "UI3q0T": {
-    "translation": "",
+    "translation": "Los datos de la cuenta se alojan en Alemania. Los archivos y adjuntos subidos se almacenan en AWS, en Estocolmo. Algunas funciones de Powerpack envían el contenido pertinente a Mistral para procesarlo, como el contenido de una oferta guardada con Web Clipper o de un correo reenviado a Magic Inbox.",
     "message": "Account data is hosted in Germany. Uploaded files and attachments are stored on AWS in Stockholm. Some Powerpack features send the relevant content to Mistral for processing, such as the contents of a clipped job posting or an email forwarded to Magic Inbox.",
     "placeholders": {},
     "comments": [],
@@ -722,7 +722,7 @@
     "obsolete": true
   },
   "o7U+ZX": {
-    "translation": "",
+    "translation": "Activar | shortlistOS",
     "message": "Activate | shortlistOS",
     "placeholders": {},
     "comments": [],
@@ -766,7 +766,7 @@
     "translation": "Activo"
   },
   "zYuLUM": {
-    "translation": "",
+    "translation": "Activo hasta el {formattedPowerpackExpiry}",
     "message": "Active until {formattedPowerpackExpiry}",
     "placeholders": {
       "formattedPowerpackExpiry": [
@@ -794,7 +794,7 @@
     "translation": "Actividad"
   },
   "WOZZqT": {
-    "translation": "",
+    "translation": "Historial de actividad",
     "message": "Activity history",
     "placeholders": {},
     "comments": [],
@@ -842,7 +842,7 @@
     "translation": "Registros de actividad"
   },
   "3Ut2pS": {
-    "translation": "",
+    "translation": "Cronología de actividad por oportunidad",
     "message": "Activity timeline per opportunity",
     "placeholders": {},
     "comments": [],
@@ -919,7 +919,7 @@
     "translation": "Añadir comentario... (escribe '/' para abrir comandos o '@' para mencionar)"
   },
   "upChDj": {
-    "translation": "",
+    "translation": "Añadir descripción… (escribe «/» para ver las opciones de formato)",
     "message": "Add description... (type '/' for formatting options)",
     "placeholders": {},
     "comments": [],
@@ -988,7 +988,7 @@
     "translation": "Añadir miembro"
   },
   "N0grOI": {
-    "translation": "",
+    "translation": "Añadir notas o contexto",
     "message": "Add notes or context",
     "placeholders": {},
     "comments": [],
@@ -1000,7 +1000,7 @@
     ]
   },
   "d+g72z": {
-    "translation": "",
+    "translation": "Añadir oportunidad",
     "message": "Add opportunity",
     "placeholders": {},
     "comments": [],
@@ -1016,7 +1016,7 @@
     ]
   },
   "2wkk6T": {
-    "translation": "",
+    "translation": "Añadir la empresa",
     "message": "Add the company",
     "placeholders": {},
     "comments": [],
@@ -1028,7 +1028,7 @@
     ]
   },
   "sx4TQp": {
-    "translation": "",
+    "translation": "Añadir el puesto",
     "message": "Add the job title",
     "placeholders": {},
     "comments": [],
@@ -1064,7 +1064,7 @@
     "translation": "Agregar webhook"
   },
   "37B7c3": {
-    "translation": "",
+    "translation": "Añade tu primera oportunidad",
     "message": "Add your first opportunity",
     "placeholders": {},
     "comments": [],
@@ -1095,7 +1095,7 @@
     "translation": "añadió {0} etiquetas: <0>{labelList}</0>"
   },
   "6rMWGj": {
-    "translation": "",
+    "translation": "Añadida hace 5 d",
     "message": "Added 5d ago",
     "placeholders": {},
     "comments": [],
@@ -1131,7 +1131,7 @@
     "translation": "añadió un elemento de lista de verificación"
   },
   "WIxMAi": {
-    "translation": "",
+    "translation": "añadió un comentario",
     "message": "added a comment",
     "placeholders": {},
     "comments": [],
@@ -1362,7 +1362,7 @@
     "translation": "Seguridad avanzada, cumplimiento normativo y soporte dedicado para grandes organizaciones."
   },
   "9PVY6F": {
-    "translation": "",
+    "translation": "Después de 3 meses, las funciones de Powerpack se pausan, pero no desaparece nada. Cada oportunidad, nota, dato salarial y tarjeta permanece exactamente donde está. Continúa tu búsqueda sin Powerpack o compra otros 3 meses si vuelves a necesitar la magia. Nunca habrá cargos automáticos.",
     "message": "After 3 months, Powerpack features pause — but nothing disappears. Every opportunity, note, salary insight, and card stays exactly where it is. Continue your job hunt without it, or purchase another 3 months if you need the magic back. No automatic charges, ever.",
     "placeholders": {},
     "comments": [],
@@ -1447,7 +1447,7 @@
     "translation": "Permitir que los miembros del espacio de trabajo vean las direcciones de correo electrónico de los demás"
   },
   "JtYb3v": {
-    "translation": "",
+    "translation": "¡Ya lo tengo!",
     "message": "Already got it!",
     "placeholders": {},
     "comments": [],
@@ -1649,7 +1649,7 @@
     "obsolete": true
   },
   "vj9Jwl": {
-    "translation": "",
+    "translation": "Candidatura confirmada",
     "message": "Application confirmed",
     "placeholders": {},
     "comments": [],
@@ -1661,7 +1661,7 @@
     ]
   },
   "wTOwz+": {
-    "translation": "",
+    "translation": "Solicitud enviada",
     "message": "Applied",
     "placeholders": {},
     "comments": [],
@@ -1703,7 +1703,7 @@
     "obsolete": true
   },
   "lMOlvu": {
-    "translation": "",
+    "translation": "Archivar lista",
     "message": "Archive shortlist",
     "placeholders": {},
     "comments": [],
@@ -1723,7 +1723,7 @@
     ]
   },
   "0UPWUQ": {
-    "translation": "",
+    "translation": "Archiva esta lista para ocultarla de tus listas activas. Podrás encontrarla de nuevo entre las listas archivadas.",
     "message": "Archive this shortlist to hide it from your active shortlists. You can find it again in archived shortlists.",
     "placeholders": {},
     "comments": [],
@@ -1747,7 +1747,7 @@
     "translation": "Archivado"
   },
   "sAGtaB": {
-    "translation": "",
+    "translation": "Las listas archivadas son de solo lectura",
     "message": "Archived shortlists are read-only",
     "placeholders": {},
     "comments": [],
@@ -1872,7 +1872,7 @@
     "translation": "¿Estás seguro de que quieres eliminar esta etiqueta?"
   },
   "3Wgi2Z": {
-    "translation": "",
+    "translation": "¿Seguro que quieres eliminar esta oportunidad?",
     "message": "Are you sure you want to delete this opportunity?",
     "placeholders": {},
     "comments": [],
@@ -1896,7 +1896,7 @@
     "translation": "¿Estás seguro de que quieres eliminar tu cuenta?"
   },
   "i/0yrK": {
-    "translation": "",
+    "translation": "Como intervalo",
     "message": "As range",
     "placeholders": {},
     "comments": [],
@@ -1936,7 +1936,7 @@
     "translation": "Asignados"
   },
   "VI7U5Q": {
-    "translation": "",
+    "translation": "en",
     "message": "at",
     "placeholders": {},
     "comments": [],
@@ -1960,7 +1960,7 @@
     "translation": "Archivo adjunto subido"
   },
   "R9Khdg": {
-    "translation": "",
+    "translation": "Auto",
     "message": "Auto",
     "placeholders": {},
     "comments": [],
@@ -1972,7 +1972,7 @@
     ]
   },
   "WDCO8g": {
-    "translation": "",
+    "translation": "Archivar automáticamente las oportunidades guardadas inactivas",
     "message": "Auto-archive stale saved opportunities",
     "placeholders": {},
     "comments": [],
@@ -1984,7 +1984,7 @@
     ]
   },
   "TropVe": {
-    "translation": "",
+    "translation": "Mover automáticamente a Sin respuesta tras un periodo de silencio en Solicitud enviada",
     "message": "Auto-move to ghosted after silence in Applied",
     "placeholders": {},
     "comments": [],
@@ -1996,7 +1996,7 @@
     ]
   },
   "L7uwys": {
-    "translation": "",
+    "translation": "Actualizaciones automáticas",
     "message": "Auto-updates",
     "placeholders": {},
     "comments": [],
@@ -2012,7 +2012,7 @@
     ]
   },
   "Dnn2XG": {
-    "translation": "",
+    "translation": "Automático",
     "message": "Automatic",
     "placeholders": {},
     "comments": [],
@@ -2024,7 +2024,7 @@
     ]
   },
   "V2ICFL": {
-    "translation": "",
+    "translation": "Análisis automático de la reputación de la empresa en Glassdoor y redes sociales",
     "message": "Automatic company sentiment from Glassdoor and social channels",
     "placeholders": {},
     "comments": [],
@@ -2036,7 +2036,7 @@
     ]
   },
   "+VITYp": {
-    "translation": "",
+    "translation": "Fuente automática que puedes importar a Google Calendar u Outlook para seguir las próximas entrevistas y tareas de seguimiento.",
     "message": "Automatic feed you can import into your Google or Outlook calendar to keep track of upcoming interviews or follow-ups.",
     "placeholders": {},
     "comments": [],
@@ -2048,7 +2048,7 @@
     ]
   },
   "ayRh+w": {
-    "translation": "",
+    "translation": "Recordatorios y avisos automáticos",
     "message": "Automatic reminders and nudges",
     "placeholders": {},
     "comments": [],
@@ -2060,7 +2060,7 @@
     ]
   },
   "3oM+JW": {
-    "translation": "",
+    "translation": "Datos salariales automáticos",
     "message": "Automatic salary data",
     "placeholders": {},
     "comments": [],
@@ -2072,7 +2072,7 @@
     ]
   },
   "q/C8t0": {
-    "translation": "",
+    "translation": "Rango salarial automático para tu puesto objetivo",
     "message": "Automatic salary range for your target role",
     "placeholders": {},
     "comments": [],
@@ -2084,7 +2084,7 @@
     ]
   },
   "aFqaTD": {
-    "translation": "",
+    "translation": "Archivar automáticamente",
     "message": "Automatically archive",
     "placeholders": {},
     "comments": [],
@@ -2096,7 +2096,7 @@
     ]
   },
   "4ZnWv2": {
-    "translation": "",
+    "translation": "Enriquece automáticamente cada oportunidad con referencias salariales de Estados Unidos, la UE, Reino Unido, APAC y el mercado global, para comparar rápidamente una oferta a escala local y mundial.",
     "message": "Automatically enriches each opportunity with salary benchmarks across the US, EU, UK, APAC, and global markets, so you can quickly see how an offer compares locally and worldwide.",
     "placeholders": {},
     "comments": [],
@@ -2108,7 +2108,7 @@
     ]
   },
   "zq4Mfs": {
-    "translation": "",
+    "translation": "Investiga automáticamente la empresa detrás de cada vacante en redes sociales, portales de empleo, noticias de financiación, señales de despidos y otras fuentes públicas, y después resume la valoración, los riesgos y el contexto reciente.",
     "message": "Automatically researches the company behind each opening across social networks, hiring portals, funding news, layoff signals, and other public sources, then summarizes the rating, risks, and recent context for you.",
     "placeholders": {},
     "comments": [],
@@ -2120,7 +2120,7 @@
     ]
   },
   "FFv0Vh": {
-    "translation": "",
+    "translation": "Automatización",
     "message": "Automation",
     "placeholders": {},
     "comments": [],
@@ -2136,7 +2136,7 @@
     ]
   },
   "E8jkox": {
-    "translation": "",
+    "translation": "Automatizaciones y avisos",
     "message": "Automations and nudges",
     "placeholders": {},
     "comments": [],
@@ -2148,7 +2148,7 @@
     ]
   },
   "CShEb/": {
-    "translation": "",
+    "translation": "Evita la dependencia de un proveedor",
     "message": "Avoid vendor lock-in",
     "placeholders": {},
     "comments": [],
@@ -2197,7 +2197,7 @@
     "translation": "Atrás"
   },
   "FYTRX2": {
-    "translation": "",
+    "translation": "Volver a la lista",
     "message": "Back to shortlist",
     "placeholders": {},
     "comments": [],
@@ -2209,7 +2209,7 @@
     ]
   },
   "ABHAFB": {
-    "translation": "",
+    "translation": "Ingeniero backend",
     "message": "Backend Engineer",
     "placeholders": {},
     "comments": [],
@@ -2260,7 +2260,7 @@
     "obsolete": true
   },
   "8Nvv72": {
-    "translation": "",
+    "translation": "Salario por debajo del mercado",
     "message": "Below market salary",
     "placeholders": {},
     "comments": [],
@@ -2649,7 +2649,7 @@
     "obsolete": true
   },
   "HQk0aG": {
-    "translation": "",
+    "translation": "Creado de forma independiente, para personas que ya afrontan una tarea difícil.",
     "message": "Built independently, for people doing an already difficult job.",
     "placeholders": {},
     "comments": [],
@@ -2661,7 +2661,7 @@
     ]
   },
   "AjVXBS": {
-    "translation": "",
+    "translation": "Calendario",
     "message": "Calendar",
     "placeholders": {},
     "comments": [],
@@ -2673,7 +2673,7 @@
     ]
   },
   "0wVlqq": {
-    "translation": "",
+    "translation": "Fuente de calendario",
     "message": "Calendar feed",
     "placeholders": {},
     "comments": [],
@@ -2685,7 +2685,7 @@
     ]
   },
   "5T5ILD": {
-    "translation": "",
+    "translation": "Fuente de calendario copiada",
     "message": "Calendar feed copied",
     "placeholders": {},
     "comments": [],
@@ -2937,7 +2937,7 @@
     "translation": "Puede editar espacio de trabajo"
   },
   "CwMR7W": {
-    "translation": "",
+    "translation": "¿Puedo exportar mis datos?",
     "message": "Can I export my data?",
     "placeholders": {},
     "comments": [],
@@ -2949,7 +2949,7 @@
     ]
   },
   "0AoPnK": {
-    "translation": "",
+    "translation": "¿Puedo alojar shortlistOS por mi cuenta?",
     "message": "Can I self-host shortlistOS?",
     "placeholders": {},
     "comments": [],
@@ -2961,7 +2961,7 @@
     ]
   },
   "KjP/23": {
-    "translation": "",
+    "translation": "¿Puedo usar Powerpack con una instalación propia?",
     "message": "Can I use Powerpack with a self-hosted installation?",
     "placeholders": {},
     "comments": [],
@@ -3193,7 +3193,7 @@
     "translation": "Cancelar"
   },
   "0AYmw4": {
-    "translation": "",
+    "translation": "Captura de oportunidades",
     "message": "Capturing opportunities",
     "placeholders": {},
     "comments": [],
@@ -3217,7 +3217,7 @@
     "translation": "Tarjeta"
   },
   "hdMZlU": {
-    "translation": "",
+    "translation": "Antigüedad de las tarjetas",
     "message": "Card aging",
     "placeholders": {},
     "comments": [],
@@ -3229,7 +3229,7 @@
     ]
   },
   "eTjd7j": {
-    "translation": "",
+    "translation": "Antigüedad de las tarjetas: señal visual en oportunidades inactivas",
     "message": "Card aging: visual staleness on inactive opportunities",
     "placeholders": {},
     "comments": [],
@@ -3266,7 +3266,7 @@
     "obsolete": true
   },
   "HT+24q": {
-    "translation": "",
+    "translation": "Campos de la tarjeta: empresa, puesto, fecha de entrevista y contactos",
     "message": "Card fields: company, role, interview date, contacts",
     "placeholders": {},
     "comments": [],
@@ -3451,7 +3451,7 @@
     "translation": "Listas de verificación"
   },
   "ZI4PZg": {
-    "translation": "",
+    "translation": "Error de pago",
     "message": "Checkout error",
     "placeholders": {},
     "comments": [],
@@ -3491,7 +3491,7 @@
     "translation": "Elegir plan"
   },
   "BdRs0t": {
-    "translation": "",
+    "translation": "Elige Powerpack para automatizar, usa gratis el espacio de trabajo completo o aloja por tu cuenta el núcleo de código abierto.",
     "message": "Choose Powerpack for automation, use the full workspace for free, or self-host the open-source core.",
     "placeholders": {},
     "comments": [],
@@ -3555,7 +3555,7 @@
     "translation": "Limpiar filtros"
   },
   "yrdiKw": {
-    "translation": "",
+    "translation": "Haz clic en Crear lista y te llevaremos directamente al nuevo tablero.",
     "message": "Click Create shortlist and we will take you straight into the new board.",
     "placeholders": {},
     "comments": [],
@@ -3623,7 +3623,7 @@
     "translation": "Cerrar"
   },
   "D87pha": {
-    "translation": "",
+    "translation": "Cerrada",
     "message": "Closed",
     "placeholders": {},
     "comments": [],
@@ -3635,7 +3635,7 @@
     ]
   },
   "rivrCX": {
-    "translation": "",
+    "translation": "Cierra pronto",
     "message": "Closing soon",
     "placeholders": {},
     "comments": [],
@@ -3736,7 +3736,7 @@
     "translation": "Empresa"
   },
   "GK8ItP": {
-    "translation": "",
+    "translation": "Sede de la empresa",
     "message": "Company HQ",
     "placeholders": {},
     "comments": [],
@@ -3748,7 +3748,7 @@
     ]
   },
   "Vv6f9Z": {
-    "translation": "",
+    "translation": "Información de la empresa",
     "message": "Company insights",
     "placeholders": {},
     "comments": [],
@@ -3760,7 +3760,7 @@
     ]
   },
   "/RBZtw": {
-    "translation": "",
+    "translation": "La empresa es opcional, pero resulta útil. Facilita revisar la lista y comparar oportunidades más adelante.",
     "message": "Company is optional, but useful. It keeps your shortlist easier to scan and helps later when comparing opportunities.",
     "placeholders": {},
     "comments": [],
@@ -3772,7 +3772,7 @@
     ]
   },
   "1SSuKm": {
-    "translation": "",
+    "translation": "Oferta de la empresa",
     "message": "Company offers",
     "placeholders": {},
     "comments": [],
@@ -3784,7 +3784,7 @@
     ]
   },
   "TutVOB": {
-    "translation": "",
+    "translation": "Reputación online de la empresa",
     "message": "Company online sentiment",
     "placeholders": {},
     "comments": [],
@@ -3796,7 +3796,7 @@
     ]
   },
   "eAuGzG": {
-    "translation": "",
+    "translation": "Reputación de la empresa",
     "message": "Company sentiment",
     "placeholders": {},
     "comments": [],
@@ -3808,7 +3808,7 @@
     ]
   },
   "rHV/EJ": {
-    "translation": "",
+    "translation": "Comparar salario",
     "message": "Compare salary",
     "placeholders": {},
     "comments": [],
@@ -4078,7 +4078,7 @@
     "translation": "Continuar"
   },
   "WSFilT": {
-    "translation": "",
+    "translation": "Continuar buscando empleo con Powerpack",
     "message": "Continue job hunting with Powerpack",
     "placeholders": {},
     "comments": [],
@@ -4118,7 +4118,7 @@
     "translation": "Continuar con {0}"
   },
   "ks5OGD": {
-    "translation": "",
+    "translation": "Contrato",
     "message": "Contract",
     "placeholders": {},
     "comments": [],
@@ -4154,7 +4154,7 @@
     "translation": "Convertir en enlace"
   },
   "he3ygx": {
-    "translation": "",
+    "translation": "Copiar",
     "message": "Copy",
     "placeholders": {},
     "comments": [],
@@ -4268,7 +4268,7 @@
     "translation": "Funciones principales"
   },
   "hYgDIe": {
-    "translation": "",
+    "translation": "Crear",
     "message": "Create",
     "placeholders": {},
     "comments": [],
@@ -4465,7 +4465,7 @@
     "translation": "Crear plantilla"
   },
   "zvdB8L": {
-    "translation": "",
+    "translation": "Crear la oportunidad",
     "message": "Create the opportunity",
     "placeholders": {},
     "comments": [],
@@ -4477,7 +4477,7 @@
     ]
   },
   "Slsk9x": {
-    "translation": "",
+    "translation": "Crea la oportunidad y aparecerá en Guardadas, lista para avanzar por tu proceso.",
     "message": "Create the opportunity and it will appear in Saved, ready to move through your pipeline.",
     "placeholders": {},
     "comments": [],
@@ -4489,7 +4489,7 @@
     ]
   },
   "IBmb8a": {
-    "translation": "",
+    "translation": "Crear la lista",
     "message": "Create the shortlist",
     "placeholders": {},
     "comments": [],
@@ -4525,7 +4525,7 @@
     "translation": "Crear espacio de trabajo"
   },
   "0cuBQn": {
-    "translation": "",
+    "translation": "Crea tu primera lista",
     "message": "Create your first shortlist",
     "placeholders": {},
     "comments": [],
@@ -4553,7 +4553,7 @@
     "translation": "Creado"
   },
   "dEY9j2": {
-    "translation": "",
+    "translation": "Creada desde otra fuente",
     "message": "Created from another source",
     "placeholders": {},
     "comments": [],
@@ -4565,7 +4565,7 @@
     ]
   },
   "F4GFHk": {
-    "translation": "",
+    "translation": "Creada manualmente",
     "message": "Created manually",
     "placeholders": {},
     "comments": [],
@@ -4589,7 +4589,7 @@
     "translation": "creó la tarjeta"
   },
   "AQKkuk": {
-    "translation": "",
+    "translation": "Creada mediante un enlace",
     "message": "Created via link",
     "placeholders": {},
     "comments": [],
@@ -4601,7 +4601,7 @@
     ]
   },
   "yjc++U": {
-    "translation": "",
+    "translation": "Creada mediante Magic Inbox",
     "message": "Created via Magic Inbox",
     "placeholders": {},
     "comments": [],
@@ -4613,7 +4613,7 @@
     ]
   },
   "IsHpwU": {
-    "translation": "",
+    "translation": "Creada mediante Web Clipper",
     "message": "Created via Web Clipper",
     "placeholders": {},
     "comments": [],
@@ -4658,7 +4658,7 @@
     "translation": "Recorta tu avatar"
   },
   "f2o98Y": {
-    "translation": "",
+    "translation": "Exportación CSV",
     "message": "CSV export",
     "placeholders": {},
     "comments": [],
@@ -4670,7 +4670,7 @@
     ]
   },
   "Q2lUR2": {
-    "translation": "",
+    "translation": "Moneda",
     "message": "Currency",
     "placeholders": {},
     "comments": [],
@@ -4836,7 +4836,7 @@
     "obsolete": true
   },
   "2SQ/G3": {
-    "translation": "",
+    "translation": "Chequia",
     "message": "Czechia",
     "placeholders": {},
     "comments": [],
@@ -4848,7 +4848,7 @@
     ]
   },
   "TNZKpI": {
-    "translation": "",
+    "translation": "Peligro",
     "message": "Danger",
     "placeholders": {},
     "comments": [],
@@ -5038,7 +5038,7 @@
     "obsolete": true
   },
   "GamYwN": {
-    "translation": "",
+    "translation": "Eliminar oportunidad",
     "message": "Delete opportunity",
     "placeholders": {},
     "comments": [],
@@ -5050,7 +5050,7 @@
     ]
   },
   "zrfdKV": {
-    "translation": "",
+    "translation": "Eliminar lista",
     "message": "Delete shortlist",
     "placeholders": {},
     "comments": [],
@@ -5138,7 +5138,7 @@
     "translation": "eliminó un elemento de la lista de verificación"
   },
   "9unWuu": {
-    "translation": "",
+    "translation": "eliminó un comentario",
     "message": "deleted a comment",
     "placeholders": {},
     "comments": [],
@@ -5182,7 +5182,7 @@
     "translation": "eliminó el elemento de la lista de verificación <0>{0}</0>"
   },
   "7VxSHI": {
-    "translation": "",
+    "translation": "La descripción es opcional. Úsala para requisitos, notas del reclutador, indicios salariales o cualquier dato que no quieras perder.",
     "message": "Description is optional. Use it for requirements, recruiter notes, salary hints, or anything you do not want to lose.",
     "placeholders": {},
     "comments": [],
@@ -5207,7 +5207,7 @@
     "obsolete": true
   },
   "9C6WXd": {
-    "translation": "",
+    "translation": "Líder de diseño",
     "message": "Design Lead",
     "placeholders": {},
     "comments": [],
@@ -5219,7 +5219,7 @@
     ]
   },
   "URmyfc": {
-    "translation": "",
+    "translation": "Detalles",
     "message": "Details",
     "placeholders": {},
     "comments": [],
@@ -5231,7 +5231,7 @@
     ]
   },
   "E/QGRL": {
-    "translation": "",
+    "translation": "Desactivado",
     "message": "Disabled",
     "placeholders": {},
     "comments": [],
@@ -5424,7 +5424,7 @@
     "translation": "Hecho"
   },
   "dN1uO6": {
-    "translation": "",
+    "translation": "Descarga un archivo JSON con los datos de tu cuenta, listas, tarjetas, comentarios y enlaces a adjuntos.",
     "message": "Download a JSON file with your account details, shortlists, cards, comments, and attachment links.",
     "placeholders": {},
     "comments": [],
@@ -5448,7 +5448,7 @@
     "translation": "Error en la descarga"
   },
   "oatvMz": {
-    "translation": "",
+    "translation": "Trabajo ideal 🎯",
     "message": "Dream job 🎯",
     "placeholders": {},
     "comments": [],
@@ -5548,7 +5548,7 @@
     "translation": "Duplicar tarjeta"
   },
   "5RUI5Q": {
-    "translation": "",
+    "translation": "Duplicar oportunidad",
     "message": "Duplicate opportunity",
     "placeholders": {},
     "comments": [],
@@ -5572,7 +5572,7 @@
     "translation": "Duplicando…"
   },
   "/meuIs": {
-    "translation": "",
+    "translation": "p. ej., «Espacio de Pete», «Búsqueda de empleo», etc.",
     "message": "e.g. \"Pete's Workspace\", \"Job hunt\", etc.",
     "placeholders": {},
     "comments": [],
@@ -5628,7 +5628,7 @@
     "translation": "Editar comentario"
   },
   "ow+kaT": {
-    "translation": "",
+    "translation": "Editar URL del empleo",
     "message": "Edit job URL",
     "placeholders": {},
     "comments": [],
@@ -5749,7 +5749,7 @@
     "translation": "Email"
   },
   "XAg35p": {
-    "translation": "",
+    "translation": "Envía empleos y novedades por correo a tu cuenta. La IA de Magic Inbox creará o actualizará automáticamente tus oportunidades.",
     "message": "Email jobs and job updates to your account. Magic Inbox AI will automatically create or update your job opportunities.",
     "placeholders": {},
     "comments": [],
@@ -5785,7 +5785,7 @@
     "translation": "Notificaciones por email para menciones"
   },
   "YUgdkY": {
-    "translation": "",
+    "translation": "Recordatorios por correo",
     "message": "Email reminders",
     "placeholders": {},
     "comments": [],
@@ -5797,7 +5797,7 @@
     ]
   },
   "EknAYx": {
-    "translation": "",
+    "translation": "Recordatorios por correo para próximas entrevistas y acciones",
     "message": "Email reminders for upcoming interviews and next actions",
     "placeholders": {},
     "comments": [],
@@ -5809,7 +5809,7 @@
     ]
   },
   "s8p8Pb": {
-    "translation": "",
+    "translation": "Enviar un correo a esta lista",
     "message": "Email to this shortlist",
     "placeholders": {},
     "comments": [],
@@ -5833,7 +5833,7 @@
     "translation": "Visibilidad del email"
   },
   "QOINDn": {
-    "translation": "",
+    "translation": "vacío",
     "message": "empty",
     "placeholders": {},
     "comments": [],
@@ -5845,7 +5845,7 @@
     ]
   },
   "RxzN1M": {
-    "translation": "",
+    "translation": "Activado",
     "message": "Enabled",
     "placeholders": {},
     "comments": [],
@@ -5881,7 +5881,7 @@
     "translation": "Ingeniería"
   },
   "hRcjn3": {
-    "translation": "",
+    "translation": "Responsable de ingeniería",
     "message": "Engineering Manager",
     "placeholders": {},
     "comments": [],
@@ -6026,7 +6026,7 @@
     "translation": "Enterprise"
   },
   "Y1W9ip": {
-    "translation": "",
+    "translation": "Participación accionarial",
     "message": "Equity",
     "placeholders": {},
     "comments": [],
@@ -6279,7 +6279,7 @@
     "translation": "Error al subir la imagen de perfil"
   },
   "nVlfR5": {
-    "translation": "",
+    "translation": "Unión Europea",
     "message": "European Union",
     "placeholders": {},
     "comments": [],
@@ -6307,7 +6307,7 @@
     "translation": "Eventos"
   },
   "rhyhek": {
-    "translation": "",
+    "translation": "Cada oportunidad sigue una ruta clara desde la bandeja de entrada hasta la solicitud, entrevista, oferta y resultado final.",
     "message": "Every opportunity follows a clear path from inbox to application, interview, offer, and final outcome.",
     "placeholders": {},
     "comments": [],
@@ -6356,7 +6356,7 @@
     "obsolete": true
   },
   "KKmLMQ": {
-    "translation": "",
+    "translation": "Explorar el código fuente",
     "message": "Explore the source code",
     "placeholders": {},
     "comments": [],
@@ -6368,7 +6368,7 @@
     ]
   },
   "AJURBI": {
-    "translation": "",
+    "translation": "Exporta todas las entrevistas previstas de esta lista como fuente iCal para Google Calendar, Outlook o cualquier aplicación de calendario. No vuelvas a perderte una entrevista.",
     "message": "Export all planned interviews from this shortlist as an iCal feed for Google Calendar, Outlook, or any calendar app. Never miss an interview again.",
     "placeholders": {},
     "comments": [],
@@ -6380,7 +6380,7 @@
     ]
   },
   "lpYill": {
-    "translation": "",
+    "translation": "Error al exportar",
     "message": "Export failed",
     "placeholders": {},
     "comments": [],
@@ -6392,7 +6392,7 @@
     ]
   },
   "ut4/No": {
-    "translation": "",
+    "translation": "Exportar mis datos",
     "message": "Export my data",
     "placeholders": {},
     "comments": [],
@@ -6404,7 +6404,7 @@
     ]
   },
   "6sIaEZ": {
-    "translation": "",
+    "translation": "Exportación lista",
     "message": "Export ready",
     "placeholders": {},
     "comments": [],
@@ -6416,7 +6416,7 @@
     ]
   },
   "bMPl/S": {
-    "translation": "",
+    "translation": "Exporta tu cuenta completa en cualquier momento",
     "message": "Export your complete account anytime",
     "placeholders": {},
     "comments": [],
@@ -6465,7 +6465,7 @@
     "translation": "No se pudo copiar el enlace de invitación"
   },
   "bIZeOx": {
-    "translation": "",
+    "translation": "No se pudo crear una lista",
     "message": "Failed to create a list",
     "placeholders": {},
     "comments": [],
@@ -6724,7 +6724,7 @@
     "obsolete": true
   },
   "esRgb4": {
-    "translation": "",
+    "translation": "Encuentra respuestas a preguntas habituales sobre shortlistOS antes de confiarle tu búsqueda de empleo.",
     "message": "Find answers to common questions about shortlistOS before trusting it with your job search.",
     "placeholders": {},
     "comments": [],
@@ -6736,7 +6736,7 @@
     ]
   },
   "3FskXV": {
-    "translation": "",
+    "translation": "Encuentra respuestas a preguntas habituales sobre shortlistOS. ¿No encuentras lo que buscas? Puedes <0>contactarnos</0>.",
     "message": "Find answers to common questions about shortlistOS. Can't find what you're looking for? Feel free to <0>contact us</0>.",
     "placeholders": {},
     "comments": [],
@@ -6748,7 +6748,7 @@
     ]
   },
   "JmZ/+d": {
-    "translation": "",
+    "translation": "Finalizar",
     "message": "Finish",
     "placeholders": {},
     "comments": [],
@@ -6760,7 +6760,7 @@
     ]
   },
   "ell+W0": {
-    "translation": "",
+    "translation": "Aviso de seguimiento cuando una empresa deja de responder",
     "message": "Follow-up nudge when a company goes quiet",
     "placeholders": {},
     "comments": [],
@@ -6772,7 +6772,7 @@
     ]
   },
   "Bp1atT": {
-    "translation": "",
+    "translation": "Recordatorio de seguimiento",
     "message": "Follow-up reminder",
     "placeholders": {},
     "comments": [],
@@ -6808,7 +6808,7 @@
     "translation": "Para la sostenibilidad a largo plazo, reconocemos que todos los buenos proyectos de código abierto necesitan una fuente de ingresos. La nuestra proviene de la oferta de pago en la nube para espacios de trabajo con múltiples usuarios y para slugs de espacio de trabajo personalizados. No hay obligación de usarla, y puedes alojar el software en tu propia infraestructura de forma gratuita."
   },
   "VsbWJl": {
-    "translation": "",
+    "translation": "para siempre",
     "message": "forever",
     "placeholders": {},
     "comments": [],
@@ -6820,7 +6820,7 @@
     ]
   },
   "P7Z0So": {
-    "translation": "",
+    "translation": "Reenvía alertas de empleo y correos de reclutadores a Magic Inbox. shortlistOS puede crear oportunidades nuevas o actualizar automáticamente las existentes.",
     "message": "Forward job alerts and recruiter emails to your Magic Inbox. shortlistOS can create new opportunities or update existing ones automatically.",
     "placeholders": {},
     "comments": [],
@@ -6832,7 +6832,7 @@
     ]
   },
   "u1vKTK": {
-    "translation": "",
+    "translation": "Reenvía o envía correos a esta dirección para añadirlos a esta lista.",
     "message": "Forward or send emails to this address to add them to this shortlist.",
     "placeholders": {},
     "comments": [],
@@ -6844,7 +6844,7 @@
     ]
   },
   "4wqHjT": {
-    "translation": "",
+    "translation": "Ingeniero fundador",
     "message": "Founding Engineer",
     "placeholders": {},
     "comments": [],
@@ -6944,7 +6944,7 @@
     "translation": "Gratis, para siempre"
   },
   "GtmO8/": {
-    "translation": "",
+    "translation": "de",
     "message": "from",
     "placeholders": {},
     "comments": [],
@@ -6976,7 +6976,7 @@
     "translation": "Acceso completo a la API"
   },
   "X1eioO": {
-    "translation": "",
+    "translation": "Control total de tus datos",
     "message": "Full control over your data",
     "placeholders": {},
     "comments": [],
@@ -6988,7 +6988,7 @@
     ]
   },
   "Dm9NZI": {
-    "translation": "",
+    "translation": "Descarga completa de datos en cualquier momento",
     "message": "Full data download anytime",
     "placeholders": {},
     "comments": [],
@@ -7000,7 +7000,7 @@
     ]
   },
   "mohPF3": {
-    "translation": "",
+    "translation": "Exportación completa de datos",
     "message": "Full data export",
     "placeholders": {},
     "comments": [],
@@ -7012,7 +7012,7 @@
     ]
   },
   "GbYvG5": {
-    "translation": "",
+    "translation": "Código fuente completo",
     "message": "Full source code",
     "placeholders": {},
     "comments": [],
@@ -7062,7 +7062,7 @@
     "translation": "General"
   },
   "MlF+22": {
-    "translation": "",
+    "translation": "Obtén una dirección de correo personalizada para esta lista. Reenvía aquí oportunidades o mensajes de reclutadores y llegarán a la bandeja de entrada de tu lista.",
     "message": "Get a personalized email address for this shortlist. Forward job leads or recruiter messages here and they will land in your shortlist inbox.",
     "placeholders": {},
     "comments": [],
@@ -7074,7 +7074,7 @@
     ]
   },
   "aNpYYp": {
-    "translation": "",
+    "translation": "Recibe recordatorios de próximas entrevistas, solicitudes sin respuesta, seguimientos vencidos y oportunidades que han quedado en silencio.",
     "message": "Get reminders for upcoming interviews, unanswered applications, overdue follow-ups, and opportunities that have gone quiet.",
     "placeholders": {},
     "comments": [],
@@ -7195,7 +7195,7 @@
     "obsolete": true
   },
   "1rBR9U": {
-    "translation": "",
+    "translation": "Obtener Powerpack",
     "message": "Get the Powerpack",
     "placeholders": {},
     "comments": [],
@@ -7219,7 +7219,7 @@
     ]
   },
   "SwnHeq": {
-    "translation": "",
+    "translation": "Obtén Powerpack para automatizar tu búsqueda de empleo.",
     "message": "Get the Powerpack to automate your job search.",
     "placeholders": {},
     "comments": [],
@@ -7300,7 +7300,7 @@
     "translation": "Ir al inicio"
   },
   "W67HEm": {
-    "translation": "",
+    "translation": "Ir al registro de actividad",
     "message": "Go to activity log",
     "placeholders": {},
     "comments": [],
@@ -7377,7 +7377,7 @@
     "translation": "Ir a configuración"
   },
   "TB7qFJ": {
-    "translation": "",
+    "translation": "Ir a las listas",
     "message": "Go to shortlists",
     "placeholders": {},
     "comments": [],
@@ -7414,7 +7414,7 @@
     "translation": "Ideal para personas que comienzan y solo necesitan lo esencial."
   },
   "1det10": {
-    "translation": "",
+    "translation": "Google Calendar",
     "message": "Google calendar",
     "placeholders": {},
     "comments": [],
@@ -7426,7 +7426,7 @@
     ]
   },
   "ebIDwV": {
-    "translation": "",
+    "translation": "Google Calendar",
     "message": "Google Calendar",
     "placeholders": {},
     "comments": [],
@@ -7438,7 +7438,7 @@
     ]
   },
   "MzgzFi": {
-    "translation": "",
+    "translation": "Sincronización con Google Calendar para entrevistas y seguimientos",
     "message": "Google Calendar sync for interviews and follow-ups",
     "placeholders": {},
     "comments": [],
@@ -7482,7 +7482,7 @@
     "translation": "Google SSO + SAML"
   },
   "gd2MmD": {
-    "translation": "",
+    "translation": "Guarda cualquier vacante interesante de internet en tu lista sin copiar y pegar nada manualmente.",
     "message": "Grab any interesting job opening on the internet, and send it to your shortlist without manually copy-pasting anything.",
     "placeholders": {},
     "comments": [],
@@ -7506,7 +7506,7 @@
     "translation": "Invitado"
   },
   "c3XJ18": {
-    "translation": "",
+    "translation": "Ayuda",
     "message": "Help",
     "placeholders": {},
     "comments": [],
@@ -7531,7 +7531,7 @@
     "obsolete": true
   },
   "B7gxgS": {
-    "translation": "",
+    "translation": "Prioridad alta 💯",
     "message": "High priority 💯",
     "placeholders": {},
     "comments": [],
@@ -7556,7 +7556,7 @@
     "obsolete": true
   },
   "0caMy7": {
-    "translation": "",
+    "translation": "Historial",
     "message": "History",
     "placeholders": {},
     "comments": [],
@@ -7593,7 +7593,7 @@
     "obsolete": true
   },
   "YzITbp": {
-    "translation": "",
+    "translation": "Aloja shortlistOS en tu propia infraestructura. Ideal para organizaciones que necesitan un control total de sus datos.",
     "message": "Host shortlistOS on your own infrastructure. Ideal for organisations that need complete control over their data.",
     "placeholders": {},
     "comments": [],
@@ -7605,7 +7605,7 @@
     ]
   },
   "rG7wCF": {
-    "translation": "",
+    "translation": "Alojado en",
     "message": "Hosted in",
     "placeholders": {},
     "comments": [],
@@ -7677,7 +7677,7 @@
     "translation": "¿Cómo se financia el proyecto?"
   },
   "eVbKBS": {
-    "translation": "",
+    "translation": "Cómo suscribirse en",
     "message": "How to subscribe in",
     "placeholders": {},
     "comments": [],
@@ -7701,7 +7701,7 @@
     "translation": "https://www.youtube.com/watch?v=..."
   },
   "Z2hVSb": {
-    "translation": "",
+    "translation": "Híbrido",
     "message": "Hybrid",
     "placeholders": {},
     "comments": [],
@@ -7870,7 +7870,7 @@
     "obsolete": true
   },
   "fDfj7s": {
-    "translation": "",
+    "translation": "Importar tus tableros de Trello a shortlistOS es fácil. Sigue nuestra guía paso a paso <0>aquí</0>.",
     "message": "Importing your Trello boards into shortlistOS is easy. You can follow our step-by-step guide <0>here</0>.",
     "placeholders": {},
     "comments": [],
@@ -7906,7 +7906,7 @@
     "translation": "en"
   },
   "TqEzr5": {
-    "translation": "",
+    "translation": "En contacto",
     "message": "In contact",
     "placeholders": {},
     "comments": [],
@@ -7959,7 +7959,7 @@
     "translation": "Inactivo"
   },
   "Gp4Yi6": {
-    "translation": "",
+    "translation": "Bandeja de entrada",
     "message": "Inbox",
     "placeholders": {},
     "comments": [],
@@ -7983,7 +7983,7 @@
     "translation": "Individuales"
   },
   "gDlLp3": {
-    "translation": "",
+    "translation": "Comprueba exactamente cómo funciona el producto",
     "message": "Inspect exactly how the product works",
     "placeholders": {},
     "comments": [],
@@ -8023,7 +8023,7 @@
     "translation": "Búsqueda inteligente"
   },
   "umwQp0": {
-    "translation": "",
+    "translation": "Entrevista",
     "message": "Interview",
     "placeholders": {},
     "comments": [],
@@ -8043,7 +8043,7 @@
     ]
   },
   "KSlR/u": {
-    "translation": "",
+    "translation": "Entrevista en 1 sem.",
     "message": "Interview in 1w",
     "placeholders": {},
     "comments": [],
@@ -8196,7 +8196,7 @@
     "obsolete": true
   },
   "R6N/wu": {
-    "translation": "",
+    "translation": "¿Powerpack es una suscripción?",
     "message": "Is Powerpack a subscription?",
     "placeholders": {},
     "comments": [],
@@ -8208,7 +8208,7 @@
     ]
   },
   "2UW+dx": {
-    "translation": "",
+    "translation": "¿shortlistOS es realmente gratis?",
     "message": "Is shortlistOS really free?",
     "placeholders": {},
     "comments": [],
@@ -8220,7 +8220,7 @@
     ]
   },
   "Sgw8xU": {
-    "translation": "",
+    "translation": "Búsqueda de empleo",
     "message": "Job hunt",
     "placeholders": {},
     "comments": [],
@@ -8236,7 +8236,7 @@
     ]
   },
   "vWp/vR": {
-    "translation": "",
+    "translation": "Buscar trabajo es difícil. Llevar el control no debería serlo.",
     "message": "Job hunting is hard. Tracking it shouldn't be.",
     "placeholders": {},
     "comments": [],
@@ -8248,7 +8248,7 @@
     ]
   },
   "x8B37U": {
-    "translation": "",
+    "translation": "Espacio de búsqueda de empleo con proceso de arrastrar y soltar",
     "message": "Job hunting workspace with drag-and-drop pipeline",
     "placeholders": {},
     "comments": [],
@@ -8260,7 +8260,7 @@
     ]
   },
   "vfRNmL": {
-    "translation": "",
+    "translation": "Ubicación del empleo",
     "message": "Job location",
     "placeholders": {},
     "comments": [],
@@ -8272,7 +8272,7 @@
     ]
   },
   "qyAYt3": {
-    "translation": "",
+    "translation": "URL de la oferta de empleo",
     "message": "Job posting URL",
     "placeholders": {},
     "comments": [],
@@ -8284,7 +8284,7 @@
     ]
   },
   "TDc7nL": {
-    "translation": "",
+    "translation": "Web Clipper de ofertas de empleo",
     "message": "Job posting Web Clipper",
     "placeholders": {},
     "comments": [],
@@ -8296,7 +8296,7 @@
     ]
   },
   "qMgKul": {
-    "translation": "",
+    "translation": "Puesto",
     "message": "Job title",
     "placeholders": {},
     "comments": [],
@@ -8308,7 +8308,7 @@
     ]
   },
   "XCNc63": {
-    "translation": "",
+    "translation": "URL del empleo",
     "message": "Job URL",
     "placeholders": {},
     "comments": [],
@@ -8320,7 +8320,7 @@
     ]
   },
   "HgxBIy": {
-    "translation": "",
+    "translation": "Proceso de búsqueda de empleo",
     "message": "Job-search pipeline",
     "placeholders": {},
     "comments": [],
@@ -8361,7 +8361,7 @@
     "obsolete": true
   },
   "aqLiRT": {
-    "translation": "",
+    "translation": "Unirse al espacio de trabajo | shortlistOS",
     "message": "Join workspace | shortlistOS",
     "placeholders": {},
     "comments": [],
@@ -8410,7 +8410,7 @@
     "translation": "Kanban reinventado"
   },
   "GuRiHw": {
-    "translation": "",
+    "translation": "Mantén cada oportunidad organizada y deja que Powerpack se encargue de las tareas repetitivas.",
     "message": "Keep every opportunity organized and let Powerpack handle the repetitive parts.",
     "placeholders": {},
     "comments": [],
@@ -8422,7 +8422,7 @@
     ]
   },
   "6WOHGY": {
-    "translation": "",
+    "translation": "Mantén cada oportunidad, correo, nota y archivo en un mismo lugar. Sigue un proceso diseñado para buscar empleo y comprueba exactamente en qué punto estás.",
     "message": "Keep every opportunity, email, note, and file together. Follow a purpose-built pipeline and see exactly where your search stands.",
     "placeholders": {},
     "comments": [],
@@ -8450,7 +8450,7 @@
     "translation": "Ten en cuenta que esta acción es irreversible."
   },
   "7NWwrd": {
-    "translation": "",
+    "translation": "Guarda juntos la descripción del puesto, los datos de la empresa, el salario, los contactos, las notas, los archivos y las fechas de entrevista.",
     "message": "Keep the job description, company details, salary, contacts, notes, files, and interview dates together.",
     "placeholders": {},
     "comments": [],
@@ -8474,7 +8474,7 @@
     "translation": "Atajos de teclado"
   },
   "JkDRIW": {
-    "translation": "",
+    "translation": "Sabe qué necesita tu atención",
     "message": "Know what needs your attention",
     "placeholders": {},
     "comments": [],
@@ -8486,7 +8486,7 @@
     ]
   },
   "oX6qyC": {
-    "translation": "",
+    "translation": "Sabe cuánto vale el puesto",
     "message": "Know what the role is worth",
     "placeholders": {},
     "comments": [],
@@ -8657,7 +8657,7 @@
     "obsolete": true
   },
   "ju3yrn": {
-    "translation": "",
+    "translation": "menos de 1 hora",
     "message": "less than 1 hour",
     "placeholders": {},
     "comments": [],
@@ -8673,7 +8673,7 @@
     ]
   },
   "95CiXf": {
-    "translation": "",
+    "translation": "Deja que Powerpack se encargue del trabajo repetitivo.",
     "message": "Let Powerpack handle the repetitive work.",
     "placeholders": {},
     "comments": [],
@@ -8750,7 +8750,7 @@
     "translation": "Acceso limitado a la API"
   },
   "yzF66j": {
-    "translation": "",
+    "translation": "Enlace",
     "message": "Link",
     "placeholders": {},
     "comments": [],
@@ -8786,7 +8786,7 @@
     "translation": "Enlace copiado"
   },
   "gggTBm": {
-    "translation": "",
+    "translation": "LinkedIn",
     "message": "LinkedIn",
     "placeholders": {},
     "comments": [],
@@ -8826,7 +8826,7 @@
     "translation": "Nombre de la lista"
   },
   "ro49zU": {
-    "translation": "",
+    "translation": "El nombre de la lista no puede superar los 100 caracteres",
     "message": "List name cannot exceed 100 characters",
     "placeholders": {},
     "comments": [],
@@ -8838,7 +8838,7 @@
     ]
   },
   "27mf2n": {
-    "translation": "",
+    "translation": "El nombre de la lista es obligatorio",
     "message": "List name is required",
     "placeholders": {},
     "comments": [],
@@ -8862,7 +8862,7 @@
     "translation": "Listas"
   },
   "JoKMvn": {
-    "translation": "",
+    "translation": "Las listas que archives aparecerán aquí.",
     "message": "Lists you archive will appear here.",
     "placeholders": {},
     "comments": [],
@@ -8887,7 +8887,7 @@
     "obsolete": true
   },
   "+FaRcJ": {
-    "translation": "",
+    "translation": "Cargar más notas",
     "message": "Load more notes",
     "placeholders": {},
     "comments": [],
@@ -8899,7 +8899,7 @@
     ]
   },
   "yZgZLg": {
-    "translation": "",
+    "translation": "Cargar actualizaciones anteriores",
     "message": "Load older updates",
     "placeholders": {},
     "comments": [],
@@ -8943,7 +8943,7 @@
     "translation": "Cargando..."
   },
   "2uL7or": {
-    "translation": "",
+    "translation": "Tipo de ubicación",
     "message": "Location type",
     "placeholders": {},
     "comments": [],
@@ -8955,7 +8955,7 @@
     ]
   },
   "PDuDSX": {
-    "translation": "",
+    "translation": "Datos salariales según la ubicación: tu país, la UE y EE. UU.",
     "message": "Location-aware salary data: your country, EU, and US",
     "placeholders": {},
     "comments": [],
@@ -8967,7 +8967,7 @@
     ]
   },
   "sQia9P": {
-    "translation": "",
+    "translation": "Iniciar sesión",
     "message": "Log in",
     "placeholders": {},
     "comments": [],
@@ -8992,7 +8992,7 @@
     "obsolete": true
   },
   "anfrsq": {
-    "translation": "",
+    "translation": "Inicio de sesión | shortlistOS",
     "message": "Login | shortlistOS",
     "placeholders": {},
     "comments": [],
@@ -9054,7 +9054,7 @@
     "obsolete": true
   },
   "cvm6OH": {
-    "translation": "",
+    "translation": "Creado y alojado en la UE",
     "message": "Made & hosted in EU",
     "placeholders": {},
     "comments": [],
@@ -9066,7 +9066,7 @@
     ]
   },
   "JHC7KK": {
-    "translation": "",
+    "translation": "Creado y alojado en la UE",
     "message": "Made and hosted in the EU",
     "placeholders": {},
     "comments": [],
@@ -9078,7 +9078,7 @@
     ]
   },
   "2QFjY7": {
-    "translation": "",
+    "translation": "Creado en",
     "message": "Made in",
     "placeholders": {},
     "comments": [],
@@ -9090,7 +9090,7 @@
     ]
   },
   "DIIDEy": {
-    "translation": "",
+    "translation": "Magic Inbox",
     "message": "Magic Inbox",
     "placeholders": {},
     "comments": [],
@@ -9106,7 +9106,7 @@
     ]
   },
   "xc6hQC": {
-    "translation": "",
+    "translation": "Dirección de Magic Inbox copiada",
     "message": "Magic Inbox address copied",
     "placeholders": {},
     "comments": [],
@@ -9118,7 +9118,7 @@
     ]
   },
   "0h3fWE": {
-    "translation": "",
+    "translation": "Magic Inbox: reenvía cualquier correo de empleo y crea o actualiza tarjetas automáticamente",
     "message": "Magic Inbox: forward any job email and auto-create or update cards",
     "placeholders": {},
     "comments": [],
@@ -9170,7 +9170,7 @@
     "translation": "Gestionar miembros"
   },
   "BWTzAb": {
-    "translation": "",
+    "translation": "Manual",
     "message": "Manual",
     "placeholders": {},
     "comments": [],
@@ -9182,7 +9182,7 @@
     ]
   },
   "yHCNzt": {
-    "translation": "",
+    "translation": "Manualmente",
     "message": "Manually",
     "placeholders": {},
     "comments": [],
@@ -9194,7 +9194,7 @@
     ]
   },
   "NtPpgG": {
-    "translation": "",
+    "translation": "Marcar la oportunidad como sin respuesta",
     "message": "Mark the opportunity as ghosted",
     "placeholders": {},
     "comments": [],
@@ -9246,7 +9246,7 @@
     "translation": "Marketing"
   },
   "CK1KXz": {
-    "translation": "",
+    "translation": "Máx.",
     "message": "Max",
     "placeholders": {},
     "comments": [],
@@ -9383,7 +9383,7 @@
     "translation": "Menciones"
   },
   "4YHrmD": {
-    "translation": "",
+    "translation": "Hito",
     "message": "Milestone",
     "placeholders": {},
     "comments": [],
@@ -9395,7 +9395,7 @@
     ]
   },
   "eTUF28": {
-    "translation": "",
+    "translation": "Mín.",
     "message": "Min",
     "placeholders": {},
     "comments": [],
@@ -9407,7 +9407,7 @@
     ]
   },
   "7AZQfM": {
-    "translation": "",
+    "translation": "Falta la variable de entorno NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY.",
     "message": "Missing NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY environment variable.",
     "placeholders": {},
     "comments": [],
@@ -9419,7 +9419,7 @@
     ]
   },
   "kSwc8N": {
-    "translation": "",
+    "translation": "Modifícalo según tus necesidades",
     "message": "Modify it for your own needs",
     "placeholders": {},
     "comments": [],
@@ -9475,7 +9475,7 @@
     "translation": "facturación mensual"
   },
   "utkZU9": {
-    "translation": "",
+    "translation": "Mueve las tarjetas entre Guardadas, Solicitud enviada, Entrevistas y las fases posteriores a medida que avanza tu búsqueda. Los detalles de la tarjeta incluyen más campos y se registra cada actividad e hito.",
     "message": "Move cards between Saved, Applied, Interviewing, and later stages as your search progresses. Card detail has more fields, and every activity and milestone gets logged for you.",
     "placeholders": {},
     "comments": [],
@@ -9511,7 +9511,7 @@
     "translation": "Mover a lista"
   },
   "C0524U": {
-    "translation": "",
+    "translation": "movió la tarjeta de <0>{0}</0> a <1>{1}</1>",
     "message": "moved the card from <0>{0}</0> to <1>{1}</1>",
     "placeholders": {
       "0": [
@@ -9602,7 +9602,7 @@
     "translation": "Nombre"
   },
   "ow4bW/": {
-    "translation": "",
+    "translation": "Ponle nombre a tu lista",
     "message": "Name your shortlist",
     "placeholders": {},
     "comments": [],
@@ -9638,7 +9638,7 @@
     "translation": "¿Necesitas ayuda?"
   },
   "A218Mj": {
-    "translation": "",
+    "translation": "Negociando",
     "message": "Negotiating",
     "placeholders": {},
     "comments": [],
@@ -9763,7 +9763,7 @@
     "translation": "Nueva lista"
   },
   "ZnLaqP": {
-    "translation": "",
+    "translation": "Nueva oportunidad",
     "message": "New opportunity",
     "placeholders": {},
     "comments": [],
@@ -9861,7 +9861,7 @@
     "obsolete": true
   },
   "hXzOVo": {
-    "translation": "",
+    "translation": "Siguiente",
     "message": "Next",
     "placeholders": {},
     "comments": [],
@@ -9906,7 +9906,7 @@
     "translation": "No hay {0}"
   },
   "ZILws9": {
-    "translation": "",
+    "translation": "Todavía no hay actividad.",
     "message": "No activity yet.",
     "placeholders": {},
     "comments": [],
@@ -9918,7 +9918,7 @@
     ]
   },
   "uyc86P": {
-    "translation": "",
+    "translation": "Sin anuncios, sin seguimiento personal y conforme al RGPD.",
     "message": "No ads, no personal tracking, GDPR compliant.",
     "placeholders": {},
     "comments": [],
@@ -9930,7 +9930,7 @@
     ]
   },
   "fFKZbE": {
-    "translation": "",
+    "translation": "Sin publicidad ni seguimiento personal",
     "message": "No advertising or personal tracking",
     "placeholders": {},
     "comments": [],
@@ -9955,7 +9955,7 @@
     "obsolete": true
   },
   "XOV9dc": {
-    "translation": "",
+    "translation": "No hay listas archivadas",
     "message": "No archived lists",
     "placeholders": {},
     "comments": [],
@@ -10028,7 +10028,7 @@
     "translation": "No hay URL de descarga disponible para este adjunto."
   },
   "JyeBLx": {
-    "translation": "",
+    "translation": "No se necesita una cuenta alojada",
     "message": "No hosted account required",
     "placeholders": {},
     "comments": [],
@@ -10128,7 +10128,7 @@
     "translation": "Aún no se encontraron roles para este espacio de trabajo."
   },
   "gs9LZX": {
-    "translation": "",
+    "translation": "Todavía no hay datos de comparación salarial.",
     "message": "No salary comparison data yet.",
     "placeholders": {},
     "comments": [],
@@ -10140,7 +10140,7 @@
     ]
   },
   "xEP/BU": {
-    "translation": "",
+    "translation": "Todavía no hay un resumen de reputación.",
     "message": "No sentiment summary yet.",
     "placeholders": {},
     "comments": [],
@@ -10152,7 +10152,7 @@
     ]
   },
   "vVyzo0": {
-    "translation": "",
+    "translation": "Sin seguimiento, sin anuncios y alineado con el RGPD",
     "message": "No tracking, no ads, GDPR aligned",
     "placeholders": {},
     "comments": [],
@@ -10176,7 +10176,7 @@
     "translation": "No hay webhooks configurados. Agregue un webhook para recibir notificaciones."
   },
   "lZhXbg": {
-    "translation": "",
+    "translation": "No. Powerpack cuesta 29 $ y permanece activo durante tres meses. No hay renovación automática ni pagos recurrentes.",
     "message": "No. Powerpack costs $29 and remains active for three months. There is no automatic renewal or recurring payment.",
     "placeholders": {},
     "comments": [],
@@ -10188,7 +10188,7 @@
     ]
   },
   "0URrGi": {
-    "translation": "",
+    "translation": "No. Actualmente Powerpack solo está disponible con la versión alojada de shortlistOS. Las instalaciones propias incluyen el núcleo de código abierto sin las funciones alojadas de automatización e IA.",
     "message": "No. Powerpack is currently available only with the hosted version of shortlistOS. Self-hosted installations include the open-source core without the hosted automation and AI features.",
     "placeholders": {},
     "comments": [],
@@ -10200,7 +10200,7 @@
     ]
   },
   "YzuotG": {
-    "translation": "",
+    "translation": "Notas y adjuntos",
     "message": "Notes and attachments",
     "placeholders": {},
     "comments": [],
@@ -10212,7 +10212,7 @@
     ]
   },
   "i9TBz5": {
-    "translation": "",
+    "translation": "Notas y archivos adjuntos",
     "message": "Notes and file attachments",
     "placeholders": {},
     "comments": [],
@@ -10224,7 +10224,7 @@
     ]
   },
   "qvdlAW": {
-    "translation": "",
+    "translation": "Recuérdame contactar de nuevo con el reclutador",
     "message": "Nudge me to follow up with the recruiter",
     "placeholders": {},
     "comments": [],
@@ -10236,7 +10236,7 @@
     ]
   },
   "D2fyoI": {
-    "translation": "",
+    "translation": "Recuérdame retomar la negociación",
     "message": "Nudge me to revisit the negotiation",
     "placeholders": {},
     "comments": [],
@@ -10248,7 +10248,7 @@
     ]
   },
   "zdW6qq": {
-    "translation": "",
+    "translation": "Avisos cuando las entrevistas o negociaciones pierden impulso",
     "message": "Nudges when interviews or negotiations lose momentum",
     "placeholders": {},
     "comments": [],
@@ -10276,7 +10276,7 @@
     "translation": "Oferta"
   },
   "Fdp03t": {
-    "translation": "",
+    "translation": "el",
     "message": "on",
     "placeholders": {},
     "comments": [],
@@ -10325,7 +10325,7 @@
     "obsolete": true
   },
   "4Bka70": {
-    "translation": "",
+    "translation": "Una vez que elimines esta lista, no habrá vuelta atrás. Esta acción no se puede deshacer.",
     "message": "Once you delete this shortlist, there is no going back. This action cannot be undone.",
     "placeholders": {},
     "comments": [],
@@ -10361,7 +10361,7 @@
     "translation": "Una vez que elimines tu espacio de trabajo, no hay vuelta atrás. Esta acción no se puede deshacer."
   },
   "8bhrfV": {
-    "translation": "",
+    "translation": "Una única fuente de información para cada oportunidad",
     "message": "One source of truth for every opportunity",
     "placeholders": {},
     "comments": [],
@@ -10373,7 +10373,7 @@
     ]
   },
   "qwU6TW": {
-    "translation": "",
+    "translation": "Pago único",
     "message": "One-time payment",
     "placeholders": {},
     "comments": [],
@@ -10385,7 +10385,7 @@
     ]
   },
   "Fac/js": {
-    "translation": "",
+    "translation": "Un pago único de {POWERPACK_PRICE} te da 3 meses de acceso completo. Sin suscripción. Buscar trabajo ya es bastante estresante.",
     "message": "One-time payment of {POWERPACK_PRICE} gets you 3 months of full access. No subscription. Job hunting is stressful enough already.",
     "placeholders": {
       "POWERPACK_PRICE": [
@@ -10413,7 +10413,7 @@
     "translation": "Abrir menú de comandos"
   },
   "CKNmPg": {
-    "translation": "",
+    "translation": "Abrir formulario",
     "message": "Open form",
     "placeholders": {},
     "comments": [],
@@ -10461,7 +10461,7 @@
     "translation": "Código abierto"
   },
   "2y0G3Y": {
-    "translation": "",
+    "translation": "Núcleo de código abierto",
     "message": "Open source core",
     "placeholders": {},
     "comments": [],
@@ -10485,7 +10485,7 @@
     "translation": "Amigos de código abierto"
   },
   "wKBCKv": {
-    "translation": "",
+    "translation": "CRM de búsqueda de empleo de código abierto con automatización opcional para las tareas repetitivas.",
     "message": "Open-source job search CRM with optional automation for the repetitive parts.",
     "placeholders": {},
     "comments": [],
@@ -10497,7 +10497,7 @@
     ]
   },
   "fNtbOa": {
-    "translation": "",
+    "translation": "Detalles de la oportunidad",
     "message": "Opportunity details",
     "placeholders": {},
     "comments": [],
@@ -10509,7 +10509,7 @@
     ]
   },
   "QOKT8/": {
-    "translation": "",
+    "translation": "Oportunidad duplicada",
     "message": "Opportunity duplicated",
     "placeholders": {},
     "comments": [],
@@ -10521,7 +10521,7 @@
     ]
   },
   "6yn8cT": {
-    "translation": "",
+    "translation": "Oportunidad duplicada correctamente.",
     "message": "Opportunity duplicated successfully.",
     "placeholders": {},
     "comments": [],
@@ -10569,7 +10569,7 @@
     "translation": "Amigos OSS"
   },
   "XYVFl8": {
-    "translation": "",
+    "translation": "Outlook.com",
     "message": "Outlook.com",
     "placeholders": {},
     "comments": [],
@@ -10730,7 +10730,7 @@
     "translation": "Las contraseñas no coinciden"
   },
   "qO/wwA": {
-    "translation": "",
+    "translation": "Pégalo en Google Calendar, Outlook o cualquier aplicación compatible con fuentes iCal.",
     "message": "Paste it into Google Calendar, Outlook, or any app that supports iCal feeds.",
     "placeholders": {},
     "comments": [],
@@ -10782,7 +10782,7 @@
     "translation": "Pendiente"
   },
   "198luN": {
-    "translation": "",
+    "translation": "al día",
     "message": "per day",
     "placeholders": {},
     "comments": [],
@@ -10794,7 +10794,7 @@
     ]
   },
   "RPxSkn": {
-    "translation": "",
+    "translation": "a la hora",
     "message": "per hour",
     "placeholders": {},
     "comments": [],
@@ -10806,7 +10806,7 @@
     ]
   },
   "4QrWVd": {
-    "translation": "",
+    "translation": "al mes",
     "message": "per month",
     "placeholders": {},
     "comments": [],
@@ -10846,7 +10846,7 @@
     "translation": "por usuario/mes"
   },
   "zoMDkL": {
-    "translation": "",
+    "translation": "a la semana",
     "message": "per week",
     "placeholders": {},
     "comments": [],
@@ -10858,7 +10858,7 @@
     ]
   },
   "cSBVtF": {
-    "translation": "",
+    "translation": "al año",
     "message": "per year",
     "placeholders": {},
     "comments": [],
@@ -10959,7 +10959,7 @@
     "obsolete": true
   },
   "WqzXIb": {
-    "translation": "",
+    "translation": "Petr Nagy",
     "message": "Petr Nagy",
     "placeholders": {},
     "comments": [],
@@ -10983,7 +10983,7 @@
     "translation": "Elige un plan para comenzar. Todos los planes de pago incluyen una prueba gratuita de 14 días."
   },
   "67RoFa": {
-    "translation": "",
+    "translation": "Proceso",
     "message": "Pipeline",
     "placeholders": {},
     "comments": [],
@@ -11065,7 +11065,7 @@
     "translation": "Por favor, confirma tu nueva contraseña"
   },
   "gPKMqZ": {
-    "translation": "",
+    "translation": "Cópialo manualmente desde el campo.",
     "message": "Please copy it manually from the field.",
     "placeholders": {},
     "comments": [],
@@ -11437,7 +11437,7 @@
     "translation": "Posición en la lista (0 = primero, dejar vacío para el final)"
   },
   "BESXp1": {
-    "translation": "",
+    "translation": "Powerpack",
     "message": "Powerpack",
     "placeholders": {},
     "comments": [],
@@ -11469,7 +11469,7 @@
     ]
   },
   "NQTS0e": {
-    "translation": "",
+    "translation": "Powerpack activo",
     "message": "Powerpack active",
     "placeholders": {},
     "comments": [],
@@ -11481,7 +11481,7 @@
     ]
   },
   "+f3k4t": {
-    "translation": "",
+    "translation": "Powerpack añade automatización e IA a tu espacio de shortlistOS, para que dediques menos tiempo a copiar información y más a avanzar en tu búsqueda.",
     "message": "Powerpack adds automation and AI to your shortlistOS workspace, so you spend less time copying information and more time moving your search forward.",
     "placeholders": {},
     "comments": [],
@@ -11493,7 +11493,7 @@
     ]
   },
   "DBahuG": {
-    "translation": "",
+    "translation": "Powerpack añade Web Clipper, Magic Inbox, recordatorios y avisos de seguimiento, información salarial y actualizaciones automáticas de oportunidades.",
     "message": "Powerpack adds the browser clipper, Magic Inbox, reminders and follow-up nudges, salary insights, and automatic opportunity updates.",
     "placeholders": {},
     "comments": [],
@@ -11505,7 +11505,7 @@
     ]
   },
   "3wW57a": {
-    "translation": "",
+    "translation": "Powerpack no incluido",
     "message": "Powerpack not included",
     "placeholders": {},
     "comments": [],
@@ -11517,7 +11517,7 @@
     ]
   },
   "mnIXIW": {
-    "translation": "",
+    "translation": "Powerpack desbloqueado",
     "message": "Powerpack unlocked",
     "placeholders": {},
     "comments": [],
@@ -11529,7 +11529,7 @@
     ]
   },
   "2N6gpE": {
-    "translation": "",
+    "translation": "¿Prefieres gestionarlo tú? Aloja por tu cuenta la versión de código abierto.",
     "message": "Prefer to run it yourself? Self-host the open-source version.",
     "placeholders": {},
     "comments": [],
@@ -11597,7 +11597,7 @@
     "translation": "Soporte prioritario por correo electrónico"
   },
   "rjGI/Q": {
-    "translation": "",
+    "translation": "Privacidad",
     "message": "Privacy",
     "placeholders": {},
     "comments": [],
@@ -11617,7 +11617,7 @@
     ]
   },
   "EdXVL4": {
-    "translation": "",
+    "translation": "Privacidad y código abierto",
     "message": "Privacy & open source",
     "placeholders": {},
     "comments": [],
@@ -11629,7 +11629,7 @@
     ]
   },
   "qNrctt": {
-    "translation": "",
+    "translation": "Privacidad y datos",
     "message": "Privacy and data",
     "placeholders": {},
     "comments": [],
@@ -11641,7 +11641,7 @@
     ]
   },
   "NKhc8b": {
-    "translation": "",
+    "translation": "Respetuoso con la privacidad",
     "message": "Privacy friendly",
     "placeholders": {},
     "comments": [],
@@ -11678,7 +11678,7 @@
     "translation": "Privado"
   },
   "8L1iAe": {
-    "translation": "",
+    "translation": "Privado por diseño. Abierto por defecto.",
     "message": "Private by design. Open by default.",
     "placeholders": {},
     "comments": [],
@@ -11738,7 +11738,7 @@
     "translation": "Plan Pro ∞"
   },
   "K47k8R": {
-    "translation": "",
+    "translation": "Producto",
     "message": "Product",
     "placeholders": {},
     "comments": [],
@@ -11754,7 +11754,7 @@
     ]
   },
   "ypR8IZ": {
-    "translation": "",
+    "translation": "Diseñador de producto",
     "message": "Product Designer",
     "placeholders": {},
     "comments": [],
@@ -11766,7 +11766,7 @@
     ]
   },
   "dtI+sk": {
-    "translation": "",
+    "translation": "Responsable de producto",
     "message": "Product Manager",
     "placeholders": {},
     "comments": [],
@@ -11869,7 +11869,7 @@
     "obsolete": true
   },
   "z1U/Fh": {
-    "translation": "",
+    "translation": "Valoración",
     "message": "Rating",
     "placeholders": {},
     "comments": [],
@@ -11881,7 +11881,7 @@
     ]
   },
   "WEYdDv": {
-    "translation": "",
+    "translation": "Recomendado",
     "message": "Recommended",
     "placeholders": {},
     "comments": [],
@@ -11906,7 +11906,7 @@
     "obsolete": true
   },
   "RVvaD1": {
-    "translation": "",
+    "translation": "Señal de alerta 🚩",
     "message": "Red flag 🚩",
     "placeholders": {},
     "comments": [],
@@ -11918,7 +11918,7 @@
     ]
   },
   "veQuE7": {
-    "translation": "",
+    "translation": "Recomendación",
     "message": "Referral",
     "placeholders": {},
     "comments": [],
@@ -11942,7 +11942,7 @@
     "translation": "Rechazado"
   },
   "TjpVjX": {
-    "translation": "",
+    "translation": "Recordatorio cuando una oportunidad guardada permanece inactiva demasiado tiempo",
     "message": "Reminder when a saved opportunity sits untouched too long",
     "placeholders": {},
     "comments": [],
@@ -12241,7 +12241,7 @@
     "obsolete": true
   },
   "plkjtw": {
-    "translation": "",
+    "translation": "Revisa correos, comentarios, hitos y cambios de estado en orden cronológico sin perder el contexto.",
     "message": "Review emails, comments, milestones, and status changes in chronological order without losing context.",
     "placeholders": {},
     "comments": [],
@@ -12317,7 +12317,7 @@
     "translation": "Ejecutar en tu propia infraestructura"
   },
   "DYWKVK": {
-    "translation": "",
+    "translation": "Ejecuta la versión base en tu propia infraestructura.",
     "message": "Run the base version on your own infrastructure.",
     "placeholders": {},
     "comments": [],
@@ -12329,7 +12329,7 @@
     ]
   },
   "Vor/+6": {
-    "translation": "",
+    "translation": "Iniciar tutorial",
     "message": "Run tutorial",
     "placeholders": {},
     "comments": [],
@@ -12341,7 +12341,7 @@
     ]
   },
   "ts9QyO": {
-    "translation": "",
+    "translation": "Iniciar tutorial ({0}/{1}) - {2}",
     "message": "Run tutorial ({0}/{1}) - {2}",
     "placeholders": {
       "0": [
@@ -12363,7 +12363,7 @@
     ]
   },
   "bUqwb8": {
-    "translation": "",
+    "translation": "Salario",
     "message": "Salary",
     "placeholders": {},
     "comments": [],
@@ -12379,7 +12379,7 @@
     ]
   },
   "QL0DBn": {
-    "translation": "",
+    "translation": "Información salarial y de la empresa",
     "message": "Salary and company intelligence",
     "placeholders": {},
     "comments": [],
@@ -12391,7 +12391,7 @@
     ]
   },
   "hl/9s9": {
-    "translation": "",
+    "translation": "Información salarial para cada empleo",
     "message": "Salary insights for each job",
     "placeholders": {},
     "comments": [],
@@ -12403,7 +12403,7 @@
     ]
   },
   "3JZqRN": {
-    "translation": "",
+    "translation": "Referencias de percentiles salariales: UE, EE. UU. y globales",
     "message": "Salary percentile benchmarks: EU, US, and global",
     "placeholders": {},
     "comments": [],
@@ -12471,7 +12471,7 @@
     "translation": "Guardar cambios"
   },
   "6iuEof": {
-    "translation": "",
+    "translation": "Guarda empleos con un clic mediante Web Clipper",
     "message": "Save jobs in one click with the browser web clipper",
     "placeholders": {},
     "comments": [],
@@ -12483,7 +12483,7 @@
     ]
   },
   "5CeHf5": {
-    "translation": "",
+    "translation": "Guarda empleos en segundos",
     "message": "Save jobs in seconds",
     "placeholders": {},
     "comments": [],
@@ -12495,7 +12495,7 @@
     ]
   },
   "ANMJkM": {
-    "translation": "",
+    "translation": "Guardar la URL de la oferta",
     "message": "Save the posting URL",
     "placeholders": {},
     "comments": [],
@@ -12519,7 +12519,7 @@
     "translation": "Ahorra tiempo con plantillas de tableros reutilizables."
   },
   "idD8Ev": {
-    "translation": "",
+    "translation": "Guardada",
     "message": "Saved",
     "placeholders": {},
     "comments": [],
@@ -12544,7 +12544,7 @@
     "obsolete": true
   },
   "A1taO8": {
-    "translation": "",
+    "translation": "Buscar",
     "message": "Search",
     "placeholders": {},
     "comments": [],
@@ -12632,7 +12632,7 @@
     "translation": "Seguridad"
   },
   "CK+/RV": {
-    "translation": "",
+    "translation": "Consulta todas las oportunidades activas, en qué estado están y cuáles necesitan atención.",
     "message": "See every active opportunity, where it stands, and what needs attention.",
     "placeholders": {},
     "comments": [],
@@ -12644,7 +12644,7 @@
     ]
   },
   "3LnYaV": {
-    "translation": "",
+    "translation": "Consulta rangos salariales orientativos según el puesto y la ubicación, con comparaciones regionales cuando haya datos disponibles.",
     "message": "See indicative salary ranges based on the role and location, with regional comparisons when data is available.",
     "placeholders": {},
     "comments": [],
@@ -12669,7 +12669,7 @@
     "obsolete": true
   },
   "GuJfYQ": {
-    "translation": "",
+    "translation": "Descubre qué dicen nuestros usuarios sobre shortlistOS",
     "message": "See what our users are saying about shortlistOS",
     "placeholders": {},
     "comments": [],
@@ -12770,7 +12770,7 @@
     "translation": "se autoasignó la tarjeta"
   },
   "PxIz1q": {
-    "translation": "",
+    "translation": "Alojar por tu cuenta la aplicación principal",
     "message": "Self-host the core application",
     "placeholders": {},
     "comments": [],
@@ -12782,7 +12782,7 @@
     ]
   },
   "6JhL+3": {
-    "translation": "",
+    "translation": "Alojamiento propio",
     "message": "Self-hosted",
     "placeholders": {},
     "comments": [],
@@ -12806,7 +12806,7 @@
     "translation": "Enviar comentarios"
   },
   "GxoVwc": {
-    "translation": "",
+    "translation": "Envíame un resumen semanal de todas las oportunidades de esta lista, incluidas las que necesitan atención a continuación.",
     "message": "Send me a weekly summary of every opportunity in this shortlist, including which ones need attention next.",
     "placeholders": {},
     "comments": [],
@@ -12818,7 +12818,7 @@
     ]
   },
   "Qmfwhb": {
-    "translation": "",
+    "translation": "Enviarme un recordatorio por correo",
     "message": "Send me an email reminder",
     "placeholders": {},
     "comments": [],
@@ -12855,7 +12855,7 @@
     "obsolete": true
   },
   "jWj3qv": {
-    "translation": "",
+    "translation": "Ingeniero sénior",
     "message": "Senior Engineer",
     "placeholders": {},
     "comments": [],
@@ -12867,7 +12867,7 @@
     ]
   },
   "UpSnoq": {
-    "translation": "",
+    "translation": "Responsable de producto sénior",
     "message": "Senior Product Manager",
     "placeholders": {},
     "comments": [],
@@ -12879,7 +12879,7 @@
     ]
   },
   "WjldFw": {
-    "translation": "",
+    "translation": "Ingeniero de software sénior",
     "message": "Senior Software Engineer",
     "placeholders": {},
     "comments": [],
@@ -12891,7 +12891,7 @@
     ]
   },
   "VTmyvi": {
-    "translation": "",
+    "translation": "Reputación",
     "message": "Sentiment",
     "placeholders": {},
     "comments": [],
@@ -12931,7 +12931,7 @@
     "translation": "Establecer fecha de vencimiento"
   },
   "1uWOL0": {
-    "translation": "",
+    "translation": "Establecer fecha de entrevista",
     "message": "Set interview date",
     "placeholders": {},
     "comments": [],
@@ -12979,7 +12979,7 @@
     "translation": "estableció la fecha de vencimiento"
   },
   "50hlc6": {
-    "translation": "",
+    "translation": "Configurar los detalles rápidos",
     "message": "Set the quick details",
     "placeholders": {},
     "comments": [],
@@ -13079,7 +13079,7 @@
     "translation": "Configuración | Permisos"
   },
   "4p8lZf": {
-    "translation": "",
+    "translation": "Ajustes | Powerpack",
     "message": "Settings | Powerpack",
     "placeholders": {},
     "comments": [],
@@ -13091,7 +13091,7 @@
     ]
   },
   "MDgEKc": {
-    "translation": "",
+    "translation": "Ajustes | Compra de Powerpack completada",
     "message": "Settings | Powerpack purchase success",
     "placeholders": {},
     "comments": [],
@@ -13139,7 +13139,7 @@
     "translation": "Atajos"
   },
   "pVVH9B": {
-    "translation": "",
+    "translation": "Lista",
     "message": "Shortlist",
     "placeholders": {},
     "comments": [],
@@ -13155,7 +13155,7 @@
     ]
   },
   "9RtyZ4": {
-    "translation": "",
+    "translation": "Lista archivada",
     "message": "Shortlist archived",
     "placeholders": {},
     "comments": [],
@@ -13171,7 +13171,7 @@
     ]
   },
   "AdYYzL": {
-    "translation": "",
+    "translation": "Ajustes de la lista",
     "message": "Shortlist settings",
     "placeholders": {},
     "comments": [],
@@ -13183,7 +13183,7 @@
     ]
   },
   "fT3WcT": {
-    "translation": "",
+    "translation": "Lista desarchivada",
     "message": "Shortlist unarchived",
     "placeholders": {},
     "comments": [],
@@ -13199,7 +13199,7 @@
     ]
   },
   "CFTu/E": {
-    "translation": "",
+    "translation": "shortlistOS",
     "message": "shortlistOS",
     "placeholders": {},
     "comments": [],
@@ -13215,7 +13215,7 @@
     ]
   },
   "954gG7": {
-    "translation": "",
+    "translation": "shortlistOS + Powerpack ⚡",
     "message": "shortlistOS + Powerpack ⚡",
     "placeholders": {},
     "comments": [],
@@ -13227,7 +13227,7 @@
     ]
   },
   "F1bosI": {
-    "translation": "",
+    "translation": "shortlistOS no te rastrea, no vende tus datos ni los bloquea. Exporta tu cuenta cuando quieras, inspecciona el código fuente o ejecuta la aplicación principal por tu cuenta.",
     "message": "shortlistOS does not track you, sell your data, or lock it away. Export your account whenever you want, inspect the source code, or run the core application yourself.",
     "placeholders": {},
     "comments": [],
@@ -13239,7 +13239,7 @@
     ]
   },
   "DeDnzA": {
-    "translation": "",
+    "translation": "shortlistOS es un producto independiente, no una plataforma de contratación, una red publicitaria ni una empresa de crecimiento financiada por capital riesgo.",
     "message": "shortlistOS is an independent product—not a recruitment platform, advertising network, or venture-backed growth company.",
     "placeholders": {},
     "comments": [],
@@ -13251,7 +13251,7 @@
     ]
   },
   "NDyHVE": {
-    "translation": "",
+    "translation": "shortlistOS registra tu búsqueda de empleo.",
     "message": "shortlistOS tracks your job search.",
     "placeholders": {},
     "comments": [],
@@ -13263,7 +13263,7 @@
     ]
   },
   "KZ7QDf": {
-    "translation": "",
+    "translation": "Listas",
     "message": "Shortlists",
     "placeholders": {},
     "comments": [],
@@ -13275,7 +13275,7 @@
     ]
   },
   "wiwkZi": {
-    "translation": "",
+    "translation": "Mostrar solo comentarios",
     "message": "Show only comments",
     "placeholders": {},
     "comments": [],
@@ -13287,7 +13287,7 @@
     ]
   },
   "AJQDmS": {
-    "translation": "",
+    "translation": "Muestra efectos visuales de antigüedad en las tarjetas según su última actividad. Las tarjetas con más de una semana envejecen progresivamente, desde desvanecidas hasta un estilo pergamino.",
     "message": "Show visual aging effects on cards based on last activity. Cards older than 1 week show progressive aging from faded to parchment style.",
     "placeholders": {},
     "comments": [],
@@ -13397,7 +13397,7 @@
     "obsolete": true
   },
   "DLmGUz": {
-    "translation": "",
+    "translation": "Registrarse | shortlistOS",
     "message": "Sign up | shortlistOS",
     "placeholders": {},
     "comments": [],
@@ -13477,7 +13477,7 @@
     "translation": "Gestión de tareas simple y visual que simplemente funciona. Arrastra y suelta tarjetas, colabora con tu equipo y haz más cosas."
   },
   "6Uau97": {
-    "translation": "",
+    "translation": "Omitir",
     "message": "Skip",
     "placeholders": {},
     "comments": [],
@@ -13547,7 +13547,7 @@
     "obsolete": true
   },
   "m0b7v3": {
-    "translation": "",
+    "translation": "Ingeniero de software",
     "message": "Software Engineer",
     "placeholders": {},
     "comments": [],
@@ -13607,7 +13607,7 @@
     "translation": "SSO"
   },
   "lyGt3z": {
-    "translation": "",
+    "translation": "Ingeniero Staff",
     "message": "Staff Engineer",
     "placeholders": {},
     "comments": [],
@@ -13648,7 +13648,7 @@
     "translation": "Iniciar prueba gratuita de 14 días"
   },
   "31VjoK": {
-    "translation": "",
+    "translation": "Iniciar descarga",
     "message": "Start download",
     "placeholders": {},
     "comments": [],
@@ -13660,7 +13660,7 @@
     ]
   },
   "XO628f": {
-    "translation": "",
+    "translation": "Empezar gratis",
     "message": "Start for free",
     "placeholders": {},
     "comments": [],
@@ -13672,7 +13672,7 @@
     ]
   },
   "zXYjjo": {
-    "translation": "",
+    "translation": "Empezar gratis",
     "message": "Start for Free",
     "placeholders": {},
     "comments": [],
@@ -13716,7 +13716,7 @@
     "translation": "Comienza gratis. Actualiza a medida que tu equipo crece. Sin tarifas ocultas, sin contratos."
   },
   "uTL+eP": {
-    "translation": "",
+    "translation": "Empieza con el nombre del puesto. Es el único campo obligatorio, así que puedes guardar una oportunidad rápidamente y completar el resto más tarde.",
     "message": "Start with the role name. This is the only required field, so you can capture an opportunity quickly and fill in the rest later.",
     "placeholders": {},
     "comments": [],
@@ -13744,7 +13744,7 @@
     "translation": "Estado"
   },
   "D47jIC": {
-    "translation": "",
+    "translation": "Mantente al tanto de las oportunidades que han quedado en silencio antes de que se pierdan.",
     "message": "Stay on top of opportunities that have gone quiet before they slip through the cracks.",
     "placeholders": {},
     "comments": [],
@@ -13756,7 +13756,7 @@
     ]
   },
   "mwiMzr": {
-    "translation": "",
+    "translation": "Deja de gestionar tu búsqueda de empleo de memoria.",
     "message": "Stop managing your job search from memory.",
     "placeholders": {},
     "comments": [],
@@ -13768,7 +13768,7 @@
     ]
   },
   "6rDcTN": {
-    "translation": "",
+    "translation": "Stripe no está configurado",
     "message": "Stripe is not configured",
     "placeholders": {},
     "comments": [],
@@ -13780,7 +13780,7 @@
     ]
   },
   "wuz+m1": {
-    "translation": "",
+    "translation": "Atascada en Solicitud enviada",
     "message": "Stuck in Applied",
     "placeholders": {},
     "comments": [],
@@ -13792,7 +13792,7 @@
     ]
   },
   "ynne7y": {
-    "translation": "",
+    "translation": "Atascada en Entrevistas",
     "message": "Stuck in Interviewing",
     "placeholders": {},
     "comments": [],
@@ -13804,7 +13804,7 @@
     ]
   },
   "M+JvBj": {
-    "translation": "",
+    "translation": "Atascada en Negociación",
     "message": "Stuck in Negotiating",
     "placeholders": {},
     "comments": [],
@@ -13816,7 +13816,7 @@
     ]
   },
   "2AONLz": {
-    "translation": "",
+    "translation": "Atascada en Guardada",
     "message": "Stuck in Saved",
     "placeholders": {},
     "comments": [],
@@ -13920,7 +13920,7 @@
     "translation": "Sistema"
   },
   "1pykHm": {
-    "translation": "",
+    "translation": "Las etiquetas del sistema no se pueden renombrar ni eliminar",
     "message": "System labels cannot be renamed or deleted",
     "placeholders": {},
     "comments": [],
@@ -13932,7 +13932,7 @@
     ]
   },
   "GtycJ/": {
-    "translation": "",
+    "translation": "Tareas",
     "message": "Tasks",
     "placeholders": {},
     "comments": [],
@@ -14072,7 +14072,7 @@
     "translation": "Plantillas"
   },
   "4Y5H+g": {
-    "translation": "",
+    "translation": "Términos",
     "message": "Terms",
     "placeholders": {},
     "comments": [],
@@ -14243,7 +14243,7 @@
     "translation": "La contraseña actual que ingresaste es incorrecta."
   },
   "s6db2N": {
-    "translation": "",
+    "translation": "La versión base alojada, sin Powerpack.",
     "message": "The hosted base version, without Powerpack.",
     "placeholders": {},
     "comments": [],
@@ -14268,7 +14268,7 @@
     "obsolete": true
   },
   "Hh6wwO": {
-    "translation": "",
+    "translation": "La principal diferencia entre shortlistOS y Trello es que shortlistOS es de código abierto, por lo que cualquiera puede ver, modificar y contribuir al código. Nuestra oferta en la nube tampoco restringe funciones para uso individual, mientras que Trello bloquea funciones básicas, como el número de tableros, tras un muro de pago.",
     "message": "The main difference between shortlistOS and Trello is that shortlistOS is open source, allowing anyone to view, modify, and contribute to our code. Our cloud offering also offers no restrictions on features for individual use, whereas Trello locks basic features such as the number of boards you can create behind a paywall.",
     "placeholders": {},
     "comments": [],
@@ -14333,7 +14333,7 @@
     "translation": "La página que buscas no existe o ha sido movida."
   },
   "kTh3p3": {
-    "translation": "",
+    "translation": "El Powerpack",
     "message": "The Powerpack",
     "placeholders": {},
     "comments": [],
@@ -14345,7 +14345,7 @@
     ]
   },
   "8HtQHS": {
-    "translation": "",
+    "translation": "Powerpack lo hace por ti.",
     "message": "The Powerpack runs it for you.",
     "placeholders": {},
     "comments": [],
@@ -14357,7 +14357,7 @@
     ]
   },
   "wIYpMk": {
-    "translation": "",
+    "translation": "La lista se ha archivado.",
     "message": "The shortlist has been archived.",
     "placeholders": {},
     "comments": [],
@@ -14373,7 +14373,7 @@
     ]
   },
   "/FUmKE": {
-    "translation": "",
+    "translation": "La lista se ha desarchivado.",
     "message": "The shortlist has been unarchived.",
     "placeholders": {},
     "comments": [],
@@ -14385,7 +14385,7 @@
     ]
   },
   "7ztkgY": {
-    "translation": "",
+    "translation": "La lista vuelve a estar activa.",
     "message": "The shortlist is active again.",
     "placeholders": {},
     "comments": [],
@@ -14397,7 +14397,7 @@
     ]
   },
   "DgnW0o": {
-    "translation": "",
+    "translation": "La URL también es opcional. Añádela cuando la tengas para poder volver siempre a la oferta original.",
     "message": "The URL is optional too. Paste it when you have it, so you can always get back to the original opening.",
     "placeholders": {},
     "comments": [],
@@ -14437,7 +14437,7 @@
     "translation": "Tema"
   },
   "cia8Zo": {
-    "translation": "",
+    "translation": "No hay anuncios, venta de datos ni incentivos para mantenerte buscando empleo más tiempo del necesario. El objetivo es simple: facilitar tu búsqueda, respetar tu privacidad y no estorbar.",
     "message": "There are no ads, no data sales, and no incentive to keep you job hunting longer than necessary. The goal is simple: make your search easier, respect your privacy, and get out of the way.",
     "placeholders": {},
     "comments": [],
@@ -14549,7 +14549,7 @@
     "translation": "Los permisos de este miembro se han restablecido a los valores predeterminados de su rol."
   },
   "r4u0Nz": {
-    "translation": "",
+    "translation": "Esta fila permite elegir el estado de la oportunidad, las etiquetas, la fecha de entrevista y dónde debe quedar la tarjeta en la columna (arriba o abajo).",
     "message": "This row lets you choose the opportunity status, labels, interview date, and where in the column the card should land (up or down).",
     "placeholders": {},
     "comments": [],
@@ -14682,7 +14682,7 @@
     "obsolete": true
   },
   "cklVjM": {
-    "translation": "",
+    "translation": "Cronología",
     "message": "Timeline",
     "placeholders": {},
     "comments": [],
@@ -14718,7 +14718,7 @@
     "translation": "Título (opcional)"
   },
   "dMtLDE": {
-    "translation": "",
+    "translation": "a",
     "message": "to",
     "placeholders": {},
     "comments": [],
@@ -14783,7 +14783,7 @@
     "translation": "Rastrea todos los cambios de tarjetas con un historial de actividad detallado."
   },
   "GW7trc": {
-    "translation": "",
+    "translation": "Registra cada oportunidad, correo, entrevista programada y seguimiento en un espacio privado. Consigue Powerpack para automatizar tu búsqueda.",
     "message": "Track every opportunity, email, scheduled interview, and follow-up in one private workspace. Get the Powerpack to automate your search.",
     "placeholders": {},
     "comments": [],
@@ -14795,7 +14795,7 @@
     ]
   },
   "vMxWEv": {
-    "translation": "",
+    "translation": "Seguir el recorrido",
     "message": "Track the journey",
     "placeholders": {},
     "comments": [],
@@ -14872,7 +14872,7 @@
     "translation": "Confiado por equipos ágiles<0/>de todo el mundo"
   },
   "iES1Cc": {
-    "translation": "",
+    "translation": "Convierte correos de empleo en oportunidades organizadas",
     "message": "Turn job emails into organized opportunities",
     "placeholders": {},
     "comments": [],
@@ -14920,7 +14920,7 @@
     "translation": "No se pudo agregar la etiqueta"
   },
   "qfofyV": {
-    "translation": "",
+    "translation": "No se pudo archivar la lista",
     "message": "Unable to archive shortlist",
     "placeholders": {},
     "comments": [],
@@ -14944,7 +14944,7 @@
     "translation": "No se pudieron borrar las anulaciones"
   },
   "vBbEyP": {
-    "translation": "",
+    "translation": "No se pudo copiar la dirección",
     "message": "Unable to copy address",
     "placeholders": {},
     "comments": [],
@@ -15157,7 +15157,7 @@
     "translation": "No se puede duplicar la tarjeta"
   },
   "/eLxUu": {
-    "translation": "",
+    "translation": "No se pudo duplicar la oportunidad",
     "message": "Unable to duplicate opportunity",
     "placeholders": {},
     "comments": [],
@@ -15241,7 +15241,7 @@
     "translation": "No se pudo iniciar el proceso de pago"
   },
   "qr3zG6": {
-    "translation": "",
+    "translation": "No se puede iniciar el pago ahora mismo. Inténtalo de nuevo.",
     "message": "Unable to start checkout right now. Please try again.",
     "placeholders": {},
     "comments": [],
@@ -15269,7 +15269,7 @@
     "translation": "No se pudo probar el webhook"
   },
   "QPhuIV": {
-    "translation": "",
+    "translation": "No se pudo desarchivar la lista",
     "message": "Unable to unarchive shortlist",
     "placeholders": {},
     "comments": [],
@@ -15373,7 +15373,7 @@
     "translation": "No se pudo actualizar el comentario"
   },
   "+GCmCX": {
-    "translation": "",
+    "translation": "No se pudieron actualizar los detalles",
     "message": "Unable to update details",
     "placeholders": {},
     "comments": [],
@@ -15465,7 +15465,7 @@
     "translation": "No se pudo actualizar el rol"
   },
   "AVKlvo": {
-    "translation": "",
+    "translation": "No se pudo actualizar la lista",
     "message": "Unable to update shortlist",
     "placeholders": {},
     "comments": [],
@@ -15502,7 +15502,7 @@
     "obsolete": true
   },
   "h+CEO5": {
-    "translation": "",
+    "translation": "Desarchivar lista",
     "message": "Unarchive shortlist",
     "placeholders": {},
     "comments": [],
@@ -15522,7 +15522,7 @@
     ]
   },
   "VEOEj4": {
-    "translation": "",
+    "translation": "Desarchiva esta lista para devolverla a tus listas activas. Podrás volver a editarla.",
     "message": "Unarchive this shortlist to return it to your active shortlists. You will be able to edit it again.",
     "placeholders": {},
     "comments": [],
@@ -15575,7 +15575,7 @@
     "obsolete": true
   },
   "rtir7c": {
-    "translation": "",
+    "translation": "desconocido",
     "message": "unknown",
     "placeholders": {},
     "comments": [],
@@ -15755,7 +15755,7 @@
     "translation": "Miembros ilimitados y un nombre de usuario personalizado para el espacio de trabajo para equipos listos para escalar."
   },
   "2g/e+E": {
-    "translation": "",
+    "translation": "Oportunidades ilimitadas",
     "message": "Unlimited opportunities",
     "placeholders": {},
     "comments": [],
@@ -15767,7 +15767,7 @@
     ]
   },
   "YHnSBW": {
-    "translation": "",
+    "translation": "Oportunidades ilimitadas por lista",
     "message": "Unlimited opportunities per shortlist",
     "placeholders": {},
     "comments": [],
@@ -15803,7 +15803,7 @@
     "translation": "Plazas ilimitadas y funciones avanzadas para equipos en crecimiento."
   },
   "9eO11b": {
-    "translation": "",
+    "translation": "Listas ilimitadas",
     "message": "Unlimited shortlists",
     "placeholders": {},
     "comments": [],
@@ -15875,7 +15875,7 @@
     "translation": "Actualizar etiqueta"
   },
   "YAL5oD": {
-    "translation": "",
+    "translation": "actualizó <0>{0}</0> de <1>{1}</1> a <2>{2}</2>",
     "message": "updated <0>{0}</0> from <1>{1}</1> to <2>{2}</2>",
     "placeholders": {
       "0": [
@@ -15909,7 +15909,7 @@
     "translation": "actualizó un elemento de la lista de verificación"
   },
   "73u16o": {
-    "translation": "",
+    "translation": "actualizó un comentario",
     "message": "updated a comment",
     "placeholders": {},
     "comments": [],
@@ -15921,7 +15921,7 @@
     ]
   },
   "qlSHKI": {
-    "translation": "",
+    "translation": "actualizó un campo personalizado",
     "message": "updated a custom field",
     "placeholders": {},
     "comments": [],
@@ -16001,7 +16001,7 @@
     "translation": "Actualizar"
   },
   "IURrEe": {
-    "translation": "",
+    "translation": "Mejorar ahora",
     "message": "Upgrade now",
     "placeholders": {},
     "comments": [],
@@ -16037,7 +16037,7 @@
     "translation": "Actualizar a Pro ($29/mes)"
   },
   "VHmXZm": {
-    "translation": "",
+    "translation": "Subir archivo adjunto",
     "message": "Upload attachment",
     "placeholders": {},
     "comments": [],
@@ -16154,7 +16154,7 @@
     "translation": "La URL debe tener al menos 3 caracteres"
   },
   "XG6hC+": {
-    "translation": "",
+    "translation": "Usa shortlistOS a tu manera.",
     "message": "Use shortlistOS your way.",
     "placeholders": {},
     "comments": [],
@@ -16178,7 +16178,7 @@
     "translation": "Usar plantilla"
   },
   "meAc5m": {
-    "translation": "",
+    "translation": "Usa el Web Clipper del navegador en una oferta de empleo. shortlistOS extrae los datos importantes y crea una oportunidad completa.",
     "message": "Use the browser clipper on a job posting. shortlistOS extracts the important details and creates a complete opportunity for you.",
     "placeholders": {},
     "comments": [],
@@ -16190,7 +16190,7 @@
     ]
   },
   "yCzs4j": {
-    "translation": "",
+    "translation": "Usa este botón cuando encuentres un empleo que merezca la pena seguir, incluso antes de solicitarlo.",
     "message": "Use this button whenever you find a job worth tracking, even before you apply.",
     "placeholders": {},
     "comments": [],
@@ -16287,7 +16287,7 @@
     "translation": "Ver documentación"
   },
   "hy6L14": {
-    "translation": "",
+    "translation": "Ver en GitHub",
     "message": "View on GitHub",
     "placeholders": {},
     "comments": [],
@@ -16359,7 +16359,7 @@
     "translation": "Estamos usando la <0>licencia AGPL-3.0</0>."
   },
   "EwyU9+": {
-    "translation": "",
+    "translation": "No pudimos preparar tu exportación. Inténtalo de nuevo más tarde.",
     "message": "We couldn't prepare your export. Please try again later.",
     "placeholders": {},
     "comments": [],
@@ -16411,7 +16411,7 @@
     "translation": "Apenas estamos empezando."
   },
   "eMF27I": {
-    "translation": "",
+    "translation": "Web Clipper",
     "message": "Web Clipper",
     "placeholders": {},
     "comments": [],
@@ -16575,7 +16575,7 @@
     "translation": "Día de inicio de semana"
   },
   "SXLuHT": {
-    "translation": "",
+    "translation": "Resumen semanal",
     "message": "Weekly digest",
     "placeholders": {},
     "comments": [],
@@ -16591,7 +16591,7 @@
     ]
   },
   "DBzbJU": {
-    "translation": "",
+    "translation": "Resumen semanal: qué requiere tu atención ahora",
     "message": "Weekly digest: what needs your attention right now",
     "placeholders": {},
     "comments": [],
@@ -16615,7 +16615,7 @@
     "translation": "Bienvenido de nuevo"
   },
   "6YVTZi": {
-    "translation": "",
+    "translation": "¿Qué añade Powerpack?",
     "message": "What does Powerpack add?",
     "placeholders": {},
     "comments": [],
@@ -16627,7 +16627,7 @@
     ]
   },
   "h71dyi": {
-    "translation": "",
+    "translation": "¿Qué ocurre cuando caduca Powerpack?",
     "message": "What happens when Powerpack expires?",
     "placeholders": {},
     "comments": [],
@@ -16664,7 +16664,7 @@
     "obsolete": true
   },
   "/L7p0S": {
-    "translation": "",
+    "translation": "¿Cuál es la diferencia entre shortlistOS y Trello?",
     "message": "What's the difference between shortlistOS and Trello?",
     "placeholders": {},
     "comments": [],
@@ -16676,7 +16676,7 @@
     ]
   },
   "JBshTl": {
-    "translation": "",
+    "translation": "Cuando está desactivado, la IA y las automatizaciones en segundo plano no pueden editar esta tarjeta.",
     "message": "When off, AI and background automations cannot edit this card.",
     "placeholders": {},
     "comments": [],
@@ -16700,7 +16700,7 @@
     "translation": "Cuando Trello se lanzó en 2011, sorprendió a todos con su simplicidad cuidadosamente diseñada, pero con los años perdió su magia y se convirtió en algo más parecido a \"Jira Lite\". Este proyecto es nuestro intento de recuperar la magia original de la simplicidad de Trello, en código abierto."
   },
   "ga9J3X": {
-    "translation": "",
+    "translation": "Cuando quieras, Powerpack puede automatizar las tareas repetitivas: la IA importa ofertas, Magic Inbox captura respuestas y Web Clipper convierte vacantes en oportunidades estructuradas.",
     "message": "When you are ready, Powerpack can automate the busy parts: AI imports job posts, Magic Inbox captures replies, and the web clipper turns openings into structured opportunities.",
     "placeholders": {},
     "comments": [],
@@ -16712,7 +16712,7 @@
     ]
   },
   "I4uRS0": {
-    "translation": "",
+    "translation": "¿Dónde se alojan mis datos?",
     "message": "Where is my data hosted?",
     "placeholders": {},
     "comments": [],
@@ -16736,7 +16736,7 @@
     "translation": "¿Por qué hacer un Trello de código abierto?"
   },
   "I0D//A": {
-    "translation": "",
+    "translation": "Lista de deseos",
     "message": "Wishlist",
     "placeholders": {},
     "comments": [],
@@ -16748,7 +16748,7 @@
     ]
   },
   "WRBOEH": {
-    "translation": "",
+    "translation": "Retirada",
     "message": "Withdrawn",
     "placeholders": {},
     "comments": [],
@@ -17030,7 +17030,7 @@
     "obsolete": true
   },
   "0gv+T2": {
-    "translation": "",
+    "translation": "X",
     "message": "X",
     "placeholders": {},
     "comments": [],
@@ -17070,7 +17070,7 @@
     "translation": "Sí, ofrecemos un plan gratuito para siempre para uso individual. Sin restricciones, sin muros de pago, sin límites."
   },
   "8fSCmF": {
-    "translation": "",
+    "translation": "Sí. La versión base es completamente gratuita e incluye listas y oportunidades ilimitadas, notas, adjuntos, historial de actividad y exportación de datos. Powerpack es opcional y añade automatización y funciones de IA.",
     "message": "Yes. The base version is completely free, including unlimited shortlists, unlimited opportunities, notes, attachments, activity history, and data export. Powerpack is optional and adds automation and AI features.",
     "placeholders": {},
     "comments": [],
@@ -17082,7 +17082,7 @@
     ]
   },
   "hgWOPx": {
-    "translation": "",
+    "translation": "Sí. El núcleo de código abierto se puede instalar y ejecutar en tu propia infraestructura siguiendo las instrucciones de GitHub. Tú te encargas del alojamiento, la configuración, las actualizaciones y las copias de seguridad.",
     "message": "Yes. The open-source core can be installed and run on your own infrastructure using the instructions on GitHub. You are responsible for hosting, configuration, updates, and backups.",
     "placeholders": {},
     "comments": [],
@@ -17094,7 +17094,7 @@
     ]
   },
   "u5vPOy": {
-    "translation": "",
+    "translation": "Sí. Puedes exportar tu cuenta completa como archivo JSON en cualquier momento.",
     "message": "Yes. You can export your complete account as a JSON file at any time.",
     "placeholders": {},
     "comments": [],
@@ -17118,7 +17118,7 @@
     "translation": "Estás a punto de cambiar tu contraseña."
   },
   "//WVYK": {
-    "translation": "",
+    "translation": "Actualmente disfrutas de toda la potencia de Powerpack y seguirás haciéndolo durante {remainingPowerpackTime}.",
     "message": "You are currently enjoying the full power of the Powerpack, and will continue to enjoy it for another {remainingPowerpackTime}.",
     "placeholders": {
       "remainingPowerpackTime": [
@@ -17146,7 +17146,7 @@
     "translation": "Siempre puedes cambiar esto más tarde en la configuración."
   },
   "9/xkXH": {
-    "translation": "",
+    "translation": "Puedes obtener una URL personalizada para tu espacio, como <0>app.shortlistos.co/kan</0>, desde los <1>ajustes del espacio de trabajo</1> al comprar una suscripción Pro. Todas las suscripciones ayudan a financiar el desarrollo del proyecto.",
     "message": "You can get a custom workspace URL, like <0>app.shortlistos.co/kan</0>, by going into your <1>workspace settings</1> and purchasing a pro workspace subscription. All subscriptions help fund the development of the project!",
     "placeholders": {},
     "comments": [],
@@ -17183,7 +17183,7 @@
     "translation": "Puedes invitar a miembros del equipo haciendo clic en el botón \"Invitar\" en la esquina superior derecha de la <0>página de miembros</0> e ingresando su dirección de correo electrónico. Recibirán un correo con un enlace para unirse al espacio de trabajo."
   },
   "2KfAnz": {
-    "translation": "",
+    "translation": "Puedes mantener el nombre sugerido o cambiarlo por el que mejor encaje con tu búsqueda.",
     "message": "You can keep the suggested name, or change it to whatever fits your job search.",
     "placeholders": {},
     "comments": [],
@@ -17296,7 +17296,7 @@
     "obsolete": true
   },
   "zkIwjm": {
-    "translation": "",
+    "translation": "Tú gestionas la instalación, las actualizaciones y las copias de seguridad",
     "message": "You manage setup, updates, backups",
     "placeholders": {},
     "comments": [],
@@ -17332,7 +17332,7 @@
     "translation": "Iniciaste sesión sin contraseña. Establece una contraseña para habilitar el inicio de sesión con contraseña."
   },
   "U3mLhz": {
-    "translation": "",
+    "translation": "¡Todo listo! Tu cuenta ya tiene las funciones de Powerpack activadas.",
     "message": "You're all set! Your account now has Powerpack features enabled and ready to go.",
     "placeholders": {},
     "comments": [],
@@ -17357,7 +17357,7 @@
     "obsolete": true
   },
   "k0DfC4": {
-    "translation": "",
+    "translation": "Te han invitado a unirte a un espacio de trabajo en shortlistOS.",
     "message": "You've been invited to join a workspace on shortlistOS.",
     "placeholders": {},
     "comments": [],
@@ -17421,7 +17421,7 @@
     "translation": "Tu cuenta ha sido eliminada."
   },
   "T6QONo": {
-    "translation": "",
+    "translation": "Tu cuenta, oportunidades, notas y archivos siguen disponibles. Tu cuenta vuelve a la versión base y las funciones de Powerpack se detienen hasta que lo actives de nuevo.",
     "message": "Your account, opportunities, notes, and files remain available. Your account returns to the base version, and Powerpack features stop until you activate it again.",
     "placeholders": {},
     "comments": [],
@@ -17457,7 +17457,7 @@
     "translation": "Tus tableros han sido importados."
   },
   "ZVlBre": {
-    "translation": "",
+    "translation": "Tus datos nunca se venden",
     "message": "Your data is never sold",
     "placeholders": {},
     "comments": [],
@@ -17481,7 +17481,7 @@
     "translation": "Tu nombre para mostrar ha sido actualizado."
   },
   "N474EJ": {
-    "translation": "",
+    "translation": "Toda tu búsqueda de empleo en un solo lugar.",
     "message": "Your entire job search in one place.",
     "placeholders": {},
     "comments": [],
@@ -17541,7 +17541,7 @@
     "translation": "Tu cuenta de GitHub está conectada."
   },
   "CjPaSp": {
-    "translation": "",
+    "translation": "Tu búsqueda de empleo de un vistazo",
     "message": "Your job search at a glance",
     "placeholders": {},
     "comments": [],
@@ -17577,7 +17577,7 @@
     "translation": "Su licencia no está activa. Por favor, revise su cuenta."
   },
   "lmPDxB": {
-    "translation": "",
+    "translation": "Tu propio alojamiento y base de datos",
     "message": "Your own hosting and database",
     "placeholders": {},
     "comments": [],
@@ -17637,7 +17637,7 @@
     "translation": "Tus proyectos han sido importados."
   },
   "GiVVN9": {
-    "translation": "",
+    "translation": "Ha comenzado la descarga de tu exportación de datos de shortlistOS.",
     "message": "Your shortlistOS data export has started downloading.",
     "placeholders": {},
     "comments": [],
@@ -17685,7 +17685,7 @@
     "translation": "Tu enlace de cancelación de suscripción no tiene un token. Por favor, abre el último correo electrónico e inténtalo de nuevo."
   },
   "WGHL0m": {
-    "translation": "",
+    "translation": "Toda tu búsqueda de un vistazo",
     "message": "Your whole search at a glance",
     "placeholders": {},
     "comments": [],
