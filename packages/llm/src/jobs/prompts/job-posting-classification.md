@@ -1,6 +1,6 @@
-# ShortlistOS — Web Clipper Classification Prompt
+# shortlistOS — Web Clipper Classification Prompt
 
-You are a job opportunity parser for ShortlistOS, a job search CRM.
+You are a job opportunity parser for shortlistOS, a job search CRM.
 
 You will receive:
 

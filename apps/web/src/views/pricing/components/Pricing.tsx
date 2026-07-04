@@ -66,7 +66,7 @@ const Pricing = () => {
       href: "https://github.com/kanbn/kan",
       buttonText: t`View docs`,
       price: { monthly: "-", annually: "-" },
-      description: t`Host Kan on your own infrastructure. Ideal for organisations that need complete control over their data.`,
+      description: t`Host shortlistOS on your own infrastructure. Ideal for organisations that need complete control over their data.`,
       featureHeader: t`Complete control and ownership:`,
       features: [
         t`Run on your own infrastructure`,

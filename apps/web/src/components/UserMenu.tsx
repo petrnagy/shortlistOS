@@ -238,7 +238,7 @@ export default function UserMenu({
               )}
               <Menu.Item>
                 <Link
-                  href="mailto:support@kan.bn"
+                  href="mailto:support@shortlistos.co"
                   target="_blank"
                   rel="noreferrer"
                   onClick={handleLinkClick}
@@ -249,7 +249,7 @@ export default function UserMenu({
               </Menu.Item>
               <Menu.Item>
                 <Link
-                  href="https://docs.kan.bn"
+                  href="https://docs.shortlistos.co"
                   target="_blank"
                   rel="noreferrer"
                   onClick={handleLinkClick}

@@ -114,9 +114,9 @@ const Testimonials = () => {
       rowSpan: 2,
       text: (
         <>
-          The interesting thing about signing into Kan for the first time is
-          that it feels new and electrifying—and yet simultaneously quite
-          familiar, especially if you’ve spent any time in Trello over the
+          The interesting thing about signing into shortlistOS for the first
+          time is that it feels new and electrifying—and yet simultaneously
+          quite familiar, especially if you’ve spent any time in Trello over the
           years.
           <br />
           <br />
@@ -125,7 +125,7 @@ const Testimonials = () => {
           revelation to use.
           <br />
           <br />
-          At its core, Kan gives you a super-minimalist and frills-free
+          At its core, shortlistOS gives you a super-minimalist and frills-free
           Trello-style Kanban board. And the extent to which it has been able to
           build upon the original Trello vision is staggering.
         </>
@@ -236,7 +236,7 @@ const Testimonials = () => {
           {t`Loved by teams worldwide`}
         </p>
         <p className="text-md lg:text-md mt-3 max-w-[500px] text-center text-light-950 dark:text-dark-900">
-          {t`See what our users are saying about Kan`}
+          {t`See what our users are saying about shortlistOS`}
         </p>
 
         <div className="mx-auto mt-16 w-full max-w-7xl">

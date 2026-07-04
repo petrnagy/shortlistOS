@@ -94,14 +94,14 @@ export default function FeedbackModal() {
           <p>
             {t`Need help?`}{" "}
             <Link
-              href="mailto:support@kan.bn"
+              href="mailto:support@shortlistos.co"
               className="text-blue-600 underline dark:text-blue-300"
             >
               {t`Contact us`}
             </Link>
             {t`, or see our`}{" "}
             <Link
-              href="https://docs.kan.bn"
+              href="https://docs.shortlistos.co"
               target="_blank"
               rel="noreferrer"
               className="text-blue-600 underline dark:text-blue-300"

@@ -31,10 +31,10 @@ const Faqs = () => {
       ),
     },
     {
-      question: t`What's the difference between Kan and Trello?`,
+      question: t`What's the difference between shortlistOS and Trello?`,
       answer: (
         <Text>
-          {t`The main difference between Kan and Trello is that Kan is open source, allowing anyone to view, modify, and contribute to our code. Our cloud offering also offers no restrictions on features for individual use, whereas Trello locks basic features such as the number of boards you can create behind a paywall.`}
+          {t`The main difference between shortlistOS and Trello is that shortlistOS is open source, allowing anyone to view, modify, and contribute to our code. Our cloud offering also offers no restrictions on features for individual use, whereas Trello locks basic features such as the number of boards you can create behind a paywall.`}
         </Text>
       ),
     },
@@ -51,10 +51,10 @@ const Faqs = () => {
       answer: (
         <Text>
           <Trans>
-            Importing your Trello boards into Kan is easy. You can follow our
-            step-by-step guide{" "}
+            Importing your Trello boards into shortlistOS is easy. You can
+            follow our step-by-step guide{" "}
             <Link
-              href="https://docs.kan.bn/imports/trello"
+              href="https://docs.shortlistos.co/imports/trello"
               className="underline"
             >
               here
@@ -70,11 +70,14 @@ const Faqs = () => {
         <Text>
           <Trans>
             You can get a custom workspace URL, like{" "}
-            <Link href="https://kan.bn/kan" className="underline">
-              kan.bn/kan
+            <Link href="https://app.shortlistos.co/kan" className="underline">
+              app.shortlistos.co/kan
             </Link>
             , by going into your{" "}
-            <Link href="https://kan.bn/settings" className="underline">
+            <Link
+              href="https://app.shortlistos.co/settings"
+              className="underline"
+            >
               workspace settings
             </Link>{" "}
             and purchasing a pro workspace subscription. All subscriptions help
@@ -115,7 +118,10 @@ const Faqs = () => {
           <Trans>
             You can invite team members by clicking the "Invite" button in the
             top right corner of the{" "}
-            <Link href="https://kan.bn/members" className="underline">
+            <Link
+              href="https://app.shortlistos.co/members"
+              className="underline"
+            >
               members page
             </Link>{" "}
             and entering their email address. They will receive an email with a
@@ -130,10 +136,7 @@ const Faqs = () => {
         <Text>
           <Trans>
             You can self-host by following the instructions in our{" "}
-            <Link
-              href={githubUrl}
-              className="underline"
-            >
+            <Link href={githubUrl} className="underline">
               repo
             </Link>
             .
@@ -155,9 +158,9 @@ const Faqs = () => {
         </p>
         <p className="text lg:text-md mt-3 max-w-[500px] text-center text-light-950 dark:text-dark-900">
           <Trans>
-            Find answers to common questions about Kan. Can't find what you're
-            looking for? Feel free to{" "}
-            <Link href="mailto:support@kan.bn" className="underline">
+            Find answers to common questions about shortlistOS. Can't find what
+            you're looking for? Feel free to{" "}
+            <Link href="mailto:support@shortlistos.co" className="underline">
               contact us
             </Link>
             .

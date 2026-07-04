@@ -31,7 +31,7 @@ export default function PricingView() {
 
   return (
     <Layout>
-      <PageHead title={`${t`Pricing`} | kan.bn`} />
+      <PageHead title={`${t`Pricing`} | shortlistOS`} />
 
       <div className="flex h-full w-full flex-col lg:pt-[5rem]">
         <div className="w-full pb-10 pt-32">
@@ -59,8 +59,6 @@ export default function PricingView() {
         </div>
 
         <div className="pb-22 flex flex-col items-center justify-center px-4">
-        
-
           <div className="mt-10 w-full">
             <FeatureComparisonTable
               frequencyValue={frequency?.value ?? "annually"}
