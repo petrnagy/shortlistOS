@@ -1,73 +1,50 @@
 import { t } from "@lingui/core/macro";
-import { useTheme } from "next-themes";
-import { useState } from "react";
 
-import Button from "~/components/Button";
 import { PageHead } from "~/components/PageHead";
-import Cta from "../home/components/Cta";
 import Layout from "../home/components/Layout";
-import Logos from "../home/components/Logos";
-import FeatureComparisonTable from "./components/FeatureComparisonTable";
-import PricingTiers from "./components/PricingTiers";
-
-type FrequencyValue = "monthly" | "annually";
+import { FeatureComparisonTable } from "./components/FeatureComparisonTable";
+import { getPricingPlans, PricingCards } from "./components/PricingCards";
 
 export default function PricingView() {
-  const { resolvedTheme } = useTheme();
-  const frequencies = [
-    {
-      value: "monthly" as FrequencyValue,
-      label: t`Monthly`,
-      priceSuffix: t`per user/month`,
-    },
-    {
-      value: "annually" as FrequencyValue,
-      label: t`Yearly`,
-      priceSuffix: t`per user/month`,
-    },
-  ];
-
-  const [frequency, setFrequency] = useState(frequencies[1]);
+  const pricingPlans = getPricingPlans();
 
   return (
     <Layout>
-      <PageHead title={`${t`Pricing`} | shortlistOS`} />
-
-      <div className="flex h-full w-full flex-col lg:pt-[5rem]">
-        <div className="w-full pb-10 pt-32">
-          <div className="flex flex-col items-center justify-center px-4 pb-10">
-            <div className="flex items-center gap-2 rounded-full border bg-light-50 px-4 py-1 text-center text-xs text-light-1000 dark:border-dark-300 dark:bg-dark-50 dark:text-dark-900 lg:text-sm">
-              <p>{t`Pricing`}</p>
+      <PageHead title={t`Pricing | shortlistOS`} />
+      <div className="mb-20">
+        <section id="pricing" className="scroll-mt-20 px-4 pb-14 pt-28">
+          <div className="mx-auto max-w-[980px]">
+            <div className="mx-auto max-w-[680px] text-center">
+              <p className="bg-brand-600 inline-flex rounded-full px-3 py-1 text-sm font-semibold text-white">
+                {t`Pricing`}
+              </p>
+              <h1 className="mt-3 text-3xl font-bold leading-[1.35] text-light-1000 dark:text-dark-1000 md:text-4xl">
+                {t`Use shortlistOS your way.`}
+              </h1>
+              <p className="mt-4 text-base leading-[1.95rem] text-light-950 dark:text-dark-900">
+                {t`Choose Powerpack for automation, use the full workspace for free, or self-host the open-source core.`}
+              </p>
             </div>
 
-            <p className="mt-4 text-center text-3xl font-bold text-light-1000 dark:text-dark-1000 lg:text-5xl">
-              {t`Simple pricing`}
-            </p>
-            <p className="text:md lg:text-md mt-6 max-w-[300px] text-center text-light-950 dark:text-dark-900">
-              {t`Start free. Upgrade as your team grows. No hidden fees, no contracts.`}
-            </p>
+            <div className="mt-10">
+              <PricingCards plans={pricingPlans} />
+            </div>
           </div>
-          <PricingTiers
-            frequency={frequency}
-            frequencies={frequencies}
-            setFrequency={setFrequency}
-          />
-        </div>
+        </section>
 
-        <div className="pb-20">
-          <Logos />
-        </div>
-
-        <div className="pb-22 flex flex-col items-center justify-center px-4">
-          <div className="mt-10 w-full">
-            <FeatureComparisonTable
-              frequencyValue={frequency?.value ?? "annually"}
-            />
+        <section id="compare-features" className="scroll-mt-24 px-4 py-14">
+          <div className="mx-auto max-w-[980px]">
+            <div className="mx-auto mb-8 max-w-[680px] text-center">
+              <h2 className="text-3xl font-bold leading-[1.35] text-light-1000 dark:text-dark-1000 md:text-4xl">
+                {t`Compare features`}
+              </h2>
+              <p className="mt-4 text-base leading-[1.95rem] text-light-950 dark:text-dark-900">
+                {t`See what is included in the free base version and what Powerpack adds for automation, reminders, salary insight, and company research.`}
+              </p>
+            </div>
+            <FeatureComparisonTable />
           </div>
-        </div>
-        <div className="relative">
-          <Cta theme={resolvedTheme ?? "light"} />
-        </div>
+        </section>
       </div>
     </Layout>
   );

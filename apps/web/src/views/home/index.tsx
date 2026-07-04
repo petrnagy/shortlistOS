@@ -12,7 +12,6 @@ import {
   FaGithub,
   FaGlobeEurope,
   FaHistory,
-  FaInfoCircle,
   FaLink,
   FaLock,
   FaShieldAlt,
@@ -26,8 +25,12 @@ import {
 import { HiMiniMinusSmall, HiMiniPlusSmall } from "react-icons/hi2";
 
 import { PageHead } from "~/components/PageHead";
-import { Tooltip } from "~/components/Tooltip";
 import { env } from "~/env";
+import {
+  getPricingPlans,
+  PricingCards,
+  type PricingPlan,
+} from "../pricing/components/PricingCards";
 import Layout from "./components/Layout";
 
 const primaryCta = t`Get the Powerpack`;
@@ -98,69 +101,7 @@ export default function HomeView() {
     },
   ];
 
-  const pricingPlans = [
-    {
-      title: t`Powerpack`,
-      price: t`$29`,
-      detail: t`One-time payment`,
-      cta: primaryCta,
-      href: powerpackSignupHref,
-      featured: true,
-      badge: t`Recommended`,
-      items: [
-        {
-          label: t`Magic Inbox`,
-          info: t`Email jobs and job updates to your account. Magic Inbox AI will automatically create or update your job opportunities.`,
-        },
-        {
-          label: t`Job posting Web Clipper`,
-          info: t`Grab any interesting job opening on the internet, and send it to your shortlist without manually copy-pasting anything.`,
-        },
-        { label: t`Company online sentiment` },
-        { label: t`Salary insights for each job` },
-        { label: t`Automatic reminders and nudges` },
-        {
-          label: t`Google calendar`,
-          info: t`Automatic feed you can import into your Google or Outlook calendar to keep track of upcoming interviews or follow-ups.`,
-        },
-        { label: t`Weekly digest` },
-      ],
-    },
-    {
-      title: t`Free`,
-      price: t`$0`,
-      detail: t`forever`,
-      description: t`The hosted base version, without Powerpack.`,
-      cta: t`Start for free`,
-      href: "/signup",
-      featured: false,
-      items: [
-        { label: t`Unlimited shortlists` },
-        { label: t`Unlimited opportunities` },
-        { label: t`Job-search pipeline` },
-        { label: t`Notes and attachments` },
-        { label: t`Activity history` },
-        { label: t`Full data export` },
-      ],
-    },
-    {
-      title: t`Self-hosted`,
-      price: t`Open source`,
-      description: t`Run the base version on your own infrastructure.`,
-      cta: t`View on GitHub`,
-      href: githubUrl,
-      compactPrice: true,
-      featured: false,
-      items: [
-        { label: t`Full source code` },
-        { label: t`Your own hosting and database` },
-        { label: t`Full control over your data` },
-        { label: t`No hosted account required` },
-        { label: t`You manage setup, updates, backups` },
-        { label: t`Powerpack not included` },
-      ],
-    },
-  ];
+  const pricingPlans = getPricingPlans();
 
   const faqs = [
     {
@@ -430,22 +371,7 @@ function ProductPreview() {
 function PricingSection({
   plans,
 }: {
-  plans: {
-    title: string;
-    price: string;
-    detail?: string;
-    description?: string;
-    cta: string;
-    href: string;
-    featured: boolean;
-    compactPrice?: boolean;
-    badge?: string;
-    note?: string;
-    items: {
-      label: string;
-      info?: string;
-    }[];
-  }[];
+  plans: PricingPlan[];
 }) {
   return (
     <Section
@@ -454,84 +380,14 @@ function PricingSection({
       title={t`Use shortlistOS your way.`}
       description={t`Choose Powerpack for automation, use the full workspace for free, or self-host the open-source core.`}
     >
-      <div className="grid gap-5 lg:grid-cols-3">
-        {plans.map((plan) => (
-          <div
-            key={plan.title}
-            className={`relative flex min-h-[420px] flex-col rounded-2xl border p-6 shadow-sm ${
-              plan.featured
-                ? "border-brand-300 dark:border-brand-500/50 bg-light-50 shadow-[0_16px_50px_rgba(124,58,237,0.18)] dark:bg-dark-100"
-                : "border-light-300 bg-light-50 dark:border-dark-300 dark:bg-dark-100"
-            }`}
-          >
-            <div className="flex items-center justify-between gap-3">
-              <h3 className="text-xl font-bold text-light-1000 dark:text-dark-1000">
-                {plan.title}
-              </h3>
-              {plan.badge && (
-                <span className="bg-brand-100 text-brand-700 dark:bg-brand-500/15 dark:text-brand-300 rounded-full px-3 py-1 text-xs font-semibold">
-                  {plan.badge}
-                </span>
-              )}
-            </div>
-            <div className="mt-5 flex flex-wrap items-end gap-x-2 gap-y-1">
-              <span
-                className={`font-bold leading-[1.1] text-light-1000 dark:text-dark-1000 ${
-                  plan.compactPrice ? "text-3xl" : "text-4xl"
-                }`}
-              >
-                {plan.price}
-              </span>
-              {plan.detail ? (
-                <span className="pb-1 text-sm leading-[1.55] text-light-900 dark:text-dark-800">
-                  {plan.detail}
-                </span>
-              ) : null}
-            </div>
-            {plan.description ? (
-              <p className="mt-4 text-sm leading-[1.65] text-light-900 dark:text-dark-800">
-                {plan.description}
-              </p>
-            ) : null}
-            <ul className="mt-6 space-y-3 pb-6">
-              {plan.items.map((item) => (
-                <li
-                  key={item.label}
-                  className="flex gap-3 text-sm leading-[1.55rem] text-light-950 dark:text-dark-900"
-                >
-                  <FaCheck className="mt-0.5 h-3.5 w-3.5 shrink-0 text-emerald-600 dark:text-emerald-300" />
-                  <span className="inline-flex items-center gap-1.5">
-                    {item.label}
-                    {item.info ? (
-                      <Tooltip content={item.info} placement="top">
-                        <span
-                          className="inline-flex cursor-help text-light-800 dark:text-dark-800"
-                          aria-label={item.info}
-                          title={item.info}
-                        >
-                          <FaInfoCircle className="h-3 w-3" />
-                        </span>
-                      </Tooltip>
-                    ) : null}
-                  </span>
-                </li>
-              ))}
-            </ul>
-            <LandingButton
-              href={plan.href}
-              variant={plan.featured ? "primary" : "secondary"}
-              className="mt-auto w-full"
-              external={plan.href.startsWith("http")}
-            >
-              {plan.cta}
-            </LandingButton>
-            {plan.note ? (
-              <p className="mt-3 text-center text-xs font-medium text-light-900 dark:text-dark-800">
-                {plan.note}
-              </p>
-            ) : null}
-          </div>
-        ))}
+      <PricingCards plans={plans} />
+      <div className="mt-6 text-center">
+        <Link
+          href="/pricing#compare-features"
+          className="text-sm font-bold text-light-1000 underline underline-offset-4 hover:text-brand-700 dark:text-dark-1000 dark:hover:text-brand-300"
+        >
+          {t`Compare features`}
+        </Link>
       </div>
     </Section>
   );

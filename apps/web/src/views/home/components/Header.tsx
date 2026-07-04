@@ -46,7 +46,7 @@ const Header = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
                 href={item.href}
                 target={item.external ? "_blank" : undefined}
                 rel={item.external ? "noopener noreferrer" : undefined}
-                className="text-sm font-semibold text-light-950 transition hover:text-light-1000 dark:text-dark-900 dark:hover:text-dark-1000"
+                className="text-sm font-semibold text-light-1000 transition hover:text-light-1000 dark:text-dark-1000 dark:hover:text-dark-1000"
               >
                 {item.label}
               </Link>
