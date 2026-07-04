@@ -9,6 +9,7 @@ import Modal from "~/components/modal";
 import { NewWorkspaceForm } from "~/components/NewWorkspaceForm";
 import { PageHead } from "~/components/PageHead";
 import { useModal } from "~/providers/modal";
+import { usePopup } from "~/providers/popup";
 import { api } from "~/utils/api";
 import Avatar from "./components/Avatar";
 import { ChangePasswordFormConfirmation } from "./components/ChangePasswordConfirmation";
@@ -17,9 +18,48 @@ import UpdateDisplayNameForm from "./components/UpdateDisplayNameForm";
 
 export default function AccountSettings() {
   const { modalContentType, openModal, isOpen } = useModal();
+  const { showPopup } = usePopup();
   const isCredentialsEnabled =
     env("NEXT_PUBLIC_ALLOW_CREDENTIALS")?.toLowerCase() === "true";
   const { data } = api.user.getUser.useQuery();
+  const exportDataQuery = api.user.exportData.useQuery(undefined, {
+    enabled: false,
+    retry: false,
+  });
+
+  const handleExportData = async () => {
+    const result = await exportDataQuery.refetch().catch(() => null);
+
+    if (!result?.data) {
+      showPopup({
+        header: t`Export failed`,
+        message: t`We couldn't prepare your export. Please try again later.`,
+        icon: "error",
+      });
+
+      return;
+    }
+
+    const json = JSON.stringify(result.data, null, 2);
+    const blob = new Blob([json], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+
+    link.href = url;
+    link.download = `shortlistos-export-${new Date()
+      .toISOString()
+      .slice(0, 10)}.json`;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(url);
+
+    showPopup({
+      header: t`Export ready`,
+      message: t`Your shortlistOS data export has started downloading.`,
+      icon: "success",
+    });
+  };
 
   return (
     <>
@@ -87,6 +127,24 @@ export default function AccountSettings() {
             </div>
           </div>
         )}
+
+        <div className="mb-8 border-y border-light-300 pb-8 dark:border-dark-300">
+          <h2 className="mb-4 mt-8 text-[14px] font-bold text-neutral-900 dark:text-dark-1000">
+            {t`Export my data`}
+          </h2>
+          <p className="mb-8 text-sm text-neutral-500 dark:text-dark-900">
+            {t`Download a JSON file with your account details, shortlists, cards, comments, and attachment links.`}
+          </p>
+          <div className="mt-4">
+            <Button
+              variant="secondary"
+              onClick={handleExportData}
+              isLoading={exportDataQuery.isFetching}
+            >
+              {t`Start download`}
+            </Button>
+          </div>
+        </div>
 
         <div className="mt-8 rounded-lg border border-red-300 bg-red-50/30 dark:border-red-900/60 dark:bg-red-950/10">
           <div className="border-b border-red-200 px-4 py-3 dark:border-red-900/50">
