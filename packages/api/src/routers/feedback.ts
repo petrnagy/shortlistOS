@@ -2,8 +2,12 @@ import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
 import * as feedbackRepo from "@kan/db/repository/feedback.repo";
+import { sendEmail } from "@kan/email";
+import { createLogger } from "@kan/logger";
 
 import { createTRPCRouter, protectedProcedure } from "../trpc";
+
+const log = createLogger("feedback-router");
 
 export const feedbackRouter = createTRPCRouter({
   create: protectedProcedure
@@ -19,9 +23,9 @@ export const feedbackRouter = createTRPCRouter({
     )
     .output(z.object({ success: z.boolean() }))
     .mutation(async ({ ctx, input }) => {
-      const userId = ctx.user?.id;
+      const user = ctx.user;
 
-      if (!userId)
+      if (!user)
         throw new TRPCError({
           message: `User not authenticated`,
           code: "UNAUTHORIZED",
@@ -29,15 +33,53 @@ export const feedbackRouter = createTRPCRouter({
 
       const result = await feedbackRepo.create(ctx.db, {
         feedback: input.feedback,
-        createdBy: userId,
+        createdBy: user.id,
         url: input.url,
       });
 
       if (!result?.id)
         throw new TRPCError({
-          message: `Unable to create workspace`,
+          message: `Unable to create feedback`,
           code: "INTERNAL_SERVER_ERROR",
         });
+
+      const feedbackEmailTo = process.env.FEEDBACK_EMAIL_TO;
+
+      if (feedbackEmailTo) {
+        try {
+          log.info(
+            { feedbackId: result.id },
+            "Sending feedback notification email",
+          );
+
+          await sendEmail(
+            feedbackEmailTo,
+            `New shortlistOS feedback from ${user.email}`,
+            "FEEDBACK_NOTIFICATION",
+            {
+              feedback: input.feedback,
+              feedbackUrl: input.url,
+              userEmail: user.email,
+              userName: user.name ?? "",
+            },
+          );
+
+          log.info(
+            { feedbackId: result.id },
+            "Feedback notification email sent",
+          );
+        } catch (error) {
+          log.error(
+            { err: error, feedbackId: result.id },
+            "Failed to send feedback notification email",
+          );
+        }
+      } else {
+        log.warn(
+          { feedbackId: result.id },
+          "FEEDBACK_EMAIL_TO is not configured; feedback saved without email notification",
+        );
+      }
 
       return { success: true };
     }),

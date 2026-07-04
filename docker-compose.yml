@@ -51,6 +51,7 @@ services:
       - SMTP_USER=${SMTP_USER}
       - SMTP_PASSWORD=${SMTP_PASSWORD}
       - EMAIL_FROM=${EMAIL_FROM}
+      - FEEDBACK_EMAIL_TO=${FEEDBACK_EMAIL_TO}
       - SMTP_REJECT_UNAUTHORIZED=${SMTP_REJECT_UNAUTHORIZED}
 
       # Disable email features entirely (optional)
