@@ -324,7 +324,7 @@ For questions, requests, or complaints about privacy, contact:
 - **Petr Nagy**
 - Email: privacy@shortlistos.co
 - Address: Mariánské nám. 5, 110 00 Staré Město, Prague, Czechia
-- VAT no.: 88074625
+- Business ID: 88074625
 `;
 
 function getNodeText(node: ReactNode): string {
@@ -361,9 +361,6 @@ export default function PrivacyView() {
         <section className="scroll-mt-20 px-4 pb-14 pt-28">
           <div className="mx-auto max-w-[980px]">
             <div className="mx-auto max-w-[680px] text-center">
-              <p className="bg-brand-600 inline-flex rounded-full px-3 py-1 text-sm font-semibold text-white">
-                Legal
-              </p>
               <h1 className="mt-3 text-3xl font-bold leading-[1.35] text-light-1000 dark:text-dark-1000 md:text-4xl">
                 Privacy Policy
               </h1>

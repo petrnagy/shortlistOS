@@ -1,646 +1,383 @@
-import Link from "next/link";
+import type { ReactNode } from "react";
+import { isValidElement } from "react";
+import ReactMarkdown from "react-markdown";
 
 import { PageHead } from "~/components/PageHead";
 import Layout from "../home/components/Layout";
 
-export default function TermsView() {
-  const SubHeading = ({ children }: { children: React.ReactNode }) => (
-    <h3 className="mb-4 text-2xl font-bold text-light-1000 dark:text-dark-950">
-      {children}
-    </h3>
-  );
+const termsOfUseMarkdown = `
+These Terms of Use govern your access to and use of the **Service**. By creating an account, purchasing Powerpack, or otherwise using the Service, you agree to these Terms.
 
-  const Text = ({ children }: { children: React.ReactNode }) => (
-    <p className="line-height text-md mb-4 text-light-1000 dark:text-dark-900">
-      {children}
-    </p>
-  );
+## 1. The Service and its operator
 
-  const UnorderedList = ({ children }: { children: React.ReactNode }) => (
-    <ul className="list-disc pl-6">{children}</ul>
-  );
+For the purposes of these Terms, the **Service** means the shortlistOS website, the hosted shortlistOS application, Powerpack, Magic Inbox, the Web Clipper, hosted APIs, and related service subdomains operated by:
 
-  const ListItem = ({ children }: { children: React.ReactNode }) => (
-    <li className="line-height text-md mb-4 text-light-1000 dark:text-dark-900">
-      {children}
-    </li>
-  );
+- **Petr Nagy**
+- Mariánské nám. 5
+- 110 00 Staré Město
+- Prague, Czechia
+- IČO: 88074625
+- Website: petrnagy.cz
+- Email: privacy@shortlistos.co
 
-  const NAME = "Open Engineering";
-  const DOMAIN = "https://app.shortlistos.co";
-  const PRIVACY_URL = `${DOMAIN}/privacy`;
-  const CONTACT_EMAIL = "support@shortlistos.co";
+The Service is designed primarily as a job-search organization tool for individual job seekers. It is not an employment agency, recruiter, career adviser, or enterprise service.
+
+These Terms apply only to the Service hosted and operated by Petr Nagy.
+
+They do **not** apply to the shortlistOS source code, independently self-hosted installations, third-party forks, or services operated by anyone else. Those are governed by their applicable open-source licences and by the terms and privacy practices of their respective operators. Petr Nagy is not responsible for third-party or self-hosted instances.
+
+## 2. Eligibility and accounts
+
+You must be at least 16 years old to use the Service.
+
+You must provide a working email address and keep access to your account secure. You are responsible for activity performed through your account unless it results from a security failure caused by the Service.
+
+You must not:
+
+- impersonate another person;
+- create an account using an email address you are not entitled to use;
+- share access in a way that compromises account security; or
+- use automated systems to create or operate accounts without permission.
+
+You should notify us promptly if you believe your account has been accessed without authorization.
+
+## 3. What the Service provides
+
+shortlistOS is a smart Kanban-style workspace for organizing a job search. Features may include:
+
+- job-opportunity cards and pipelines;
+- notes, files, contacts, reminders, and activity history;
+- Magic Inbox;
+- the Web Clipper;
+- AI-assisted extraction and updates;
+- salary and company information; and
+- other free or Powerpack features made available from time to time.
+
+Some features are free. Others require an active Powerpack period.
+
+The calendar provided inside shortlistOS is an internal feature. It does not connect to or access your external calendars.
+
+## 4. Powerpack
+
+Powerpack costs **USD 29 as a one-time payment** and provides access to Powerpack functionality for **three months** from activation. The exact expiry date is shown in your account.
+
+Powerpack is not a subscription and does not renew automatically.
+
+Powerpack is activated after payment is successfully processed, normally immediately or within a few minutes.
+
+Payments are processed by Stripe. We do not receive or store your full payment-card details.
+
+Prices for future purchases may change. A price change will not shorten or otherwise affect an already active Powerpack period.
+
+## 5. Refunds and withdrawal
+
+You may request a **full refund within 14 days of purchasing Powerpack**, without giving a reason. No payment-processing fee will be deducted from that refund.
+
+To request a refund or withdraw from the purchase, send a clear statement through the support contact provided in the Service or to the contact address listed in these Terms. You may use the model form at the end of these Terms, but you are not required to do so.
+
+We will issue an eligible refund to the original payment method without undue delay and no later than 14 days after receiving the request. Your bank or payment provider may take additional time to display the refund.
+
+Powerpack access may be disabled when the refund is issued.
+
+Refund requests submitted more than 14 days after purchase are considered individually and are not guaranteed.
+
+Deleting your account does not automatically create a right to a refund. If the purchase is still within the 14-day refund period, you may request the full refund separately. Later requests may be considered individually.
+
+If we permanently discontinue Powerpack before your paid period ends, we will provide a proportional refund for the unused part of that period.
+
+No refund is required where an account is suspended or terminated because of a serious violation of these Terms, except where applicable law requires otherwise.
+
+Nothing in this section limits any mandatory consumer rights that apply to you.
+
+## 6. Your content
+
+You retain ownership of the content you add to the Service.
+
+You grant us a non-exclusive, royalty-free licence to host, store, reproduce, process, transmit, and display your content only as necessary to:
+
+- operate and secure the Service;
+- provide the features you request;
+- create backups;
+- process content through relevant service providers; and
+- provide support or troubleshoot technical problems.
+
+This licence allows our service providers to process your content on our behalf only where necessary to provide their services to us.
+
+The licence ends when you delete the content or your account, except where copies temporarily remain in backups or must be retained for a legal reason.
+
+You are responsible for the content you add. You must have the right to use it and must not upload content that is unlawful, infringes another person's rights, or contains confidential or sensitive information that you are not allowed to share.
+
+Content stored in your account is private and is not published to other shortlistOS users.
+
+## 7. AI, automation, and third-party information
+
+AI and automation features may extract information or add and update fields on your job-opportunity cards. You can review, change, or delete those results.
+
+These features do not make hiring decisions, assess your legal eligibility for employment, or make decisions with legal or similarly significant effects.
+
+AI-generated results, salary information, company information, extracted content, reminders, and suggestions may be incomplete, outdated, or incorrect. You are responsible for reviewing information before relying on it.
+
+The Service does not guarantee:
+
+- employment, interviews, offers, or other job-search results;
+- the accuracy of AI-generated or automatically extracted information;
+- the accuracy or completeness of salary or company data;
+- that a job posting is genuine, current, lawful, or still available; or
+- that reminders, deadlines, emails, or automated updates will always be delivered or processed correctly.
+
+The Service is an organizational tool and does not provide legal, financial, tax, recruitment, or professional career advice.
+
+Some features rely on third-party providers. Their availability, outputs, and processing may be subject to their own terms and technical limitations.
+
+## 8. Acceptable use
+
+You must not use the Service to:
+
+- break the law or help another person break the law;
+- harass, threaten, defraud, abuse, or impersonate anyone;
+- send spam or unsolicited bulk messages;
+- upload malware, malicious code, or harmful content;
+- attack, disrupt, overload, or interfere with the Service;
+- bypass authentication, rate limits, access controls, or security measures;
+- probe or access accounts, systems, or data without authorization;
+- scrape, harvest, or systematically extract data from the hosted Service without permission;
+- misuse Magic Inbox, the Web Clipper, APIs, or email infrastructure;
+- infringe intellectual-property, privacy, confidentiality, or other rights;
+- resell or provide unauthorized access to the hosted Service; or
+- reverse-engineer or access non-public parts of the hosted Service, except where applicable law or an applicable open-source licence expressly permits it.
+
+You must not use the Service as the sole place where you keep important information. You should maintain your own copies or regularly export your data.
+
+## 9. Intellectual property
+
+Your content remains yours as described above.
+
+Rights in the shortlistOS name, branding, logos, website content, documentation, and hosted-service materials belong to Petr Nagy or their respective licensors, except where expressly released under an open-source licence.
+
+Source code made available under an open-source licence is governed by that licence. These Terms do not restrict rights expressly granted by the applicable open-source licence.
+
+Using the hosted Service does not transfer ownership of the Service, its branding, or its underlying technology to you.
+
+## 10. Service availability and changes
+
+We aim to keep the Service available and useful, but we do not promise uninterrupted, error-free, or permanently available operation.
+
+The Service may be unavailable because of maintenance, updates, provider outages, security incidents, technical failures, or circumstances outside our reasonable control.
+
+We may add, change, restrict, or remove features. Where reasonably possible, we will avoid materially reducing paid Powerpack functionality during an active paid period.
+
+We may discontinue the free Service or individual free features. If we permanently discontinue Powerpack during an active paid period, the proportional-refund rule in Section 5 applies.
+
+We may release updates, including security updates, automatically.
+
+## 11. Suspension and termination
+
+You may stop using the Service or delete your account at any time.
+
+We may suspend or terminate access immediately where reasonably necessary to:
+
+- prevent serious abuse or illegal activity;
+- protect users, infrastructure, or third parties;
+- respond to a security threat;
+- prevent fraud or misuse; or
+- comply with a legal obligation.
+
+For less serious issues, we will provide notice and a reasonable opportunity to correct the issue where reasonably possible.
+
+Termination or account deletion may result in deletion of your content as described in the Privacy Policy. You should export anything you wish to keep before deleting your account.
+
+Sections that by their nature should continue after termination—including ownership, disclaimers, liability limitations, governing law, and dispute provisions—remain effective.
+
+## 12. Third-party services and links
+
+The Service may use or link to third-party services, websites, job postings, authentication providers, payment providers, and data providers.
+
+We do not control third-party websites or services and are not responsible for their content, availability, security, terms, or privacy practices.
+
+A link or integration does not mean that we endorse the third party or guarantee its information.
+
+## 13. Consumer rights and conformity
+
+Nothing in these Terms removes rights that cannot legally be removed.
+
+Where mandatory consumer law applies, you may have rights if a paid digital service is not supplied, does not match its description, or does not function as consumers may reasonably expect. Depending on the circumstances, those rights may include correction of the problem, a price reduction, termination, or a refund.
+
+Any disclaimer, exclusion, or limitation in these Terms applies only to the extent permitted by law.
+
+## 14. Disclaimers
+
+Subject to Section 13, the Service is provided on an **"as available"** basis.
+
+To the maximum extent permitted by law, we do not make additional warranties or guarantees about:
+
+- availability, uptime, speed, or compatibility;
+- uninterrupted or error-free operation;
+- preservation of data without loss;
+- the accuracy of user-entered, imported, extracted, generated, salary, or company information;
+- results obtained from using the Service; or
+- suitability for a particular job search, application, negotiation, or employment decision.
+
+You remain responsible for your applications, communications, decisions, deadlines, backups, and use of information obtained through the Service.
+
+## 15. Limitation of liability
+
+To the maximum extent permitted by law, Petr Nagy is not liable for:
+
+- lost employment, interviews, offers, opportunities, income, profits, or savings;
+- decisions made by employers, recruiters, job platforms, or other third parties;
+- reliance on AI-generated, extracted, salary, company, or other informational results;
+- indirect, incidental, special, consequential, or purely economic loss;
+- loss or corruption of data where you did not keep a reasonable backup or export;
+- third-party services, websites, job postings, providers, or integrations;
+- outages, delays, security events, or failures outside reasonable control; or
+- misuse of the Service or violation of these Terms by a user.
+
+Nothing in these Terms excludes or limits liability where doing so would be unlawful, including liability arising from fraud, intentional misconduct, or any mandatory consumer remedy that cannot be excluded.
+
+## 16. Privacy
+
+Our processing of personal data is described in the shortlistOS Privacy Policy, available through the Service.
+
+## 17. Changes to these Terms
+
+We may update these Terms when the Service, its pricing, legal requirements, or business practices change.
+
+Material changes will be announced through a notice on the shortlistOS website or inside the Service. The effective date at the top will be updated.
+
+Changes will not retroactively remove rights you already acquired during an active Powerpack period. Where the law requires your consent to a change, we will request it.
+
+## 18. Governing law and disputes
+
+These Terms are governed by the laws of the Czech Republic.
+
+If you are a consumer, this choice does not deprive you of mandatory protections provided by the laws of your country of residence. Nothing in these Terms forces a consumer to bring a claim exclusively before Czech courts where applicable law allows another court.
+
+Please contact us first so that we can try to resolve a complaint directly.
+
+Consumers may also seek out-of-court resolution through the:
+
+**Czech Trade Inspection Authority**
+
+(Česká obchodní inspekce)
+
+ADR information and submission details: https://coi.gov.cz/en/information-about-adr/
+
+The Czech Trade Inspection Authority facilitates an amicable resolution but does not issue a binding court judgment.
+
+The former EU Online Dispute Resolution platform is no longer available.
+
+## 19. Severability and waiver
+
+If part of these Terms is found invalid or unenforceable, the remaining parts continue to apply to the extent legally possible.
+
+A delay or failure to enforce a provision does not permanently waive the right to enforce it later.
+
+## 20. Contact
+
+Questions, complaints, withdrawal notices, or legal notices may be sent to:
+
+- **Petr Nagy**
+- Mariánské nám. 5
+- 110 00 Staré Město
+- Prague, Czechia
+- IČO: 88074625
+- Email: privacy@shortlistos.co
+
+## Model withdrawal form
+
+Complete and send this form only if you wish to withdraw from a Powerpack purchase. A normal email or other clear statement is also sufficient.
+
+> To: Petr Nagy, Mariánské nám. 5, 110 00 Staré Město, Prague, Czechia
+>
+> Email: privacy@shortlistos.co
+>
+> I hereby give notice that I withdraw from my contract for the purchase of Powerpack.
+>
+> - Purchase date:
+> - Account email address:
+> - Name:
+> - Date:
+> - Signature (only if submitted on paper):
+`;
+
+function getNodeText(node: ReactNode): string {
+  if (typeof node === "string" || typeof node === "number") {
+    return String(node);
+  }
+
+  if (Array.isArray(node)) {
+    return node.map(getNodeText).join("");
+  }
+
+  if (isValidElement(node)) {
+    const props = node.props as { children?: ReactNode };
+    return getNodeText(props.children);
+  }
+
+  return "";
+}
+
+function isOperatorDetailsList(children: ReactNode) {
+  const text = getNodeText(children);
 
   return (
+    text.includes("Mariánské nám. 5") &&
+    text.includes("Email: privacy@shortlistos.co")
+  );
+}
+
+export default function TermsView() {
+  return (
     <Layout>
-      <PageHead title="Terms of Service | shortlistOS" />
+      <PageHead title="Terms of Use | shortlistOS" />
       <div className="mb-20">
         <section className="scroll-mt-20 px-4 pb-14 pt-28">
           <div className="mx-auto max-w-[980px]">
             <div className="mx-auto max-w-[680px] text-center">
-              <p className="bg-brand-600 inline-flex rounded-full px-3 py-1 text-sm font-semibold text-white">
-                Terms
-              </p>
               <h1 className="mt-3 text-3xl font-bold leading-[1.35] text-light-1000 dark:text-dark-1000 md:text-4xl">
-                Terms of Service
+                Terms of Use
               </h1>
               <p className="mt-4 text-base leading-[1.95rem] text-light-950 dark:text-dark-900">
-                Last updated: 26rd Feb 2025
+                Effective date: 6 July 2026
               </p>
             </div>
 
             <div className="mt-10">
-              <div className="mb-6">
-                <SubHeading>Introduction</SubHeading>
-                <Text>
-                  These Terms of Service (“Terms”, “Terms of Service”) govern
-                  your use of our web pages located at {DOMAIN} operated by{" "}
-                  {NAME}.
-                </Text>
-                <Text>
-                  Our Privacy Policy also governs your use of our Service and
-                  explains how we collect, safeguard and disclose information
-                  that results from your use of our web pages. Please read it
-                  here <Link href={PRIVACY_URL}>{PRIVACY_URL}</Link>.
-                </Text>
-                <Text>
-                  Your agreement with us includes these Terms and our Privacy
-                  Policy (“Agreements”). You acknowledge that you have read and
-                  understood Agreements, and agree to be bound of them.
-                </Text>
-                <Text>
-                  If you do not agree with (or cannot comply with) Agreements,
-                  then you may not use the Service, but please let us know by
-                  emailing at {CONTACT_EMAIL} so we can try to find a solution.
-                  These Terms apply to all visitors, users and others who wish
-                  to access or use Service. Thank you for being responsible.
-                </Text>
-              </div>
-
-              <div className="mb-6">
-                <SubHeading>Communications</SubHeading>
-                <Text>
-                  By creating an Account on our Service, you agree to subscribe
-                  to newsletters, marketing or promotional materials and other
-                  information we may send. However, you may opt out of receiving
-                  any, or all, of these communications from us by following the
-                  unsubscribe link or by emailing at {CONTACT_EMAIL}.
-                </Text>
-              </div>
-
-              <div className="mb-6">
-                <SubHeading>Purchases</SubHeading>
-                <Text>
-                  If you wish to purchase any product or service made available
-                  through Service (“Purchase”), you may be asked to supply
-                  certain information relevant to your Purchase including,
-                  without limitation, your credit card number, the expiration
-                  date of your credit card, your billing address, and your
-                  shipping information.
-                </Text>
-                <Text>
-                  You represent and warrant that: (i) you have the legal right
-                  to use any credit card(s) or other payment method(s) in
-                  connection with any Purchase; and that (ii) the information
-                  you supply to us is true, correct and complete.
-                </Text>
-                <Text>
-                  You represent and warrant that: (i) you have the legal right
-                  to use any credit card(s) or other payment method(s) in
-                  connection with any Purchase; and that (ii) the information
-                  you supply to us is true, correct and complete.
-                </Text>
-                <Text>
-                  We may employ the use of third party services for the purpose
-                  of facilitating payment and the completion of Purchases. By
-                  submitting your information, you grant us the right to provide
-                  the information to these third parties subject to our Privacy
-                  Policy.
-                </Text>
-                <Text>
-                  We reserve the right to refuse or cancel your order at any
-                  time for reasons including but not limited to: product or
-                  service availability, errors in the description or price of
-                  the product or service, error in your order or other reasons.
-                </Text>
-                <Text>
-                  We reserve the right to refuse or cancel your order if fraud
-                  or an unauthorized or illegal transaction is suspected.
-                </Text>
-              </div>
-
-              <div className="mb-6">
-                <SubHeading>Contests, Sweepstakes and Promotions</SubHeading>
-                <Text>
-                  Any contests, sweepstakes or other promotions (collectively,
-                  “Promotions”) made available through Service may be governed
-                  by rules that are separate from these Terms of Service. If you
-                  participate in any Promotions, please review the applicable
-                  rules as well as our Privacy Policy. If the rules for a
-                  Promotion conflict with these Terms of Service, Promotion
-                  rules will apply.
-                </Text>
-              </div>
-
-              <div className="mb-6">
-                <SubHeading>Subscriptions</SubHeading>
-                <Text>
-                  Some parts of Service are billed on a subscription basis
-                  (“Subscription(s)”). You will be billed in advance on a
-                  recurring and periodic basis (“Billing Cycle”). Billing cycles
-                  are set either on a monthly or annual basis, depending on the
-                  type of subscription plan you select when purchasing a
-                  Subscription.
-                </Text>
-                <Text>
-                  At the end of each Billing Cycle, your Subscription will
-                  automatically renew under the exact same conditions unless you
-                  cancel it or {NAME} cancels it. You may cancel your
-                  Subscription renewal either through your online account
-                  management page or by contacting {NAME} customer support team.
-                </Text>
-                <Text>
-                  A valid payment method, including credit card or PayPal, is
-                  required to process the payment for your subscription. You
-                  shall provide {NAME} with accurate and complete billing
-                  information including full name, address, state, zip code,
-                  telephone number, and a valid payment method information. By
-                  submitting such payment information, you automatically
-                  authorize {NAME} to charge all Subscription fees incurred
-                  through your account to any such payment instruments.
-                </Text>
-                <Text>
-                  Should automatic billing fail to occur for any reason, {NAME}{" "}
-                  will issue an electronic invoice indicating that you must
-                  proceed manually, within a certain deadline date, with the
-                  full payment corresponding to the billing period as indicated
-                  on the invoice.
-                </Text>
-              </div>
-
-              <div className="mb-6">
-                <SubHeading>Fee Changes</SubHeading>
-                <Text>
-                  {NAME}, in its sole discretion and at any time, may modify
-                  Subscription fees for the Subscriptions. Any Subscription fee
-                  change will become effective at the end of the then-current
-                  Billing Cycle.
-                </Text>
-                <Text>
-                  {NAME}, will provide you with a reasonable prior notice of any
-                  change in Subscription fees to give you an opportunity to
-                  terminate your Subscription before such change becomes
-                  effective.
-                </Text>
-                <Text>
-                  Your continued use of Service after Subscription fee change
-                  comes into effect constitutes your agreement to pay the
-                  modified Subscription fee amount.
-                </Text>
-              </div>
-
-              <div className="mb-6">
-                <SubHeading>Refunds</SubHeading>
-                <Text>
-                  Except when required by law, paid Subscription fees are
-                  non-refundable.
-                </Text>
-              </div>
-
-              <div className="mb-6">
-                <SubHeading>Content</SubHeading>
-                <Text>
-                  Our Service allows you to post, link, store, share and
-                  otherwise make available certain information, text, graphics,
-                  videos, or other material (“Content”). You are responsible for
-                  Content that you post on or through Service, including its
-                  legality, reliability, and appropriateness.
-                </Text>
-                <Text>
-                  By posting Content on or through Service, You represent and
-                  warrant that: (i) Content is yours (you own it) and/or you
-                  have the right to use it and the right to grant us the rights
-                  and license as provided in these Terms, and (ii) that the
-                  posting of your Content on or through Service does not violate
-                  the privacy rights, publicity rights, copyrights, contract
-                  rights or any other rights of any person or entity. We reserve
-                  the right to terminate the account of anyone found to be
-                  infringing on a copyright.
-                </Text>
-                <Text>
-                  You retain any and all of your rights to any Content you
-                  submit, post or display on or through Service and you are
-                  responsible for protecting those rights. We take no
-                  responsibility and assume no liability for Content you or any
-                  third party posts on or through Service. However, by posting
-                  Content using Service you grant us the right and license to
-                  use, modify, publicly perform, publicly display, reproduce,
-                  and distribute such Content on and through Service. You agree
-                  that this license includes the right for us to make your
-                  Content available to other users of Service, who may also use
-                  your Content subject to these Terms.
-                </Text>
-                <Text>
-                  {NAME} has the right but not the obligation to monitor and
-                  edit all Content provided by users. In addition, Content found
-                  on or through this Service are the property of {NAME} or used
-                  with permission. You may not distribute, modify, transmit,
-                  reuse, download, repost, copy, or use said Content, whether in
-                  whole or in part, for commercial purposes or for personal
-                  gain, without express advance written permission from us.
-                </Text>
-              </div>
-
-              <div className="mb-6">
-                <SubHeading>Prohibited Uses</SubHeading>
-                <Text>
-                  You may use Service only for lawful purposes and in accordance
-                  with Terms. You agree not to use Service:
-                </Text>
-                <UnorderedList>
-                  <ListItem>
-                    In any way that violates any applicable national or
-                    international law or regulation.
-                  </ListItem>
-                  <ListItem>
-                    For the purpose of exploiting, harming, or attempting to
-                    exploit or harm minors in any way by exposing them to
-                    inappropriate content or otherwise.
-                  </ListItem>
-                  <ListItem>
-                    To transmit, or procure the sending of, any advertising or
-                    promotional material, including any “junk mail”, “chain
-                    letter,” “spam,” or any other similar solicitation.
-                  </ListItem>
-                  <ListItem>
-                    To impersonate or attempt to impersonate Company, a Company
-                    employee, another user, or any other person or entity.
-                  </ListItem>
-                  <ListItem>
-                    In any way that infringes upon the rights of others, or in
-                    any way is illegal, threatening, fraudulent, or harmful, or
-                    in connection with any unlawful, illegal, fraudulent, or
-                    harmful purpose or activity.
-                  </ListItem>
-                  <ListItem>
-                    To engage in any other conduct that restricts or inhibits
-                    anyone’s use or enjoyment of Service, or which, as
-                    determined by us, may harm or offend Company or users of
-                    Service or expose them to liability.
-                  </ListItem>
-                </UnorderedList>
-                <Text>Additionally, you agree not to:</Text>
-                <UnorderedList>
-                  <ListItem>
-                    Use Service in any manner that could disable, overburden,
-                    damage, or impair Service or interfere with any other
-                    party’s use of Service, including their ability to engage in
-                    real time activities through Service.
-                  </ListItem>
-                  <ListItem>
-                    Use any robot, spider, or other automatic device, process,
-                    or means to access Service for any purpose, including
-                    monitoring or copying any of the material on Service.
-                  </ListItem>
-                  <ListItem>
-                    Use any manual process to monitor or copy any of the
-                    material on Service or for any other unauthorized purpose
-                    without our prior written consent.
-                  </ListItem>
-                  <ListItem>
-                    Use any device, software, or routine that interferes with
-                    the proper working of Service.
-                  </ListItem>
-                  <ListItem>
-                    Introduce any viruses, trojan horses, worms, logic bombs, or
-                    other material which is malicious or technologically
-                    harmful.
-                  </ListItem>
-                  <ListItem>
-                    Attempt to gain unauthorized access to, interfere with,
-                    damage, or disrupt any parts of Service, the server on which
-                    Service is stored, or any server, computer, or database
-                    connected to Service.
-                  </ListItem>
-                  <ListItem>
-                    Attack Service via a denial-of-service attack or a
-                    distributed denial-of-service attack.
-                  </ListItem>
-                  <ListItem>
-                    Take any action that may damage or falsify Company rating.
-                  </ListItem>
-                  <ListItem>
-                    Otherwise attempt to interfere with the proper working of
-                    Service.
-                  </ListItem>
-                </UnorderedList>
-              </div>
-
-              <div className="mb-6">
-                <SubHeading>Analytics</SubHeading>
-                <Text>
-                  We may use third-party Service Providers to monitor and
-                  analyze the use of our Service.
-                </Text>
-              </div>
-
-              <div className="mb-6">
-                <SubHeading>Age Restrictions</SubHeading>
-                <Text>
-                  Service is intended only for access and use by individuals at
-                  least thirteen (13) years old. By accessing or using any of
-                  Company, you warrant and represent that you are at least
-                  thirteen (13) years of age and with the full authority, right,
-                  and capacity to enter into this agreement and abide by all of
-                  the terms and conditions of Terms. If you are not at least
-                  thirteen (13) years old, you are prohibited from both the
-                  access and usage of Service.
-                </Text>
-              </div>
-
-              <div className="mb-6">
-                <SubHeading>Accounts</SubHeading>
-                <Text>
-                  When you create an account with us, you guarantee that you are
-                  above the age of 13, and that the information you provide us
-                  is accurate, complete, and current at all times. Inaccurate,
-                  incomplete, or obsolete information may result in the
-                  immediate termination of your account on Service.
-                </Text>
-                <Text>
-                  You are responsible for maintaining the confidentiality of
-                  your account and password, including but not limited to the
-                  restriction of access to your computer and/or account. You
-                  agree to accept responsibility for any and all activities or
-                  actions that occur under your account and/or password, whether
-                  your password is with our Service or a third-party service.
-                  You must notify us immediately upon becoming aware of any
-                  breach of security or unauthorized use of your account.
-                </Text>
-                <Text>
-                  In certain circumstances, you have the following data
-                  protection rights:
-                </Text>
-                <UnorderedList>
-                  <ListItem>
-                    You may not use as a username the name of another person or
-                    entity or that is not lawfully available for use, a name or
-                    trademark that is subject to any rights of another person or
-                    entity other than you, without appropriate authorization.
-                    You may not use as a username any name that is offensive,
-                    vulgar or obscene.
-                  </ListItem>
-                  <ListItem>
-                    We reserve the right to refuse service, terminate accounts,
-                    remove or edit content, or cancel orders in our sole
-                    discretion.
-                  </ListItem>
-                </UnorderedList>
-              </div>
-
-              <div className="mb-6">
-                <SubHeading>Intellectual Property</SubHeading>
-                <Text>
-                  Service and its original content (excluding Content provided
-                  by users), features and functionality are and will remain the
-                  exclusive property of {NAME}. and its licensors. Service is
-                  protected by copyright, trademark, and other laws of foreign
-                  countries. Our trademarks and trade dress may not be used in
-                  connection with any product or service without the prior
-                  written consent of {NAME}.
-                </Text>
-              </div>
-
-              <div className="mb-6">
-                <SubHeading>Error Reporting & Feedback</SubHeading>
-                <Text>
-                  You may provide us either directly at {CONTACT_EMAIL} or via
-                  third party sites and tools with information and feedback
-                  concerning errors, suggestions for improvements, ideas,
-                  problems, complaints, and other matters related to our Service
-                  (“Feedback”). You acknowledge and agree that: (i) you shall
-                  not retain, acquire or assert any intellectual property right
-                  or other right, title or interest in or to the Feedback; (ii)
-                  Company may have development ideas similar to the Feedback;
-                  (iii) Feedback does not contain confidential information or
-                  proprietary information from you or any third party; and (iv)
-                  Company is not under any obligation of confidentiality with
-                  respect to the Feedback. In the event the transfer of the
-                  ownership to the Feedback is not possible due to applicable
-                  mandatory laws, you grant Company and its affiliates an
-                  exclusive, transferable, irrevocable, free-of-charge,
-                  sub-licensable, unlimited and perpetual right to use
-                  (including copy, modify, create derivative works, publish,
-                  distribute and commercialize) Feedback in any manner and for
-                  any purpose.
-                </Text>
-              </div>
-
-              <div className="mb-6">
-                <SubHeading>Links To Other Web Sites</SubHeading>
-                <Text>
-                  Our Service may contain links to third party web sites or
-                  services that are not owned or controlled by {NAME}.
-                </Text>
-                <Text>
-                  {NAME} has no control over, and assumes no responsibility for
-                  the content, privacy policies, or practices of any third party
-                  web sites or services. We do not warrant the offerings of any
-                  of these entities/individuals or their websites.
-                </Text>
-                <Text>
-                  YOU ACKNOWLEDGE AND AGREE THAT {NAME.toUpperCase()} SHALL NOT
-                  BE RESPONSIBLE OR LIABLE, DIRECTLY OR INDIRECTLY, FOR ANY
-                  DAMAGE OR LOSS CAUSED OR ALLEGED TO BE CAUSED BY OR IN
-                  CONNECTION WITH USE OF OR RELIANCE ON ANY SUCH CONTENT, GOODS
-                  OR SERVICES AVAILABLE ON OR THROUGH ANY SUCH THIRD PARTY WEB
-                  SITES OR SERVICES.
-                </Text>
-                <Text>
-                  WE STRONGLY ADVISE YOU TO READ THE TERMS OF SERVICE AND
-                  PRIVACY POLICIES OF ANY THIRD PARTY WEB SITES OR SERVICES THAT
-                  YOU VISIT.
-                </Text>
-              </div>
-
-              <div className="mb-6">
-                <SubHeading>Disclaimer of Warranty</SubHeading>
-                <Text>
-                  THESE SERVICES ARE PROVIDED BY COMPANY ON AN “AS IS” AND “AS
-                  AVAILABLE” BASIS. COMPANY MAKES NO REPRESENTATIONS OR
-                  WARRANTIES OF ANY KIND, EXPRESS OR IMPLIED, AS TO THE
-                  OPERATION OF THEIR SERVICES, OR THE INFORMATION, CONTENT OR
-                  MATERIALS INCLUDED THEREIN. YOU EXPRESSLY AGREE THAT YOUR USE
-                  OF THESE SERVICES, THEIR CONTENT, AND ANY SERVICES OR ITEMS
-                  OBTAINED FROM US IS AT YOUR SOLE RISK.
-                </Text>
-                <Text>
-                  NEITHER COMPANY NOR ANY PERSON ASSOCIATED WITH COMPANY MAKES
-                  ANY WARRANTY OR REPRESENTATION WITH RESPECT TO THE
-                  COMPLETENESS, SECURITY, RELIABILITY, QUALITY, ACCURACY, OR
-                  AVAILABILITY OF THE SERVICES. WITHOUT LIMITING THE FOREGOING,
-                  NEITHER COMPANY NOR ANYONE ASSOCIATED WITH COMPANY REPRESENTS
-                  OR WARRANTS THAT THE SERVICES, THEIR CONTENT, OR ANY SERVICES
-                  OR ITEMS OBTAINED THROUGH THE SERVICES WILL BE ACCURATE,
-                  RELIABLE, ERROR-FREE, OR UNINTERRUPTED, THAT DEFECTS WILL BE
-                  CORRECTED, THAT THE SERVICES OR THE SERVER THAT MAKES IT
-                  AVAILABLE ARE FREE OF VIRUSES OR OTHER HARMFUL COMPONENTS OR
-                  THAT THE SERVICES OR ANY SERVICES OR ITEMS OBTAINED THROUGH
-                  THE SERVICES WILL OTHERWISE MEET YOUR NEEDS OR EXPECTATIONS.
-                </Text>
-                <Text>
-                  COMPANY HEREBY DISCLAIMS ALL WARRANTIES OF ANY KIND, WHETHER
-                  EXPRESS OR IMPLIED, STATUTORY, OR OTHERWISE, INCLUDING BUT NOT
-                  LIMITED TO ANY WARRANTIES OF MERCHANTABILITY,
-                  NON-INFRINGEMENT, AND FITNESS FOR PARTICULAR PURPOSE.
-                </Text>
-                <Text>
-                  THE FOREGOING DOES NOT AFFECT ANY WARRANTIES WHICH CANNOT BE
-                  EXCLUDED OR LIMITED UNDER APPLICABLE LAW.
-                </Text>
-              </div>
-
-              <div className="mb-6">
-                <SubHeading>Limitation of Liability</SubHeading>
-                <Text>
-                  EXCEPT AS PROHIBITED BY LAW, YOU WILL HOLD US AND OUR
-                  OFFICERS, DIRECTORS, EMPLOYEES, AND AGENTS HARMLESS FOR ANY
-                  INDIRECT, PUNITIVE, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL
-                  DAMAGE, HOWEVER IT ARISES (INCLUDING ATTORNEYS' FEES AND ALL
-                  RELATED COSTS AND EXPENSES OF LITIGATION AND ARBITRATION, OR
-                  AT TRIAL OR ON APPEAL, IF ANY, WHETHER OR NOT LITIGATION OR
-                  ARBITRATION IS INSTITUTED), WHETHER IN AN ACTION OF CONTRACT,
-                  NEGLIGENCE, OR OTHER TORTIOUS ACTION, OR ARISING OUT OF OR IN
-                  CONNECTION WITH THIS AGREEMENT, INCLUDING WITHOUT LIMITATION
-                  ANY CLAIM FOR PERSONAL INJURY OR PROPERTY DAMAGE, ARISING FROM
-                  THIS AGREEMENT AND ANY VIOLATION BY YOU OF ANY FEDERAL, STATE,
-                  OR LOCAL LAWS, STATUTES, RULES, OR REGULATIONS, EVEN IF
-                  COMPANY HAS BEEN PREVIOUSLY ADVISED OF THE POSSIBILITY OF SUCH
-                  DAMAGE. EXCEPT AS PROHIBITED BY LAW, IF THERE IS LIABILITY
-                  FOUND ON THE PART OF COMPANY, IT WILL BE LIMITED TO THE AMOUNT
-                  PAID FOR THE PRODUCTS AND/OR SERVICES, AND UNDER NO
-                  CIRCUMSTANCES WILL THERE BE CONSEQUENTIAL OR PUNITIVE DAMAGES.
-                  SOME STATES DO NOT ALLOW THE EXCLUSION OR LIMITATION OF
-                  PUNITIVE, INCIDENTAL OR CONSEQUENTIAL DAMAGES, SO THE PRIOR
-                  LIMITATION OR EXCLUSION MAY NOT APPLY TO YOU.
-                </Text>
-              </div>
-
-              <div className="mb-6">
-                <SubHeading>Termination</SubHeading>
-                <Text>
-                  We may terminate or suspend your account and bar access to
-                  Service immediately, without prior notice or liability, under
-                  our sole discretion, for any reason whatsoever and without
-                  limitation, including but not limited to a breach of Terms.
-                </Text>
-                <Text>
-                  If you wish to terminate your account, you may simply
-                  discontinue using Service.
-                </Text>
-                <Text>
-                  All provisions of Terms which by their nature should survive
-                  termination shall survive termination, including, without
-                  limitation, ownership provisions, warranty disclaimers,
-                  indemnity and limitations of liability.
-                </Text>
-              </div>
-
-              <div className="mb-6">
-                <SubHeading>Governing Law</SubHeading>
-                <Text>
-                  These Terms shall be governed and construed in accordance with
-                  the laws of the United Kingdom without regard to its conflict
-                  of law provisions.
-                </Text>
-                <Text>
-                  Our failure to enforce any right or provision of these Terms
-                  will not be considered a waiver of those rights. If any
-                  provision of these Terms is held to be invalid or
-                  unenforceable by a court, the remaining provisions of these
-                  Terms will remain in effect. These Terms constitute the entire
-                  agreement between us regarding our Service and supersede and
-                  replace any prior agreements we might have had between us
-                  regarding Service.
-                </Text>
-              </div>
-
-              <div className="mb-6">
-                <SubHeading>Changes To Service</SubHeading>
-                <Text>
-                  We reserve the right to withdraw or amend our Service, and any
-                  service or material we provide via Service, in our sole
-                  discretion without notice. We will not be liable if for any
-                  reason all or any part of Service is unavailable at any time
-                  or for any period. From time to time, we may restrict access
-                  to some parts of Service, or the entire Service, to users,
-                  including registered users.
-                </Text>
-              </div>
-
-              <div className="mb-6">
-                <SubHeading>Amendments To Terms</SubHeading>
-                <Text>
-                  We may amend Terms at any time by posting the amended terms on
-                  this site. It is your responsibility to review these Terms
-                  periodically.
-                </Text>
-                <Text>
-                  Your continued use of the Platform following the posting of
-                  revised Terms means that you accept and agree to the changes.
-                  You are expected to check this page frequently so you are
-                  aware of any changes, as they are binding on you.
-                </Text>
-                <Text>
-                  By continuing to access or use our Service after any revisions
-                  become effective, you agree to be bound by the revised terms.
-                  If you do not agree to the new terms, you are no longer
-                  authorized to use Service.
-                </Text>
-              </div>
-
-              <div className="mb-6">
-                <SubHeading>Waiver And Severability</SubHeading>
-                <Text>
-                  No waiver by Company of any term or condition set forth in
-                  Terms shall be deemed a further or continuing waiver of such
-                  term or condition or a waiver of any other term or condition,
-                  and any failure of Company to assert a right or provision
-                  under Terms shall not constitute a waiver of such right or
-                  provision.
-                </Text>
-                <Text>
-                  If any provision of Terms is held by a court or other tribunal
-                  of competent jurisdiction to be invalid, illegal or
-                  unenforceable for any reason, such provision shall be
-                  eliminated or limited to the minimum extent such that the
-                  remaining provisions of Terms will continue in full force and
-                  effect.
-                </Text>
-              </div>
-
-              <div className="mb-6">
-                <SubHeading>Acknowledgement</SubHeading>
-                <Text>
-                  BY USING SERVICE OR OTHER SERVICES PROVIDED BY US, YOU
-                  ACKNOWLEDGE THAT YOU HAVE READ THESE TERMS OF SERVICE AND
-                  AGREE TO BE BOUND BY THEM.
-                </Text>
-              </div>
-
-              <div className="mb-6">
-                <SubHeading>Contact Us</SubHeading>
-                <Text>
-                  If you have any questions about these terms of service, please
-                  contact us at{" "}
-                  <Link
-                    className="line-height text-md mb-4 text-light-1000 dark:text-dark-900"
-                    href="mailto:support@shortlistos.co"
-                  >
-                    support@shortlistos.co
-                  </Link>
-                </Text>
-              </div>
+              <ReactMarkdown
+                components={{
+                  h2: ({ children }) => (
+                    <h2 className="mb-4 mt-10 text-2xl font-bold text-light-1000 dark:text-dark-950">
+                      {children}
+                    </h2>
+                  ),
+                  p: ({ children }) => (
+                    <p className="mb-4 text-base leading-[1.8rem] text-light-1000 dark:text-dark-900">
+                      {children}
+                    </p>
+                  ),
+                  ul: ({ children }) => (
+                    <ul
+                      className={
+                        isOperatorDetailsList(children)
+                          ? "mb-4 list-none space-y-0.5 pl-3 text-light-1000 dark:text-dark-900 [&_li]:leading-[1.45rem]"
+                          : "mb-4 list-disc space-y-2 pl-6 text-light-1000 dark:text-dark-900"
+                      }
+                    >
+                      {children}
+                    </ul>
+                  ),
+                  li: ({ children }) => (
+                    <li className="text-base leading-[1.8rem]">{children}</li>
+                  ),
+                  blockquote: ({ children }) => (
+                    <blockquote className="mb-6 border-l-2 border-light-500 pl-4 text-light-1000 dark:border-dark-400 dark:text-dark-900">
+                      {children}
+                    </blockquote>
+                  ),
+                }}
+              >
+                {termsOfUseMarkdown}
+              </ReactMarkdown>
             </div>
           </div>
         </section>

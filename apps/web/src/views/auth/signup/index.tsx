@@ -120,6 +120,21 @@ export default function SignUpPage() {
                 </span>
               </Trans>
             </p>
+            {!isMagicLinkSent && (
+              <p className="mt-4 max-w-sm text-center text-xs leading-5 text-light-900 dark:text-dark-900">
+                <Trans>
+                  By creating an account, you agree to our{" "}
+                  <span className="underline">
+                    <Link href="/privacy">Privacy Policy</Link>
+                  </span>{" "}
+                  and{" "}
+                  <span className="underline">
+                    <Link href="/terms">Terms of Use</Link>
+                  </span>
+                  .
+                </Trans>
+              </p>
+            )}
           </div>
           <PaperGrainBackground />
         </div>
