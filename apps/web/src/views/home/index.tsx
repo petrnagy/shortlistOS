@@ -31,6 +31,7 @@ import {
   PricingCards,
   type PricingPlan,
 } from "../pricing/components/PricingCards";
+import FinalCta from "./components/FinalCta";
 import Layout from "./components/Layout";
 
 const primaryCta = t`Get the Powerpack`;
@@ -461,6 +462,14 @@ function PrivacyOpenSourceSection() {
             {t`Explore the source code`}
           </LandingButton>
         </div>
+        <div className="mt-4 text-center">
+          <Link
+            href="/privacy"
+            className="text-sm font-bold text-light-1000 underline underline-offset-4 hover:text-brand-700 dark:text-dark-1000 dark:hover:text-brand-300"
+          >
+            {t`Privacy policy`}
+          </Link>
+        </div>
       </div>
     </section>
   );
@@ -541,41 +550,6 @@ function FaqSection({
             </dl>
           </div>
         </div>
-      </div>
-    </section>
-  );
-}
-
-function FinalCta() {
-  return (
-    <section className="px-4 py-20 text-center">
-      <div className="mx-auto max-w-[680px]">
-        <h2 className="mt-3 text-4xl font-bold leading-[1.35] text-light-1000 dark:text-dark-1000 md:text-5xl">
-          {t`Stop managing your job search from memory.`}
-        </h2>
-        <p className="mt-4 text-base leading-[1.95rem] text-light-950 dark:text-dark-900">
-          {t`Keep every opportunity organized and let Powerpack handle the repetitive parts.`}
-        </p>
-        <div className="mt-7 flex flex-col items-center justify-center gap-3 sm:flex-row">
-          <LandingButton
-            href={powerpackSignupHref}
-            variant="primary"
-            dynamicBackground
-            className="w-full sm:w-44"
-          >
-            {primaryCta}
-          </LandingButton>
-          <LandingButton
-            href="/signup"
-            variant="secondary"
-            className="w-full sm:w-44"
-          >
-            {secondaryCta}
-          </LandingButton>
-        </div>
-        <p className="mt-4 text-sm text-light-900 dark:text-dark-800">
-          {t`3 months of automation & AI for $29 · No recurring payments`}
-        </p>
       </div>
     </section>
   );

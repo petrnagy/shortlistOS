@@ -1,6 +1,7 @@
 import { t } from "@lingui/core/macro";
 
 import { PageHead } from "~/components/PageHead";
+import FinalCta from "../home/components/FinalCta";
 import Layout from "../home/components/Layout";
 import { FeatureComparisonTable } from "./components/FeatureComparisonTable";
 import { getPricingPlans, PricingCards } from "./components/PricingCards";
@@ -45,6 +46,7 @@ export default function PricingView() {
             <FeatureComparisonTable />
           </div>
         </section>
+        <FinalCta />
       </div>
     </Layout>
   );

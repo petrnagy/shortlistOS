@@ -1,346 +1,443 @@
-import Link from "next/link";
+import type { ReactNode } from "react";
+import { isValidElement } from "react";
+import ReactMarkdown from "react-markdown";
 
 import { PageHead } from "~/components/PageHead";
 import Layout from "../home/components/Layout";
 
+const privacyPolicyMarkdown = `
+This Privacy Policy explains how the **Service** handles personal data.
+
+## 1. Who operates the Service?
+
+For the purposes of this Privacy Policy, the **Service** means the shortlistOS website, hosted application, Powerpack features, Magic Inbox, Web Clipper, APIs, and related service subdomains.
+
+The Service is operated by:
+
+- **Petr Nagy**
+- Mariánské nám. 5
+- 110 00 Staré Město
+- Prague, Czechia
+- Business ID: 88074625
+- Website: petrnagy.cz
+- Privacy contact: privacy@shortlistos.co
+
+Petr Nagy is the data controller for the Service.
+
+No data protection officer has been appointed. Privacy requests are handled directly by Petr Nagy.
+
+## 2. What this policy covers
+
+This policy covers the Service as defined above.
+
+This policy does **not** cover independently self-hosted versions of shortlistOS. The operators of those instances are responsible for their own data processing.
+
+## 3. Data we collect
+
+### Account and authentication data
+
+To create and use an account, we may process:
+
+- your email address;
+- an optional display name;
+- an optional avatar;
+- a securely hashed password, when you use password authentication;
+- authentication and session information; and
+- a provider account ID and basic profile data when you sign in through Google, Microsoft, GitHub, or LinkedIn.
+
+Your display name and avatar do not need to represent your real identity.
+
+OAuth providers are used only for authentication. shortlistOS does not send your job-search content back to them.
+
+### Content you add to shortlistOS
+
+You may add information such as:
+
+- job opportunities and job descriptions;
+- company information;
+- recruiter or other contact details;
+- notes and comments;
+- salary information and offer terms;
+- interview dates and reminders;
+- files, documents, and images;
+- job-posting URLs;
+- activity history; and
+- emails sent through Magic Inbox.
+
+This content is private to your account and is not visible to other shortlistOS users. Access by the operator and service providers is limited to what is needed to run, secure, support, or troubleshoot the service.
+
+Users should only add information they are entitled to use and should avoid uploading unnecessary sensitive or confidential information.
+
+### Magic Inbox data
+
+When you intentionally send or forward an email to your private Magic Inbox address, shortlistOS temporarily processes:
+
+- the email headers;
+- the email body;
+- supported attachments; and
+- text extracted from supported office documents, such as PDF, DOC, and DOCX files.
+
+The raw email and attachments are kept only while the message is being processed. They are normally deleted within minutes.
+
+If processing fails, shortlistOS retries it up to three times. The raw input is deleted after the third failed attempt. In unusual cases, this may take longer than 24 hours.
+
+After successful processing, the raw input is deleted and only the resulting information added to the relevant opportunity is kept.
+
+### Web Clipper data
+
+The Web Clipper sends data only when you actively choose to clip a page. It may send:
+
+- the full rendered HTML of the page; and
+- the page URL.
+
+The raw HTML is deleted after processing. Only the resulting information added to shortlistOS is retained.
+
+The Web Clipper does not collect or transmit pages in the background.
+
+### AI and automation data
+
+Powerpack automation and AI features may add or update information on a job-opportunity card. You can review, edit, or delete those changes.
+
+These features do not make hiring decisions, determine eligibility, reject candidates, or make other decisions with legal or similarly significant effects.
+
+For AI processing, relevant content may be sent to Mistral AI, including:
+
+- clipped-page HTML;
+- forwarded email content;
+- text extracted from supported documents; and
+- job-related information contained in that content.
+
+shortlistOS does not use your content to train its own AI models. Mistral's retention and model-improvement practices are governed by the Mistral plan, privacy settings, and terms that apply when processing takes place.
+
+Deleting raw input from shortlistOS does not necessarily mean that any copy processed by Mistral is deleted at the same time. Mistral handles its copy according to its own terms and configured data controls.
+
+### Salary and company information
+
+shortlistOS uses OpenWebNinja to retrieve salary or company-related information.
+
+Only the following information is sent to OpenWebNinja:
+
+- job title; and
+- company name.
+
+No account details, email addresses, notes, comments, attachments, Magic Inbox messages, or other user content are sent to OpenWebNinja.
+
+### Payment data
+
+Powerpack payments are processed by Stripe.
+
+shortlistOS stores only:
+
+- your Stripe customer ID; and
+- your Powerpack expiry date.
+
+shortlistOS does not receive or store card numbers or other full card details. Stripe processes and retains payment information under its own terms.
+
+### Communications
+
+Brevo is used to send transactional and service-related emails, such as:
+
+- sign-in and verification messages;
+- password-reset messages;
+- reminders;
+- service notices; and
+- Powerpack-related messages.
+
+Brevo receives the recipient's email address and the content of the email being sent.
+
+shortlistOS does not send marketing or promotional emails.
+
+Emails sent to addresses ending in \`@shortlistos.co\`, including privacy and support emails, are handled through Google Workspace, which is managed only by Petr Nagy.
+
+Support and privacy-request emails are archived and remain available until the sender asks for their deletion, unless keeping them is required to establish, exercise, or defend a legal claim or to comply with the law.
+
+### Technical and security data
+
+The shortlistOS web server logs:
+
+- IP address;
+- requested URL;
+- user-agent information; and
+- API requests, which appear as normal web-server requests.
+
+Web-server logs are retained for 15 days.
+
+Error logs may contain technical information related to an application error. They are retained until the next application release.
+
+Cloudflare may process network and device information when providing:
+
+- DNS;
+- caching and content delivery;
+- DDoS protection;
+- security filtering; and
+- Cloudflare Turnstile challenges when needed.
+
+UptimeRobot checks only public paths to confirm that the service is available. It does not monitor private user pages or user-specific API endpoints.
+
+## 4. Analytics, cookies, and local storage
+
+### Session cookie
+
+shortlistOS uses one essential session cookie to keep you signed in and secure your session.
+
+It is not used for advertising or behavioral tracking.
+
+### Local storage
+
+Browser local storage may be used to remember preferences such as your selected language.
+
+### Simple Analytics
+
+Simple Analytics is used on the public website, subpages, and inside the application.
+
+shortlistOS uses the official Simple Analytics Next.js library without custom events. Simple Analytics provides aggregate website statistics and does not use cookies, retain IP addresses, or create user or device identifiers.
+
+## 5. Why we process data
+
+We process personal data for the following purposes and legal bases:
+
+| Purpose | Legal basis |
+|---|---|
+| Creating and operating your account | Performing our contract with you |
+| Storing and managing your job-search information | Performing our contract with you |
+| Processing Magic Inbox, Web Clipper, AI, and automation requests | Performing our contract with you |
+| Processing Powerpack purchases and access | Performing our contract with you |
+| Sending transactional and service messages | Performing our contract with you |
+| Responding to support and privacy requests | Performing our contract, our legitimate interests, or compliance with legal obligations |
+| Preventing abuse and protecting the service | Our legitimate interests in security and fraud prevention |
+| Keeping short-lived server and error logs | Our legitimate interests in security, maintenance, and troubleshooting |
+| Measuring aggregate usage through Simple Analytics | Our legitimate interest in understanding and improving the service |
+| Complying with binding legal requests | Compliance with a legal obligation |
+
+Where processing is based on legitimate interests, we use data only where those interests are not overridden by your rights and freedoms.
+
+## 6. Service providers
+
+We use the following service providers:
+
+| Provider | Purpose | Data involved |
+|---|---|---|
+| Hetzner | Application and PostgreSQL hosting, VPS backups | Account data, user content, technical data |
+| Amazon Web Services | Private avatar and attachment storage | Avatars, files, and attachments |
+| Mistral AI | AI extraction and processing | Content submitted for AI processing |
+| OpenWebNinja | Salary and company information | Job title and company name only |
+| Brevo | Transactional email and Magic Inbox email routing | Recipient, email content, incoming Magic Inbox messages |
+| Stripe | Payment processing | Payment and billing information |
+| Simple Analytics | Aggregate usage analytics | Privacy-preserving aggregate visit data |
+| Cloudflare | DNS, CDN, caching, security, DDoS protection, Turnstile | Network, request, device, and challenge data |
+| UptimeRobot | Public uptime monitoring | Requests to public paths |
+| Google Workspace | Receiving support and privacy emails | Sender, recipient, and email content |
+| Google, Microsoft, GitHub, and LinkedIn | Optional account authentication | Basic profile and authentication data |
+
+We may also disclose data where required by law, a binding court order, or a valid request from a competent authority.
+
+We do not sell or rent personal data. We do not share it for advertising or behavioral profiling.
+
+## 7. Where data is stored
+
+The live shortlistOS application and PostgreSQL database are hosted on a Hetzner server in Germany.
+
+Avatars and attachments are stored privately in the AWS \`eu-north-1\` region in Stockholm, Sweden. They are available only through authorized links.
+
+Hetzner keeps VPS backups according to the backup settings and retention available for the service. Deleted data may therefore remain in backups until those backups expire.
+
+Our own core hosting and file storage are located in the European Union. Some external providers are global companies and may process limited data outside the European Economic Area under their own terms and legally recognized transfer safeguards.
+
+## 8. How long we keep data
+
+We keep account data and user content until you delete the relevant content or delete your account.
+
+When you delete your account:
+
+- live database records are deleted;
+- AWS-hosted avatars, files, and attachments are deleted; and
+- remaining backup copies disappear when the applicable backups expire.
+
+Other retention periods include:
+
+- web-server logs: 15 days;
+- error logs: until the next application release;
+- raw Magic Inbox and Web Clipper input: normally minutes, or until successful processing or the third failed attempt;
+- support and privacy emails: until deletion is requested, subject to any necessary legal retention; and
+- Stripe payment records: retained by Stripe according to Stripe's own requirements and policies.
+
+Browser preferences remain in local storage until you clear them or shortlistOS replaces or removes them.
+
+## 9. Your controls and rights
+
+Inside the application, you can:
+
+- view and correct your account information;
+- edit or delete individual opportunities and other content;
+- export your shortlistOS data in JSON format; and
+- delete your account and its live data.
+
+Depending on the law that applies to you, you may also have the right to:
+
+- access your personal data;
+- correct inaccurate or incomplete data;
+- request deletion;
+- restrict processing;
+- object to certain processing;
+- receive portable data; and
+- complain to a data-protection authority.
+
+To exercise a right that cannot be completed directly in the app, contact **privacy@shortlistos.co**.
+
+We may ask you to reasonably verify your identity before disclosing or deleting data. A logged-in user can delete their own account directly without making a separate email request.
+
+In Czechia, the relevant supervisory authority is the **Office for Personal Data Protection**.
+
+## 10. Security
+
+We use reasonable technical and organizational measures to protect personal data, including:
+
+- HTTPS encryption for traffic;
+- a database that is not publicly accessible;
+- hashed passwords;
+- private file storage;
+- authorized links for files and avatars;
+- restricted infrastructure access;
+- security filtering and DDoS protection; and
+- limited log-retention periods.
+
+Production systems and data are accessible only to Petr Nagy and relevant service providers where access is needed to provide or support their services.
+
+No online service can guarantee absolute security.
+
+## 11. Age requirement
+
+shortlistOS is intended for people aged 16 or older.
+
+The service does not contain adult content, but users must be old enough to create an account and make a payment where applicable.
+
+## 12. Changes to this policy
+
+We may update this Privacy Policy when shortlistOS, its service providers, or legal requirements change.
+
+Material changes will be announced through an updated notice on the shortlistOS website. The effective date at the top of this policy will also be updated.
+
+## 13. Contact
+
+For questions, requests, or complaints about privacy, contact:
+
+- **Petr Nagy**
+- Email: privacy@shortlistos.co
+- Address: Mariánské nám. 5, 110 00 Staré Město, Prague, Czechia
+- VAT no.: 88074625
+`;
+
+function getNodeText(node: ReactNode): string {
+  if (typeof node === "string" || typeof node === "number") {
+    return String(node);
+  }
+
+  if (Array.isArray(node)) {
+    return node.map(getNodeText).join("");
+  }
+
+  if (isValidElement(node)) {
+    const props = node.props as { children?: ReactNode };
+    return getNodeText(props.children);
+  }
+
+  return "";
+}
+
+function isOperatorDetailsList(children: ReactNode) {
+  const text = getNodeText(children);
+
+  return (
+    text.includes("Mariánské nám. 5") &&
+    text.includes("Privacy contact: privacy@shortlistos.co")
+  );
+}
+
 export default function PrivacyView() {
-  const SubHeading = ({ children }: { children: React.ReactNode }) => (
-    <h3 className="mb-4 text-2xl font-bold text-light-1000 dark:text-dark-950">
-      {children}
-    </h3>
-  );
-
-  const Text = ({ children }: { children: React.ReactNode }) => (
-    <p className="line-height text-md mb-4 text-light-1000 dark:text-dark-900">
-      {children}
-    </p>
-  );
-
-  const UnorderedList = ({ children }: { children: React.ReactNode }) => (
-    <ul className="list-disc pl-6">{children}</ul>
-  );
-
-  const ListItem = ({ children }: { children: React.ReactNode }) => (
-    <li className="line-height text-md mb-4 text-light-1000 dark:text-dark-900">
-      {children}
-    </li>
-  );
-
-  const NAME = "Open Engineering";
-
   return (
     <Layout>
       <PageHead title="Privacy Policy | shortlistOS" />
-      <div className="flex flex-col items-center">
-        <div className="mb-20 flex h-full w-full max-w-[980px] flex-col px-4 lg:pt-[5rem]">
-          <div className="flex items-center justify-center py-36 text-4xl font-bold tracking-tight text-light-1000 dark:text-dark-1000">
-            <h2>Privacy Policy</h2>
-          </div>
-          <p className="mb-6 text-sm text-light-1000 dark:text-dark-900">
-            Last updated: 23rd Feb 2025
-          </p>
-          <div className="mb-6">
-            <SubHeading>Introduction</SubHeading>
-            <Text>
-              Your privacy is important to us. It is our policy to respect your
-              privacy and comply with any applicable law and regulation
-              regarding any personal information we may collect about you,
-              including across our website, {NAME}, and other sites we own and
-              operate.
-            </Text>
-          </div>
+      <div className="mb-20">
+        <section className="scroll-mt-20 px-4 pb-14 pt-28">
+          <div className="mx-auto max-w-[980px]">
+            <div className="mx-auto max-w-[680px] text-center">
+              <p className="bg-brand-600 inline-flex rounded-full px-3 py-1 text-sm font-semibold text-white">
+                Legal
+              </p>
+              <h1 className="mt-3 text-3xl font-bold leading-[1.35] text-light-1000 dark:text-dark-1000 md:text-4xl">
+                Privacy Policy
+              </h1>
+              <p className="mt-4 text-base leading-[1.95rem] text-light-950 dark:text-dark-900">
+                Effective date: 6 July 2026
+              </p>
+            </div>
 
-          <div className="mb-6">
-            <SubHeading>Information We Collect</SubHeading>
-            <Text>
-              Information we collect includes both information you knowingly and
-              actively provide us when using or participating in any of our
-              services and promotions, and any information automatically sent by
-              your devices in the course of accessing our products and services.
-            </Text>
+            <div className="mt-10">
+              <ReactMarkdown
+                components={{
+                  h2: ({ children }) => (
+                    <h2 className="mb-4 mt-10 text-2xl font-bold text-light-1000 dark:text-dark-950">
+                      {children}
+                    </h2>
+                  ),
+                  h3: ({ children }) => (
+                    <h3 className="mb-3 mt-7 text-xl font-bold text-light-1000 dark:text-dark-950">
+                      {children}
+                    </h3>
+                  ),
+                  p: ({ children }) => (
+                    <p className="mb-4 text-base leading-[1.8rem] text-light-1000 dark:text-dark-900">
+                      {children}
+                    </p>
+                  ),
+                  ul: ({ children }) => (
+                    <ul
+                      className={
+                        isOperatorDetailsList(children)
+                          ? "mb-4 list-none space-y-0.5 pl-3 text-light-1000 dark:text-dark-900 [&_li]:leading-[1.45rem]"
+                          : "mb-4 list-disc space-y-2 pl-6 text-light-1000 dark:text-dark-900"
+                      }
+                    >
+                      {children}
+                    </ul>
+                  ),
+                  li: ({ children }) => (
+                    <li className="text-base leading-[1.8rem]">{children}</li>
+                  ),
+                  table: ({ children }) => (
+                    <div className="mb-6 overflow-x-auto rounded-md border border-light-300 dark:border-dark-300">
+                      <table className="min-w-full divide-y divide-light-300 text-left text-sm dark:divide-dark-300">
+                        {children}
+                      </table>
+                    </div>
+                  ),
+                  thead: ({ children }) => (
+                    <thead className="bg-light-200 dark:bg-dark-200">
+                      {children}
+                    </thead>
+                  ),
+                  th: ({ children }) => (
+                    <th className="px-4 py-3 font-bold text-light-1000 dark:text-dark-1000">
+                      {children}
+                    </th>
+                  ),
+                  td: ({ children }) => (
+                    <td className="border-t border-light-300 px-4 py-3 leading-[1.6rem] text-light-1000 dark:border-dark-300 dark:text-dark-900">
+                      {children}
+                    </td>
+                  ),
+                  code: ({ children }) => (
+                    <code className="rounded bg-light-200 px-1 py-0.5 text-sm dark:bg-dark-200">
+                      {children}
+                    </code>
+                  ),
+                }}
+              >
+                {privacyPolicyMarkdown}
+              </ReactMarkdown>
+            </div>
           </div>
-
-          <div className="mb-6">
-            <SubHeading>Log Data</SubHeading>
-            <Text>
-              When you visit our website, our servers may automatically log the
-              standard data provided by your web browser. It may include your
-              device’s Internet Protocol (IP) address, your browser type and
-              version, the pages you visit, the time and date of your visit, the
-              time spent on each page, other details about your visit, and
-              technical details that occur in conjunction with any errors you
-              may encounter.
-            </Text>
-            <Text>
-              Please be aware that while this information may not be personally
-              identifying by itself, it may be possible to combine it with other
-              data to personally identify individual persons.
-            </Text>
-          </div>
-
-          <div className="mb-6">
-            <SubHeading>Personal Information</SubHeading>
-            <Text>
-              We may ask for personal information which may include one or more
-              of the following:
-            </Text>
-            <UnorderedList>
-              <ListItem>Name</ListItem>
-              <ListItem>Email</ListItem>
-            </UnorderedList>
-          </div>
-
-          <div className="mb-6">
-            <SubHeading>
-              Legitimate Reasons for Processing Your Personal Information
-            </SubHeading>
-            <Text>
-              We only collect and use your personal information when we have a
-              legitimate reason for doing so. In which instance, we only collect
-              personal information that is reasonably necessary to provide our
-              services to you.
-            </Text>
-          </div>
-
-          <div className="mb-6">
-            <SubHeading>Collection and Use of Information</SubHeading>
-            <Text>
-              We may collect personal information from you when you do any of
-              the following on our website:
-            </Text>
-            <UnorderedList>
-              <ListItem>
-                Sign up to receive updates from us via email or social media
-                channels
-              </ListItem>
-              <ListItem>
-                Use a mobile device or web browser to access our content
-              </ListItem>
-              <ListItem>
-                Contact us via email, social media, or on any similar
-                technologies
-              </ListItem>
-              <ListItem>When you mention us on social media</ListItem>
-            </UnorderedList>
-            <Text>
-              We may collect, hold, use, and disclose information for the
-              following purposes, and personal information will not be further
-              processed in a manner that is incompatible with these purposes:
-            </Text>
-            <UnorderedList>
-              <ListItem>to contact and communicate with you</ListItem>
-              <ListItem>
-                for analytics, market research, and business development,
-                including to operate and improve our website, associated
-                applications, and associated social media platforms
-              </ListItem>
-              <ListItem>
-                to enable you to access and use our website, associated
-                applications, and associated social media platforms
-              </ListItem>
-            </UnorderedList>
-            <Text>
-              Please be aware that we may combine information we collect about
-              you with general information or research data we receive from
-              other trusted sources.
-            </Text>
-          </div>
-
-          <div className="mb-6">
-            <SubHeading>Security of Your Personal Information</SubHeading>
-            <Text>
-              When we collect and process personal information, and while we
-              retain this information, we will protect it within commercially
-              acceptable means to prevent loss and theft, as well as
-              unauthorized access, disclosure, copying, use, or modification.
-            </Text>
-
-            <Text>
-              Although we will do our best to protect the personal information
-              you provide to us, we advise that no method of electronic
-              transmission or storage is 100% secure, and no one can guarantee
-              absolute data security. We will comply with laws applicable to us
-              in respect of any data breach.
-            </Text>
-            <Text>
-              You are responsible for selecting any password and its overall
-              security strength, ensuring the security of your own information
-              within the bounds of our services.
-            </Text>
-          </div>
-
-          <div className="mb-6">
-            <SubHeading>How Long We Keep Your Personal Information</SubHeading>
-            <Text>
-              We keep your personal information only for as long as we need to.
-              This time period may depend on what we are using your information
-              for, in accordance with this privacy policy. If your personal
-              information is no longer required, we will delete it or make it
-              anonymous by removing all details that identify you.
-            </Text>
-
-            <Text>
-              However, if necessary, we may retain your personal information for
-              our compliance with a legal, accounting, or reporting obligation
-              or for archiving purposes in the public interest, scientific, or
-              historical research purposes or statistical purposes.
-            </Text>
-          </div>
-
-          <div className="mb-6">
-            <SubHeading>Children’s Privacy</SubHeading>
-            <Text>
-              We do not aim any of our products or services directly at children
-              under the age of 13, and we do not knowingly collect personal
-              information about children under 13.
-            </Text>
-          </div>
-
-          <div className="mb-6">
-            <SubHeading>
-              Disclosure of Personal Information to Third Parties
-            </SubHeading>
-            <Text>We may disclose personal information to</Text>
-            <UnorderedList>
-              <ListItem>
-                a parent, subsidiary, or affiliate of our company
-              </ListItem>
-              <ListItem>
-                third party service providers for the purpose of enabling them
-                to provide their services, for example, IT service providers,
-                data storage, hosting and server providers, advertisers, or
-                analytics platforms
-              </ListItem>
-              <ListItem>
-                our employees, contractors, and/or related entities
-              </ListItem>
-              <ListItem>
-                our existing or potential agents or business partners
-              </ListItem>
-              <ListItem>
-                sponsors or promoters of any competition, sweepstakes, or
-                promotion we run
-              </ListItem>
-              <ListItem>
-                courts, tribunals, regulatory authorities, and law enforcement
-                officers, as required by law, in connection with any actual or
-                prospective legal proceedings, or in order to establish,
-                exercise, or defend our legal rights
-              </ListItem>
-              <ListItem>
-                third parties, including agents or sub-contractors, who assist
-                us in providing information, products, services, or direct
-                marketing to you third parties to collect and process data
-              </ListItem>
-            </UnorderedList>
-          </div>
-
-          <div className="mb-6">
-            <SubHeading>
-              International Transfers of Personal Information
-            </SubHeading>
-            <Text>
-              The personal information we collect is stored and/or processed
-              where we or our partners, affiliates, and third-party providers
-              maintain facilities. Please be aware that the locations to which
-              we store, process, or transfer your personal information may not
-              have the same data protection laws as the country in which you
-              initially provided the information. If we transfer your personal
-              information to third parties in other countries: (i) we will
-              perform those transfers in accordance with the requirements of
-              applicable law; and (ii) we will protect the transferred personal
-              information in accordance with this privacy policy.
-            </Text>
-          </div>
-
-          <div className="mb-6">
-            <SubHeading>
-              Your Rights and Controlling Your Personal Information
-            </SubHeading>
-            <Text>
-              You always retain the right to withhold personal information from
-              us, with the understanding that your experience of our website may
-              be affected. We will not discriminate against you for exercising
-              any of your rights over your personal information. If you do
-              provide us with personal information you understand that we will
-              collect, hold, use and disclose it in accordance with this privacy
-              policy. You retain the right to request details of any personal
-              information we hold about you.
-            </Text>
-            <Text>
-              If we receive personal information about you from a third party,
-              we will protect it as set out in this privacy policy. If you are a
-              third party providing personal information about somebody else,
-              you represent and warrant that you have such person’s consent to
-              provide the personal information to us.
-            </Text>
-            <Text>
-              If you have previously agreed to us using your personal
-              information for direct marketing purposes, you may change your
-              mind at any time. We will provide you with the ability to
-              unsubscribe from our email-database or opt out of communications.
-              Please be aware we may need to request specific information from
-              you to help us confirm your identity.
-            </Text>
-            <Text>
-              If you believe that any information we hold about you is
-              inaccurate, out of date, incomplete, irrelevant, or misleading,
-              please contact us using the details provided in this privacy
-              policy. We will take reasonable steps to correct any information
-              found to be inaccurate, incomplete, misleading, or out of date.
-            </Text>
-            <Text>
-              If you believe that we have breached a relevant data protection
-              law and wish to make a complaint, please contact us using the
-              details below and provide us with full details of the alleged
-              breach. We will promptly investigate your complaint and respond to
-              you, in writing, setting out the outcome of our investigation and
-              the steps we will take to deal with your complaint. You also have
-              the right to contact a regulatory body or data protection
-              authority in relation to your complaint.
-            </Text>
-          </div>
-
-          <div className="mb-6">
-            <SubHeading>Limits of Our Policy</SubHeading>
-            <Text>
-              Our website may link to external sites that are not operated by
-              us. Please be aware that we have no control over the content and
-              policies of those sites, and cannot accept responsibility or
-              liability for their respective privacy practices.
-            </Text>
-          </div>
-
-          <div className="mb-6">
-            <SubHeading>Changes to This Policy</SubHeading>
-            <Text>
-              At our discretion, we may change our privacy policy to reflect
-              updates to our business processes, current acceptable practices,
-              or legislative or regulatory changes. If we decide to change this
-              privacy policy, we will post the changes here at the same link by
-              which you are accessing this privacy policy.
-            </Text>
-            <Text>
-              If required by law, we will get your permission or give you the
-              opportunity to opt in to or opt out of, as applicable, any new
-              uses of your personal information.
-            </Text>
-          </div>
-
-          <div className="mb-6">
-            <SubHeading>Contact Us</SubHeading>
-            <Text>
-              For any questions or concerns regarding your privacy, you may
-              contact us using the following details:
-            </Text>
-            <Link
-              className="line-height text-md mb-4 text-light-1000 dark:text-dark-900"
-              href="mailto:support@shortlistos.co"
-            >
-              support@shortlistos.co
-            </Link>
-          </div>
-        </div>
+        </section>
       </div>
     </Layout>
   );
