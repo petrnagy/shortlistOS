@@ -6,6 +6,41 @@ import {
   workspaceMemberSchema,
 } from "./common";
 
+export const cardContactRoleSchema = z.enum([
+  "HR",
+  "RECRUITER",
+  "HIRING_MANAGER",
+  "CTO",
+  "CEO",
+  "ADMIN",
+  "OTHER",
+]);
+
+export const cardContactMethodTypeSchema = z.enum([
+  "PHONE",
+  "EMAIL",
+  "LINKEDIN",
+  "WHATSAPP",
+  "TELEGRAM",
+  "WEBSITE",
+  "OTHER",
+]);
+
+export const cardContactsJsonSchema = z.array(
+  z.object({
+    id: z.string().min(1),
+    role: cardContactRoleSchema,
+    name: z.string().min(1).max(255),
+    methods: z.array(
+      z.object({
+        id: z.string().min(1),
+        type: cardContactMethodTypeSchema,
+        value: z.string().min(1).max(1000),
+      }),
+    ),
+  }),
+);
+
 // ─── card.create ─────────────────────────────────────────────
 export const cardCreateResponseSchema = z.object({
   publicId: z.string(),
@@ -17,6 +52,7 @@ export const cardUpdateResponseSchema = z.object({
   title: z.string(),
   description: z.string().nullable(),
   dueDate: z.date().nullable(),
+  contactsJson: cardContactsJsonSchema.nullable(),
   manualUpdatedOnly: z.boolean(),
   shortlistCompanyName: z.string().nullable(),
   shortlistJobPostingUrl: z.string().nullable(),
@@ -65,6 +101,7 @@ export const cardDetailSchema = z.object({
   cardNumber: z.number().nullable(),
   index: z.number(),
   dueDate: z.date().nullable(),
+  contactsJson: cardContactsJsonSchema.nullable(),
   manualUpdatedOnly: z.boolean(),
   shortlistCompanyName: z.string().nullable(),
   shortlistJobPostingUrl: z.string().nullable(),

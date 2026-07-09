@@ -2,7 +2,7 @@ import type { KeyboardEvent } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { t } from "@lingui/core/macro";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import {
   HiOutlineBanknotes,
@@ -12,16 +12,21 @@ import {
   HiOutlineCalendarDays,
   HiOutlineChatBubbleLeftRight,
   HiOutlineDocumentText,
+  HiOutlineEnvelope,
   HiOutlineLink,
   HiOutlineLockClosed,
   HiOutlineMapPin,
   HiOutlinePencilSquare,
+  HiOutlinePhone,
+  HiOutlinePlus,
   HiOutlineShieldCheck,
   HiOutlineStar,
   HiOutlineTag,
+  HiOutlineUserGroup,
   HiStar,
   HiXMark,
 } from "react-icons/hi2";
+import { FaRegCircleUser } from "react-icons/fa6";
 import { IoChevronForwardSharp } from "react-icons/io5";
 import { LuTreePalm } from "react-icons/lu";
 
@@ -69,6 +74,24 @@ interface FormValues {
 }
 
 const JOB_LOCATION_TYPE_OPTIONS = ["onsite", "hybrid", "remote"] as const;
+const CONTACT_ROLE_OPTIONS = [
+  "HR",
+  "RECRUITER",
+  "HIRING_MANAGER",
+  "CTO",
+  "CEO",
+  "ADMIN",
+  "OTHER",
+] as const;
+const CONTACT_METHOD_TYPE_OPTIONS = [
+  "PHONE",
+  "EMAIL",
+  "LINKEDIN",
+  "WHATSAPP",
+  "TELEGRAM",
+  "WEBSITE",
+  "OTHER",
+] as const;
 const JOB_TYPE_OPTIONS = [
   "FULL_TIME",
   "PART_TIME",
@@ -259,6 +282,8 @@ const TEST_SALARY_COMPARISON_DATA = {
 } as const;
 
 type JobLocationType = (typeof JOB_LOCATION_TYPE_OPTIONS)[number];
+type ContactRole = (typeof CONTACT_ROLE_OPTIONS)[number];
+type ContactMethodType = (typeof CONTACT_METHOD_TYPE_OPTIONS)[number];
 type JobType = (typeof JOB_TYPE_OPTIONS)[number];
 type SalaryRegion = (typeof SALARY_REGIONS)[number];
 type SalaryInterval = (typeof SALARY_INTERVAL_OPTIONS)[number]["value"];
@@ -286,6 +311,20 @@ interface ShortlistUpdateFields {
   shortlistJobLocationType?: JobLocationType | null;
   shortlistJobType?: JobType;
   shortlistCompanyLocation?: string | null;
+  contactsJson?: CardContact[];
+}
+
+interface CardContactMethod {
+  id: string;
+  type: ContactMethodType;
+  value: string;
+}
+
+interface CardContact {
+  id: string;
+  role: ContactRole;
+  name: string;
+  methods: CardContactMethod[];
 }
 
 const emptyToNull = (value: string) => {
@@ -330,6 +369,83 @@ const formatEnumLabel = (value: string) =>
     .split("_")
     .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
     .join(" ");
+
+const createContactId = () =>
+  `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
+
+const isContactRole = (value: unknown): value is ContactRole =>
+  typeof value === "string" &&
+  CONTACT_ROLE_OPTIONS.includes(value as ContactRole);
+
+const isContactMethodType = (value: unknown): value is ContactMethodType =>
+  typeof value === "string" &&
+  CONTACT_METHOD_TYPE_OPTIONS.includes(value as ContactMethodType);
+
+const parseContactsJson = (value: unknown): CardContact[] => {
+  if (!Array.isArray(value)) return [];
+
+  return value
+    .map((contact) => {
+      if (!isRecord(contact)) return null;
+
+      const name = typeof contact.name === "string" ? contact.name : "";
+      if (!name.trim()) return null;
+
+      const methods = Array.isArray(contact.methods)
+        ? contact.methods
+            .map((method) => {
+              if (!isRecord(method)) return null;
+
+              const methodValue =
+                typeof method.value === "string" ? method.value : "";
+              if (!methodValue.trim()) return null;
+
+              return {
+                id:
+                  typeof method.id === "string" && method.id.length > 0
+                    ? method.id
+                    : createContactId(),
+                type: isContactMethodType(method.type) ? method.type : "EMAIL",
+                value: methodValue,
+              };
+            })
+            .filter((method): method is CardContactMethod => Boolean(method))
+        : [];
+
+      return {
+        id:
+          typeof contact.id === "string" && contact.id.length > 0
+            ? contact.id
+            : createContactId(),
+        role: isContactRole(contact.role) ? contact.role : "RECRUITER",
+        name,
+        methods,
+      };
+    })
+    .filter((contact): contact is CardContact => Boolean(contact));
+};
+
+const getContactMethodIcon = (type: ContactMethodType) => {
+  switch (type) {
+    case "PHONE":
+    case "WHATSAPP":
+    case "TELEGRAM":
+      return HiOutlinePhone;
+    case "EMAIL":
+      return HiOutlineEnvelope;
+    default:
+      return HiOutlineLink;
+  }
+};
+
+const commitOnEnter = (
+  event: KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>,
+  commit: () => void,
+) => {
+  if (event.key !== "Enter") return;
+  event.preventDefault();
+  commit();
+};
 
 const formatCurrencyAmount = (
   amount: number | null,
@@ -488,6 +604,451 @@ function SalaryComparisonBars({
   );
 }
 
+function ContactsSection({
+  cardPublicId,
+  contactsJson,
+  canEdit,
+  isUpdating,
+  onUpdate,
+}: {
+  cardPublicId: string;
+  contactsJson: unknown;
+  canEdit: boolean;
+  isUpdating: boolean;
+  onUpdate: (contacts: CardContact[]) => void;
+}) {
+  const contacts = parseContactsJson(contactsJson);
+  const nameInputRef = useRef<HTMLInputElement | null>(null);
+  const [newContactDraft, setNewContactDraft] = useState<CardContact | null>(
+    null,
+  );
+  const [editingContactId, setEditingContactId] = useState<string | null>(null);
+  const [contactDraft, setContactDraft] = useState<CardContact | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<
+    | { type: "contact"; contactId: string }
+    | { type: "method"; contactId: string; methodId: string }
+    | null
+  >(null);
+
+  const disabled = !canEdit || isUpdating || !cardPublicId;
+  const actionButtonClass =
+    "text-xs font-medium text-light-900 underline underline-offset-2 hover:text-light-1000 disabled:cursor-not-allowed disabled:opacity-60 dark:text-dark-900 dark:hover:text-dark-1000";
+  const addPersonButtonClass =
+    "inline-flex items-center justify-center gap-1.5 rounded-[5px] border border-light-300 px-2.5 py-1.5 text-xs font-medium text-light-1000 hover:bg-light-200 disabled:cursor-not-allowed disabled:opacity-60 dark:border-dark-300 dark:text-dark-1000 dark:hover:bg-dark-200";
+  const iconButtonClass =
+    "flex h-6 w-[22px] items-center justify-center rounded-[5px] text-light-900 hover:bg-light-200 disabled:cursor-not-allowed disabled:opacity-60 dark:text-dark-900 dark:hover:bg-dark-200";
+  const compactInputClass =
+    "h-7 w-full rounded-[5px] border border-light-300 bg-light-50 px-2 py-0 text-xs text-light-1000 focus:border-light-600 focus:outline-none focus:ring-0 disabled:cursor-not-allowed disabled:opacity-60 dark:border-dark-300 dark:bg-dark-50 dark:text-dark-1000 dark:focus:border-dark-600";
+
+  useEffect(() => {
+    if (newContactDraft || editingContactId) {
+      nameInputRef.current?.focus();
+    }
+  }, [newContactDraft?.id, editingContactId]);
+
+  const commitContacts = (nextContacts: CardContact[]) => {
+    onUpdate(nextContacts);
+  };
+
+  const createEmptyContactDraft = (): CardContact => ({
+    id: createContactId(),
+    role: "RECRUITER",
+    name: "",
+    methods: [
+      {
+        id: createContactId(),
+        type: "PHONE",
+        value: "",
+      },
+    ],
+  });
+
+  const updateDraftMethod = (
+    draft: CardContact,
+    methodId: string,
+    fields: Partial<Pick<CardContactMethod, "type" | "value">>,
+  ): CardContact => ({
+    ...draft,
+    methods: draft.methods.map((method) =>
+      method.id === methodId ? { ...method, ...fields } : method,
+    ),
+  });
+
+  const removeDraftMethod = (
+    draft: CardContact,
+    methodId: string,
+  ): CardContact => ({
+    ...draft,
+    methods: draft.methods.filter((method) => method.id !== methodId),
+  });
+
+  const addDraftMethod = (draft: CardContact): CardContact => ({
+    ...draft,
+    methods: [
+      ...draft.methods,
+      {
+        id: createContactId(),
+        type: "PHONE",
+        value: "",
+      },
+    ],
+  });
+
+  const cleanContactDraft = (draft: CardContact): CardContact | null => {
+    const name = draft.name.trim();
+    if (!name) return null;
+
+    return {
+      ...draft,
+      name,
+      methods: draft.methods
+        .map((method) => ({ ...method, value: method.value.trim() }))
+        .filter((method) => method.value.length > 0),
+    };
+  };
+
+  const saveNewContact = () => {
+    if (!newContactDraft) return;
+    const cleanedDraft = cleanContactDraft(newContactDraft);
+    if (!cleanedDraft) return;
+
+    commitContacts([...contacts, cleanedDraft]);
+    setNewContactDraft(null);
+  };
+
+  const startEditingContact = (contact: CardContact) => {
+    setEditingContactId(contact.id);
+    setContactDraft(
+      contact.methods.length > 0 ? contact : addDraftMethod(contact),
+    );
+  };
+
+  const saveContact = (contactId: string) => {
+    if (!contactDraft) return;
+    const cleanedDraft = cleanContactDraft(contactDraft);
+    if (!cleanedDraft) return;
+
+    commitContacts(
+      contacts.map((contact) =>
+        contact.id === contactId ? cleanedDraft : contact,
+      ),
+    );
+    setEditingContactId(null);
+    setContactDraft(null);
+  };
+
+  const confirmDelete = () => {
+    if (!deleteTarget) return;
+
+    if (deleteTarget.type === "contact") {
+      commitContacts(
+        contacts.filter((contact) => contact.id !== deleteTarget.contactId),
+      );
+    } else {
+      commitContacts(
+        contacts.map((contact) =>
+          contact.id === deleteTarget.contactId
+            ? {
+                ...contact,
+                methods: contact.methods.filter(
+                  (method) => method.id !== deleteTarget.methodId,
+                ),
+              }
+            : contact,
+        ),
+      );
+    }
+
+    setDeleteTarget(null);
+  };
+
+  const renderContactForm = ({
+    draft,
+    setDraft,
+    onSave,
+    onCancel,
+  }: {
+    draft: CardContact;
+    setDraft: (draft: CardContact) => void;
+    onSave: () => void;
+    onCancel: () => void;
+  }) => (
+    <div className="space-y-1">
+      <div className="grid grid-cols-[22px_92px_1fr] items-center gap-x-1 gap-y-2">
+        <FaRegCircleUser className="h-4 w-4 text-light-900 dark:text-dark-900" />
+        <select
+          value={draft.role}
+          onChange={(event) =>
+            setDraft({ ...draft, role: event.target.value as ContactRole })
+          }
+          disabled={disabled}
+          className={compactInputClass}
+        >
+          {CONTACT_ROLE_OPTIONS.map((role) => (
+            <option key={role} value={role}>
+              {formatEnumLabel(role)}
+            </option>
+          ))}
+        </select>
+        <input
+          ref={nameInputRef}
+          type="text"
+          value={draft.name}
+          onChange={(event) => setDraft({ ...draft, name: event.target.value })}
+          onKeyDown={(event) => commitOnEnter(event, onSave)}
+          placeholder={t`Name`}
+          disabled={disabled}
+          className={compactInputClass}
+        />
+      </div>
+      <div className="space-y-1 pl-[23px]">
+        {draft.methods.map((method) => {
+          const MethodIcon = getContactMethodIcon(method.type);
+
+          return (
+            <div
+              key={method.id}
+              className="grid min-h-[28px] grid-cols-[22px_92px_1fr_28px] items-center gap-x-1 gap-y-1"
+            >
+              <MethodIcon className="h-4 w-4 justify-self-center text-light-900 dark:text-dark-900" />
+              <select
+                value={method.type}
+                onChange={(event) =>
+                  setDraft(
+                    updateDraftMethod(draft, method.id, {
+                      type: event.target.value as ContactMethodType,
+                    }),
+                  )
+                }
+                disabled={disabled}
+                className={compactInputClass}
+              >
+                {CONTACT_METHOD_TYPE_OPTIONS.map((type) => (
+                  <option key={type} value={type}>
+                    {formatEnumLabel(type)}
+                  </option>
+                ))}
+              </select>
+              <input
+                type="text"
+                value={method.value}
+                onChange={(event) =>
+                  setDraft(
+                    updateDraftMethod(draft, method.id, {
+                      value: event.target.value,
+                    }),
+                  )
+                }
+                onKeyDown={(event) => commitOnEnter(event, onSave)}
+                placeholder={t`Contact value`}
+                disabled={disabled}
+                className={compactInputClass}
+              />
+              <button
+                type="button"
+                onClick={() => setDraft(removeDraftMethod(draft, method.id))}
+                disabled={disabled || draft.methods.length === 1}
+                className="flex h-6 w-7 items-center justify-center rounded-[5px] text-light-900 hover:bg-light-200 disabled:cursor-not-allowed disabled:opacity-40 dark:text-dark-900 dark:hover:bg-dark-200"
+                aria-label={t`Remove contact method`}
+              >
+                <HiXMark className="h-4 w-4" />
+              </button>
+            </div>
+          );
+        })}
+      </div>
+      <div className="pl-[23px]">
+        <Tooltip content={t`Add contact`} placement="top">
+          <button
+            type="button"
+            onClick={() => setDraft(addDraftMethod(draft))}
+            disabled={disabled}
+            className={iconButtonClass}
+            aria-label={t`Add contact`}
+          >
+            <HiOutlinePlus className="h-4 w-4" />
+          </button>
+        </Tooltip>
+      </div>
+      <div className="flex justify-end gap-3">
+        <button
+          type="button"
+          onClick={onCancel}
+          disabled={disabled}
+          className={actionButtonClass}
+        >
+          {t`Cancel`}
+        </button>
+        <button
+          type="button"
+          onClick={onSave}
+          disabled={disabled || draft.name.trim().length === 0}
+          className={actionButtonClass}
+        >
+          {t`Save`}
+        </button>
+      </div>
+    </div>
+  );
+
+  return (
+    <>
+      <section className="mt-8">
+        <div className="mb-4 flex items-center gap-2">
+          <HiOutlineUserGroup className="h-5 w-5 text-light-900 dark:text-dark-900" />
+          <h3 className="text-sm font-semibold text-light-1000 dark:text-dark-1000">
+            {t`Contacts`}
+          </h3>
+        </div>
+        <div className="space-y-3 rounded-[8px] border border-light-300 p-3 dark:border-dark-300">
+          {contacts.map((contact) => (
+            <div
+              key={contact.id}
+              className="min-h-[124px] border-b border-light-300 pb-3 last:border-b-0 dark:border-dark-300"
+            >
+              {editingContactId === contact.id && contactDraft ? (
+                renderContactForm({
+                  draft: contactDraft,
+                  setDraft: setContactDraft,
+                  onSave: () => saveContact(contact.id),
+                  onCancel: () => {
+                    setEditingContactId(null);
+                    setContactDraft(null);
+                  },
+                })
+              ) : (
+                <>
+                  <div className="grid min-h-[48px] grid-cols-[22px_92px_1fr] items-center gap-x-1 gap-y-2">
+                    <FaRegCircleUser className="h-4 w-4 text-light-900 dark:text-dark-900" />
+                    <button
+                      type="button"
+                      onClick={() => canEdit && startEditingContact(contact)}
+                      disabled={disabled}
+                      className="truncate rounded-[5px] py-1 text-left text-xs font-medium text-light-900 hover:bg-light-200 disabled:cursor-default disabled:hover:bg-transparent dark:text-dark-900 dark:hover:bg-dark-200 dark:disabled:hover:bg-transparent"
+                    >
+                      {formatEnumLabel(contact.role)}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => canEdit && startEditingContact(contact)}
+                      disabled={disabled}
+                      className="min-w-0 truncate rounded-[5px] px-2 py-1 text-left text-xs text-light-1000 hover:bg-light-200 disabled:cursor-default disabled:hover:bg-transparent dark:text-dark-1000 dark:hover:bg-dark-200 dark:disabled:hover:bg-transparent"
+                    >
+                      {contact.name}
+                    </button>
+                  </div>
+
+                  <div className="mt-2 space-y-2 pl-[23px]">
+                    {contact.methods.map((method) => {
+                      const MethodIcon = getContactMethodIcon(method.type);
+
+                      return (
+                        <div
+                          key={method.id}
+                          className="flex min-h-[28px] items-center gap-2"
+                        >
+                          <span className="flex w-[22px] flex-shrink-0 items-center justify-center">
+                            <MethodIcon className="h-4 w-4 text-light-900 dark:text-dark-900" />
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => canEdit && startEditingContact(contact)}
+                            disabled={disabled}
+                            className="min-w-0 flex-1 truncate rounded-[5px] px-2 py-1 text-left text-xs text-light-1000 hover:bg-light-200 disabled:cursor-default disabled:hover:bg-transparent dark:text-dark-1000 dark:hover:bg-dark-200 dark:disabled:hover:bg-transparent"
+                          >
+                            {method.value}
+                          </button>
+                        </div>
+                      );
+                    })}
+                    {canEdit && (
+                      <Tooltip content={t`Add contact`} placement="top">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setEditingContactId(contact.id);
+                            setContactDraft(addDraftMethod(contact));
+                          }}
+                          disabled={disabled}
+                          className={iconButtonClass}
+                          aria-label={t`Add contact`}
+                        >
+                          <HiOutlinePlus className="h-4 w-4" />
+                        </button>
+                      </Tooltip>
+                    )}
+                  </div>
+                </>
+              )}
+            </div>
+          ))}
+
+          {newContactDraft &&
+            renderContactForm({
+              draft: newContactDraft,
+              setDraft: setNewContactDraft,
+              onSave: saveNewContact,
+              onCancel: () => setNewContactDraft(null),
+            })}
+
+          {canEdit && !newContactDraft && (
+            <div
+              className={
+                contacts.length === 0
+                  ? "flex min-h-[48px] items-center justify-center"
+                  : ""
+              }
+            >
+              <button
+                type="button"
+                onClick={() => setNewContactDraft(createEmptyContactDraft())}
+                disabled={disabled}
+                className={addPersonButtonClass}
+              >
+                <HiOutlinePlus className="h-4 w-4" />
+                {t`Add person`}
+              </button>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {deleteTarget && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-light-50/40 p-4 backdrop-blur-[2px] dark:bg-dark-50/40">
+          <div className="w-full max-w-[400px] rounded-lg border border-light-600 bg-white p-5 shadow-3xl-light dark:border-dark-600 dark:bg-dark-100 dark:shadow-3xl-dark">
+            <h3 className="text-sm font-semibold text-light-1000 dark:text-dark-1000">
+              {deleteTarget.type === "contact"
+                ? t`Delete contact?`
+                : t`Delete contact method?`}
+            </h3>
+            <p className="mt-3 text-sm leading-6 text-light-900 dark:text-dark-900">
+              {deleteTarget.type === "contact"
+                ? t`This will delete the person and all phone numbers, emails, and other contact methods saved under them.`
+                : t`This will delete this contact method.`}
+            </p>
+            <div className="mt-5 flex justify-end gap-3">
+              <button
+                type="button"
+                onClick={() => setDeleteTarget(null)}
+                className={actionButtonClass}
+              >
+                {t`Cancel`}
+              </button>
+              <button
+                type="button"
+                onClick={confirmDelete}
+                className="rounded-[5px] bg-red-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-red-700"
+              >
+                {t`Delete`}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
+}
+
 export function CardRightPanel({ isTemplate }: { isTemplate?: boolean }) {
   const router = useRouter();
   const { canEditCard } = usePermissions();
@@ -503,7 +1064,9 @@ export function CardRightPanel({ isTemplate }: { isTemplate?: boolean }) {
     { enabled: !!cardId && cardId.length >= 12 },
   );
 
-  const isCreator = card?.createdBy && session?.user.id === card.createdBy;
+  const isCreator = Boolean(
+    card?.createdBy && session?.user.id === card.createdBy,
+  );
   const canEdit = canEditCard || isCreator;
 
   const board = card?.list.board;
@@ -763,15 +1326,6 @@ export function CardRightPanel({ isTemplate }: { isTemplate?: boolean }) {
     setIsEditingJobUrl(false);
   };
 
-  const commitOnEnter = (
-    event: KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>,
-    commit: () => void,
-  ) => {
-    if (event.key !== "Enter") return;
-    event.preventDefault();
-    commit();
-  };
-
   return (
     <div className="h-full w-[360px] overflow-y-auto border-l-[1px] border-light-300 bg-light-50 p-6 text-light-900 dark:border-dark-300 dark:bg-dark-50 dark:text-dark-900">
       <div className="mb-10 flex items-center justify-between">
@@ -818,7 +1372,7 @@ export function CardRightPanel({ isTemplate }: { isTemplate?: boolean }) {
           <div className={detailRowClass}>
             <HiOutlineDocumentText className={detailIconClass} />
             <span className={detailLabelClass}>{t`Created`}</span>
-            <span className="text-sm text-light-1000 dark:text-dark-1000">
+            <span className="px-2 py-1 text-sm text-light-1000 dark:text-dark-1000">
               {card?.createdAt ? (
                 <Tooltip
                   content={formatCreatedSourceTooltip(
@@ -835,6 +1389,14 @@ export function CardRightPanel({ isTemplate }: { isTemplate?: boolean }) {
           </div>
         </div>
       </section>
+
+      <ContactsSection
+        cardPublicId={cardId ?? ""}
+        contactsJson={card?.contactsJson}
+        canEdit={canEdit}
+        isUpdating={updateShortlistFields.isPending}
+        onUpdate={(contactsJson) => commitShortlistFields({ contactsJson })}
+      />
 
       <section className="mt-8">
         <div className="mb-4 flex items-center gap-2">
@@ -979,14 +1541,16 @@ export function CardRightPanel({ isTemplate }: { isTemplate?: boolean }) {
                   <span aria-hidden="true" />
                 )}
                 {canEdit && (
-                  <button
-                    type="button"
-                    onClick={() => setIsEditingJobUrl(true)}
-                    className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-[5px] text-light-900 hover:bg-light-200 dark:text-dark-900 dark:hover:bg-dark-200"
-                    aria-label={t`Edit job URL`}
-                  >
-                    <HiOutlinePencilSquare className="h-4 w-4" />
-                  </button>
+                  <Tooltip content={t`Edit job URL`} placement="top">
+                    <button
+                      type="button"
+                      onClick={() => setIsEditingJobUrl(true)}
+                      className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-[5px] text-light-900 hover:bg-light-200 dark:text-dark-900 dark:hover:bg-dark-200"
+                      aria-label={t`Edit job URL`}
+                    >
+                      <HiOutlinePencilSquare className="h-4 w-4" />
+                    </button>
+                  </Tooltip>
                 )}
               </div>
             )}
@@ -1340,7 +1904,9 @@ export default function CardPage({ isTemplate }: { isTemplate?: boolean }) {
     }
   }, [router, cardId, isLoading, error, card]);
 
-  const isCreator = card?.createdBy && session?.user.id === card.createdBy;
+  const isCreator = Boolean(
+    card?.createdBy && session?.user.id === card.createdBy,
+  );
   const canEdit = canEditCard || isCreator;
 
   const refetchCard = async () => {

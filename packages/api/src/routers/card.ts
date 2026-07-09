@@ -17,6 +17,7 @@ import {
   commentResponseSchema,
   commentDeleteResponseSchema,
   activityItemSchema,
+  cardContactsJsonSchema,
 } from "../schemas";
 import { mergeActivities } from "../utils/activities";
 import { sendMentionEmails } from "../utils/notifications";
@@ -30,6 +31,11 @@ import {
 const normalizeActivityValue = (value: unknown) => {
   if (value === null || value === undefined || value === "") return undefined;
   return String(value);
+};
+
+const parseContactsJson = (value: unknown) => {
+  const parsed = cardContactsJsonSchema.safeParse(value);
+  return parsed.success ? parsed.data : null;
 };
 
 export const cardRouter = createTRPCRouter({
@@ -734,6 +740,7 @@ export const cardRouter = createTRPCRouter({
 
       return {
         ...result,
+        contactsJson: parseContactsJson(result.contactsJson),
         attachments: attachmentsWithUrls,
         list: {
           ...result.list,
@@ -866,6 +873,7 @@ export const cardRouter = createTRPCRouter({
         index: z.number().optional(),
         listPublicId: z.string().min(12).optional(),
         dueDate: z.date().nullable().optional(),
+        contactsJson: cardContactsJsonSchema.optional(),
         manualUpdatedOnly: z.boolean().optional(),
         shortlistCompanyName: z.string().max(255).nullable().optional(),
         shortlistJobPostingUrl: z.string().url().nullable().optional(),
@@ -977,6 +985,7 @@ export const cardRouter = createTRPCRouter({
             description: string | null;
             publicId: string;
             dueDate: Date | null;
+            contactsJson: unknown;
             manualUpdatedOnly: boolean;
             shortlistCompanyName: string | null;
             shortlistJobPostingUrl: string | null;
@@ -996,6 +1005,14 @@ export const cardRouter = createTRPCRouter({
         | undefined;
 
       const previousDueDate = existingCard.dueDate;
+      const summarizeContactsJson = (contacts: unknown) => {
+        const parsed = cardContactsJsonSchema.safeParse(contacts);
+        if (!parsed.success || parsed.data.length === 0) return "No contacts";
+
+        return `${parsed.data.length} ${
+          parsed.data.length === 1 ? "contact" : "contacts"
+        }`;
+      };
       const hasShortlistFieldUpdate =
         input.shortlistCompanyName !== undefined ||
         input.shortlistJobPostingUrl !== undefined ||
@@ -1009,13 +1026,15 @@ export const cardRouter = createTRPCRouter({
         input.shortlistJobLocation !== undefined ||
         input.shortlistJobLocationType !== undefined ||
         input.shortlistJobType !== undefined ||
-        input.shortlistCompanyLocation !== undefined;
+        input.shortlistCompanyLocation !== undefined ||
+        input.contactsJson !== undefined;
 
       if (
         input.title ||
         input.description ||
         input.dueDate !== undefined ||
         input.manualUpdatedOnly !== undefined ||
+        input.contactsJson !== undefined ||
         hasShortlistFieldUpdate
       ) {
         result = await cardRepo.update(
@@ -1024,6 +1043,9 @@ export const cardRouter = createTRPCRouter({
             ...(input.title && { title: input.title }),
             ...(input.description && { description: input.description }),
             ...(input.dueDate !== undefined && { dueDate: input.dueDate }),
+            ...(input.contactsJson !== undefined && {
+              contactsJson: input.contactsJson,
+            }),
             ...(input.manualUpdatedOnly !== undefined && {
               manualUpdatedOnly: input.manualUpdatedOnly,
             }),
@@ -1280,9 +1302,26 @@ export const cardRouter = createTRPCRouter({
         );
       }
 
+      if (
+        input.contactsJson !== undefined &&
+        JSON.stringify(existingCard.contactsJson ?? []) !==
+          JSON.stringify(input.contactsJson)
+      ) {
+        pushShortlistActivity(
+          "Contacts",
+          summarizeContactsJson(existingCard.contactsJson),
+          summarizeContactsJson(input.contactsJson),
+        );
+      }
+
       if (activities.length > 0) {
         await cardActivityRepo.bulkCreate(ctx.db, activities);
       }
+
+      const responseResult = {
+        ...result,
+        contactsJson: parseContactsJson(result.contactsJson),
+      };
 
       // Build changes object for webhook
       const webhookChanges: Record<string, { from: unknown; to: unknown }> = {};
@@ -1308,6 +1347,16 @@ export const cardRouter = createTRPCRouter({
         webhookChanges.manualUpdatedOnly = {
           from: existingCard.manualUpdatedOnly,
           to: input.manualUpdatedOnly,
+        };
+      }
+      if (
+        input.contactsJson !== undefined &&
+        JSON.stringify(existingCard.contactsJson ?? []) !==
+          JSON.stringify(input.contactsJson)
+      ) {
+        webhookChanges.contactsJson = {
+          from: existingCard.contactsJson,
+          to: input.contactsJson,
         };
       }
       const movedToNewList = Boolean(newListId && existingCard.listId !== newListId);
@@ -1356,7 +1405,7 @@ export const cardRouter = createTRPCRouter({
         console.error("Webhook delivery failed:", error);
       });
 
-      return result;
+      return responseResult;
     }),
   delete: protectedProcedure
     .meta({
@@ -1541,6 +1590,7 @@ export const cardRouter = createTRPCRouter({
         workspaceId: targetList.workspaceId,
         position: "end",
         dueDate: sourceCard.dueDate ?? null,
+        contactsJson: sourceCard.contactsJson,
         shortlistCompanyName: sourceCard.shortlistCompanyName,
         shortlistJobPostingUrl: sourceCard.shortlistJobPostingUrl,
         shortlistSalaryMin: sourceCard.shortlistSalaryMin,

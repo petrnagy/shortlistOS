@@ -45,6 +45,7 @@ export const create = async (
     workspaceId: number;
     position: "start" | "end";
     dueDate?: Date | null;
+    contactsJson?: unknown;
     shortlistCompanyName?: string | null;
     shortlistJobPostingUrl?: string | null;
     shortlistSalaryMin?: number | null;
@@ -121,6 +122,7 @@ export const create = async (
         index: index,
         cardNumber,
         dueDate: cardInput.dueDate ?? null,
+        contactsJson: cardInput.contactsJson,
         shortlistCompanyName: cardInput.shortlistCompanyName,
         shortlistJobPostingUrl: cardInput.shortlistJobPostingUrl,
         shortlistSalaryMin: cardInput.shortlistSalaryMin,
@@ -236,6 +238,7 @@ export const update = async (
     title?: string;
     description?: string;
     dueDate?: Date | null;
+    contactsJson?: unknown;
     manualUpdatedOnly?: boolean;
     shortlistCompanyName?: string | null;
     shortlistJobPostingUrl?: string | null;
@@ -261,6 +264,8 @@ export const update = async (
       title: cardInput.title,
       description: cardInput.description,
       dueDate: cardInput.dueDate !== undefined ? cardInput.dueDate : undefined,
+      contactsJson:
+        cardInput.contactsJson !== undefined ? cardInput.contactsJson : undefined,
       manualUpdatedOnly: cardInput.manualUpdatedOnly,
       shortlistCompanyName: cardInput.shortlistCompanyName,
       shortlistJobPostingUrl: cardInput.shortlistJobPostingUrl,
@@ -286,6 +291,7 @@ export const update = async (
       title: cards.title,
       description: cards.description,
       dueDate: cards.dueDate,
+      contactsJson: cards.contactsJson,
       manualUpdatedOnly: cards.manualUpdatedOnly,
       shortlistCompanyName: cards.shortlistCompanyName,
       shortlistJobPostingUrl: cards.shortlistJobPostingUrl,
@@ -336,6 +342,7 @@ export const getByPublicId = (db: dbClient, cardPublicId: string) => {
       description: true,
       listId: true,
       dueDate: true,
+      contactsJson: true,
       manualUpdatedOnly: true,
       shortlistCompanyName: true,
       shortlistJobPostingUrl: true,
@@ -582,6 +589,7 @@ export const getWithListAndMembersByPublicId = async (
       description: true,
       createdAt: true,
       dueDate: true,
+      contactsJson: true,
       manualUpdatedOnly: true,
       shortlistCompanyName: true,
       shortlistJobPostingUrl: true,
@@ -989,6 +997,7 @@ export const reorder = async (
         title: true,
         description: true,
         dueDate: true,
+        contactsJson: true,
         manualUpdatedOnly: true,
         shortlistCompanyName: true,
         shortlistJobPostingUrl: true,

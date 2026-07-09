@@ -330,6 +330,13 @@
       "when": 1782262800000,
       "tag": "20260624090000_AddProcessingFieldsToShortlistClip",
       "breakpoints": true
+    },
+    {
+      "idx": 47,
+      "version": "7",
+      "when": 1783674000000,
+      "tag": "20260710090000_AddContactsJsonToCard",
+      "breakpoints": true
     }
   ]
 }

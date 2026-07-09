@@ -85,6 +85,7 @@ export const cards = pgTable(
       () => imports.id,
     ),
     dueDate: timestamp("dueDate"),
+    contactsJson: json("contactsJson"),
     manualUpdatedOnly: boolean("manualUpdatedOnly").notNull().default(false),
     shortlistCompanyName: varchar("shortlist_companyName", { length: 255 }),
     shortlistJobPostingUrl: text("shortlist_jobPostingUrl"),
