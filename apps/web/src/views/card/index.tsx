@@ -639,6 +639,7 @@ function ContactsSection({
     "flex h-6 w-[22px] items-center justify-center rounded-[5px] text-light-900 hover:bg-light-200 disabled:cursor-not-allowed disabled:opacity-60 dark:text-dark-900 dark:hover:bg-dark-200";
   const compactInputClass =
     "h-7 w-full rounded-[5px] border border-light-300 bg-light-50 px-2 py-0 text-xs text-light-1000 focus:border-light-600 focus:outline-none focus:ring-0 disabled:cursor-not-allowed disabled:opacity-60 dark:border-dark-300 dark:bg-dark-50 dark:text-dark-1000 dark:focus:border-dark-600";
+  const contactFooterClass = "flex min-h-[20px] justify-end gap-3";
 
   useEffect(() => {
     if (newContactDraft || editingContactId) {
@@ -774,7 +775,7 @@ function ContactsSection({
     onCancel: () => void;
   }) => (
     <div className="space-y-1">
-      <div className="grid grid-cols-[22px_92px_1fr] items-center gap-x-1 gap-y-2">
+      <div className="grid min-h-[48px] grid-cols-[22px_92px_1fr] items-center gap-x-1 gap-y-2">
         <FaRegCircleUser className="h-4 w-4 text-light-900 dark:text-dark-900" />
         <select
           value={draft.role}
@@ -870,7 +871,7 @@ function ContactsSection({
           </button>
         </Tooltip>
       </div>
-      <div className="flex justify-end gap-3">
+      <div className={contactFooterClass}>
         <button
           type="button"
           onClick={onCancel}
@@ -904,7 +905,7 @@ function ContactsSection({
           {contacts.map((contact) => (
             <div
               key={contact.id}
-              className="min-h-[124px] border-b border-light-300 pb-3 last:border-b-0 dark:border-dark-300"
+              className="border-b border-light-300 pb-3 last:border-b-0 dark:border-dark-300"
             >
               {editingContactId === contact.id && contactDraft ? (
                 renderContactForm({
@@ -938,7 +939,7 @@ function ContactsSection({
                     </button>
                   </div>
 
-                  <div className="mt-2 space-y-2 pl-[23px]">
+                  <div className="mt-1 space-y-1 pl-[23px]">
                     {contact.methods.map((method) => {
                       const MethodIcon = getContactMethodIcon(method.type);
 
@@ -977,6 +978,25 @@ function ContactsSection({
                         </button>
                       </Tooltip>
                     )}
+                  </div>
+                  <div
+                    className={`${contactFooterClass} invisible`}
+                    aria-hidden="true"
+                  >
+                    <button
+                      type="button"
+                      className={actionButtonClass}
+                      tabIndex={-1}
+                    >
+                      {t`Cancel`}
+                    </button>
+                    <button
+                      type="button"
+                      className={actionButtonClass}
+                      tabIndex={-1}
+                    >
+                      {t`Save`}
+                    </button>
                   </div>
                 </>
               )}
