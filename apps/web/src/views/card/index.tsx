@@ -363,11 +363,16 @@ const formatCreatedSourceTooltip = (source: string) => {
   }
 };
 
+const ENUM_LABEL_ACRONYMS = new Set(["CEO", "CTO", "HR"]);
+
 const formatEnumLabel = (value: string) =>
   value
-    .toLowerCase()
     .split("_")
-    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .map((part) =>
+      ENUM_LABEL_ACRONYMS.has(part)
+        ? part
+        : part.charAt(0).toUpperCase() + part.slice(1).toLowerCase(),
+    )
     .join(" ");
 
 const createContactId = () =>
@@ -633,13 +638,25 @@ function ContactsSection({
   const disabled = !canEdit || isUpdating || !cardPublicId;
   const actionButtonClass =
     "text-xs font-medium text-light-900 underline underline-offset-2 hover:text-light-1000 disabled:cursor-not-allowed disabled:opacity-60 dark:text-dark-900 dark:hover:text-dark-1000";
+  const deleteActionButtonClass =
+    "text-xs font-medium text-red-600 underline underline-offset-2 hover:text-red-700 disabled:cursor-not-allowed disabled:opacity-60 dark:text-red-400 dark:hover:text-red-300";
   const addPersonButtonClass =
     "inline-flex items-center justify-center gap-1.5 rounded-[5px] border border-light-300 px-2.5 py-1.5 text-xs font-medium text-light-1000 hover:bg-light-200 disabled:cursor-not-allowed disabled:opacity-60 dark:border-dark-300 dark:text-dark-1000 dark:hover:bg-dark-200";
   const iconButtonClass =
     "flex h-6 w-[22px] items-center justify-center rounded-[5px] text-light-900 hover:bg-light-200 disabled:cursor-not-allowed disabled:opacity-60 dark:text-dark-900 dark:hover:bg-dark-200";
   const compactInputClass =
-    "h-7 w-full rounded-[5px] border border-light-300 bg-light-50 px-2 py-0 text-xs text-light-1000 focus:border-light-600 focus:outline-none focus:ring-0 disabled:cursor-not-allowed disabled:opacity-60 dark:border-dark-300 dark:bg-dark-50 dark:text-dark-1000 dark:focus:border-dark-600";
-  const contactFooterClass = "flex min-h-[20px] justify-end gap-3";
+    "h-7 w-full rounded-[5px] border border-light-300 bg-light-50 px-2 py-0 text-xs leading-none text-light-1000 focus:border-light-600 focus:outline-none focus:ring-0 disabled:cursor-not-allowed disabled:opacity-60 dark:border-dark-300 dark:bg-dark-50 dark:text-dark-1000 dark:focus:border-dark-600";
+  const hiddenCompactSelectClass =
+    "absolute inset-0 h-full w-full cursor-pointer rounded-[5px] border border-light-300 bg-light-50 text-xs leading-none text-light-1000 opacity-0 focus:border-light-600 focus:outline-none focus:ring-0 disabled:cursor-not-allowed dark:border-dark-300 dark:bg-dark-50 dark:text-dark-1000 dark:focus:border-dark-600";
+  const contactPersonRowClass =
+    "grid h-12 grid-cols-[22px_1fr] items-center gap-x-1 gap-y-2";
+  const contactPersonEditRowClass =
+    "grid h-12 grid-cols-[22px_1fr_92px] items-center gap-x-1 gap-y-2";
+  const contactMethodEditRowClass =
+    "grid h-7 grid-cols-[22px_1fr] items-center gap-x-1 gap-y-1";
+  const contactMethodViewRowClass = "flex h-7 items-center gap-2";
+  const contactMethodsWrapperClass = "mt-1 space-y-1 pl-[23px]";
+  const contactFooterClass = "flex h-5 items-center justify-between gap-3";
 
   useEffect(() => {
     if (newContactDraft || editingContactId) {
@@ -761,6 +778,8 @@ function ContactsSection({
     }
 
     setDeleteTarget(null);
+    setEditingContactId(null);
+    setContactDraft(null);
   };
 
   const renderContactForm = ({
@@ -768,15 +787,27 @@ function ContactsSection({
     setDraft,
     onSave,
     onCancel,
+    onDelete,
   }: {
     draft: CardContact;
     setDraft: (draft: CardContact) => void;
     onSave: () => void;
     onCancel: () => void;
+    onDelete?: () => void;
   }) => (
     <div className="space-y-1">
-      <div className="grid min-h-[48px] grid-cols-[22px_92px_1fr] items-center gap-x-1 gap-y-2">
+      <div className={contactPersonEditRowClass}>
         <FaRegCircleUser className="h-4 w-4 text-light-900 dark:text-dark-900" />
+        <input
+          ref={nameInputRef}
+          type="text"
+          value={draft.name}
+          onChange={(event) => setDraft({ ...draft, name: event.target.value })}
+          onKeyDown={(event) => commitOnEnter(event, onSave)}
+          placeholder={t`Name`}
+          disabled={disabled}
+          className={compactInputClass}
+        />
         <select
           value={draft.role}
           onChange={(event) =>
@@ -791,69 +822,64 @@ function ContactsSection({
             </option>
           ))}
         </select>
-        <input
-          ref={nameInputRef}
-          type="text"
-          value={draft.name}
-          onChange={(event) => setDraft({ ...draft, name: event.target.value })}
-          onKeyDown={(event) => commitOnEnter(event, onSave)}
-          placeholder={t`Name`}
-          disabled={disabled}
-          className={compactInputClass}
-        />
       </div>
-      <div className="space-y-1 pl-[23px]">
+      <div className={contactMethodsWrapperClass}>
         {draft.methods.map((method) => {
           const MethodIcon = getContactMethodIcon(method.type);
 
           return (
             <div
               key={method.id}
-              className="grid min-h-[28px] grid-cols-[22px_92px_1fr_28px] items-center gap-x-1 gap-y-1"
+              className={contactMethodEditRowClass}
             >
-              <MethodIcon className="h-4 w-4 justify-self-center text-light-900 dark:text-dark-900" />
-              <select
-                value={method.type}
-                onChange={(event) =>
-                  setDraft(
-                    updateDraftMethod(draft, method.id, {
-                      type: event.target.value as ContactMethodType,
-                    }),
-                  )
-                }
-                disabled={disabled}
-                className={compactInputClass}
-              >
-                {CONTACT_METHOD_TYPE_OPTIONS.map((type) => (
-                  <option key={type} value={type}>
-                    {formatEnumLabel(type)}
-                  </option>
-                ))}
-              </select>
-              <input
-                type="text"
-                value={method.value}
-                onChange={(event) =>
-                  setDraft(
-                    updateDraftMethod(draft, method.id, {
-                      value: event.target.value,
-                    }),
-                  )
-                }
-                onKeyDown={(event) => commitOnEnter(event, onSave)}
-                placeholder={t`Contact value`}
-                disabled={disabled}
-                className={compactInputClass}
-              />
-              <button
-                type="button"
-                onClick={() => setDraft(removeDraftMethod(draft, method.id))}
-                disabled={disabled || draft.methods.length === 1}
-                className="flex h-6 w-7 items-center justify-center rounded-[5px] text-light-900 hover:bg-light-200 disabled:cursor-not-allowed disabled:opacity-40 dark:text-dark-900 dark:hover:bg-dark-200"
-                aria-label={t`Remove contact method`}
-              >
-                <HiXMark className="h-4 w-4" />
-              </button>
+              <div className="relative flex h-6 w-[22px] items-center justify-center rounded-[5px] text-light-900 hover:bg-light-200 dark:text-dark-900 dark:hover:bg-dark-200">
+                <MethodIcon className="h-4 w-4 text-light-900 dark:text-dark-900" />
+                <select
+                  value={method.type}
+                  onChange={(event) =>
+                    setDraft(
+                      updateDraftMethod(draft, method.id, {
+                        type: event.target.value as ContactMethodType,
+                      }),
+                    )
+                  }
+                  disabled={disabled}
+                  className={hiddenCompactSelectClass}
+                  aria-label={t`Change contact type`}
+                >
+                  {CONTACT_METHOD_TYPE_OPTIONS.map((type) => (
+                    <option key={type} value={type}>
+                      {formatEnumLabel(type)}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="relative">
+                <input
+                  type="text"
+                  value={method.value}
+                  onChange={(event) =>
+                    setDraft(
+                      updateDraftMethod(draft, method.id, {
+                        value: event.target.value,
+                      }),
+                    )
+                  }
+                  onKeyDown={(event) => commitOnEnter(event, onSave)}
+                  placeholder={t`Contact value`}
+                  disabled={disabled}
+                  className={`${compactInputClass} pr-8`}
+                />
+                <button
+                  type="button"
+                  onClick={() => setDraft(removeDraftMethod(draft, method.id))}
+                  disabled={disabled || draft.methods.length === 1}
+                  className="absolute right-1 top-1/2 flex h-5 w-5 -translate-y-1/2 items-center justify-center rounded-[5px] text-light-900 hover:bg-light-200 disabled:cursor-not-allowed disabled:opacity-40 dark:text-dark-900 dark:hover:bg-dark-200"
+                  aria-label={t`Remove contact method`}
+                >
+                  <HiXMark className="h-4 w-4" />
+                </button>
+              </div>
             </div>
           );
         })}
@@ -872,22 +898,36 @@ function ContactsSection({
         </Tooltip>
       </div>
       <div className={contactFooterClass}>
-        <button
-          type="button"
-          onClick={onCancel}
-          disabled={disabled}
-          className={actionButtonClass}
-        >
-          {t`Cancel`}
-        </button>
-        <button
-          type="button"
-          onClick={onSave}
-          disabled={disabled || draft.name.trim().length === 0}
-          className={actionButtonClass}
-        >
-          {t`Save`}
-        </button>
+        <div>
+          {onDelete && (
+            <button
+              type="button"
+              onClick={onDelete}
+              disabled={disabled}
+              className={deleteActionButtonClass}
+            >
+              {t`Delete`}
+            </button>
+          )}
+        </div>
+        <div className="flex items-center gap-3">
+          <button
+            type="button"
+            onClick={onCancel}
+            disabled={disabled}
+            className={actionButtonClass}
+          >
+            {t`Cancel`}
+          </button>
+          <button
+            type="button"
+            onClick={onSave}
+            disabled={disabled || draft.name.trim().length === 0}
+            className={actionButtonClass}
+          >
+            {t`Save`}
+          </button>
+        </div>
       </div>
     </div>
   );
@@ -916,37 +956,34 @@ function ContactsSection({
                     setEditingContactId(null);
                     setContactDraft(null);
                   },
+                  onDelete: () =>
+                    setDeleteTarget({
+                      type: "contact",
+                      contactId: contact.id,
+                    }),
                 })
               ) : (
                 <>
-                  <div className="grid min-h-[48px] grid-cols-[22px_92px_1fr] items-center gap-x-1 gap-y-2">
+                  <div className={contactPersonRowClass}>
                     <FaRegCircleUser className="h-4 w-4 text-light-900 dark:text-dark-900" />
                     <button
                       type="button"
                       onClick={() => canEdit && startEditingContact(contact)}
                       disabled={disabled}
-                      className="truncate rounded-[5px] py-1 text-left text-xs font-medium text-light-900 hover:bg-light-200 disabled:cursor-default disabled:hover:bg-transparent dark:text-dark-900 dark:hover:bg-dark-200 dark:disabled:hover:bg-transparent"
+                      className="min-w-0 truncate rounded-[5px] px-2 py-1 text-left text-xs font-medium text-light-1000 hover:bg-light-200 disabled:cursor-default disabled:hover:bg-transparent dark:text-dark-1000 dark:hover:bg-dark-200 dark:disabled:hover:bg-transparent"
                     >
-                      {formatEnumLabel(contact.role)}
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => canEdit && startEditingContact(contact)}
-                      disabled={disabled}
-                      className="min-w-0 truncate rounded-[5px] px-2 py-1 text-left text-xs text-light-1000 hover:bg-light-200 disabled:cursor-default disabled:hover:bg-transparent dark:text-dark-1000 dark:hover:bg-dark-200 dark:disabled:hover:bg-transparent"
-                    >
-                      {contact.name}
+                      {contact.name} ({formatEnumLabel(contact.role)})
                     </button>
                   </div>
 
-                  <div className="mt-1 space-y-1 pl-[23px]">
+                  <div className={contactMethodsWrapperClass}>
                     {contact.methods.map((method) => {
                       const MethodIcon = getContactMethodIcon(method.type);
 
                       return (
                         <div
                           key={method.id}
-                          className="flex min-h-[28px] items-center gap-2"
+                          className={contactMethodViewRowClass}
                         >
                           <span className="flex w-[22px] flex-shrink-0 items-center justify-center">
                             <MethodIcon className="h-4 w-4 text-light-900 dark:text-dark-900" />
@@ -955,7 +992,7 @@ function ContactsSection({
                             type="button"
                             onClick={() => canEdit && startEditingContact(contact)}
                             disabled={disabled}
-                            className="min-w-0 flex-1 truncate rounded-[5px] px-2 py-1 text-left text-xs text-light-1000 hover:bg-light-200 disabled:cursor-default disabled:hover:bg-transparent dark:text-dark-1000 dark:hover:bg-dark-200 dark:disabled:hover:bg-transparent"
+                            className="min-w-0 truncate rounded-[5px] px-2 py-1 text-left text-xs text-light-1000 hover:bg-light-200 disabled:cursor-default disabled:hover:bg-transparent dark:text-dark-1000 dark:hover:bg-dark-200 dark:disabled:hover:bg-transparent"
                           >
                             {method.value}
                           </button>
@@ -983,20 +1020,31 @@ function ContactsSection({
                     className={`${contactFooterClass} invisible`}
                     aria-hidden="true"
                   >
-                    <button
-                      type="button"
-                      className={actionButtonClass}
-                      tabIndex={-1}
-                    >
-                      {t`Cancel`}
-                    </button>
-                    <button
-                      type="button"
-                      className={actionButtonClass}
-                      tabIndex={-1}
-                    >
-                      {t`Save`}
-                    </button>
+                    <div>
+                      <button
+                        type="button"
+                        className={deleteActionButtonClass}
+                        tabIndex={-1}
+                      >
+                        {t`Delete`}
+                      </button>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <button
+                        type="button"
+                        className={actionButtonClass}
+                        tabIndex={-1}
+                      >
+                        {t`Cancel`}
+                      </button>
+                      <button
+                        type="button"
+                        className={actionButtonClass}
+                        tabIndex={-1}
+                      >
+                        {t`Save`}
+                      </button>
+                    </div>
                   </div>
                 </>
               )}
@@ -1008,7 +1056,9 @@ function ContactsSection({
               draft: newContactDraft,
               setDraft: setNewContactDraft,
               onSave: saveNewContact,
-              onCancel: () => setNewContactDraft(null),
+              onCancel: () => {
+                setNewContactDraft(null);
+              },
             })}
 
           {canEdit && !newContactDraft && (
