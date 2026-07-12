@@ -2,7 +2,7 @@ import type { KeyboardEvent } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { t } from "@lingui/core/macro";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import {
   HiOutlineBanknotes,
@@ -288,6 +288,41 @@ type JobType = (typeof JOB_TYPE_OPTIONS)[number];
 type SalaryRegion = (typeof SALARY_REGIONS)[number];
 type SalaryInterval = (typeof SALARY_INTERVAL_OPTIONS)[number]["value"];
 
+const CONTACT_ROLE_LABELS = {
+  HR: t`HR`,
+  RECRUITER: t`Recruiter`,
+  HIRING_MANAGER: t`Hiring manager`,
+  CTO: t`CTO`,
+  CEO: t`CEO`,
+  ADMIN: t`Admin`,
+  OTHER: t`Other`,
+} satisfies Record<ContactRole, string>;
+
+const CONTACT_METHOD_TYPE_LABELS = {
+  PHONE: t`Phone`,
+  EMAIL: t`Email`,
+  LINKEDIN: t`LinkedIn`,
+  WHATSAPP: t`WhatsApp`,
+  TELEGRAM: t`Telegram`,
+  WEBSITE: t`Website`,
+  OTHER: t`Other`,
+} satisfies Record<ContactMethodType, string>;
+
+const JOB_TYPE_LABELS = {
+  FULL_TIME: t`Full time`,
+  PART_TIME: t`Part time`,
+  CONTRACT: t`Contract`,
+  INTERNSHIP: t`Internship`,
+  TEMPORARY: t`Temporary`,
+  FREELANCE: t`Freelance`,
+} satisfies Record<JobType, string>;
+
+const JOB_LOCATION_TYPE_LABELS = {
+  onsite: t`Onsite`,
+  hybrid: t`Hybrid`,
+  remote: t`Remote`,
+} satisfies Record<JobLocationType, string>;
+
 interface SalaryRange {
   min: number | null;
   max: number | null;
@@ -362,18 +397,6 @@ const formatCreatedSourceTooltip = (source: string) => {
       return t`Created from another source`;
   }
 };
-
-const ENUM_LABEL_ACRONYMS = new Set(["CEO", "CTO", "HR"]);
-
-const formatEnumLabel = (value: string) =>
-  value
-    .split("_")
-    .map((part) =>
-      ENUM_LABEL_ACRONYMS.has(part)
-        ? part
-        : part.charAt(0).toUpperCase() + part.slice(1).toLowerCase(),
-    )
-    .join(" ");
 
 const createContactId = () =>
   `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
@@ -623,7 +646,6 @@ function ContactsSection({
   onUpdate: (contacts: CardContact[]) => void;
 }) {
   const contacts = parseContactsJson(contactsJson);
-  const nameInputRef = useRef<HTMLInputElement | null>(null);
   const [newContactDraft, setNewContactDraft] = useState<CardContact | null>(
     null,
   );
@@ -649,7 +671,7 @@ function ContactsSection({
   const hiddenCompactSelectClass =
     "absolute inset-0 h-full w-full cursor-pointer rounded-[5px] border border-light-300 bg-light-50 text-xs leading-none text-light-1000 opacity-0 focus:border-light-600 focus:outline-none focus:ring-0 disabled:cursor-not-allowed dark:border-dark-300 dark:bg-dark-50 dark:text-dark-1000 dark:focus:border-dark-600";
   const contactPersonRowClass =
-    "grid h-12 grid-cols-[22px_1fr] items-center gap-x-1 gap-y-2";
+    "grid h-9 grid-cols-[22px_1fr] items-center gap-x-1 gap-y-2";
   const contactPersonEditRowClass =
     "grid h-12 grid-cols-[22px_1fr_92px] items-center gap-x-1 gap-y-2";
   const contactMethodEditRowClass =
@@ -657,12 +679,9 @@ function ContactsSection({
   const contactMethodViewRowClass = "flex h-7 items-center gap-2";
   const contactMethodsWrapperClass = "mt-1 space-y-1 pl-[23px]";
   const contactFooterClass = "flex h-5 items-center justify-between gap-3";
-
-  useEffect(() => {
-    if (newContactDraft || editingContactId) {
-      nameInputRef.current?.focus();
-    }
-  }, [newContactDraft?.id, editingContactId]);
+  const contactViewWrapperClass =
+    "w-full cursor-pointer rounded-[5px] px-2 pb-2 pt-1 hover:bg-light-200 focus:outline-none focus:ring-1 focus:ring-light-500 dark:hover:bg-dark-200 dark:focus:ring-dark-500";
+  const disabledContactViewWrapperClass = "w-full rounded-[5px] px-2 pb-2 pt-1";
 
   const commitContacts = (nextContacts: CardContact[]) => {
     onUpdate(nextContacts);
@@ -799,7 +818,6 @@ function ContactsSection({
       <div className={contactPersonEditRowClass}>
         <FaRegCircleUser className="h-4 w-4 text-light-900 dark:text-dark-900" />
         <input
-          ref={nameInputRef}
           type="text"
           value={draft.name}
           onChange={(event) => setDraft({ ...draft, name: event.target.value })}
@@ -818,7 +836,7 @@ function ContactsSection({
         >
           {CONTACT_ROLE_OPTIONS.map((role) => (
             <option key={role} value={role}>
-              {formatEnumLabel(role)}
+              {CONTACT_ROLE_LABELS[role]}
             </option>
           ))}
         </select>
@@ -832,28 +850,33 @@ function ContactsSection({
               key={method.id}
               className={contactMethodEditRowClass}
             >
-              <div className="relative flex h-6 w-[22px] items-center justify-center rounded-[5px] text-light-900 hover:bg-light-200 dark:text-dark-900 dark:hover:bg-dark-200">
-                <MethodIcon className="h-4 w-4 text-light-900 dark:text-dark-900" />
-                <select
-                  value={method.type}
-                  onChange={(event) =>
-                    setDraft(
-                      updateDraftMethod(draft, method.id, {
-                        type: event.target.value as ContactMethodType,
-                      }),
-                    )
-                  }
-                  disabled={disabled}
-                  className={hiddenCompactSelectClass}
-                  aria-label={t`Change contact type`}
-                >
-                  {CONTACT_METHOD_TYPE_OPTIONS.map((type) => (
-                    <option key={type} value={type}>
-                      {formatEnumLabel(type)}
-                    </option>
-                  ))}
-                </select>
-              </div>
+              <Tooltip
+                content={t`Change type`}
+                placement="top"
+              >
+                <div className="relative flex h-6 w-[22px] items-center justify-center rounded-[5px] text-light-900 hover:bg-light-200 dark:text-dark-900 dark:hover:bg-dark-200">
+                  <MethodIcon className="h-4 w-4 text-light-900 dark:text-dark-900" />
+                  <select
+                    value={method.type}
+                    onChange={(event) =>
+                      setDraft(
+                        updateDraftMethod(draft, method.id, {
+                          type: event.target.value as ContactMethodType,
+                        }),
+                      )
+                    }
+                    disabled={disabled}
+                    className={hiddenCompactSelectClass}
+                    aria-label={t`Change contact type`}
+                  >
+                    {CONTACT_METHOD_TYPE_OPTIONS.map((type) => (
+                      <option key={type} value={type}>
+                        {CONTACT_METHOD_TYPE_LABELS[type]}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </Tooltip>
               <div className="relative">
                 <input
                   type="text"
@@ -866,7 +889,7 @@ function ContactsSection({
                     )
                   }
                   onKeyDown={(event) => commitOnEnter(event, onSave)}
-                  placeholder={t`Contact value`}
+                  placeholder={t`Phone, email, LinkedIn, etc.`}
                   disabled={disabled}
                   className={`${compactInputClass} pr-8`}
                 />
@@ -964,58 +987,58 @@ function ContactsSection({
                 })
               ) : (
                 <>
-                  <div className={contactPersonRowClass}>
-                    <FaRegCircleUser className="h-4 w-4 text-light-900 dark:text-dark-900" />
-                    <button
-                      type="button"
-                      onClick={() => canEdit && startEditingContact(contact)}
-                      disabled={disabled}
-                      className="min-w-0 truncate rounded-[5px] px-2 py-1 text-left text-xs font-medium text-light-1000 hover:bg-light-200 disabled:cursor-default disabled:hover:bg-transparent dark:text-dark-1000 dark:hover:bg-dark-200 dark:disabled:hover:bg-transparent"
+                  <Tooltip
+                    className="flex w-full"
+                    content={t`Click to edit`}
+                    placement="top"
+                  >
+                    <div
+                      role={canEdit ? "button" : undefined}
+                      tabIndex={disabled ? undefined : 0}
+                      onClick={() => {
+                        if (!disabled) startEditingContact(contact);
+                      }}
+                      onKeyDown={(event) => {
+                        if (disabled) return;
+                        if (event.key === "Enter" || event.key === " ") {
+                          event.preventDefault();
+                          startEditingContact(contact);
+                        }
+                      }}
+                      className={
+                        disabled
+                          ? disabledContactViewWrapperClass
+                          : contactViewWrapperClass
+                      }
                     >
-                      {contact.name} ({formatEnumLabel(contact.role)})
-                    </button>
-                  </div>
+                      <div className={contactPersonRowClass}>
+                        <FaRegCircleUser className="h-4 w-4 text-light-900 dark:text-dark-900" />
+                        <span className="min-w-0 truncate text-left text-xs font-medium text-light-1000 dark:text-dark-1000">
+                          {contact.name} ({CONTACT_ROLE_LABELS[contact.role]})
+                        </span>
+                      </div>
 
-                  <div className={contactMethodsWrapperClass}>
-                    {contact.methods.map((method) => {
-                      const MethodIcon = getContactMethodIcon(method.type);
+                      <div className={contactMethodsWrapperClass}>
+                        {contact.methods.map((method) => {
+                          const MethodIcon = getContactMethodIcon(method.type);
 
-                      return (
-                        <div
-                          key={method.id}
-                          className={contactMethodViewRowClass}
-                        >
-                          <span className="flex w-[22px] flex-shrink-0 items-center justify-center">
-                            <MethodIcon className="h-4 w-4 text-light-900 dark:text-dark-900" />
-                          </span>
-                          <button
-                            type="button"
-                            onClick={() => canEdit && startEditingContact(contact)}
-                            disabled={disabled}
-                            className="min-w-0 truncate rounded-[5px] px-2 py-1 text-left text-xs text-light-1000 hover:bg-light-200 disabled:cursor-default disabled:hover:bg-transparent dark:text-dark-1000 dark:hover:bg-dark-200 dark:disabled:hover:bg-transparent"
-                          >
-                            {method.value}
-                          </button>
-                        </div>
-                      );
-                    })}
-                    {canEdit && (
-                      <Tooltip content={t`Add contact`} placement="top">
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setEditingContactId(contact.id);
-                            setContactDraft(addDraftMethod(contact));
-                          }}
-                          disabled={disabled}
-                          className={iconButtonClass}
-                          aria-label={t`Add contact`}
-                        >
-                          <HiOutlinePlus className="h-4 w-4" />
-                        </button>
-                      </Tooltip>
-                    )}
-                  </div>
+                          return (
+                            <div
+                              key={method.id}
+                              className={contactMethodViewRowClass}
+                            >
+                              <span className="flex w-[22px] flex-shrink-0 items-center justify-center">
+                                <MethodIcon className="h-4 w-4 text-light-900 dark:text-dark-900" />
+                              </span>
+                              <span className="min-w-0 truncate text-left text-xs text-light-1000 dark:text-dark-1000">
+                                {method.value}
+                              </span>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </Tooltip>
                   <div
                     className={`${contactFooterClass} invisible`}
                     aria-hidden="true"
@@ -1518,7 +1541,7 @@ export function CardRightPanel({ isTemplate }: { isTemplate?: boolean }) {
             >
               {JOB_TYPE_OPTIONS.map((option) => (
                 <option key={option} value={option}>
-                  {formatEnumLabel(option)}
+                  {JOB_TYPE_LABELS[option]}
                 </option>
               ))}
             </select>
@@ -1542,7 +1565,7 @@ export function CardRightPanel({ isTemplate }: { isTemplate?: boolean }) {
               <option value="">{t`unknown`}</option>
               {JOB_LOCATION_TYPE_OPTIONS.map((option) => (
                 <option key={option} value={option}>
-                  {formatEnumLabel(option)}
+                  {JOB_LOCATION_TYPE_LABELS[option]}
                 </option>
               ))}
             </select>

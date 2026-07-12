@@ -7,6 +7,7 @@ import tippy from "tippy.js";
 
 interface TooltipProps {
   children: ReactNode;
+  className?: string;
   content?: ReactNode;
   placement?: Placement;
   delay?: number | [number, number];
@@ -14,6 +15,7 @@ interface TooltipProps {
 
 export function Tooltip({
   children,
+  className = "inline-flex",
   content,
   placement = "bottom",
   delay = [500, 0],
@@ -47,7 +49,7 @@ export function Tooltip({
   }, [content, placement, delay]);
 
   return (
-    <div ref={triggerRef} className="inline-flex">
+    <div ref={triggerRef} className={className}>
       {children}
     </div>
   );
