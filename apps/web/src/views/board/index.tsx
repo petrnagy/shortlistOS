@@ -804,6 +804,9 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
                                         >
                                           <Card
                                             title={card.title}
+                                            shortlistCompanyName={
+                                              card.shortlistCompanyName
+                                            }
                                             ticketNumber={
                                               card.cardNumber != null
                                                 ? `${boardData.workspace.cardPrefix}-${card.cardNumber}`

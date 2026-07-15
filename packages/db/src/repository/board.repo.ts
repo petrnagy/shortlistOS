@@ -277,6 +277,7 @@ export const getByPublicId = async (
               index: true,
               dueDate: true,
               cardNumber: true,
+              shortlistCompanyName: true,
               shortlistJobLocationType: true,
             },
             with: {
@@ -483,6 +484,7 @@ export const getBySlug = async (
               index: true,
               dueDate: true,
               cardNumber: true,
+              shortlistCompanyName: true,
               shortlistJobLocationType: true,
             },
             with: {

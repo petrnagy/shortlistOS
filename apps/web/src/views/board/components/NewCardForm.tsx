@@ -166,6 +166,8 @@ export function NewCardForm({
               description: "",
               dueDate: args.dueDate ?? null,
               cardNumber: null,
+              shortlistCompanyName: args.shortlistCompanyName ?? null,
+              shortlistJobLocationType: null,
               lastActivity: null,
               comments: [],
               checklists: [],

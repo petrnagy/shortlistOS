@@ -33,6 +33,7 @@ const JOB_LOCATION_TYPE_LABELS: Record<ShortlistJobLocationType, CardLabel> = {
 
 const Card = ({
   title,
+  shortlistCompanyName,
   labels,
   members,
   checklists,
@@ -45,6 +46,7 @@ const Card = ({
   shortlistJobLocationType,
 }: {
   title: string;
+  shortlistCompanyName?: string | null;
   ticketNumber?: string | null;
   labels: CardLabel[];
   members: {
@@ -96,6 +98,8 @@ const Card = ({
   const generatedLocationLabel = getJobLocationTypeLabel(
     shortlistJobLocationType,
   );
+  const companyName = shortlistCompanyName?.trim();
+  const displayTitle = companyName ? `${title} at ${companyName}` : title;
   const displayLabels =
     generatedLocationLabel &&
     !labels.some((label) => label.name === generatedLocationLabel.name)
@@ -114,7 +118,7 @@ const Card = ({
           {ticketNumber}
         </span>
       )} */}
-      <span className="break-words">{title}</span>
+      <span className="break-words">{displayTitle}</span>
       {displayLabels.length ||
       members.length ||
       checklists.length > 0 ||
