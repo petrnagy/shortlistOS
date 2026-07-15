@@ -565,6 +565,9 @@ importers:
 
   packages/llm:
     dependencies:
+      '@kan/shared':
+        specifier: workspace:^
+        version: link:../shared
       '@mistralai/mistralai':
         specifier: ^2.2.6
         version: 2.2.6

@@ -303,6 +303,7 @@ function buildCardInput(
     title: title?.trim() ?? "Untitled opportunity",
     description: classification.description ?? "",
     dueDate: parseDate(classification.applicationDeadline),
+    contactsJson: classification.contactsJson,
     shortlistCompanyName: classification.companyName,
     shortlistJobPostingUrl: clip.url,
     shortlistSalaryMin: classification.salaryMin,

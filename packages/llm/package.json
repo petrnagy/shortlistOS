@@ -28,6 +28,7 @@
     "typecheck": "tsc --noEmit --emitDeclarationOnly false"
   },
   "dependencies": {
+    "@kan/shared": "workspace:^",
     "@mistralai/mistralai": "^2.2.6",
     "turndown": "^7.2.4",
     "zod": "catalog:"

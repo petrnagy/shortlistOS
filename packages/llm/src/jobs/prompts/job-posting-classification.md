@@ -519,6 +519,57 @@ Example:
 
 This is valid when the role is remote but the employment contract is associated with Prague.
 
+### Contacts
+
+- `contactsJson` `array`
+
+Extract contact people or clearly named contact teams/departments from the job posting.
+
+Return an empty array when no contact information is present.
+
+Each contact must use this exact shape:
+
+{
+"id": "contact-1",
+"role": "HR | RECRUITER | HIRING_MANAGER | CTO | CEO | ADMIN | OTHER",
+"name": "Person or named team/department",
+"methods": [
+{
+"id": "contact-1-method-1",
+"type": "PHONE | EMAIL | LINKEDIN | WHATSAPP | TELEGRAM | WEBSITE | OTHER",
+"value": "Contact value exactly as presented, with obvious whitespace cleaned"
+}
+]
+}
+
+Rules:
+
+- Include only contacts that are explicitly connected to this job opportunity, the hiring process, application questions, recruitment, or the hiring company.
+- Do not include generic application buttons, generic apply URLs, job board URLs, tracking URLs, newsletter links, unrelated social links, or company footer links.
+- Do not include contact information from unrelated page chrome, ads, other vacancies, testimonials, or legal/footer boilerplate.
+- Do not guess names, roles, or contact values.
+- Create a contact only when the posting identifies a person or a clearly named team/department, such as `Jane Smith`, `Recruitment Team`, `People Team`, or `Hiring Team`.
+- If a contact method is shown without an identifiable person or named team/department, do not create a contact for it.
+- Preserve the contact name as written, with only obvious whitespace cleaned.
+- Use `RECRUITER` for recruiters, talent acquisition contacts, recruitment consultants, and recruitment teams.
+- Use `HR` for HR, People, or Human Resources contacts.
+- Use `HIRING_MANAGER` only when the posting explicitly identifies the contact as a hiring manager or role manager.
+- Use `CTO`, `CEO`, or `ADMIN` only when that role is explicitly stated.
+- Use `OTHER` when the contact is relevant but no listed role can be confidently selected.
+- A contact may have multiple methods. Put all methods belonging to the same person/team in the same `methods` array.
+- Use unique non-empty IDs in the format `contact-1`, `contact-2`, `contact-1-method-1`, `contact-1-method-2`, etc.
+- Do not return contacts with an empty `methods` array.
+
+Method type rules:
+
+- `EMAIL`: email addresses.
+- `PHONE`: phone numbers.
+- `LINKEDIN`: LinkedIn profile or company/contact LinkedIn URLs explicitly tied to the contact.
+- `WHATSAPP`: WhatsApp numbers or links.
+- `TELEGRAM`: Telegram usernames or links.
+- `WEBSITE`: personal, team, recruiter, or company contact pages explicitly presented as a contact method for this job.
+- `OTHER`: any other explicit contact method.
+
 ### Other fields
 
 - `equityMentioned` `boolean`  
@@ -619,5 +670,6 @@ Do not include:
 "jobLocations": [],
 "remoteLocationRestriction": null,
 "applicationDeadline": null,
+"contactsJson": [],
 "equityMentioned": false
 }

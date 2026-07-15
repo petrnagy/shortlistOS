@@ -109,6 +109,20 @@ describe("job posting classification", () => {
         jobLocations: ["European Union"],
         remoteLocationRestriction: "European Union",
         applicationDeadline: null,
+        contactsJson: [
+          {
+            id: "contact-1",
+            role: "RECRUITER",
+            name: "Jane Smith",
+            methods: [
+              {
+                id: "contact-1-method-1",
+                type: "EMAIL",
+                value: "jane.smith@example.com",
+              },
+            ],
+          },
+        ],
         equityMentioned: true,
       }),
       model: "test-model",
@@ -145,6 +159,20 @@ describe("job posting classification", () => {
         "Software Engineer",
       ]);
       expect(result.classification.locationType).toBe("REMOTE");
+      expect(result.classification.contactsJson).toEqual([
+        {
+          id: "contact-1",
+          role: "RECRUITER",
+          name: "Jane Smith",
+          methods: [
+            {
+              id: "contact-1-method-1",
+              type: "EMAIL",
+              value: "jane.smith@example.com",
+            },
+          ],
+        },
+      ]);
     }
     expect(result.model).toBe("test-model");
     expect(result.warnings).toEqual([]);

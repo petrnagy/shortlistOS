@@ -12,6 +12,11 @@ import { fileURLToPath } from "node:url";
 import TurndownService from "turndown";
 import { z } from "zod";
 
+import {
+  CARD_CONTACT_METHOD_TYPE_OPTIONS,
+  CARD_CONTACT_ROLE_OPTIONS,
+} from "@kan/shared/constants";
+
 import { completeLlmMessage } from "../llm-connector";
 
 const DEFAULT_MAX_CONTENT_CHARS = 60_000;
@@ -33,6 +38,27 @@ export const jobPostingRejectionSchema = z.object({
   ]),
   rejectionReason: z.string(),
 });
+
+const jobPostingContactRoleSchema = z.enum(CARD_CONTACT_ROLE_OPTIONS);
+
+const jobPostingContactMethodTypeSchema = z.enum(
+  CARD_CONTACT_METHOD_TYPE_OPTIONS,
+);
+
+const jobPostingContactsJsonSchema = z.array(
+  z.object({
+    id: z.string().min(1),
+    role: jobPostingContactRoleSchema,
+    name: z.string().min(1).max(255),
+    methods: z.array(
+      z.object({
+        id: z.string().min(1),
+        type: jobPostingContactMethodTypeSchema,
+        value: z.string().min(1).max(1000),
+      }),
+    ),
+  }),
+);
 
 export const jobPostingSuccessSchema = z.object({
   isJobOpportunity: z.literal(true),
@@ -103,6 +129,7 @@ export const jobPostingSuccessSchema = z.object({
   jobLocations: z.array(z.string()),
   remoteLocationRestriction: z.string().nullable(),
   applicationDeadline: z.string().nullable(),
+  contactsJson: jobPostingContactsJsonSchema,
   equityMentioned: z.boolean(),
 });
 
