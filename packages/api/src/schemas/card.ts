@@ -1,30 +1,21 @@
 import { z } from "zod";
 
 import {
+  CARD_CONTACT_METHOD_TYPE_OPTIONS,
+  CARD_CONTACT_ROLE_OPTIONS,
+} from "@kan/shared/constants";
+
+import {
   checklistResponseSchema,
   labelSchema,
   workspaceMemberSchema,
 } from "./common";
 
-export const cardContactRoleSchema = z.enum([
-  "HR",
-  "RECRUITER",
-  "HIRING_MANAGER",
-  "CTO",
-  "CEO",
-  "ADMIN",
-  "OTHER",
-]);
+export const cardContactRoleSchema = z.enum(CARD_CONTACT_ROLE_OPTIONS);
 
-export const cardContactMethodTypeSchema = z.enum([
-  "PHONE",
-  "EMAIL",
-  "LINKEDIN",
-  "WHATSAPP",
-  "TELEGRAM",
-  "WEBSITE",
-  "OTHER",
-]);
+export const cardContactMethodTypeSchema = z.enum(
+  CARD_CONTACT_METHOD_TYPE_OPTIONS,
+);
 
 export const cardContactsJsonSchema = z.array(
   z.object({

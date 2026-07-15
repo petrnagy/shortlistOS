@@ -31,6 +31,12 @@ import { IoChevronForwardSharp } from "react-icons/io5";
 import { LuTreePalm } from "react-icons/lu";
 
 import { authClient } from "@kan/auth/client";
+import {
+  CARD_CONTACT_METHOD_TYPE_OPTIONS,
+  CARD_CONTACT_ROLE_OPTIONS,
+  type CardContactMethodType,
+  type CardContactRole,
+} from "@kan/shared/constants";
 
 import Avatar from "~/components/Avatar";
 import Editor from "~/components/Editor";
@@ -74,24 +80,6 @@ interface FormValues {
 }
 
 const JOB_LOCATION_TYPE_OPTIONS = ["onsite", "hybrid", "remote"] as const;
-const CONTACT_ROLE_OPTIONS = [
-  "HR",
-  "RECRUITER",
-  "HIRING_MANAGER",
-  "CTO",
-  "CEO",
-  "ADMIN",
-  "OTHER",
-] as const;
-const CONTACT_METHOD_TYPE_OPTIONS = [
-  "PHONE",
-  "EMAIL",
-  "LINKEDIN",
-  "WHATSAPP",
-  "TELEGRAM",
-  "WEBSITE",
-  "OTHER",
-] as const;
 const JOB_TYPE_OPTIONS = [
   "FULL_TIME",
   "PART_TIME",
@@ -282,8 +270,8 @@ const TEST_SALARY_COMPARISON_DATA = {
 } as const;
 
 type JobLocationType = (typeof JOB_LOCATION_TYPE_OPTIONS)[number];
-type ContactRole = (typeof CONTACT_ROLE_OPTIONS)[number];
-type ContactMethodType = (typeof CONTACT_METHOD_TYPE_OPTIONS)[number];
+type ContactRole = CardContactRole;
+type ContactMethodType = CardContactMethodType;
 type JobType = (typeof JOB_TYPE_OPTIONS)[number];
 type SalaryRegion = (typeof SALARY_REGIONS)[number];
 type SalaryInterval = (typeof SALARY_INTERVAL_OPTIONS)[number]["value"];
@@ -403,11 +391,11 @@ const createContactId = () =>
 
 const isContactRole = (value: unknown): value is ContactRole =>
   typeof value === "string" &&
-  CONTACT_ROLE_OPTIONS.includes(value as ContactRole);
+  CARD_CONTACT_ROLE_OPTIONS.includes(value as ContactRole);
 
 const isContactMethodType = (value: unknown): value is ContactMethodType =>
   typeof value === "string" &&
-  CONTACT_METHOD_TYPE_OPTIONS.includes(value as ContactMethodType);
+  CARD_CONTACT_METHOD_TYPE_OPTIONS.includes(value as ContactMethodType);
 
 const parseContactsJson = (value: unknown): CardContact[] => {
   if (!Array.isArray(value)) return [];
@@ -834,7 +822,7 @@ function ContactsSection({
           disabled={disabled}
           className={compactInputClass}
         >
-          {CONTACT_ROLE_OPTIONS.map((role) => (
+          {CARD_CONTACT_ROLE_OPTIONS.map((role) => (
             <option key={role} value={role}>
               {CONTACT_ROLE_LABELS[role]}
             </option>
@@ -869,7 +857,7 @@ function ContactsSection({
                     className={hiddenCompactSelectClass}
                     aria-label={t`Change contact type`}
                   >
-                    {CONTACT_METHOD_TYPE_OPTIONS.map((type) => (
+                    {CARD_CONTACT_METHOD_TYPE_OPTIONS.map((type) => (
                       <option key={type} value={type}>
                         {CONTACT_METHOD_TYPE_LABELS[type]}
                       </option>
