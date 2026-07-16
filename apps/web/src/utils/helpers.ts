@@ -48,6 +48,10 @@ export const formatMemberDisplayName = (
 export const getAvatarUrl = (imageOrKey: string | null) => {
   if (!imageOrKey) return "";
 
+  if (imageOrKey.startsWith("/")) {
+    return imageOrKey;
+  }
+
   if (imageOrKey.startsWith("http://") || imageOrKey.startsWith("https://")) {
     return imageOrKey;
   }

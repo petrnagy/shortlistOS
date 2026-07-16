@@ -345,6 +345,12 @@ export const cardRouter = createTRPCRouter({
           code: "NOT_FOUND",
         });
 
+      if (existingComment.shortlistIsSystem)
+        throw new TRPCError({
+          message: `System comments cannot be edited`,
+          code: "FORBIDDEN",
+        });
+
       await assertCanEdit(
         ctx.db,
         userId,
@@ -431,6 +437,12 @@ export const cardRouter = createTRPCRouter({
         throw new TRPCError({
           message: `Comment with public ID ${input.commentPublicId} not found`,
           code: "NOT_FOUND",
+        });
+
+      if (existingComment.shortlistIsSystem)
+        throw new TRPCError({
+          message: `System comments cannot be deleted`,
+          code: "FORBIDDEN",
         });
 
       await assertCanDelete(

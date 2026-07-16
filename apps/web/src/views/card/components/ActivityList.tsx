@@ -629,6 +629,7 @@ const ActivityList = ({
               isEdited={!!activity.comment?.updatedAt}
               isAuthor={activity.comment?.createdBy === sessionData?.user.id}
               isViewOnly={!!isViewOnly}
+              isSystem={!!activity.comment?.shortlistIsSystem}
             />
           );
 

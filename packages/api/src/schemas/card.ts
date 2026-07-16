@@ -65,6 +65,7 @@ export const cardUpdateResponseSchema = z.object({
 export const commentResponseSchema = z.object({
   publicId: z.string(),
   comment: z.string(),
+  shortlistIsSystem: z.boolean().optional(),
 });
 
 export const commentDeleteResponseSchema = z.object({
@@ -197,6 +198,7 @@ export const cardDetailSchema = z.object({
           publicId: z.string(),
           comment: z.string(),
           createdBy: z.string().nullable(),
+          shortlistIsSystem: z.boolean(),
           updatedAt: z.date().nullable(),
           deletedAt: z.date().nullable(),
         })
@@ -264,6 +266,7 @@ export const activityItemSchema = z.object({
       publicId: z.string(),
       comment: z.string(),
       createdBy: z.string().nullable(),
+      shortlistIsSystem: z.boolean(),
       updatedAt: z.date().nullable(),
       deletedAt: z.date().nullable(),
     })

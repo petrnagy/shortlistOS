@@ -25,6 +25,7 @@ const Avatar = ({
   icon?: React.ReactNode;
   isLoading?: boolean;
 }) => {
+  const sizePx = sizeMap[size];
   const initials = name?.trim()
     ? getInitialsFromName(name)
     : inferInitialsFromEmail(email);
@@ -32,13 +33,34 @@ const Avatar = ({
   return (
     <>
       {imageUrl ? (
-        <Image
-          src={imageUrl}
-          className="rounded-full bg-gray-50"
-          width={sizeMap[size]}
-          height={sizeMap[size]}
-          alt=""
-        />
+        <span
+          className="relative inline-flex"
+          style={{
+            height: sizePx,
+            width: icon ? sizePx * 1.8 : sizePx,
+          }}
+        >
+          <Image
+            src={imageUrl}
+            className="rounded-full bg-gray-50"
+            width={sizePx}
+            height={sizePx}
+            alt=""
+          />
+          {icon && (
+            <span
+              className="absolute top-0 flex items-center justify-center rounded-full border border-light-50 bg-light-1000 text-white dark:border-dark-100 dark:bg-dark-400"
+              style={{
+                height: sizePx,
+                left: sizePx * 0.8,
+                width: sizePx,
+                fontSize: Math.max(11, Math.round(sizePx * 0.56)),
+              }}
+            >
+              {icon}
+            </span>
+          )}
+        </span>
       ) : (
         <span
           className={twMerge(

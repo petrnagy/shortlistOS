@@ -32,6 +32,7 @@ const Comment = ({
   isAuthor,
   isEdited = false,
   isViewOnly = false,
+  isSystem = false,
 }: {
   publicId: string | undefined;
   cardPublicId: string;
@@ -44,6 +45,7 @@ const Comment = ({
   isAuthor: boolean;
   isEdited: boolean;
   isViewOnly: boolean;
+  isSystem?: boolean;
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const utils = api.useUtils();
@@ -105,7 +107,7 @@ const Comment = ({
   };
 
   const dropdownItems = [
-    ...(isAuthor && canEditComment
+    ...(isAuthor && canEditComment && !isSystem
       ? [
           {
             label: t`Edit comment`,
@@ -114,7 +116,7 @@ const Comment = ({
           },
         ]
       : []),
-    ...((isAuthor || canDeleteComment)
+    ...((isAuthor || canDeleteComment) && !isSystem
       ? [
           {
             label: t`Delete comment`,
