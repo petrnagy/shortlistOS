@@ -1,5 +1,4 @@
 import type { ReactNode } from "react";
-import type { Root } from "react-dom/client";
 import type { Placement } from "tippy.js";
 import { useEffect, useRef } from "react";
 import { createRoot } from "react-dom/client";
@@ -21,7 +20,6 @@ export function Tooltip({
   delay = [500, 0],
 }: TooltipProps) {
   const triggerRef = useRef<HTMLDivElement>(null);
-  const rootRef = useRef<Root | null>(null);
 
   useEffect(() => {
     if (!triggerRef.current) return;
@@ -30,7 +28,6 @@ export function Tooltip({
 
     const container = document.createElement("div");
     const root = createRoot(container);
-    rootRef.current = root;
     root.render(content);
 
     const instance = tippy(triggerRef.current, {
@@ -44,7 +41,7 @@ export function Tooltip({
 
     return () => {
       instance.destroy();
-      rootRef.current?.unmount();
+      window.setTimeout(() => root.unmount(), 0);
     };
   }, [content, placement, delay]);
 

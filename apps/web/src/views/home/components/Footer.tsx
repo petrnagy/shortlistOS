@@ -21,8 +21,8 @@ function EuFlagIcon() {
       <circle cx="256" cy="256" r="256" fill="#294695" />
       {Array.from({ length: 12 }).map((_, index) => {
         const angle = (index * Math.PI) / 6;
-        const cx = 256 + Math.sin(angle) * 168;
-        const cy = 256 - Math.cos(angle) * 168;
+        const cx = (256 + Math.sin(angle) * 168).toFixed(6);
+        const cy = (256 - Math.cos(angle) * 168).toFixed(6);
 
         return (
           <text
