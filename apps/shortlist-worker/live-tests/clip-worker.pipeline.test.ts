@@ -20,7 +20,9 @@ import {
   cardActivities,
   cards,
   lists,
-  shortlistClips,
+  shortlistJobQueue,
+  shortlistSourceObjects,
+  shortlistWebpageSources,
   users,
   workspaceMembers,
   workspaces,
@@ -33,6 +35,7 @@ const requiredEnv = [
   "POSTGRES_URL",
   "LLM_CONNECTOR_API_KEY",
   "LLM_CONNECTOR_MODEL",
+  "SHORTLIST_SOURCE_BUCKET_NAME",
 ];
 
 const shouldRun = requiredEnv.every((name) => Boolean(process.env[name]));
@@ -44,7 +47,9 @@ interface CreatedIds {
   workspaceMemberId?: number;
   boardId?: number;
   listId?: number;
-  clipId?: string;
+  jobId?: string;
+  sourceId?: string;
+  objectId?: string;
   cardId?: number;
 }
 
@@ -90,22 +95,22 @@ maybeDescribe("shortlist clip worker pipeline", () => {
       retried: 0,
     });
 
-    const [processedClip] = await db
+    const [processedJob] = await db
       .select({
-        processingResult: shortlistClips.processingResult,
-        processingTries: shortlistClips.processingTries,
-        processingLog: shortlistClips.processingLog,
-        processedAt: shortlistClips.processedAt,
+        attempts: shortlistJobQueue.attempts,
+        processingLog: shortlistJobQueue.processingLog,
+        processedAt: shortlistJobQueue.processedAt,
+        status: shortlistJobQueue.status,
       })
-      .from(shortlistClips)
-      .where(eq(shortlistClips.id, requireCreatedId("clipId", createdIds)));
+      .from(shortlistJobQueue)
+      .where(eq(shortlistJobQueue.id, requireCreatedId("jobId", createdIds)));
 
-    expect(processedClip).toBeDefined();
-    expect(processedClip?.processingResult).toBe("COMPLETED");
-    expect(processedClip?.processingTries).toBe(1);
-    expect(processedClip?.processedAt).toBeInstanceOf(Date);
-    expect(processedClip?.processingLog).toContain("LLM classification finished");
-    expect(processedClip?.processingLog).toContain("Created card");
+    expect(processedJob).toBeDefined();
+    expect(processedJob?.status).toBe("COMPLETED");
+    expect(processedJob?.attempts).toBe(1);
+    expect(processedJob?.processedAt).toBeInstanceOf(Date);
+    expect(processedJob?.processingLog).toContain("LLM classification finished");
+    expect(processedJob?.processingLog).toContain("Created card");
 
     const [createdCard] = await db
       .select({
@@ -146,11 +151,15 @@ async function createQueuedClip(
 ): Promise<void> {
   const testRunId = generateUID();
   const userId = randomUUID();
-  const clipId = randomUUID();
+  const jobId = randomUUID();
+  const objectId = randomUUID();
+  const sourceId = randomUUID();
   const email = `clip-worker-${testRunId}@example.test`;
 
   ids.userId = userId;
-  ids.clipId = clipId;
+  ids.jobId = jobId;
+  ids.objectId = objectId;
+  ids.sourceId = sourceId;
 
   await database.insert(users).values({
     id: userId,
@@ -217,12 +226,40 @@ async function createQueuedClip(
   if (!savedList) throw new Error("Failed to create test Saved list");
   ids.listId = savedList.id;
 
-  await database.insert(shortlistClips).values({
-    id: clipId,
+  await database.insert(shortlistWebpageSources).values({
+    id: sourceId,
     createdBy: userId,
     boardId: board.id,
     url: TEST_CLIP_URL,
-    rawHtml,
+    metadataJson: { testRunId },
+  });
+
+  await database.insert(shortlistSourceObjects).values({
+    id: objectId,
+    boardId: board.id,
+    bucket: getRequiredEnv("SHORTLIST_SOURCE_BUCKET_NAME"),
+    contentType: "text/html",
+    createdBy: userId,
+    fileSize: Buffer.byteLength(rawHtml, "utf8"),
+    objectType: "WEBPAGE_HTML",
+    originalFilename: "webpage.html",
+    s3Key: `live-tests/${testRunId}/webpage.html`,
+    sourceId,
+    sourceType: "WEBPAGE",
+  });
+
+  await database.insert(shortlistJobQueue).values({
+    id: jobId,
+    boardId: board.id,
+    createdBy: userId,
+    jobType: "CLASSIFY_SOURCE",
+    payloadJson: {
+      objectId,
+      sourceUrl: TEST_CLIP_URL,
+    },
+    sourceId,
+    sourceType: "WEBPAGE",
+    status: "PENDING",
   });
 }
 
@@ -253,7 +290,9 @@ function resetCreatedIds(ids: CreatedIds): void {
   ids.workspaceMemberId = undefined;
   ids.boardId = undefined;
   ids.listId = undefined;
-  ids.clipId = undefined;
+  ids.jobId = undefined;
+  ids.objectId = undefined;
+  ids.sourceId = undefined;
   ids.cardId = undefined;
 }
 
@@ -261,10 +300,22 @@ async function cleanupCreatedRows(
   database: dbClient,
   ids: CreatedIds,
 ): Promise<void> {
-  if (ids.clipId) {
+  if (ids.jobId) {
     await database
-      .delete(shortlistClips)
-      .where(eq(shortlistClips.id, ids.clipId));
+      .delete(shortlistJobQueue)
+      .where(eq(shortlistJobQueue.id, ids.jobId));
+  }
+
+  if (ids.objectId) {
+    await database
+      .delete(shortlistSourceObjects)
+      .where(eq(shortlistSourceObjects.id, ids.objectId));
+  }
+
+  if (ids.sourceId) {
+    await database
+      .delete(shortlistWebpageSources)
+      .where(eq(shortlistWebpageSources.id, ids.sourceId));
   }
 
   if (ids.cardId) {

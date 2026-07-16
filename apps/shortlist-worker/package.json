@@ -6,12 +6,13 @@
   "type": "module",
   "scripts": {
     "build": "tsc",
-    "dev": "node -e \"console.log('shortlist-worker dev does not start processors. Run pnpm process-clip explicitly.')\"",
+    "dev": "node -e \"console.log('shortlist-worker dev does not start processors. Run pnpm process-sources explicitly.')\"",
     "format": "prettier --check . --ignore-path ../../.gitignore",
     "lint": "eslint",
+    "process-sources": "dotenv -e ../../.env -- tsx src/jobs/process-sources.ts",
     "process-clip": "dotenv -e ../../.env -- tsx src/jobs/process-clip.ts",
     "process-inbox": "dotenv -e ../../.env -- tsx src/jobs/process-inbox.ts",
-    "start": "node -e \"console.log('shortlist-worker has no default daemon yet. Run pnpm process-clip or pnpm process-inbox.')\"",
+    "start": "node -e \"console.log('shortlist-worker has no default daemon yet. Run pnpm process-sources.')\"",
     "test:pipeline": "dotenv -e ../../.env -- vitest run live-tests",
     "typecheck": "tsc --noEmit --emitDeclarationOnly false"
   },
@@ -24,6 +25,7 @@
     "@kan/shared": "workspace:^",
     "dotenv-cli": "^7.4.4",
     "drizzle-orm": "^0.42.0",
+    "officeparser": "^7.3.0",
     "tsx": "^4.20.3",
     "zod": "catalog:"
   },

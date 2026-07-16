@@ -1,13 +1,4 @@
 /**
- * Author: Petr Nagy / shortlistOS
- * URL: https://petrnagy.cz
- * Since: 2026-06-24
- * License: No license. All rights reserved.
- * Copyright: Copyright (c) 2026 Petr Nagy.
- * Proprietary: shortlistOS Powerpack feature. Not part of the open-source distribution.
+ * Deprecated compatibility entrypoint. Use process-sources instead.
  */
-import { createLogger } from "@kan/logger";
-
-const logger = createLogger("shortlist-worker:process-inbox");
-
-logger.info("Inbox processing is not implemented yet.");
+import "./process-sources";

@@ -6,10 +6,6 @@
  * Copyright: Copyright (c) 2026 Petr Nagy.
  * Proprietary: shortlistOS Powerpack feature. Not part of the open-source distribution.
  */
-import { createLogger } from "@kan/logger";
+import { processShortlistJobQueueBatch } from "./source-queue-worker";
 
-const logger = createLogger("shortlist-worker:inbox-worker");
-
-export function processInboxBatch(): void {
-  logger.info("Inbox worker is not implemented yet.");
-}
+export const processInboxBatch = processShortlistJobQueueBatch;

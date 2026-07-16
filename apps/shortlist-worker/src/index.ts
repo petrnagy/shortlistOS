@@ -11,5 +11,5 @@ import { createLogger } from "@kan/logger";
 const logger = createLogger("shortlist-worker");
 
 logger.info(
-  "shortlist-worker has no default daemon yet. Run process-clip or process-inbox.",
+  "shortlist-worker has no default daemon yet. Run process-sources.",
 );
