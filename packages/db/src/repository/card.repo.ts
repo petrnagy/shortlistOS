@@ -795,6 +795,7 @@ export const getWithListAndMembersByPublicId = async (
               publicId: true,
               comment: true,
               createdBy: true,
+              shortlistIsSystem: true,
               updatedAt: true,
               deletedAt: true,
             },

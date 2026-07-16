@@ -16,8 +16,11 @@ import { integrations } from "./integrations";
 import { lists } from "./lists";
 import {
   shortlistActivityLogs,
-  shortlistClips,
-  shortlistInbox,
+  shortlistAttachmentSources,
+  shortlistEmailSources,
+  shortlistJobQueue,
+  shortlistSourceObjects,
+  shortlistWebpageSources,
 } from "./shortlist";
 import { workspaceMembers, workspaces } from "./workspaces";
 
@@ -83,8 +86,11 @@ export const usersRelations = relations(users, ({ many }) => ({
     relationName: "listsCreatedByUser",
   }),
   shortlistActivityLogs: many(shortlistActivityLogs),
-  shortlistInboxEntries: many(shortlistInbox),
-  shortlistClips: many(shortlistClips),
+  shortlistAttachmentSources: many(shortlistAttachmentSources),
+  shortlistEmailSources: many(shortlistEmailSources),
+  shortlistJobQueue: many(shortlistJobQueue),
+  shortlistSourceObjects: many(shortlistSourceObjects),
+  shortlistWebpageSources: many(shortlistWebpageSources),
   deletedWorkspaces: many(workspaces, {
     relationName: "workspaceDeletedByUser",
   }),

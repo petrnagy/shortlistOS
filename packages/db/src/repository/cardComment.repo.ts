@@ -19,6 +19,7 @@ export const create = async (
     cardId: number;
     comment: string;
     createdBy: string;
+    shortlistIsSystem?: boolean;
   },
 ) => {
   const [result] = await db
@@ -27,12 +28,14 @@ export const create = async (
       publicId: generateUID(),
       comment: commentInput.comment,
       createdBy: commentInput.createdBy,
+      shortlistIsSystem: commentInput.shortlistIsSystem ?? false,
       cardId: commentInput.cardId,
     })
     .returning({
       id: comments.id,
       publicId: comments.publicId,
       comment: comments.comment,
+      shortlistIsSystem: comments.shortlistIsSystem,
     });
 
   return result;
@@ -45,6 +48,7 @@ export const getByPublicId = (db: dbClient, publicId: string) => {
       publicId: true,
       comment: true,
       createdBy: true,
+      shortlistIsSystem: true,
     },
     where: eq(comments.publicId, publicId),
   });

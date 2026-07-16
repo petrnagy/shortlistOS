@@ -1,6 +1,7 @@
 import { relations, sql } from "drizzle-orm";
 import {
   bigint,
+  boolean,
   index,
   integer,
   jsonb,
@@ -18,8 +19,8 @@ import { boards } from "./boards";
 import { cards } from "./cards";
 import { users } from "./users";
 
-export const shortlistInbox = pgTable(
-  "shortlist_inbox",
+export const shortlistAttachmentSources = pgTable(
+  "shortlist_attachment_source",
   {
     id: uuid("id")
       .notNull()
@@ -28,53 +29,90 @@ export const shortlistInbox = pgTable(
     createdBy: uuid("createdBy")
       .notNull()
       .references(() => users.id, { onDelete: "cascade" }),
-    userId: uuid("userId")
+    boardId: bigint("boardId", { mode: "number" })
+      .notNull()
+      .references(() => boards.id, { onDelete: "cascade" }),
+    originalFilename: text("originalFilename").notNull(),
+    contentType: text("contentType").notNull(),
+    fileSize: bigint("fileSize", { mode: "number" }).notNull(),
+    metadataJson: jsonb("metadataJson"),
+    createdAt: timestamp("createdAt").notNull().defaultNow(),
+    updatedAt: timestamp("updatedAt"),
+  },
+  (table) => [
+    index("shortlist_attachment_source_created_by_idx").on(table.createdBy),
+    index("shortlist_attachment_source_board_idx").on(table.boardId),
+    index("shortlist_attachment_source_created_at_idx").on(table.createdAt),
+  ],
+).enableRLS();
+
+export const shortlistAttachmentSourcesRelations = relations(
+  shortlistAttachmentSources,
+  ({ one }) => ({
+    createdByUser: one(users, {
+      fields: [shortlistAttachmentSources.createdBy],
+      references: [users.id],
+      relationName: "shortlistAttachmentSourcesCreatedByUser",
+    }),
+    board: one(boards, {
+      fields: [shortlistAttachmentSources.boardId],
+      references: [boards.id],
+      relationName: "shortlistAttachmentSourcesBoard",
+    }),
+  }),
+);
+
+export const shortlistEmailSources = pgTable(
+  "shortlist_email_source",
+  {
+    id: uuid("id")
+      .notNull()
+      .primaryKey()
+      .default(sql`uuid_generate_v4()`),
+    createdBy: uuid("createdBy")
       .notNull()
       .references(() => users.id, { onDelete: "cascade" }),
     boardId: bigint("boardId", { mode: "number" })
       .notNull()
       .references(() => boards.id, { onDelete: "cascade" }),
+    externId: varchar("externId", { length: 250 }).notNull(),
+    fromEmail: text("fromEmail"),
+    fromName: text("fromName"),
+    subject: text("subject"),
+    sentAt: timestamp("sentAt"),
+    hasSupportedAttachment: boolean("hasSupportedAttachment")
+      .notNull()
+      .default(false),
+    metadataJson: jsonb("metadataJson"),
     createdAt: timestamp("createdAt").notNull().defaultNow(),
     updatedAt: timestamp("updatedAt"),
-    processedAt: timestamp("processedAt"),
-    processingTries: smallint("processingTries").notNull().default(0),
-    externId: varchar("externId", { length: 250 }).notNull(),
-    rawContent: text("rawContent"),
-    contentType: varchar("contentType", { length: 20 }).notNull(),
-    source: varchar("source", { length: 20 }).notNull(),
-    processingLog: text("processingLog"),
-    processingResult: varchar("processingResult", { length: 10 }).notNull(),
   },
   (table) => [
-    index("shortlist_inbox_user_idx").on(table.userId),
-    index("shortlist_inbox_board_idx").on(table.boardId),
-    index("shortlist_inbox_created_at_idx").on(table.createdAt),
-    index("shortlist_inbox_processed_at_idx").on(table.processedAt),
-    index("shortlist_inbox_processing_result_idx").on(table.processingResult),
-    uniqueIndex("shortlist_inbox_extern_id_idx").on(table.externId),
+    index("shortlist_email_source_created_by_idx").on(table.createdBy),
+    index("shortlist_email_source_board_idx").on(table.boardId),
+    index("shortlist_email_source_created_at_idx").on(table.createdAt),
+    uniqueIndex("shortlist_email_source_extern_id_idx").on(table.externId),
   ],
 ).enableRLS();
 
-export const shortlistInboxRelations = relations(shortlistInbox, ({ one }) => ({
-  createdByUser: one(users, {
-    fields: [shortlistInbox.createdBy],
-    references: [users.id],
-    relationName: "shortlistInboxCreatedByUser",
+export const shortlistEmailSourcesRelations = relations(
+  shortlistEmailSources,
+  ({ one }) => ({
+    createdByUser: one(users, {
+      fields: [shortlistEmailSources.createdBy],
+      references: [users.id],
+      relationName: "shortlistEmailSourcesCreatedByUser",
+    }),
+    board: one(boards, {
+      fields: [shortlistEmailSources.boardId],
+      references: [boards.id],
+      relationName: "shortlistEmailSourcesBoard",
+    }),
   }),
-  user: one(users, {
-    fields: [shortlistInbox.userId],
-    references: [users.id],
-    relationName: "shortlistInboxUser",
-  }),
-  board: one(boards, {
-    fields: [shortlistInbox.boardId],
-    references: [boards.id],
-    relationName: "shortlistInboxBoard",
-  }),
-}));
+);
 
-export const shortlistClips = pgTable(
-  "shortlist_clip",
+export const shortlistWebpageSources = pgTable(
+  "shortlist_webpage_source",
   {
     id: uuid("id")
       .notNull()
@@ -87,33 +125,136 @@ export const shortlistClips = pgTable(
       .notNull()
       .references(() => boards.id, { onDelete: "cascade" }),
     url: text("url").notNull(),
-    rawHtml: text("rawHtml").notNull(),
+    metadataJson: jsonb("metadataJson"),
     createdAt: timestamp("createdAt").notNull().defaultNow(),
     updatedAt: timestamp("updatedAt"),
-    processedAt: timestamp("processedAt"),
-    processingTries: smallint("processingTries").notNull().default(0),
-    processingLog: text("processingLog"),
-    processingResult: varchar("processingResult", { length: 10 }),
   },
   (table) => [
-    index("shortlist_clip_created_by_idx").on(table.createdBy),
-    index("shortlist_clip_board_idx").on(table.boardId),
-    index("shortlist_clip_created_at_idx").on(table.createdAt),
-    index("shortlist_clip_processed_at_idx").on(table.processedAt),
-    index("shortlist_clip_processing_result_idx").on(table.processingResult),
+    index("shortlist_webpage_source_created_by_idx").on(table.createdBy),
+    index("shortlist_webpage_source_board_idx").on(table.boardId),
+    index("shortlist_webpage_source_created_at_idx").on(table.createdAt),
   ],
 ).enableRLS();
 
-export const shortlistClipsRelations = relations(shortlistClips, ({ one }) => ({
+export const shortlistWebpageSourcesRelations = relations(
+  shortlistWebpageSources,
+  ({ one }) => ({
+    createdByUser: one(users, {
+      fields: [shortlistWebpageSources.createdBy],
+      references: [users.id],
+      relationName: "shortlistWebpageSourcesCreatedByUser",
+    }),
+    board: one(boards, {
+      fields: [shortlistWebpageSources.boardId],
+      references: [boards.id],
+      relationName: "shortlistWebpageSourcesBoard",
+    }),
+  }),
+);
+
+export const shortlistSourceObjects = pgTable(
+  "shortlist_source_object",
+  {
+    id: uuid("id")
+      .notNull()
+      .primaryKey()
+      .default(sql`uuid_generate_v4()`),
+    createdBy: uuid("createdBy")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    boardId: bigint("boardId", { mode: "number" })
+      .notNull()
+      .references(() => boards.id, { onDelete: "cascade" }),
+    sourceType: varchar("sourceType", { length: 20 }).notNull(),
+    sourceId: uuid("sourceId").notNull(),
+    objectType: varchar("objectType", { length: 30 }).notNull(),
+    bucket: text("bucket").notNull(),
+    s3Key: text("s3Key").notNull(),
+    originalFilename: text("originalFilename").notNull(),
+    contentType: text("contentType").notNull(),
+    fileSize: bigint("fileSize", { mode: "number" }).notNull(),
+    metadataJson: jsonb("metadataJson"),
+    createdAt: timestamp("createdAt").notNull().defaultNow(),
+  },
+  (table) => [
+    index("shortlist_source_object_created_by_idx").on(table.createdBy),
+    index("shortlist_source_object_board_idx").on(table.boardId),
+    index("shortlist_source_object_source_idx").on(
+      table.sourceType,
+      table.sourceId,
+    ),
+    index("shortlist_source_object_type_idx").on(table.objectType),
+    uniqueIndex("shortlist_source_object_s3_key_idx").on(
+      table.bucket,
+      table.s3Key,
+    ),
+  ],
+).enableRLS();
+
+export const shortlistSourceObjectsRelations = relations(
+  shortlistSourceObjects,
+  ({ one }) => ({
+    createdByUser: one(users, {
+      fields: [shortlistSourceObjects.createdBy],
+      references: [users.id],
+      relationName: "shortlistSourceObjectsCreatedByUser",
+    }),
+    board: one(boards, {
+      fields: [shortlistSourceObjects.boardId],
+      references: [boards.id],
+      relationName: "shortlistSourceObjectsBoard",
+    }),
+  }),
+);
+
+export const shortlistJobQueue = pgTable(
+  "shortlist_job_queue",
+  {
+    id: uuid("id")
+      .notNull()
+      .primaryKey()
+      .default(sql`uuid_generate_v4()`),
+    jobType: varchar("jobType", { length: 30 }).notNull(),
+    status: varchar("status", { length: 20 }).notNull(),
+    sourceType: varchar("sourceType", { length: 20 }).notNull(),
+    sourceId: uuid("sourceId").notNull(),
+    createdBy: uuid("createdBy")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    boardId: bigint("boardId", { mode: "number" })
+      .notNull()
+      .references(() => boards.id, { onDelete: "cascade" }),
+    payloadJson: jsonb("payloadJson"),
+    attempts: smallint("attempts").notNull().default(0),
+    maxAttempts: smallint("maxAttempts").notNull().default(3),
+    runAfter: timestamp("runAfter").notNull().defaultNow(),
+    lockedAt: timestamp("lockedAt"),
+    lockedBy: varchar("lockedBy", { length: 100 }),
+    processedAt: timestamp("processedAt"),
+    error: text("error"),
+    processingLog: text("processingLog"),
+    createdAt: timestamp("createdAt").notNull().defaultNow(),
+    updatedAt: timestamp("updatedAt"),
+  },
+  (table) => [
+    index("shortlist_job_queue_status_idx").on(table.status),
+    index("shortlist_job_queue_run_after_idx").on(table.runAfter),
+    index("shortlist_job_queue_source_idx").on(table.sourceType, table.sourceId),
+    index("shortlist_job_queue_board_idx").on(table.boardId),
+    index("shortlist_job_queue_created_by_idx").on(table.createdBy),
+  ],
+).enableRLS();
+
+export const shortlistJobQueueRelations = relations(shortlistJobQueue, ({ one }) => ({
   createdByUser: one(users, {
-    fields: [shortlistClips.createdBy],
+    fields: [shortlistJobQueue.createdBy],
     references: [users.id],
-    relationName: "shortlistClipsCreatedByUser",
+    relationName: "shortlistJobQueueCreatedByUser",
   }),
   board: one(boards, {
-    fields: [shortlistClips.boardId],
+    fields: [shortlistJobQueue.boardId],
     references: [boards.id],
-    relationName: "shortlistClipsBoard",
+    relationName: "shortlistJobQueueBoard",
   }),
 }));
 

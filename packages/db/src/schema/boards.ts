@@ -20,8 +20,11 @@ import { labels } from "./labels";
 import { lists } from "./lists";
 import {
   shortlistActivityLogs,
-  shortlistClips,
-  shortlistInbox,
+  shortlistAttachmentSources,
+  shortlistEmailSources,
+  shortlistJobQueue,
+  shortlistSourceObjects,
+  shortlistWebpageSources,
 } from "./shortlist";
 import { users } from "./users";
 import { workspaces } from "./workspaces";
@@ -177,8 +180,11 @@ export const boardsRelations = relations(boards, ({ one, many }) => ({
     relationName: "boardImport",
   }),
   shortlistActivityLogs: many(shortlistActivityLogs),
-  shortlistInboxEntries: many(shortlistInbox),
-  shortlistClips: many(shortlistClips),
+  shortlistAttachmentSources: many(shortlistAttachmentSources),
+  shortlistEmailSources: many(shortlistEmailSources),
+  shortlistJobQueue: many(shortlistJobQueue),
+  shortlistSourceObjects: many(shortlistSourceObjects),
+  shortlistWebpageSources: many(shortlistWebpageSources),
   workspace: one(workspaces, {
     fields: [boards.workspaceId],
     references: [workspaces.id],

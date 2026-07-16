@@ -337,6 +337,41 @@
       "when": 1783674000000,
       "tag": "20260710090000_AddContactsJsonToCard",
       "breakpoints": true
+    },
+    {
+      "idx": 48,
+      "version": "7",
+      "when": 1784116800000,
+      "tag": "20260715120000_AddShortlistSourceQueue",
+      "breakpoints": true
+    },
+    {
+      "idx": 49,
+      "version": "7",
+      "when": 1784203200000,
+      "tag": "20260716120000_AddShortlistRobotUser",
+      "breakpoints": true
+    },
+    {
+      "idx": 50,
+      "version": "7",
+      "when": 1784205000000,
+      "tag": "20260716123000_SetShortlistRobotAvatar",
+      "breakpoints": true
+    },
+    {
+      "idx": 51,
+      "version": "7",
+      "when": 1784205900000,
+      "tag": "20260716124500_SetShortlistRobotIconAvatar",
+      "breakpoints": true
+    },
+    {
+      "idx": 52,
+      "version": "7",
+      "when": 1784206800000,
+      "tag": "20260716130000_SetShortlistRobotV2Avatar",
+      "breakpoints": true
     }
   ]
 }

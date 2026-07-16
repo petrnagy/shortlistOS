@@ -316,6 +316,7 @@ export const comments = pgTable("card_comments", {
   id: bigserial("id", { mode: "number" }).primaryKey(),
   publicId: varchar("publicId", { length: 12 }).notNull().unique(),
   comment: text("comment").notNull(),
+  shortlistIsSystem: boolean("shortlist_isSystem").default(false).notNull(),
   cardId: bigint("cardId", { mode: "number" })
     .notNull()
     .references(() => cards.id, { onDelete: "cascade" }),
