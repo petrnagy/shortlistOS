@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { t } from "@lingui/core/macro";
 import { Draggable } from "react-beautiful-dnd";
-import { HiOutlinePlusSmall } from "react-icons/hi2";
+import { HiOutlinePaperClip, HiOutlinePlusSmall } from "react-icons/hi2";
 
 import { Tooltip } from "~/components/Tooltip";
 import { usePermissions } from "~/hooks/usePermissions";
@@ -35,10 +35,17 @@ export default function List({
   const { openModal } = useModal();
   const { canCreateCard } = usePermissions();
   const canAddCard = canCreateCard && !isArchived;
+  const isSavedList = index === 0 && list.name === "Saved";
 
   const openNewCardForm = (publicListId: PublicListId) => {
     if (!canAddCard) return;
     openModal("NEW_CARD");
+    setSelectedPublicListId(publicListId);
+  };
+
+  const openSavedFileUploadForm = (publicListId: PublicListId) => {
+    if (!canAddCard || !isSavedList) return;
+    openModal("SAVED_FILE_UPLOAD");
     setSelectedPublicListId(publicListId);
   };
 
@@ -62,6 +69,29 @@ export default function List({
               {list.name}
             </div>
             <div className="flex items-center">
+              {isSavedList && (
+                <Tooltip
+                  content={
+                    isArchived
+                      ? t`Archived shortlists are read-only`
+                      : !canCreateCard
+                        ? t`You don't have permission`
+                        : t`Upload file`
+                  }
+                >
+                  <button
+                    className="mx-1 inline-flex h-fit items-center rounded-md p-1 px-1 text-sm font-semibold text-dark-50 hover:bg-light-400 disabled:cursor-not-allowed disabled:opacity-60 dark:hover:bg-dark-200"
+                    onClick={() => openSavedFileUploadForm(list.publicId)}
+                    disabled={!canAddCard}
+                    aria-label={t`Upload file`}
+                  >
+                    <HiOutlinePaperClip
+                      className="h-4 w-4 text-dark-900"
+                      aria-hidden="true"
+                    />
+                  </button>
+                </Tooltip>
+              )}
               <Tooltip
                 content={
                   isArchived

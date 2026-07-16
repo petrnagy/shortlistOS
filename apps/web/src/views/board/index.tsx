@@ -54,6 +54,7 @@ import List from "./components/List";
 import { NewCardForm } from "./components/NewCardForm";
 import { NewListForm } from "./components/NewListForm";
 import { NewTemplateForm } from "./components/NewTemplateForm";
+import { SavedFileUploadForm } from "./components/SavedFileUploadForm";
 import UpdateBoardSlugButton from "./components/UpdateBoardSlugButton";
 import { UpdateBoardSlugForm } from "./components/UpdateBoardSlugForm";
 import VisibilityButton from "./components/VisibilityButton";
@@ -427,6 +428,13 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
             listPublicId={selectedPublicListId}
             queryParams={queryParams}
           />
+        </Modal>
+
+        <Modal
+          modalSize="md"
+          isVisible={isOpen && modalContentType === "SAVED_FILE_UPLOAD"}
+        >
+          <SavedFileUploadForm boardPublicId={boardId ?? ""} />
         </Modal>
 
         <Modal

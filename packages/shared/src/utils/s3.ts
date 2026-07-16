@@ -8,8 +8,13 @@ import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { env } from "next-runtime-env";
 
 export function createS3Client() {
-  const endpoint = process.env.S3_ENDPOINT?.trim() || undefined;
-  const region = process.env.S3_REGION?.trim() || "us-east-1";
+  const configuredEndpoint = process.env.S3_ENDPOINT?.trim();
+  const configuredRegion = process.env.S3_REGION?.trim();
+  const endpoint = configuredEndpoint === "" ? undefined : configuredEndpoint;
+  const region =
+    configuredRegion === undefined || configuredRegion === ""
+      ? "us-east-1"
+      : configuredRegion;
   const credentials =
     process.env.S3_ACCESS_KEY_ID && process.env.S3_SECRET_ACCESS_KEY
       ? {
@@ -77,6 +82,46 @@ export async function deleteObject(bucket: string, key: string) {
   );
 }
 
+export async function putObject(
+  bucket: string,
+  key: string,
+  body: Buffer | Uint8Array,
+  contentType: string,
+) {
+  const client = createS3Client();
+  await client.send(
+    new PutObjectCommand({
+      Bucket: bucket,
+      Key: key,
+      Body: body,
+      ContentType: contentType,
+      ContentLength: body.byteLength,
+    }),
+  );
+}
+
+export async function getObjectBuffer(bucket: string, key: string) {
+  const client = createS3Client();
+  const response = await client.send(
+    new GetObjectCommand({
+      Bucket: bucket,
+      Key: key,
+    }),
+  );
+
+  if (!response.Body) {
+    throw new Error(`S3 object ${key} has no body`);
+  }
+
+  const chunks: Uint8Array[] = [];
+
+  for await (const chunk of response.Body as AsyncIterable<Uint8Array>) {
+    chunks.push(chunk);
+  }
+
+  return Buffer.concat(chunks);
+}
+
 /**
  * Generate presigned URL for an avatar image
  * Returns the URL as-is if it's already a full URL (external provider)
@@ -89,6 +134,10 @@ export async function generateAvatarUrl(
 ): Promise<string | null> {
   if (!imageKey) {
     return null;
+  }
+
+  if (imageKey.startsWith("/")) {
+    return imageKey;
   }
 
   if (imageKey.startsWith("http://") || imageKey.startsWith("https://")) {

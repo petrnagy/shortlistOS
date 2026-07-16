@@ -9,10 +9,18 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
 import { createDrizzleClient } from "@kan/db/client";
-import { shortlistClips } from "@kan/db/schema";
+import { shortlistWebpageSources } from "@kan/db/schema";
 import { createLogger } from "@kan/logger";
+import {
+  SHORTLIST_SOURCE_OBJECT_TYPES,
+  SHORTLIST_SOURCE_TYPES,
+} from "@kan/shared/constants";
 
 import { env } from "~/env";
+import {
+  enqueueShortlistSource,
+  storeShortlistSourceObject,
+} from "~/utils/shortlistSourceIntake";
 import {
   isAuthorizedBearerRequest,
   isNonEmptyString,
@@ -62,6 +70,16 @@ export default async function handler(
   const db = createDrizzleClient();
 
   try {
+    const bucket = env.SHORTLIST_SOURCE_BUCKET_NAME;
+
+    if (!bucket) {
+      log.error("Shortlist source bucket is not configured");
+
+      return res
+        .status(500)
+        .json({ message: "Shortlist source bucket is not configured" });
+    }
+
     const access = await resolveOwnedBoardWithActivePowerpack(db, {
       boardPublicId: payload.boardId,
       userId: payload.userId,
@@ -76,11 +94,55 @@ export default async function handler(
       return res.status(200).json({ inserted: 0, skipped: 1 });
     }
 
-    await db.insert(shortlistClips).values({
-      createdBy: access.userId,
+    const sourceUrl = payload.url.trim();
+    const htmlBuffer = Buffer.from(payload.rawHtml, "utf8");
+    const [source] = await db
+      .insert(shortlistWebpageSources)
+      .values({
+        boardId: access.boardId,
+        createdBy: access.userId,
+        metadataJson: {
+          boardPublicId: payload.boardId,
+        },
+        url: sourceUrl,
+      })
+      .returning({ id: shortlistWebpageSources.id });
+
+    if (!source) {
+      log.error("Failed to create shortlist webpage source");
+
+      return res.status(500).json({ message: "Failed to create source" });
+    }
+
+    const object = await storeShortlistSourceObject({
+      db,
+      bucket,
+      body: htmlBuffer,
       boardId: access.boardId,
-      url: payload.url.trim(),
-      rawHtml: payload.rawHtml,
+      boardPublicId: payload.boardId,
+      contentLength: htmlBuffer.byteLength,
+      contentType: "text/html",
+      createdBy: access.userId,
+      filename: "webpage.html",
+      metadata: {
+        "source-url": sourceUrl,
+      },
+      objectType: SHORTLIST_SOURCE_OBJECT_TYPES.WEBPAGE_HTML,
+      sourceId: source.id,
+      sourceType: SHORTLIST_SOURCE_TYPES.WEBPAGE,
+    });
+
+    await enqueueShortlistSource({
+      db,
+      boardId: access.boardId,
+      createdBy: access.userId,
+      payloadJson: {
+        objectId: object.id,
+        s3Key: object.s3Key,
+        sourceUrl,
+      },
+      sourceId: source.id,
+      sourceType: SHORTLIST_SOURCE_TYPES.WEBPAGE,
     });
 
     return res.status(200).json({ inserted: 1, skipped: 0 });

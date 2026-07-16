@@ -186,7 +186,7 @@ describe("shortlist magic inbox webhook", () => {
     });
   });
 
-  it("inserts a Brevo inbound email into shortlist_inbox without using a real database", async () => {
+  it("inserts a Brevo inbound email source without using a real database", async () => {
     const response = createResponse();
 
     await handler(createRequest({ body: createBrevoPayload() }), response);

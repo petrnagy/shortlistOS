@@ -31,6 +31,7 @@ export const env = createEnv({
     // Proprietary shortlistOS Powerpack and Magic Inbox functionality.
     STRIPE_SECRET_KEY: z.string().optional(),
     STRIPE_SHORTLIST_WEBHOOK_SECRET: z.string().optional(),
+    BREVO_API_KEY: z.string().optional(),
     BREVO_MAGIC_INBOX_WEBHOOK_SECRET: z.string().optional(),
     SHORTLIST_MAGIC_CLIP_WEBHOOK_SECRET: z.string().optional(),
     GOOGLE_CLIENT_ID: z.string().optional(),
@@ -81,6 +82,7 @@ export const env = createEnv({
     S3_REGION: z.string().optional(),
     S3_ENDPOINT: z.string().optional(),
     S3_FORCE_PATH_STYLE: z.string().optional(),
+    SHORTLIST_SOURCE_BUCKET_NAME: z.string().optional(),
     EMAIL_FROM: z.string().optional(),
     REDIS_URL: z.string().url().optional().or(z.literal("")),
   },
