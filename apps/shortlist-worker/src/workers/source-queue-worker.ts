@@ -33,6 +33,7 @@ import {
 } from "@kan/shared/constants";
 import { generateUID, getObjectBuffer, putObject } from "@kan/shared/utils";
 
+import { buildCardDescription } from "../utils/build-card-description";
 import { extractSourceText } from "../utils/extract-source-text";
 
 const logger = createLogger("shortlist-worker:source-queue-worker");
@@ -723,9 +724,12 @@ function buildCardInput(
   );
 
   return {
-    title: title?.trim() ?? "Untitled opportunity",
-    description: classification.description ?? "",
-    dueDate: parseDate(classification.applicationDeadline),
+    title: title.trim() || "Untitled opportunity",
+    description: buildCardDescription(
+      classification.description,
+      classification.applicationDeadline,
+    ),
+    dueDate: null,
     contactsJson: classification.contactsJson,
     shortlistCompanyName: classification.companyName,
     shortlistJobPostingUrl: sourceUrl,
@@ -880,14 +884,6 @@ function normalizeUrl(value: string | null | undefined): string {
   } catch {
     return normalizeText(value);
   }
-}
-
-function parseDate(value: string | null): Date | null {
-  if (!value) return null;
-
-  const parsed = new Date(value);
-
-  return Number.isNaN(parsed.getTime()) ? null : parsed;
 }
 
 function formatJobLocation(
