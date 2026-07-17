@@ -2116,13 +2116,6 @@ export default function CardPage({ isTemplate }: { isTemplate?: boolean }) {
             <>
               <div className="flex items-center gap-1">
                 <Link
-                  className="whitespace-nowrapleading-[1.5rem] text-sm font-bold text-light-900 dark:text-dark-950"
-                  href={`${isTemplate ? "/templates" : "/boards"}`}
-                >
-                  {workspace.name}
-                </Link>
-                <IoChevronForwardSharp className="h-[10px] w-[10px] text-light-900 dark:text-dark-900" />
-                <Link
                   className="whitespace-nowrap text-sm font-bold leading-[1.5rem] text-light-900 dark:text-dark-950"
                   href={`${isTemplate ? "/templates" : "/boards"}/${board?.publicId}`}
                 >
