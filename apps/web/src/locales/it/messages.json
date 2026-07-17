@@ -13286,9 +13286,9 @@
       ]
     ]
   },
-  "AJQDmS": {
-    "translation": "",
-    "message": "Show visual aging effects on cards based on last activity. Cards older than 1 week show progressive aging from faded to parchment style.",
+  "DtiT8q": {
+    "translation": "Mostra gli effetti visivi di invecchiamento sulle schede in base all'ultima attività. Le schede più vecchie di una settimana assumono gradualmente una tonalità calda più intensa con il passare del tempo.",
+    "message": "Show visual aging effects on cards based on last activity. Cards older than 1 week gradually receive a stronger warm tint as they age.",
     "placeholders": {},
     "comments": [],
     "origin": [

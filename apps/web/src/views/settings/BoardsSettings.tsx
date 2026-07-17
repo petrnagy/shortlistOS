@@ -299,7 +299,7 @@ const BoardsSettings = ({
         <AutomationCard
           icon={<HiOutlineClock className="h-4 w-4" />}
           title={t`Card aging`}
-          description={t`Show visual aging effects on cards based on last activity. Cards older than 1 week show progressive aging from faded to parchment style.`}
+          description={t`Show visual aging effects on cards based on last activity. Cards older than 1 week gradually receive a stronger warm tint as they age.`}
           isChecked={displayPowerpackToggle(isCardAgingEnabled)}
           onToggle={handleCardAgingToggle}
           disabled={isDisabled}

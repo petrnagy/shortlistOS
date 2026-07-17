@@ -13286,9 +13286,9 @@
       ]
     ]
   },
-  "AJQDmS": {
-    "translation": "Zeigt visuelle Alterungseffekte für Karten anhand der letzten Aktivität. Karten, die älter als eine Woche sind, altern stufenweise von verblasst bis zum Pergamentstil.",
-    "message": "Show visual aging effects on cards based on last activity. Cards older than 1 week show progressive aging from faded to parchment style.",
+  "DtiT8q": {
+    "translation": "Zeigt visuelle Alterungseffekte für Karten anhand der letzten Aktivität. Karten, die älter als eine Woche sind, erhalten mit zunehmendem Alter schrittweise einen stärkeren warmen Farbton.",
+    "message": "Show visual aging effects on cards based on last activity. Cards older than 1 week gradually receive a stronger warm tint as they age.",
     "placeholders": {},
     "comments": [],
     "origin": [
