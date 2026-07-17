@@ -29,15 +29,23 @@ const JOB_POSTING_CLASSIFICATION_INSTRUCTIONS = readFileSync(
 
 export const jobPostingRejectionSchema = z.object({
   isJobOpportunity: z.literal(false),
-  pageType: z.enum([
-    "JOB_SEARCH_RESULTS",
-    "CAREERS_PAGE",
-    "TALENT_POOL",
-    "ARTICLE",
-    "OTHER",
-  ]),
-  rejectionReason: z.string(),
+  pageType: z
+    .enum([
+      "JOB_SEARCH_RESULTS",
+      "CAREERS_PAGE",
+      "TALENT_POOL",
+      "ARTICLE",
+      "OTHER",
+    ])
+    .catch("OTHER"),
+  rejectionReason: z
+    .string()
+    .catch("The source is not a specific job opportunity."),
 });
+
+const nullableStringSchema = z.string().nullable().catch(null);
+const nullableIntegerSchema = z.number().int().nullable().catch(null);
+const stringArraySchema = z.array(z.string()).catch([]);
 
 const jobPostingContactRoleOptions = new Set<string>(
   CARD_CONTACT_ROLE_OPTIONS,
@@ -75,57 +83,68 @@ const jobPostingContactsJsonSchema = z.array(
 export const jobPostingSuccessSchema = z.object({
   isJobOpportunity: z.literal(true),
   pageType: z.literal("JOB_POSTING"),
-  jobTitle: z.string().nullable(),
-  jobTitleNormalized: z.string().nullable(),
-  jobTitleDisplay: z.string().nullable(),
-  jobTitleBroader: z.string().nullable(),
-  jobTitleAtoms: z.object({
-    seniority: z
-      .enum([
-        "INTERN",
-        "JUNIOR",
-        "MID",
-        "SENIOR",
-        "LEAD",
-        "STAFF",
-        "PRINCIPAL",
-      ])
-      .nullable(),
-    occupation: z.string().nullable(),
-    titleSpecializations: z.array(z.string()),
-    managementLevel: z
-      .enum([
-        "INDIVIDUAL_CONTRIBUTOR",
-        "SUPERVISOR",
-        "TEAM_LEAD",
-        "DEPUTY_MANAGER",
-        "MANAGER",
-        "HEAD_OF_DEPARTMENT",
-        "DIRECTOR",
-        "EXECUTIVE",
-      ])
-      .nullable(),
-  }),
-  salaryLookupTitles: z.array(z.string()),
-  companyName: z.string().nullable(),
-  companyWebsiteUrl: z.string().nullable(),
-  companyHQ: z.string().nullable(),
-  sourceJobId: z.string().nullable(),
-  requisitionId: z.string().nullable(),
-  postingStatus: z.enum(["ACTIVE", "EXPIRED", "UNKNOWN"]),
-  description: z.string().nullable(),
-  salaryMin: z.number().int().nullable(),
-  salaryMax: z.number().int().nullable(),
-  salarySingle: z.number().int().nullable(),
-  salaryCurrency: z.string().nullable(),
+  jobTitle: z.string().trim().min(1),
+  jobTitleNormalized: nullableStringSchema,
+  jobTitleDisplay: nullableStringSchema,
+  jobTitleBroader: nullableStringSchema,
+  jobTitleAtoms: z
+    .object({
+      seniority: z
+        .enum([
+          "INTERN",
+          "JUNIOR",
+          "MID",
+          "SENIOR",
+          "LEAD",
+          "STAFF",
+          "PRINCIPAL",
+        ])
+        .nullable()
+        .catch(null),
+      occupation: nullableStringSchema,
+      titleSpecializations: stringArraySchema,
+      managementLevel: z
+        .enum([
+          "INDIVIDUAL_CONTRIBUTOR",
+          "SUPERVISOR",
+          "TEAM_LEAD",
+          "DEPUTY_MANAGER",
+          "MANAGER",
+          "HEAD_OF_DEPARTMENT",
+          "DIRECTOR",
+          "EXECUTIVE",
+        ])
+        .nullable()
+        .catch(null),
+    })
+    .catch({
+      seniority: null,
+      occupation: null,
+      titleSpecializations: [],
+      managementLevel: null,
+    }),
+  salaryLookupTitles: stringArraySchema,
+  companyName: nullableStringSchema,
+  companyWebsiteUrl: nullableStringSchema,
+  companyHQ: nullableStringSchema,
+  sourceJobId: nullableStringSchema,
+  requisitionId: nullableStringSchema,
+  postingStatus: z.enum(["ACTIVE", "EXPIRED", "UNKNOWN"]).catch("UNKNOWN"),
+  description: nullableStringSchema,
+  salaryMin: nullableIntegerSchema,
+  salaryMax: nullableIntegerSchema,
+  salarySingle: nullableIntegerSchema,
+  salaryCurrency: nullableStringSchema,
   salaryPeriod: z
     .enum(["ANNUAL", "MONTHLY", "WEEKLY", "DAILY", "HOURLY"])
-    .nullable(),
+    .nullable()
+    .catch(null),
   salarySource: z
     .enum(["EMPLOYER_PROVIDED", "PLATFORM_ESTIMATE", "UNKNOWN"])
-    .nullable(),
-  salaryOriginalText: z.string().nullable(),
-  workSchedule: z.enum(["FULL_TIME", "PART_TIME"]).nullable(),
+    .nullable()
+    .catch(null),
+  salaryOriginalText: nullableStringSchema,
+  workSchedule: z.enum(["FULL_TIME", "PART_TIME"]).nullable().catch(null),
   engagementType: z
     .enum([
       "EMPLOYEE",
@@ -135,14 +154,20 @@ export const jobPostingSuccessSchema = z.object({
       "TEMPORARY",
       "SEASONAL",
     ])
-    .nullable(),
-  engagementTypeSource: z.enum(["EXPLICIT", "INFERRED", "UNKNOWN"]),
-  locationType: z.enum(["REMOTE", "HYBRID", "ON_SITE"]).nullable(),
-  jobLocations: z.array(z.string()),
-  remoteLocationRestriction: z.string().nullable(),
-  applicationDeadline: z.string().nullable(),
-  contactsJson: jobPostingContactsJsonSchema,
-  equityMentioned: z.boolean(),
+    .nullable()
+    .catch(null),
+  engagementTypeSource: z
+    .enum(["EXPLICIT", "INFERRED", "UNKNOWN"])
+    .catch("UNKNOWN"),
+  locationType: z
+    .enum(["REMOTE", "HYBRID", "ON_SITE"])
+    .nullable()
+    .catch(null),
+  jobLocations: stringArraySchema,
+  remoteLocationRestriction: nullableStringSchema,
+  applicationDeadline: nullableStringSchema,
+  contactsJson: jobPostingContactsJsonSchema.catch([]),
+  equityMentioned: z.boolean().catch(false),
 });
 
 export const jobPostingClassificationSchema = z.union([

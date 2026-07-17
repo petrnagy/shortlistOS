@@ -75,8 +75,10 @@ Never guess or invent values.
 
 ### Opportunity identity
 
-- `jobTitle` `string | null`  
+- `jobTitle` `string`
   The job title as presented in the posting, with only obvious formatting noise removed.
+
+  A successful job-opportunity classification requires a non-empty job title. If the job title cannot be confidently determined, reject the source as `OTHER` instead.
 
 - `jobTitleDisplay` `string | null`  
   A clean, human-readable version of the title that preserves meaningful seniority, specialization, profession, platform, industry, or management information.
@@ -243,8 +245,10 @@ For `Emergency Department Registered Nurse`:
 "Registered Nurse"
 ]
 
-- `companyName` `string | null`  
+- `companyName` `string | null`
   The hiring company, not the job board, recruitment platform, or applicant tracking system.
+
+  Return `null` when the hiring company is not disclosed, including confidential-client or recruiter-posted opportunities. Do not reject an otherwise valid opportunity solely because the company is unknown, and never infer or invent the company name.
 
 - `companyWebsiteUrl` `string | null`  
   The hiring company’s own website only when it is explicitly stated or linked in the webpage content.
@@ -638,7 +642,7 @@ Do not include:
 {
 "isJobOpportunity": true,
 "pageType": "JOB_POSTING",
-"jobTitle": null,
+"jobTitle": "Job title as presented",
 "jobTitleDisplay": null,
 "jobTitleNormalized": null,
 "jobTitleBroader": null,

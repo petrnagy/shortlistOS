@@ -301,6 +301,87 @@ describe("job posting classification", () => {
     }
   });
 
+  it("falls back safely when non-critical opportunity fields are invalid", () => {
+    const classification = jobPostingClassificationSchema.parse({
+      isJobOpportunity: true,
+      pageType: "JOB_POSTING",
+      jobTitle: "Product Engineer",
+      companyName: "Acme",
+      jobTitleAtoms: {
+        seniority: "EXPERT",
+        occupation: 42,
+        titleSpecializations: "TypeScript",
+        managementLevel: "OWNER",
+      },
+      salaryMin: "not-a-number",
+      salaryPeriod: "YEARLY",
+      postingStatus: "OPEN",
+      engagementTypeSource: "MODEL_GUESS",
+      locationType: "FLEXIBLE",
+      contactsJson: [
+        {
+          id: "contact-1",
+          role: "RECRUITER",
+          name: "Jane Smith",
+          methods: [{ type: "FAX", value: "123" }],
+        },
+      ],
+      equityMentioned: "yes",
+    });
+
+    expect(classification).toMatchObject({
+      isJobOpportunity: true,
+      pageType: "JOB_POSTING",
+      jobTitle: "Product Engineer",
+      companyName: "Acme",
+      jobTitleAtoms: {
+        seniority: null,
+        occupation: null,
+        titleSpecializations: [],
+        managementLevel: null,
+      },
+      salaryMin: null,
+      salaryPeriod: null,
+      postingStatus: "UNKNOWN",
+      engagementTypeSource: "UNKNOWN",
+      locationType: null,
+      contactsJson: [],
+      equityMentioned: false,
+    });
+  });
+
+  it("falls back safely when rejection details are invalid", () => {
+    expect(
+      jobPostingClassificationSchema.parse({
+        isJobOpportunity: false,
+        pageType: "JOB_POSTING",
+      }),
+    ).toEqual({
+      isJobOpportunity: false,
+      pageType: "OTHER",
+      rejectionReason: "The source is not a specific job opportunity.",
+    });
+  });
+
+  it("accepts a job opportunity when the hiring company is undisclosed", () => {
+    const classification = jobPostingClassificationSchema.parse({
+      isJobOpportunity: true,
+      pageType: "JOB_POSTING",
+      jobTitle: "Senior Developer",
+      companyName: null,
+      salaryOriginalText: "Competitive salary",
+      description: "Build software products for our client.",
+    });
+
+    expect(classification).toMatchObject({
+      isJobOpportunity: true,
+      jobTitle: "Senior Developer",
+      companyName: null,
+      salaryOriginalText: "Competitive salary",
+      description: "Build software products for our client.",
+    });
+  });
+
   it("truncates large content before calling the LLM", async () => {
     completeLlmMessageMock.mockResolvedValueOnce({
       content: JSON.stringify({
