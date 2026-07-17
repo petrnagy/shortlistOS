@@ -242,6 +242,65 @@ describe("job posting classification", () => {
     ).toThrow();
   });
 
+  it("normalizes an unsupported contact role to OTHER", () => {
+    const classification = jobPostingClassificationSchema.parse({
+      isJobOpportunity: true,
+      pageType: "JOB_POSTING",
+      jobTitle: "Chief of Staff",
+      jobTitleNormalized: "Chief of Staff",
+      jobTitleDisplay: "Chief of Staff",
+      jobTitleBroader: "Chief of Staff",
+      jobTitleAtoms: {
+        seniority: null,
+        occupation: "Chief of Staff",
+        titleSpecializations: [],
+        managementLevel: "EXECUTIVE",
+      },
+      salaryLookupTitles: ["Chief of Staff"],
+      companyName: "Acme",
+      companyWebsiteUrl: null,
+      companyHQ: null,
+      sourceJobId: null,
+      requisitionId: null,
+      postingStatus: "ACTIVE",
+      description: null,
+      salaryMin: null,
+      salaryMax: null,
+      salarySingle: null,
+      salaryCurrency: null,
+      salaryPeriod: null,
+      salarySource: null,
+      salaryOriginalText: null,
+      workSchedule: null,
+      engagementType: null,
+      engagementTypeSource: "UNKNOWN",
+      locationType: null,
+      jobLocations: [],
+      remoteLocationRestriction: null,
+      applicationDeadline: null,
+      contactsJson: [
+        {
+          id: "contact-1",
+          role: "EXECUTIVE",
+          name: "Jane Smith",
+          methods: [
+            {
+              id: "contact-1-method-1",
+              type: "EMAIL",
+              value: "jane.smith@example.com",
+            },
+          ],
+        },
+      ],
+      equityMentioned: false,
+    });
+
+    expect(classification.isJobOpportunity).toBe(true);
+    if (classification.isJobOpportunity) {
+      expect(classification.contactsJson[0]?.role).toBe("OTHER");
+    }
+  });
+
   it("truncates large content before calling the LLM", async () => {
     completeLlmMessageMock.mockResolvedValueOnce({
       content: JSON.stringify({

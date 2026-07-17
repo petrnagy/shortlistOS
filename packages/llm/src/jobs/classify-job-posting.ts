@@ -39,7 +39,19 @@ export const jobPostingRejectionSchema = z.object({
   rejectionReason: z.string(),
 });
 
-const jobPostingContactRoleSchema = z.enum(CARD_CONTACT_ROLE_OPTIONS);
+const jobPostingContactRoleOptions = new Set<string>(
+  CARD_CONTACT_ROLE_OPTIONS,
+);
+
+const jobPostingContactRoleSchema = z.preprocess(
+  (value) =>
+    typeof value === "string" &&
+    value.length > 0 &&
+    !jobPostingContactRoleOptions.has(value)
+      ? "OTHER"
+      : value,
+  z.enum(CARD_CONTACT_ROLE_OPTIONS),
+);
 
 const jobPostingContactMethodTypeSchema = z.enum(
   CARD_CONTACT_METHOD_TYPE_OPTIONS,
