@@ -1,4 +1,52 @@
 {
+  "tcSGLx": {
+    "message": "Change status",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/board/components/CardContextMenu.tsx",
+        37
+      ]
+    ],
+    "translation": "Modifier le statut"
+  },
+  "2MwtO5": {
+    "message": "Change opportunity status to:",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/board/components/CardContextMoveListModal.tsx",
+        70
+      ]
+    ],
+    "translation": "Modifier le statut de l’opportunité en :"
+  },
+  "YtYIzr": {
+    "message": "Job interview",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/board/components/CardContextDueDateModal.tsx",
+        20
+      ]
+    ],
+    "translation": "Entretien d’embauche"
+  },
+  "4q0n9G": {
+    "message": "Copy opportunity link",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/board/components/CardContextMenu.tsx",
+        55
+      ]
+    ],
+    "translation": "Copier le lien de l’opportunité"
+  },
   "X0N0PA": {
     "message": " (edited)",
     "placeholders": {},

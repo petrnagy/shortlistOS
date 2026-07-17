@@ -1,4 +1,52 @@
 {
+  "tcSGLx": {
+    "message": "Change status",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/board/components/CardContextMenu.tsx",
+        37
+      ]
+    ],
+    "translation": "Cambia stato"
+  },
+  "2MwtO5": {
+    "message": "Change opportunity status to:",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/board/components/CardContextMoveListModal.tsx",
+        70
+      ]
+    ],
+    "translation": "Cambia lo stato dell’opportunità in:"
+  },
+  "YtYIzr": {
+    "message": "Job interview",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/board/components/CardContextDueDateModal.tsx",
+        20
+      ]
+    ],
+    "translation": "Colloquio di lavoro"
+  },
+  "4q0n9G": {
+    "message": "Copy opportunity link",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/board/components/CardContextMenu.tsx",
+        55
+      ]
+    ],
+    "translation": "Copia link dell’opportunità"
+  },
   "X0N0PA": {
     "message": " (edited)",
     "placeholders": {},

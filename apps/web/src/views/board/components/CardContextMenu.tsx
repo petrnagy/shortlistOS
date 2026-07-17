@@ -2,12 +2,11 @@ import { t } from "@lingui/core/macro";
 import { useEffect, useRef } from "react";
 import {
   HiLink,
+  HiOutlineArrowRightCircle,
   HiOutlineCalendar,
   HiOutlineDocumentDuplicate,
   HiOutlineTag,
   HiOutlineTrash,
-  HiOutlineUserGroup,
-  HiOutlineArrowRightCircle,
 } from "react-icons/hi2";
 
 export type CardContextMenuAction =
@@ -34,14 +33,8 @@ const MENU_ITEMS: {
   requiresEdit: boolean;
 }[] = [
   {
-    action: "members",
-    label: t`Manage members`,
-    icon: <HiOutlineUserGroup className="h-4 w-4 shrink-0" />,
-    requiresEdit: true,
-  },
-  {
     action: "move",
-    label: t`Move to another list`,
+    label: t`Change status`,
     icon: <HiOutlineArrowRightCircle className="h-4 w-4 shrink-0" />,
     requiresEdit: true,
   },
@@ -53,25 +46,25 @@ const MENU_ITEMS: {
   },
   {
     action: "dueDate",
-    label: t`Set due date`,
+    label: t`Set interview date`,
     icon: <HiOutlineCalendar className="h-4 w-4 shrink-0" />,
     requiresEdit: true,
   },
   {
     action: "copyLink",
-    label: t`Copy link to card`,
+    label: t`Copy opportunity link`,
     icon: <HiLink className="h-4 w-4 shrink-0" />,
     requiresEdit: false,
   },
   {
     action: "duplicate",
-    label: t`Duplicate card`,
+    label: t`Duplicate opportunity`,
     icon: <HiOutlineDocumentDuplicate className="h-4 w-4 shrink-0" />,
     requiresEdit: true,
   },
   {
     action: "delete",
-    label: t`Delete card`,
+    label: t`Delete opportunity`,
     icon: <HiOutlineTrash className="h-4 w-4 shrink-0" />,
     requiresEdit: true,
   },

@@ -17,7 +17,7 @@ export function CardContextDueDateModal() {
   return (
     <div className="p-4">
       <h2 className="mb-4 text-lg font-semibold text-light-1000 dark:text-dark-1000">
-        {t`Set due date`}
+        {t`Job interview`}
       </h2>
       {isLoading ? (
         <div className="h-10 w-full animate-pulse rounded bg-light-200 dark:bg-dark-300" />
