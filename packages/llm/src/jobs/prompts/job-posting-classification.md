@@ -576,12 +576,28 @@ Method type rules:
 
 ### Other fields
 
+- `interviewDateTime` `string | null`
+  An explicitly scheduled job interview date/time, returned as an ISO 8601
+  timestamp. Use only interview scheduling information. Never map an application
+  deadline, availability date, or proposed start date to this field.
+
 - `equityMentioned` `boolean`  
   Set to `true` only when equity, stock options, shares, or RSUs are explicitly offered as part of compensation.
 
   Do not set it to `true` for references to equal opportunity, diversity, inclusion, or workplace equity.
 
   Otherwise, set it to `false`.
+
+### Evidence and corrections
+
+- `fieldEvidence` `array`
+  For each populated opportunity field, identify the annotated source section
+  used and include a short supporting quote when possible. Each entry has
+  `{ "field": string, "source": string, "quote": string | null }`.
+- `explicitCorrections` `string[]`
+  List fields that the newest source explicitly says changed, was corrected,
+  moved, increased, decreased, replaced, or should now have a different value.
+  Do not list a field merely because two sources disagree.
 
 ## Conflict resolution and source priority
 
@@ -674,6 +690,9 @@ Do not include:
 "jobLocations": [],
 "remoteLocationRestriction": null,
 "applicationDeadline": null,
+"interviewDateTime": null,
 "contactsJson": [],
-"equityMentioned": false
+"equityMentioned": false,
+"fieldEvidence": [],
+"explicitCorrections": []
 }

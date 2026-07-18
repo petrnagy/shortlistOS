@@ -6,24 +6,31 @@
  * Copyright: Copyright (c) 2026 Petr Nagy.
  * Proprietary: shortlistOS Powerpack feature. Not part of the open-source distribution.
  */
-import { and, asc, eq, inArray, isNull, lte } from "drizzle-orm";
+import { createHash } from "node:crypto";
+import { and, asc, eq, inArray, isNull, lt, lte, or, sql } from "drizzle-orm";
 
 import type { dbClient } from "@kan/db/client";
+import type { JobPostingClassification, OpportunityFacts } from "@kan/llm";
+import * as cardRepo from "@kan/db/repository/card.repo";
 import * as cardActivityRepo from "@kan/db/repository/cardActivity.repo";
 import * as cardAttachmentRepo from "@kan/db/repository/cardAttachment.repo";
 import * as cardCommentRepo from "@kan/db/repository/cardComment.repo";
-import * as cardRepo from "@kan/db/repository/card.repo";
 import {
   boards,
   cards,
   lists,
+  shortlistEmailSources,
   shortlistJobQueue,
+  shortlistSourceCards,
   shortlistSourceObjects,
   shortlistWebpageSources,
   users,
 } from "@kan/db/schema";
-import type { JobPostingClassification } from "@kan/llm";
-import { classifyJobPostingContent } from "@kan/llm";
+import {
+  classifyJobPostingContent,
+  classifyOpportunityFactsContent,
+  jobPostingSuccessSchema,
+} from "@kan/llm";
 import { createLogger } from "@kan/logger";
 import {
   SHORTLIST_JOB_STATUSES,
@@ -31,7 +38,12 @@ import {
   SHORTLIST_SOURCE_OBJECT_TYPES,
   SHORTLIST_SOURCE_TYPES,
 } from "@kan/shared/constants";
-import { generateUID, getObjectBuffer, putObject } from "@kan/shared/utils";
+import {
+  deleteObject,
+  generateUID,
+  getObjectBuffer,
+  putObject,
+} from "@kan/shared/utils";
 
 import { buildCardDescription } from "../utils/build-card-description";
 import { extractSourceText } from "../utils/extract-source-text";
@@ -76,9 +88,19 @@ interface ClassificationSourceContent {
   clippedAt: Date;
   content: string;
   contentKind: "email" | "webpage";
-  sourceObject: SourceObjectForClassification;
-  sourceObjectBuffer: Buffer;
+  contentHash: string;
+  currentEmailContent: string | null;
+  provenance: Record<string, string[]>;
+  sourceObjects: ExtractedSourceObject[];
   sourceUrl: string | null;
+}
+
+interface ExtractedSourceObject {
+  buffer: Buffer | null;
+  content: string | null;
+  role: "ATTACHMENT" | "CURRENT_EMAIL" | "QUOTED_HISTORY" | "SOURCE";
+  sourceObject: SourceObjectForClassification;
+  warning: string | null;
 }
 
 interface SourceObjectForClassification {
@@ -95,6 +117,25 @@ interface DuplicateMatch {
   cardId: number;
   cardPublicId: string;
   reason: string;
+  matchType: string;
+}
+
+interface ExistingCardSnapshot {
+  contactsJson: unknown;
+  description: string | null;
+  dueDate: Date | null;
+  manualUpdatedOnly: boolean;
+  shortlistCompanyLocation: string | null;
+  shortlistCompanyName: string | null;
+  shortlistJobLocation: string | null;
+  shortlistJobLocationType: string | null;
+  shortlistJobPostingUrl: string | null;
+  shortlistJobType: string;
+  shortlistSalaryCurrency: string | null;
+  shortlistSalaryInterval: string;
+  shortlistSalaryMax: number | null;
+  shortlistSalaryMin: number | null;
+  title: string;
 }
 
 export async function processShortlistJobQueueBatch(
@@ -129,31 +170,64 @@ async function getPendingJobs(
   db: dbClient,
   limit: number,
 ): Promise<QueueJobRow[]> {
-  return db
-    .select({
-      id: shortlistJobQueue.id,
-      attempts: shortlistJobQueue.attempts,
-      boardId: shortlistJobQueue.boardId,
-      createdAt: shortlistJobQueue.createdAt,
-      createdBy: shortlistJobQueue.createdBy,
-      maxAttempts: shortlistJobQueue.maxAttempts,
-      payloadJson: shortlistJobQueue.payloadJson,
-      processingLog: shortlistJobQueue.processingLog,
-      sourceId: shortlistJobQueue.sourceId,
-      sourceType: shortlistJobQueue.sourceType,
-    })
-    .from(shortlistJobQueue)
-    .where(
-      and(
-        inArray(shortlistJobQueue.status, [
-          SHORTLIST_JOB_STATUSES.PENDING,
-          SHORTLIST_JOB_STATUSES.RETRY,
-        ]),
-        lte(shortlistJobQueue.runAfter, new Date()),
-      ),
-    )
-    .orderBy(asc(shortlistJobQueue.runAfter), asc(shortlistJobQueue.createdAt))
-    .limit(limit);
+  return db.transaction(async (tx) => {
+    const staleLockBefore = new Date(Date.now() - 15 * 60 * 1000);
+    const jobs = await tx
+      .select({
+        id: shortlistJobQueue.id,
+        attempts: shortlistJobQueue.attempts,
+        boardId: shortlistJobQueue.boardId,
+        createdAt: shortlistJobQueue.createdAt,
+        createdBy: shortlistJobQueue.createdBy,
+        maxAttempts: shortlistJobQueue.maxAttempts,
+        payloadJson: shortlistJobQueue.payloadJson,
+        processingLog: shortlistJobQueue.processingLog,
+        sourceId: shortlistJobQueue.sourceId,
+        sourceType: shortlistJobQueue.sourceType,
+      })
+      .from(shortlistJobQueue)
+      .where(
+        and(
+          or(
+            inArray(shortlistJobQueue.status, [
+              SHORTLIST_JOB_STATUSES.PENDING,
+              SHORTLIST_JOB_STATUSES.RETRY,
+            ]),
+            and(
+              eq(shortlistJobQueue.status, SHORTLIST_JOB_STATUSES.PROCESSING),
+              lt(shortlistJobQueue.lockedAt, staleLockBefore),
+            ),
+          ),
+          lte(shortlistJobQueue.runAfter, new Date()),
+        ),
+      )
+      .orderBy(
+        asc(shortlistJobQueue.runAfter),
+        asc(shortlistJobQueue.createdAt),
+      )
+      .limit(limit)
+      .for("update", { skipLocked: true });
+
+    if (jobs.length > 0) {
+      await tx
+        .update(shortlistJobQueue)
+        .set({
+          attempts: sql`${shortlistJobQueue.attempts} + 1`,
+          lockedAt: new Date(),
+          lockedBy: `shortlist-worker:${process.pid}`,
+          status: SHORTLIST_JOB_STATUSES.PROCESSING,
+          updatedAt: new Date(),
+        })
+        .where(
+          inArray(
+            shortlistJobQueue.id,
+            jobs.map((job) => job.id),
+          ),
+        );
+    }
+
+    return jobs;
+  });
 }
 
 async function processQueueJob(
@@ -162,13 +236,13 @@ async function processQueueJob(
   options: ProcessShortlistJobQueueBatchOptions,
 ): Promise<QueueProcessingStatus> {
   const attempt = job.attempts + 1;
+  let incompleteCreatedCardId: number | null = null;
+  const uploadedCardObjectKeys: string[] = [];
   const log = createProcessingLog(job.processingLog, [
     `Attempt ${attempt} started.`,
     `Source type: ${job.sourceType}`,
     `Source id: ${job.sourceId}`,
   ]);
-
-  await markJobProcessing(db, job.id, attempt);
 
   try {
     await ensureShortlistRobotUser(db);
@@ -196,14 +270,23 @@ async function processQueueJob(
     }
 
     const sourceContent = await getClassificationSourceContent(db, job);
-    const classification = await classifyJobPostingContent({
-      apiKey: options.apiKey,
-      model: options.model,
-      htmlContent: sourceContent.content,
-      sourceUrl: sourceContent.sourceUrl,
-      clippedAt: sourceContent.clippedAt,
-      contentKind: sourceContent.contentKind,
-    });
+    const existingLink = await findLinkedCard(db, job);
+    const classification =
+      job.sourceType === SHORTLIST_SOURCE_TYPES.EMAIL
+        ? await classifyEmailSourcesIndependently({
+            apiKey: options.apiKey,
+            existingTitle: existingLink?.card.title ?? null,
+            model: options.model,
+            sourceContent,
+          })
+        : await classifyJobPostingContent({
+            apiKey: options.apiKey,
+            model: options.model,
+            htmlContent: sourceContent.content,
+            sourceUrl: sourceContent.sourceUrl,
+            clippedAt: sourceContent.clippedAt,
+            contentKind: sourceContent.contentKind,
+          });
 
     let processingLog = appendLog(
       log,
@@ -227,31 +310,53 @@ async function processQueueJob(
     const cardInput = buildCardInput(
       classification.classification,
       sourceContent.sourceUrl,
+      job.sourceType,
     );
     processingLog = appendLog(
       processingLog,
       `Prepared card "${cardInput.title}" for Saved list.`,
     );
 
-    const duplicate = await findDuplicateCard(
-      db,
-      job.boardId,
-      sourceContent.sourceUrl,
-      classification.classification,
-    );
+    const duplicate = existingLink
+      ? {
+          cardId: existingLink.cardId,
+          cardPublicId: existingLink.cardPublicId,
+          reason: "same email thread",
+          matchType: "EMAIL_THREAD",
+        }
+      : await findDuplicateCard(
+          db,
+          job.boardId,
+          sourceContent.sourceUrl,
+          sourceContent.contentHash,
+          classification.classification,
+        );
 
     if (duplicate) {
-      await finishJob(db, job.id, {
-        attempts: attempt,
-        error: duplicate.reason,
-        processingLog: appendLog(
-          processingLog,
-          `Duplicate of card ${duplicate.cardPublicId}: ${duplicate.reason}.`,
-        ),
-        status: SHORTLIST_JOB_STATUSES.DUPLICATE,
+      const updateResult = await enrichDuplicateCard(db, {
+        classification: classification.classification,
+        duplicate,
+        job,
+        sourceContent,
+        uploadedCardObjectKeys,
       });
 
-      return SHORTLIST_JOB_STATUSES.DUPLICATE;
+      await finishJob(db, job.id, {
+        attempts: attempt,
+        error: null,
+        processingLog: appendLog(
+          processingLog,
+          `${updateResult.changedFields.length > 0 ? "Updated" : "Linked"} card ${duplicate.cardPublicId}: ${duplicate.reason}.`,
+        ),
+        status:
+          updateResult.changedFields.length > 0
+            ? SHORTLIST_JOB_STATUSES.COMPLETED
+            : SHORTLIST_JOB_STATUSES.DUPLICATE,
+      });
+
+      return updateResult.changedFields.length > 0
+        ? SHORTLIST_JOB_STATUSES.COMPLETED
+        : SHORTLIST_JOB_STATUSES.DUPLICATE;
     }
 
     const createdCard = await cardRepo.create(db, {
@@ -261,6 +366,7 @@ async function processQueueJob(
       workspaceId: board.workspaceId,
       position: "end",
     });
+    incompleteCreatedCardId = createdCard.id;
 
     await addRobotProcessingHistory(db, {
       boardWorkspaceId: board.workspaceId,
@@ -268,7 +374,18 @@ async function processQueueJob(
       cardPublicId: createdCard.publicId,
       job,
       sourceContent,
+      uploadedCardObjectKeys,
     });
+
+    await linkSourceToCard(db, {
+      cardId: createdCard.id,
+      classification: classification.classification,
+      contentHash: sourceContent.contentHash,
+      job,
+      matchType: "CREATED",
+      provenance: sourceContent.provenance,
+    });
+    incompleteCreatedCardId = null;
 
     await finishJob(db, job.id, {
       attempts: attempt,
@@ -282,7 +399,42 @@ async function processQueueJob(
 
     return SHORTLIST_JOB_STATUSES.COMPLETED;
   } catch (error) {
-    const shouldRetry = attempt < Math.min(job.maxAttempts, options.retryLimit);
+    const attachmentsBucket = process.env.NEXT_PUBLIC_ATTACHMENTS_BUCKET_NAME;
+    if (attachmentsBucket && incompleteCreatedCardId) {
+      await Promise.all(
+        uploadedCardObjectKeys.map((s3Key) =>
+          deleteObject(attachmentsBucket, s3Key).catch((cleanupError) => {
+            logger.error(
+              { error: formatError(cleanupError), s3Key },
+              "Failed to clean up an incomplete card attachment object",
+            );
+          }),
+        ),
+      );
+    }
+    if (incompleteCreatedCardId) {
+      try {
+        await cardRepo.softDelete(db, {
+          cardId: incompleteCreatedCardId,
+          deletedAt: new Date(),
+          deletedBy: SHORTLIST_ROBOT_USER.id,
+        });
+      } catch (cleanupError) {
+        logger.error(
+          {
+            cardId: incompleteCreatedCardId,
+            error: formatError(cleanupError),
+          },
+          "Failed to hide an incompletely audited shortlist card",
+        );
+      }
+    }
+
+    const shouldRetry = shouldRetryJob(
+      attempt,
+      job.maxAttempts,
+      options.retryLimit,
+    );
     const status = shouldRetry
       ? SHORTLIST_JOB_STATUSES.RETRY
       : SHORTLIST_JOB_STATUSES.FAILED;
@@ -316,7 +468,7 @@ async function getClassificationSourceContent(
   db: dbClient,
   job: QueueJobRow,
 ): Promise<ClassificationSourceContent> {
-    const objects = await db
+  const objects = await db
     .select({
       bucket: shortlistSourceObjects.bucket,
       contentType: shortlistSourceObjects.contentType,
@@ -334,70 +486,445 @@ async function getClassificationSourceContent(
       ),
     );
 
-  const sourceObject = selectClassifiableObject(job.sourceType, objects);
+  const selectedObjects = selectClassifiableObjects(job.sourceType, objects);
 
-  if (!sourceObject) {
+  if (selectedObjects.length === 0) {
     throw new Error(`No classifiable object found for source ${job.sourceId}`);
   }
 
-  const buffer = await getObjectBuffer(sourceObject.bucket, sourceObject.s3Key);
-  const webpage = job.sourceType === SHORTLIST_SOURCE_TYPES.WEBPAGE
-    ? await getWebpageSource(db, job.sourceId)
-    : null;
+  const extractedObjects: ExtractedSourceObject[] = [];
+  for (const selected of selectedObjects) {
+    let buffer: Buffer;
+    try {
+      buffer = await getObjectBuffer(
+        selected.sourceObject.bucket,
+        selected.sourceObject.s3Key,
+      );
+    } catch (error) {
+      extractedObjects.push({
+        buffer: null,
+        content: null,
+        role: selected.role,
+        sourceObject: selected.sourceObject,
+        warning: `Download failed: ${formatError(error)}`,
+      });
+      continue;
+    }
+    let content: string | null = null;
+    let warning: string | null = null;
+
+    if (selected.shouldExtract) {
+      try {
+        content = await extractSourceText({
+          buffer,
+          contentType: selected.sourceObject.contentType,
+          filename: selected.sourceObject.originalFilename,
+        });
+      } catch (error) {
+        warning = formatError(error);
+      }
+    }
+
+    extractedObjects.push({
+      buffer,
+      content,
+      role: selected.role,
+      sourceObject: selected.sourceObject,
+      warning,
+    });
+  }
+
+  const usableObjects = extractedObjects.filter(
+    (object): object is ExtractedSourceObject & { content: string } =>
+      !!object.content?.trim(),
+  );
+  if (usableObjects.length === 0) {
+    const errors = extractedObjects
+      .map((object) => object.warning)
+      .filter(Boolean)
+      .join("; ");
+    throw new Error(
+      errors || `No text could be extracted from source ${job.sourceId}`,
+    );
+  }
+
+  const webpage =
+    job.sourceType === SHORTLIST_SOURCE_TYPES.WEBPAGE
+      ? await getWebpageSource(db, job.sourceId)
+      : null;
+
+  const orderedObjects = [...usableObjects].sort(
+    (left, right) =>
+      sourceRolePriority(left.role) - sourceRolePriority(right.role),
+  );
+  const content = orderedObjects
+    .map(
+      (object) =>
+        `<section><h2>SOURCE: ${object.role} (${escapeHtml(object.sourceObject.originalFilename)})</h2><pre>${escapeHtml(object.content)}</pre></section>`,
+    )
+    .join("\n");
+
+  const contentHash = createHash("sha256");
+  for (const object of extractedObjects) {
+    if (object.buffer) contentHash.update(object.buffer);
+  }
 
   return {
     clippedAt: job.createdAt,
-    content: await extractSourceText({
-      buffer,
-      contentType: sourceObject.contentType,
-      filename: sourceObject.originalFilename,
-    }),
+    content,
     contentKind:
       job.sourceType === SHORTLIST_SOURCE_TYPES.EMAIL ? "email" : "webpage",
-    sourceObject,
-    sourceObjectBuffer: buffer,
+    contentHash: contentHash.digest("hex"),
+    currentEmailContent:
+      orderedObjects.find((object) => object.role === "CURRENT_EMAIL")
+        ?.content ?? null,
+    provenance: orderedObjects.reduce<Record<string, string[]>>(
+      (provenance, object) => {
+        (provenance[object.role] ??= []).push(
+          object.sourceObject.originalFilename,
+        );
+        return provenance;
+      },
+      {},
+    ),
+    sourceObjects: extractedObjects,
     sourceUrl: webpage?.url ?? getPayloadSourceUrl(job.payloadJson),
   };
 }
 
-function selectClassifiableObject(
-  sourceType: string,
-  objects: {
-    bucket: string;
-    contentType: string;
-    fileSize: number;
-    metadataJson: unknown;
-    objectType: string;
-    originalFilename: string;
-    s3Key: string;
-  }[],
-) {
-  if (sourceType === SHORTLIST_SOURCE_TYPES.EMAIL) {
-    return (
-      objects.find(
-        (object) =>
-          object.objectType === SHORTLIST_SOURCE_OBJECT_TYPES.EMAIL_HTML,
-      ) ??
-      objects.find(
-        (object) =>
-          object.objectType === SHORTLIST_SOURCE_OBJECT_TYPES.EMAIL_TEXT,
-      ) ??
-      objects.find(
-        (object) =>
-          object.objectType === SHORTLIST_SOURCE_OBJECT_TYPES.EMAIL_EML,
-      ) ??
-      objects.find(
-        (object) =>
-          object.objectType === SHORTLIST_SOURCE_OBJECT_TYPES.ATTACHMENT_FILE,
-      )
+interface ClassifiedEmailSource {
+  facts: OpportunityFacts;
+  filename: string;
+  model: string;
+  rawResponse: unknown;
+  role: "ATTACHMENT" | "CURRENT_EMAIL" | "QUOTED_HISTORY";
+  warnings: string[];
+}
+
+const MERGEABLE_FACT_FIELDS = [
+  "jobTitle",
+  "jobTitleNormalized",
+  "jobTitleDisplay",
+  "jobTitleBroader",
+  "jobTitleAtoms",
+  "salaryLookupTitles",
+  "companyName",
+  "companyWebsiteUrl",
+  "companyHQ",
+  "sourceJobId",
+  "requisitionId",
+  "postingStatus",
+  "description",
+  "salaryMin",
+  "salaryMax",
+  "salarySingle",
+  "salaryCurrency",
+  "salaryPeriod",
+  "salarySource",
+  "salaryOriginalText",
+  "workSchedule",
+  "engagementType",
+  "engagementTypeSource",
+  "locationType",
+  "jobLocations",
+  "remoteLocationRestriction",
+  "applicationDeadline",
+  "interviewDateTime",
+  "contactsJson",
+  "equityMentioned",
+] as const satisfies readonly (keyof OpportunityFacts)[];
+
+export async function classifyEmailSourcesIndependently(input: {
+  apiKey: string;
+  existingTitle: string | null;
+  model: string;
+  sourceContent: ClassificationSourceContent;
+}) {
+  const sources = input.sourceContent.sourceObjects.filter(
+    (
+      source,
+    ): source is ExtractedSourceObject & {
+      content: string;
+      role: ClassifiedEmailSource["role"];
+    } =>
+      !!source.content?.trim() &&
+      (source.role === "CURRENT_EMAIL" ||
+        source.role === "ATTACHMENT" ||
+        source.role === "QUOTED_HISTORY"),
+  );
+  const classified: ClassifiedEmailSource[] = [];
+  const classificationErrors: string[] = [];
+
+  await Promise.all(
+    sources.map(async (source) => {
+      try {
+        const result = await classifyOpportunityFactsContent({
+          apiKey: input.apiKey,
+          model: input.model,
+          htmlContent: source.content,
+          sourceUrl: input.sourceContent.sourceUrl,
+          clippedAt: input.sourceContent.clippedAt,
+          contentKind: "email",
+          sourceRole: source.role,
+        });
+        classified.push({
+          facts: result.facts,
+          filename: source.sourceObject.originalFilename,
+          model: result.model,
+          rawResponse: result.rawResponse,
+          role: source.role,
+          warnings: result.warnings,
+        });
+      } catch (error) {
+        classificationErrors.push(
+          `${source.sourceObject.originalFilename}: ${formatError(error)}`,
+        );
+      }
+    }),
+  );
+
+  if (classified.length === 0 && classificationErrors.length > 0) {
+    throw new Error(
+      `Every email source classification failed: ${classificationErrors.join("; ")}`,
     );
   }
 
-  return objects.find((object) =>
-    sourceType === SHORTLIST_SOURCE_TYPES.WEBPAGE
-      ? object.objectType === SHORTLIST_SOURCE_OBJECT_TYPES.WEBPAGE_HTML
-      : object.objectType === SHORTLIST_SOURCE_OBJECT_TYPES.ATTACHMENT_FILE,
+  const classification = mergeOpportunityFactsDeterministically(
+    classified,
+    input.existingTitle,
   );
+
+  return {
+    classification,
+    model: classified.map((source) => source.model).join(", ") || input.model,
+    rawResponse: classified.map((source) => source.rawResponse),
+    warnings: [
+      ...classified.flatMap((source) => source.warnings),
+      ...classificationErrors,
+    ],
+  };
+}
+
+export function mergeOpportunityFactsDeterministically(
+  sources: ClassifiedEmailSource[],
+  existingTitle: string | null,
+): JobPostingClassification {
+  const relevant = sources.filter((source) => source.facts.isRelevant);
+  if (relevant.length === 0) {
+    return {
+      isJobOpportunity: false,
+      pageType: "OTHER",
+      rejectionReason:
+        sources.find((source) => source.facts.rejectionReason)?.facts
+          .rejectionReason ?? "The email contains no job-opportunity facts.",
+    };
+  }
+
+  const history = relevant.filter((source) => source.role === "QUOTED_HISTORY");
+  const current = relevant.filter((source) => source.role === "CURRENT_EMAIL");
+  const attachments = relevant.filter((source) => source.role === "ATTACHMENT");
+  const merged: Partial<OpportunityFacts> = {};
+
+  for (const source of history) assignFacts(merged, source.facts, "fill");
+  for (const source of current) assignFacts(merged, source.facts, "overwrite");
+  if (attachments[0]) assignFacts(merged, attachments[0].facts, "overwrite");
+  for (const source of attachments.slice(1)) {
+    assignFacts(merged, source.facts, "fill");
+  }
+
+  const explicitCorrections = new Set(
+    current.flatMap((source) => source.facts.explicitCorrections),
+  );
+  for (const field of explicitCorrections) {
+    if (!isMergeableFactField(field)) continue;
+    const correctingSource = current.find((source) =>
+      hasFactValue(source.facts[field]),
+    );
+    if (correctingSource)
+      merged[field] = correctingSource.facts[field] as never;
+  }
+
+  merged.description = mergeSourceDescriptions(
+    attachments,
+    current,
+    history,
+    explicitCorrections.has("description"),
+  );
+  merged.contactsJson = mergeSourceArrays(
+    relevant.flatMap((source) => source.facts.contactsJson ?? []),
+  ) as OpportunityFacts["contactsJson"];
+  merged.jobLocations = mergeSourceArrays(
+    relevant.flatMap((source) => source.facts.jobLocations ?? []),
+  ) as string[];
+
+  const jobTitle =
+    (typeof merged.jobTitle === "string" && merged.jobTitle.trim()
+      ? merged.jobTitle
+      : null) ?? existingTitle;
+  if (!jobTitle?.trim()) {
+    return {
+      isJobOpportunity: false,
+      pageType: "OTHER",
+      rejectionReason:
+        "The combined email sources did not contain a job title and were not linked to an existing opportunity.",
+    };
+  }
+
+  const fieldEvidence = relevant.flatMap((source) =>
+    MERGEABLE_FACT_FIELDS.filter((field) =>
+      hasFactValue(source.facts[field]),
+    ).map((field) => ({
+      field,
+      quote:
+        source.facts.fieldEvidence.find((evidence) => evidence.field === field)
+          ?.quote ?? null,
+      source: source.role,
+    })),
+  );
+
+  return jobPostingSuccessSchema.parse({
+    ...merged,
+    explicitCorrections: [...explicitCorrections],
+    fieldEvidence,
+    isJobOpportunity: true,
+    jobTitle,
+    pageType: "JOB_POSTING",
+  });
+}
+
+function assignFacts(
+  target: Partial<OpportunityFacts>,
+  source: OpportunityFacts,
+  mode: "fill" | "overwrite",
+) {
+  for (const field of MERGEABLE_FACT_FIELDS) {
+    const value = source[field];
+    if (!hasFactValue(value)) continue;
+    if (mode === "fill" && hasFactValue(target[field])) continue;
+    target[field] = value as never;
+  }
+}
+
+function hasFactValue(value: unknown): boolean {
+  if (value === undefined || value === null || value === "") return false;
+  if (Array.isArray(value)) return value.length > 0;
+  return true;
+}
+
+function isMergeableFactField(
+  field: string,
+): field is (typeof MERGEABLE_FACT_FIELDS)[number] {
+  return (MERGEABLE_FACT_FIELDS as readonly string[]).includes(field);
+}
+
+function mergeSourceDescriptions(
+  attachments: ClassifiedEmailSource[],
+  current: ClassifiedEmailSource[],
+  history: ClassifiedEmailSource[],
+  currentExplicitlyCorrectsDescription: boolean,
+): string | undefined {
+  const ordered = currentExplicitlyCorrectsDescription
+    ? current
+    : [...attachments, ...current, ...history];
+  const descriptions = ordered
+    .map((source) => source.facts.description?.trim())
+    .filter((description): description is string => !!description);
+  const unique: string[] = [];
+  for (const description of descriptions) {
+    if (
+      unique.some(
+        (existing) =>
+          normalizeText(existing).includes(normalizeText(description)) ||
+          normalizeText(description).includes(normalizeText(existing)),
+      )
+    ) {
+      continue;
+    }
+    unique.push(description);
+  }
+  return unique.length > 0 ? unique.join("\n\n") : undefined;
+}
+
+function mergeSourceArrays(values: unknown[]): unknown[] {
+  const seen = new Set<string>();
+  return values.filter((value) => {
+    const key = normalizeText(JSON.stringify(value));
+    if (!key || seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
+
+export function selectClassifiableObjects(
+  sourceType: string,
+  objects: SourceObjectForClassification[],
+): {
+  role: ExtractedSourceObject["role"];
+  shouldExtract: boolean;
+  sourceObject: SourceObjectForClassification;
+}[] {
+  if (sourceType === SHORTLIST_SOURCE_TYPES.EMAIL) {
+    const current = objects.find(
+      (object) =>
+        object.objectType === SHORTLIST_SOURCE_OBJECT_TYPES.EMAIL_CURRENT,
+    );
+    const html = objects.find(
+      (object) =>
+        object.objectType === SHORTLIST_SOURCE_OBJECT_TYPES.EMAIL_HTML,
+    );
+    const text = objects.find(
+      (object) =>
+        object.objectType === SHORTLIST_SOURCE_OBJECT_TYPES.EMAIL_TEXT,
+    );
+    const body = current ?? html ?? text;
+
+    return objects
+      .filter(
+        (object) =>
+          object === body ||
+          (current !== undefined && object === html) ||
+          object.objectType === SHORTLIST_SOURCE_OBJECT_TYPES.EMAIL_EML ||
+          object.objectType === SHORTLIST_SOURCE_OBJECT_TYPES.ATTACHMENT_FILE,
+      )
+      .map((object) => ({
+        role:
+          object.objectType === SHORTLIST_SOURCE_OBJECT_TYPES.ATTACHMENT_FILE
+            ? "ATTACHMENT"
+            : object === body
+              ? "CURRENT_EMAIL"
+              : "QUOTED_HISTORY",
+        shouldExtract:
+          object.objectType !== SHORTLIST_SOURCE_OBJECT_TYPES.EMAIL_EML ||
+          !body,
+        sourceObject: object,
+      }));
+  }
+
+  const object = objects.find((candidate) =>
+    sourceType === SHORTLIST_SOURCE_TYPES.WEBPAGE
+      ? candidate.objectType === SHORTLIST_SOURCE_OBJECT_TYPES.WEBPAGE_HTML
+      : candidate.objectType === SHORTLIST_SOURCE_OBJECT_TYPES.ATTACHMENT_FILE,
+  );
+
+  return object
+    ? [
+        {
+          role:
+            sourceType === SHORTLIST_SOURCE_TYPES.ATTACHMENT
+              ? "ATTACHMENT"
+              : "SOURCE",
+          shouldExtract: true,
+          sourceObject: object,
+        },
+      ]
+    : [];
+}
+
+function sourceRolePriority(role: ExtractedSourceObject["role"]): number {
+  if (role === "CURRENT_EMAIL") return 0;
+  if (role === "ATTACHMENT") return 1;
+  if (role === "QUOTED_HISTORY") return 2;
+  return 1;
 }
 
 async function getWebpageSource(db: dbClient, sourceId: string) {
@@ -451,38 +978,95 @@ async function addRobotProcessingHistory(
     cardPublicId: string;
     job: QueueJobRow;
     sourceContent: ClassificationSourceContent;
+    uploadedCardObjectKeys: string[];
   },
 ) {
-  const filename = getDisplayFilename(args.sourceContent.sourceObject);
+  const sourceFiles = getSourceFilesForCard(args.sourceContent.sourceObjects);
+  const filenames = sourceFiles.map((source) =>
+    getDisplayFilename(source.sourceObject),
+  );
   const intakeLabel = getSourceIntakeLabel(args.job.sourceType);
 
   await createRobotCommentActivity(
     db,
     args.cardId,
-    `Received ${filename} via ${intakeLabel}`,
+    `Received ${filenames.join(", ")} via ${intakeLabel}`,
   );
 
   await createRobotCommentActivity(
     db,
     args.cardId,
-    `Converted ${filename} into a job opportunity`,
+    `Processed ${args.sourceContent.sourceObjects.filter((source) => source.content).length} source part(s) into opportunity information`,
   );
 
-  const attachment = await attachOriginalSourceFile(db, {
-    buffer: args.sourceContent.sourceObjectBuffer,
-    cardId: args.cardId,
-    cardPublicId: args.cardPublicId,
-    contentType: args.sourceContent.sourceObject.contentType,
-    filename,
-    fileSize: args.sourceContent.sourceObject.fileSize,
-    workspaceId: args.boardWorkspaceId,
-  });
+  const attachedFilenames: string[] = [];
+  for (const source of sourceFiles) {
+    const filename = getDisplayFilename(source.sourceObject);
+    const attachment = await attachOriginalSourceFile(db, {
+      buffer: source.buffer,
+      cardId: args.cardId,
+      cardPublicId: args.cardPublicId,
+      contentType: source.sourceObject.contentType,
+      filename,
+      fileSize: source.sourceObject.fileSize,
+      workspaceId: args.boardWorkspaceId,
+      onUploaded: (s3Key) => args.uploadedCardObjectKeys.push(s3Key),
+    });
+    attachedFilenames.push(attachment.originalFilename);
+  }
 
   await createRobotCommentActivity(
     db,
     args.cardId,
-    `Original file: ${attachment.originalFilename}`,
+    `Original source${attachedFilenames.length === 1 ? "" : "s"}: ${attachedFilenames.join(", ")}`,
   );
+
+  const warnings = args.sourceContent.sourceObjects.filter(
+    (source) => source.warning,
+  );
+  if (warnings.length > 0) {
+    await createRobotCommentActivity(
+      db,
+      args.cardId,
+      `Some source files could not be parsed: ${warnings
+        .map(
+          (source) =>
+            `${source.sourceObject.originalFilename} (${source.warning})`,
+        )
+        .join(", ")}`,
+    );
+  }
+}
+
+function getSourceFilesForCard(
+  sources: ExtractedSourceObject[],
+): (ExtractedSourceObject & { buffer: Buffer })[] {
+  const downloadedSources = sources.filter(
+    (source): source is ExtractedSourceObject & { buffer: Buffer } =>
+      source.buffer !== null,
+  );
+  const eml = sources.find(
+    (source) =>
+      source.sourceObject.objectType ===
+      SHORTLIST_SOURCE_OBJECT_TYPES.EMAIL_EML,
+  );
+  const attachments = downloadedSources.filter(
+    (source) =>
+      source.sourceObject.objectType ===
+      SHORTLIST_SOURCE_OBJECT_TYPES.ATTACHMENT_FILE,
+  );
+
+  if (eml?.buffer) return [{ ...eml, buffer: eml.buffer }, ...attachments];
+  if (attachments.length > 0) {
+    const body = downloadedSources.find(
+      (source) => source.role === "CURRENT_EMAIL",
+    );
+    return body ? [body, ...attachments] : attachments;
+  }
+
+  return downloadedSources
+    .filter((source) => source.role !== "QUOTED_HISTORY")
+    .slice(0, 1);
 }
 
 async function createRobotCommentActivity(
@@ -529,6 +1113,7 @@ async function attachOriginalSourceFile(
     filename: string;
     fileSize: number;
     workspaceId: number;
+    onUploaded?: (s3Key: string) => void;
   },
 ) {
   const bucket = process.env.NEXT_PUBLIC_ATTACHMENTS_BUCKET_NAME;
@@ -541,6 +1126,7 @@ async function attachOriginalSourceFile(
   const s3Key = `${args.workspaceId}/${args.cardPublicId}/${generateUID()}-${sanitizedFilename}`;
 
   await putObject(bucket, s3Key, args.buffer, args.contentType);
+  args.onUploaded?.(s3Key);
 
   const attachment = await cardAttachmentRepo.create(db, {
     cardId: args.cardId,
@@ -626,23 +1212,6 @@ function escapeHtml(value: string) {
     .replace(/'/g, "&#39;");
 }
 
-async function markJobProcessing(
-  db: dbClient,
-  jobId: string,
-  attempts: number,
-) {
-  await db
-    .update(shortlistJobQueue)
-    .set({
-      attempts,
-      lockedAt: new Date(),
-      lockedBy: "shortlist-worker",
-      status: SHORTLIST_JOB_STATUSES.PROCESSING,
-      updatedAt: new Date(),
-    })
-    .where(eq(shortlistJobQueue.id, jobId));
-}
-
 async function finishJobWithStatus(
   db: dbClient,
   job: QueueJobRow,
@@ -683,10 +1252,26 @@ async function finishJob(
       processedAt:
         values.status === SHORTLIST_JOB_STATUSES.RETRY ? null : new Date(),
       processingLog: values.processingLog,
+      runAfter:
+        values.status === SHORTLIST_JOB_STATUSES.RETRY
+          ? new Date(Date.now() + getJobRetryDelayMs(values.attempts))
+          : new Date(),
       status: values.status,
       updatedAt: new Date(),
     })
     .where(eq(shortlistJobQueue.id, jobId));
+}
+
+export function shouldRetryJob(
+  attempt: number,
+  maxAttempts: number,
+  configuredRetryLimit: number,
+): boolean {
+  return attempt < Math.min(maxAttempts, configuredRetryLimit);
+}
+
+export function getJobRetryDelayMs(attempt: number): number {
+  return Math.min(60_000, 2 ** attempt * 1_000);
 }
 
 async function getBoard(db: dbClient, boardId: number) {
@@ -717,6 +1302,7 @@ async function getSavedList(db: dbClient, boardId: number) {
 function buildCardInput(
   classification: Extract<JobPostingClassification, { isJobOpportunity: true }>,
   sourceUrl: string | null,
+  sourceType: string,
 ) {
   const title = classification.jobTitleDisplay ?? classification.jobTitle;
   const salaryInterval = mapSalaryPeriodToCardInterval(
@@ -725,11 +1311,14 @@ function buildCardInput(
 
   return {
     title: title.trim() || "Untitled opportunity",
-    description: buildCardDescription(
-      classification.description,
-      classification.applicationDeadline,
+    description: appendImportedOpportunityDetails(
+      buildCardDescription(
+        classification.description,
+        classification.applicationDeadline,
+      ),
+      classification,
     ),
-    dueDate: null,
+    dueDate: parseInterviewDate(classification.interviewDateTime),
     contactsJson: classification.contactsJson,
     shortlistCompanyName: classification.companyName,
     shortlistJobPostingUrl: sourceUrl,
@@ -737,7 +1326,7 @@ function buildCardInput(
     shortlistSalaryMax: classification.salaryMax,
     shortlistSalaryCurrency: classification.salaryCurrency,
     shortlistSalaryInterval: salaryInterval,
-    shortlistCardSource: "MAGIC_CLIP",
+    shortlistCardSource: mapCardSource(sourceType),
     shortlistJobLocation: formatJobLocation(classification),
     shortlistJobLocationType: mapLocationType(classification.locationType),
     shortlistJobType: mapWorkSchedule(classification.workSchedule),
@@ -745,12 +1334,98 @@ function buildCardInput(
   };
 }
 
+function parseInterviewDate(value: string | null): Date | null {
+  if (!value) return null;
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? null : date;
+}
+
+function appendImportedOpportunityDetails(
+  description: string,
+  classification: Extract<JobPostingClassification, { isJobOpportunity: true }>,
+): string {
+  const details: [string, string | null][] = [
+    ["Company website", classification.companyWebsiteUrl],
+    ["Source job ID", classification.sourceJobId],
+    ["Requisition ID", classification.requisitionId],
+    [
+      "Posting status",
+      classification.postingStatus === "UNKNOWN"
+        ? null
+        : classification.postingStatus,
+    ],
+    ["Engagement type", classification.engagementType],
+    ["Salary as published", classification.salaryOriginalText],
+    ["Equity", classification.equityMentioned ? "Mentioned" : null],
+  ];
+  const paragraphs = details
+    .filter((detail): detail is [string, string] => !!detail[1]?.trim())
+    .map(
+      ([label, value]) =>
+        `<p><strong>${escapeHtml(label)}:</strong> ${escapeHtml(value)}</p>`,
+    )
+    .join("");
+
+  return `${description}${paragraphs}`;
+}
+
 async function findDuplicateCard(
   db: dbClient,
   boardId: number,
   sourceUrl: string | null,
+  contentHash: string,
   classification: Extract<JobPostingClassification, { isJobOpportunity: true }>,
 ): Promise<DuplicateMatch | null> {
+  const sourceIdentifierMatches = await db
+    .select({
+      cardId: cards.id,
+      cardPublicId: cards.publicId,
+      classificationJson: shortlistSourceCards.classificationJson,
+    })
+    .from(shortlistSourceCards)
+    .innerJoin(cards, eq(shortlistSourceCards.cardId, cards.id))
+    .innerJoin(lists, eq(cards.listId, lists.id))
+    .where(and(eq(lists.boardId, boardId), isNull(cards.deletedAt)));
+  const sourceJobId = normalizeText(classification.sourceJobId);
+  const requisitionId = normalizeText(classification.requisitionId);
+
+  for (const candidate of sourceIdentifierMatches) {
+    const previous = getClassificationIdentifiers(candidate.classificationJson);
+    if (
+      (sourceJobId && sourceJobId === previous.sourceJobId) ||
+      (requisitionId && requisitionId === previous.requisitionId)
+    ) {
+      return {
+        cardId: candidate.cardId,
+        cardPublicId: candidate.cardPublicId,
+        matchType: "EXTERNAL_JOB_ID",
+        reason: "same external job identifier",
+      };
+    }
+  }
+
+  const hashMatch = await db
+    .select({ cardId: cards.id, cardPublicId: cards.publicId })
+    .from(shortlistSourceCards)
+    .innerJoin(cards, eq(shortlistSourceCards.cardId, cards.id))
+    .innerJoin(lists, eq(cards.listId, lists.id))
+    .where(
+      and(
+        eq(shortlistSourceCards.contentHash, contentHash),
+        eq(lists.boardId, boardId),
+        isNull(cards.deletedAt),
+      ),
+    )
+    .limit(1);
+
+  if (hashMatch[0]) {
+    return {
+      ...hashMatch[0],
+      matchType: "CONTENT_HASH",
+      reason: "same source content",
+    };
+  }
+
   const boardCards = await db
     .select({
       cardId: cards.id,
@@ -791,12 +1466,14 @@ async function findDuplicateCard(
       return {
         cardId: card.cardId,
         cardPublicId: card.cardPublicId,
+        matchType: "SOURCE_URL",
         reason: "same source URL",
       };
     }
 
     const titleMatches =
-      normalizedTitle.length > 0 && normalizeText(card.title) === normalizedTitle;
+      normalizedTitle.length > 0 &&
+      normalizeText(card.title) === normalizedTitle;
     const companyMatches =
       normalizedCompany.length > 0 &&
       normalizeText(card.shortlistCompanyName) === normalizedCompany;
@@ -804,18 +1481,512 @@ async function findDuplicateCard(
       (normalizedLocation.length > 0 &&
         normalizeText(card.shortlistJobLocation) === normalizedLocation) ||
       (normalizedLocationType.length > 0 &&
-        normalizeText(card.shortlistJobLocationType) === normalizedLocationType);
+        normalizeText(card.shortlistJobLocationType) ===
+          normalizedLocationType);
 
     if (titleMatches && companyMatches && locationMatches) {
       return {
         cardId: card.cardId,
         cardPublicId: card.cardPublicId,
+        matchType: "IDENTITY_FIELDS",
         reason: "same title, company, and location signal",
+      };
+    }
+
+    const titleSimilarity = tokenSimilarity(
+      normalizedTitle,
+      normalizeText(card.title),
+    );
+    const locationCompatible =
+      locationMatches ||
+      (!normalizedLocation && !normalizedLocationType) ||
+      (!normalizeText(card.shortlistJobLocation) &&
+        !normalizeText(card.shortlistJobLocationType));
+    if (companyMatches && locationCompatible && titleSimilarity >= 0.8) {
+      return {
+        cardId: card.cardId,
+        cardPublicId: card.cardPublicId,
+        matchType: "FUZZY_IDENTITY",
+        reason: `high-confidence title/company match (${Math.round(titleSimilarity * 100)}%)`,
       };
     }
   }
 
   return null;
+}
+
+export function tokenSimilarity(left: string, right: string): number {
+  const leftTokens = new Set(normalizeText(left).split(" ").filter(Boolean));
+  const rightTokens = new Set(normalizeText(right).split(" ").filter(Boolean));
+  if (leftTokens.size === 0 || rightTokens.size === 0) return 0;
+  const intersection = [...leftTokens].filter((token) =>
+    rightTokens.has(token),
+  );
+  const union = new Set([...leftTokens, ...rightTokens]);
+  return intersection.length / union.size;
+}
+
+function getClassificationIdentifiers(value: unknown): {
+  requisitionId: string;
+  sourceJobId: string;
+} {
+  if (!value || typeof value !== "object") {
+    return { requisitionId: "", sourceJobId: "" };
+  }
+  const classification = value as Record<string, unknown>;
+  return {
+    requisitionId: normalizeText(
+      typeof classification.requisitionId === "string"
+        ? classification.requisitionId
+        : null,
+    ),
+    sourceJobId: normalizeText(
+      typeof classification.sourceJobId === "string"
+        ? classification.sourceJobId
+        : null,
+    ),
+  };
+}
+
+function mapCardSource(sourceType: string): string {
+  if (sourceType === SHORTLIST_SOURCE_TYPES.EMAIL) return "EMAIL_INBOX";
+  if (sourceType === SHORTLIST_SOURCE_TYPES.WEBPAGE) return "WEB_CLIPPER";
+  if (sourceType === SHORTLIST_SOURCE_TYPES.ATTACHMENT) return "FILE_UPLOAD";
+  return "MANUAL";
+}
+
+async function findLinkedCard(db: dbClient, job: QueueJobRow) {
+  const direct = await db
+    .select({
+      card: cards,
+      cardId: cards.id,
+      cardPublicId: cards.publicId,
+    })
+    .from(shortlistSourceCards)
+    .innerJoin(cards, eq(shortlistSourceCards.cardId, cards.id))
+    .where(
+      and(
+        eq(shortlistSourceCards.sourceType, job.sourceType),
+        eq(shortlistSourceCards.sourceId, job.sourceId),
+        isNull(cards.deletedAt),
+      ),
+    )
+    .limit(1);
+  if (direct[0]) return direct[0];
+  if (job.sourceType !== SHORTLIST_SOURCE_TYPES.EMAIL) return null;
+
+  const email = await db.query.shortlistEmailSources.findFirst({
+    columns: { inReplyTo: true, referencesJson: true },
+    where: eq(shortlistEmailSources.id, job.sourceId),
+  });
+  const referencedMessageIds = [
+    email?.inReplyTo,
+    ...getStringArray(email?.referencesJson),
+  ].filter((value): value is string => !!value);
+  if (referencedMessageIds.length === 0) return null;
+
+  const linkedCandidates = await db
+    .select({
+      card: cards,
+      cardId: cards.id,
+      cardPublicId: cards.publicId,
+      externId: shortlistEmailSources.externId,
+    })
+    .from(shortlistEmailSources)
+    .innerJoin(
+      shortlistSourceCards,
+      and(
+        eq(shortlistSourceCards.sourceType, SHORTLIST_SOURCE_TYPES.EMAIL),
+        eq(shortlistSourceCards.sourceId, shortlistEmailSources.id),
+      ),
+    )
+    .innerJoin(cards, eq(shortlistSourceCards.cardId, cards.id))
+    .where(
+      and(
+        eq(shortlistEmailSources.boardId, job.boardId),
+        isNull(cards.deletedAt),
+      ),
+    );
+  const normalizedReferences = new Set(
+    referencedMessageIds.map(normalizeMessageId),
+  );
+  const linked = linkedCandidates.find((candidate) =>
+    normalizedReferences.has(normalizeMessageId(candidate.externId)),
+  );
+
+  return linked ?? null;
+}
+
+function normalizeMessageId(value: string): string {
+  return value.trim().toLowerCase().replace(/^<|>$/g, "");
+}
+
+function getStringArray(value: unknown): string[] {
+  return Array.isArray(value)
+    ? value.filter((item): item is string => typeof item === "string")
+    : [];
+}
+
+async function enrichDuplicateCard(
+  db: dbClient,
+  args: {
+    classification: Extract<
+      JobPostingClassification,
+      { isJobOpportunity: true }
+    >;
+    duplicate: DuplicateMatch;
+    job: QueueJobRow;
+    sourceContent: ClassificationSourceContent;
+    uploadedCardObjectKeys: string[];
+  },
+) {
+  const context = await db
+    .select({ card: cards, workspaceId: boards.workspaceId })
+    .from(cards)
+    .innerJoin(lists, eq(cards.listId, lists.id))
+    .innerJoin(boards, eq(lists.boardId, boards.id))
+    .where(eq(cards.id, args.duplicate.cardId))
+    .limit(1);
+  const existing = context[0];
+  if (!existing) throw new Error("Duplicate card no longer exists");
+
+  const incoming = buildCardInput(
+    args.classification,
+    args.sourceContent.sourceUrl,
+    args.job.sourceType,
+  );
+  const evidenceFields = new Set(
+    args.classification.fieldEvidence
+      .filter((evidence) => !evidence.source.includes("EXISTING_CARD"))
+      .map((evidence) => evidence.field),
+  );
+  const { changedFields, patch } = buildEnrichmentPatch(
+    existing.card,
+    incoming,
+    new Set(args.classification.explicitCorrections),
+    args.duplicate.matchType === "EMAIL_THREAD" || evidenceFields.size > 0
+      ? evidenceFields
+      : undefined,
+  );
+
+  if (changedFields.length > 0) {
+    await cardRepo.update(db, patch, {
+      cardPublicId: args.duplicate.cardPublicId,
+    });
+    await createUpdateActivities(db, existing.card, patch, changedFields);
+  }
+
+  await addRobotProcessingHistory(db, {
+    boardWorkspaceId: existing.workspaceId,
+    cardId: args.duplicate.cardId,
+    cardPublicId: args.duplicate.cardPublicId,
+    job: args.job,
+    sourceContent: args.sourceContent,
+    uploadedCardObjectKeys: args.uploadedCardObjectKeys,
+  });
+  await createRobotCommentActivity(
+    db,
+    args.duplicate.cardId,
+    changedFields.length > 0
+      ? `Updated opportunity fields: ${changedFields.join(", ")}`
+      : "This source matched the opportunity but contained no safe new field changes",
+  );
+  await linkSourceToCard(db, {
+    cardId: args.duplicate.cardId,
+    classification: args.classification,
+    contentHash: args.sourceContent.contentHash,
+    job: args.job,
+    matchType: args.duplicate.matchType,
+    provenance: args.sourceContent.provenance,
+  });
+
+  return { changedFields };
+}
+
+export function buildEnrichmentPatch(
+  existing: ExistingCardSnapshot,
+  incoming: ReturnType<typeof buildCardInput>,
+  explicitCorrections: Set<string>,
+  newInformationFields?: Set<string>,
+) {
+  const patch: Parameters<typeof cardRepo.update>[1] = {};
+  const changedFields: string[] = [];
+  if (existing.manualUpdatedOnly) return { changedFields, patch };
+
+  const add = <K extends keyof typeof patch>(
+    key: K,
+    label: string,
+    current: (typeof existing)[keyof typeof existing],
+    next: (typeof patch)[K],
+    classificationField: string,
+  ) => {
+    if (
+      newInformationFields &&
+      !newInformationFields.has(classificationField)
+    ) {
+      return;
+    }
+    const currentEmpty =
+      current === null || current === undefined || current === "";
+    const nextEmpty = next === null || next === undefined || next === "";
+    if (nextEmpty || Object.is(current, next)) return;
+    if (!currentEmpty && !explicitCorrections.has(classificationField)) return;
+    patch[key] = next;
+    changedFields.push(label);
+  };
+
+  add("title", "Title", existing.title, incoming.title, "jobTitle");
+  add(
+    "dueDate",
+    "Interview date",
+    existing.dueDate,
+    incoming.dueDate,
+    "interviewDateTime",
+  );
+  add(
+    "shortlistCompanyName",
+    "Company name",
+    existing.shortlistCompanyName,
+    incoming.shortlistCompanyName,
+    "companyName",
+  );
+  add(
+    "shortlistJobPostingUrl",
+    "Job URL",
+    existing.shortlistJobPostingUrl,
+    incoming.shortlistJobPostingUrl,
+    "sourceUrl",
+  );
+  add(
+    "shortlistSalaryMin",
+    "Minimum salary",
+    existing.shortlistSalaryMin,
+    incoming.shortlistSalaryMin,
+    "salaryMin",
+  );
+  add(
+    "shortlistSalaryMax",
+    "Maximum salary",
+    existing.shortlistSalaryMax,
+    incoming.shortlistSalaryMax,
+    "salaryMax",
+  );
+  add(
+    "shortlistSalaryCurrency",
+    "Salary currency",
+    existing.shortlistSalaryCurrency,
+    incoming.shortlistSalaryCurrency,
+    "salaryCurrency",
+  );
+  add(
+    "shortlistSalaryInterval",
+    "Salary interval",
+    existing.shortlistSalaryInterval,
+    incoming.shortlistSalaryInterval,
+    "salaryPeriod",
+  );
+  add(
+    "shortlistJobLocation",
+    "Job location",
+    existing.shortlistJobLocation,
+    incoming.shortlistJobLocation,
+    "jobLocations",
+  );
+  add(
+    "shortlistJobLocationType",
+    "Location type",
+    existing.shortlistJobLocationType,
+    incoming.shortlistJobLocationType,
+    "locationType",
+  );
+  add(
+    "shortlistJobType",
+    "Contract",
+    existing.shortlistJobType,
+    incoming.shortlistJobType,
+    "workSchedule",
+  );
+  add(
+    "shortlistCompanyLocation",
+    "Company HQ",
+    existing.shortlistCompanyLocation,
+    incoming.shortlistCompanyLocation,
+    "companyHQ",
+  );
+
+  if (!newInformationFields || newInformationFields.has("description")) {
+    const mergedDescription = mergeDescription(
+      existing.description,
+      incoming.description,
+    );
+    if (mergedDescription !== existing.description) {
+      patch.description = mergedDescription;
+      changedFields.push("Description");
+    }
+  }
+  if (!newInformationFields || newInformationFields.has("contactsJson")) {
+    const mergedContacts = mergeContacts(
+      existing.contactsJson,
+      incoming.contactsJson,
+    );
+    if (
+      JSON.stringify(mergedContacts) !==
+      JSON.stringify(existing.contactsJson ?? [])
+    ) {
+      patch.contactsJson = mergedContacts;
+      changedFields.push("Contacts");
+    }
+  }
+
+  return { changedFields, patch };
+}
+
+export function mergeDescription(
+  current: string | null,
+  incoming: string,
+): string {
+  if (!incoming.trim()) return current ?? "";
+  if (!current?.trim()) return incoming;
+  if (normalizeText(current).includes(normalizeText(incoming))) return current;
+  return `${current}\n\n<p><strong>Additional imported information</strong></p>\n${incoming}`;
+}
+
+export function mergeContacts(current: unknown, incoming: unknown): unknown[] {
+  const currentContacts: unknown[] = Array.isArray(current)
+    ? (current as unknown[])
+    : [];
+  const incomingContacts: unknown[] = Array.isArray(incoming)
+    ? (incoming as unknown[])
+    : [];
+  const seen = new Set(
+    currentContacts.map((contact) => normalizeText(JSON.stringify(contact))),
+  );
+  return [
+    ...currentContacts,
+    ...incomingContacts.filter((contact) => {
+      const key = normalizeText(JSON.stringify(contact));
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    }),
+  ];
+}
+
+async function createUpdateActivities(
+  db: dbClient,
+  existing: ExistingCardSnapshot & { id: number },
+  patch: Parameters<typeof cardRepo.update>[1],
+  changedFields: string[],
+) {
+  const activities = changedFields.map((field) => {
+    if (field === "Title") {
+      return {
+        type: "card.updated.title" as const,
+        cardId: existing.id,
+        createdBy: SHORTLIST_ROBOT_USER.id,
+        fromTitle: existing.title,
+        toTitle: patch.title,
+      };
+    }
+    if (field === "Description") {
+      return {
+        type: "card.updated.description" as const,
+        cardId: existing.id,
+        createdBy: SHORTLIST_ROBOT_USER.id,
+        fromDescription: existing.description ?? undefined,
+        toDescription: patch.description,
+      };
+    }
+    if (field === "Interview date") {
+      return {
+        type: existing.dueDate
+          ? ("card.updated.dueDate.updated" as const)
+          : ("card.updated.dueDate.added" as const),
+        cardId: existing.id,
+        createdBy: SHORTLIST_ROBOT_USER.id,
+        fromDueDate: existing.dueDate ?? undefined,
+        toDueDate: patch.dueDate ?? undefined,
+      };
+    }
+    const key = activityFieldToCardKey(field);
+    return {
+      type: "card.updated.shortlistField" as const,
+      cardId: existing.id,
+      createdBy: SHORTLIST_ROBOT_USER.id,
+      fromTitle: field,
+      fromDescription: stringifyActivityValue(key ? existing[key] : null),
+      toDescription: stringifyActivityValue(key ? patch[key] : null),
+    };
+  });
+  await cardActivityRepo.bulkCreate(db, activities);
+}
+
+function activityFieldToCardKey(
+  field: string,
+): keyof ExistingCardSnapshot | null {
+  const keys: Record<string, keyof ExistingCardSnapshot> = {
+    "Company name": "shortlistCompanyName",
+    "Job URL": "shortlistJobPostingUrl",
+    "Minimum salary": "shortlistSalaryMin",
+    "Maximum salary": "shortlistSalaryMax",
+    "Salary currency": "shortlistSalaryCurrency",
+    "Salary interval": "shortlistSalaryInterval",
+    "Job location": "shortlistJobLocation",
+    "Location type": "shortlistJobLocationType",
+    Contract: "shortlistJobType",
+    "Company HQ": "shortlistCompanyLocation",
+    Contacts: "contactsJson",
+  };
+  return keys[field] ?? null;
+}
+
+function stringifyActivityValue(value: unknown): string {
+  if (value === null || value === undefined) return "";
+  return typeof value === "string" ? value : JSON.stringify(value);
+}
+
+async function linkSourceToCard(
+  db: dbClient,
+  args: {
+    cardId: number;
+    classification: Extract<
+      JobPostingClassification,
+      { isJobOpportunity: true }
+    >;
+    contentHash: string;
+    job: QueueJobRow;
+    matchType: string;
+    provenance: Record<string, string[]>;
+  },
+) {
+  await db
+    .insert(shortlistSourceCards)
+    .values({
+      cardId: args.cardId,
+      classificationJson: args.classification,
+      contentHash: args.contentHash,
+      fieldProvenanceJson: {
+        fields: args.classification.fieldEvidence,
+        sources: args.provenance,
+      },
+      matchType: args.matchType,
+      sourceId: args.job.sourceId,
+      sourceType: args.job.sourceType,
+    })
+    .onConflictDoUpdate({
+      target: [shortlistSourceCards.sourceType, shortlistSourceCards.sourceId],
+      set: {
+        cardId: args.cardId,
+        classificationJson: args.classification,
+        contentHash: args.contentHash,
+        fieldProvenanceJson: {
+          fields: args.classification.fieldEvidence,
+          sources: args.provenance,
+        },
+        matchType: args.matchType,
+        updatedAt: new Date(),
+      },
+    });
 }
 
 function createProcessingLog(

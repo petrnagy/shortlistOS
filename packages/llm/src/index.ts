@@ -13,11 +13,18 @@ export {
 } from "./llm-connector";
 
 export {
+  buildOpportunityFactsPrompt,
   buildJobPostingClassificationPrompt,
+  classifyOpportunityFactsContent,
   classifyJobPostingContent,
   convertHtmlToJobPostingMarkdown,
   jobPostingClassificationSchema,
+  jobPostingSuccessSchema,
+  opportunityFactsSchema,
+  type ClassifyOpportunityFactsInput,
+  type ClassifyOpportunityFactsResult,
   type ClassifyJobPostingContentInput,
   type ClassifyJobPostingContentResult,
   type JobPostingClassification,
+  type OpportunityFacts,
 } from "./jobs/classify-job-posting";

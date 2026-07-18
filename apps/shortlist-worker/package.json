@@ -12,7 +12,7 @@
     "process-sources": "dotenv -e ../../.env -- tsx src/jobs/process-sources.ts",
     "process-clip": "dotenv -e ../../.env -- tsx src/jobs/process-clip.ts",
     "process-inbox": "dotenv -e ../../.env -- tsx src/jobs/process-inbox.ts",
-    "start": "node -e \"console.log('shortlist-worker has no default daemon yet. Run pnpm process-sources.')\"",
+    "start": "dotenv -e ../../.env -- tsx src/jobs/watch-sources.ts",
     "test:pipeline": "dotenv -e ../../.env -- vitest run live-tests",
     "typecheck": "tsc --noEmit --emitDeclarationOnly false"
   },

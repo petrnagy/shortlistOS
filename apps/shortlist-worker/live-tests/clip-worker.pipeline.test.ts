@@ -6,28 +6,30 @@
  * Copyright: Copyright (c) 2026 Petr Nagy.
  * Proprietary: shortlistOS Powerpack feature. Not part of the open-source distribution.
  */
+import { randomUUID } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
-import { randomUUID } from "node:crypto";
-
 import { and, eq, isNull } from "drizzle-orm";
 import { afterEach, beforeAll, describe, expect, it } from "vitest";
 
-import { createDrizzleClient } from "@kan/db/client";
 import type { dbClient } from "@kan/db/client";
+import { createDrizzleClient } from "@kan/db/client";
 import {
   boards,
   cardActivities,
+  cardAttachments,
   cards,
+  comments,
   lists,
   shortlistJobQueue,
+  shortlistSourceCards,
   shortlistSourceObjects,
   shortlistWebpageSources,
   users,
   workspaceMembers,
   workspaces,
 } from "@kan/db/schema";
-import { generateUID } from "@kan/shared/utils";
+import { deleteObject, generateUID, putObject } from "@kan/shared/utils";
 
 import { processClipBatch } from "../src/workers/clip-worker";
 
@@ -36,6 +38,7 @@ const requiredEnv = [
   "LLM_CONNECTOR_API_KEY",
   "LLM_CONNECTOR_MODEL",
   "SHORTLIST_SOURCE_BUCKET_NAME",
+  "NEXT_PUBLIC_ATTACHMENTS_BUCKET_NAME",
 ];
 
 const shouldRun = requiredEnv.every((name) => Boolean(process.env[name]));
@@ -51,6 +54,8 @@ interface CreatedIds {
   sourceId?: string;
   objectId?: string;
   cardId?: number;
+  sourceS3Key?: string;
+  attachmentS3Keys?: string[];
 }
 
 let db: dbClient;
@@ -109,7 +114,9 @@ maybeDescribe("shortlist clip worker pipeline", () => {
     expect(processedJob?.status).toBe("COMPLETED");
     expect(processedJob?.attempts).toBe(1);
     expect(processedJob?.processedAt).toBeInstanceOf(Date);
-    expect(processedJob?.processingLog).toContain("LLM classification finished");
+    expect(processedJob?.processingLog).toContain(
+      "LLM classification finished",
+    );
     expect(processedJob?.processingLog).toContain("Created card");
 
     const [createdCard] = await db
@@ -136,10 +143,41 @@ maybeDescribe("shortlist clip worker pipeline", () => {
     expect(createdCard?.title).toContain("Moodle");
     expect(createdCard?.shortlistCompanyName).toBe("Arden University");
     expect(createdCard?.shortlistJobPostingUrl).toBe(TEST_CLIP_URL);
-    expect(createdCard?.shortlistCardSource).toBe("MAGIC_CLIP");
+    expect(createdCard?.shortlistCardSource).toBe("WEB_CLIPPER");
 
     createdIds.cardId = createdCard?.id;
-  });
+
+    const systemComments = await db
+      .select({ id: comments.id })
+      .from(comments)
+      .where(
+        and(
+          eq(comments.cardId, requireCreatedId("cardId", createdIds)),
+          eq(comments.shortlistIsSystem, true),
+        ),
+      );
+    expect(systemComments.length).toBeGreaterThanOrEqual(3);
+
+    const attachments = await db
+      .select({ s3Key: cardAttachments.s3Key })
+      .from(cardAttachments)
+      .where(
+        eq(cardAttachments.cardId, requireCreatedId("cardId", createdIds)),
+      );
+    expect(attachments).toHaveLength(1);
+    createdIds.attachmentS3Keys = attachments.map(({ s3Key }) => s3Key);
+
+    const sourceLinks = await db
+      .select({ id: shortlistSourceCards.id })
+      .from(shortlistSourceCards)
+      .where(
+        eq(
+          shortlistSourceCards.sourceId,
+          requireCreatedId("sourceId", createdIds),
+        ),
+      );
+    expect(sourceLinks).toHaveLength(1);
+  }, 60_000);
 });
 
 const TEST_CLIP_URL = "https://example.test/jobs/moodle-php-developer";
@@ -160,6 +198,7 @@ async function createQueuedClip(
   ids.jobId = jobId;
   ids.objectId = objectId;
   ids.sourceId = sourceId;
+  ids.sourceS3Key = `live-tests/${testRunId}/webpage.html`;
 
   await database.insert(users).values({
     id: userId,
@@ -243,10 +282,17 @@ async function createQueuedClip(
     fileSize: Buffer.byteLength(rawHtml, "utf8"),
     objectType: "WEBPAGE_HTML",
     originalFilename: "webpage.html",
-    s3Key: `live-tests/${testRunId}/webpage.html`,
+    s3Key: ids.sourceS3Key,
     sourceId,
     sourceType: "WEBPAGE",
   });
+
+  await putObject(
+    getRequiredEnv("SHORTLIST_SOURCE_BUCKET_NAME"),
+    ids.sourceS3Key,
+    Buffer.from(rawHtml, "utf8"),
+    "text/html",
+  );
 
   await database.insert(shortlistJobQueue).values({
     id: jobId,
@@ -294,12 +340,21 @@ function resetCreatedIds(ids: CreatedIds): void {
   ids.objectId = undefined;
   ids.sourceId = undefined;
   ids.cardId = undefined;
+  ids.sourceS3Key = undefined;
+  ids.attachmentS3Keys = undefined;
 }
 
 async function cleanupCreatedRows(
   database: dbClient,
   ids: CreatedIds,
 ): Promise<void> {
+  for (const s3Key of ids.attachmentS3Keys ?? []) {
+    await deleteObject(
+      getRequiredEnv("NEXT_PUBLIC_ATTACHMENTS_BUCKET_NAME"),
+      s3Key,
+    );
+  }
+
   if (ids.jobId) {
     await database
       .delete(shortlistJobQueue)
@@ -314,8 +369,18 @@ async function cleanupCreatedRows(
 
   if (ids.sourceId) {
     await database
+      .delete(shortlistSourceCards)
+      .where(eq(shortlistSourceCards.sourceId, ids.sourceId));
+    await database
       .delete(shortlistWebpageSources)
       .where(eq(shortlistWebpageSources.id, ids.sourceId));
+  }
+
+  if (ids.sourceS3Key) {
+    await deleteObject(
+      getRequiredEnv("SHORTLIST_SOURCE_BUCKET_NAME"),
+      ids.sourceS3Key,
+    );
   }
 
   if (ids.cardId) {
