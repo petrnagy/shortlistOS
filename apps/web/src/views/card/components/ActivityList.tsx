@@ -72,6 +72,8 @@ const formatCardSourceValue = (value: string) => {
       return t`Manually`;
     case "EMAIL_INBOX":
       return t`Magic Inbox`;
+    case "FILE_UPLOAD":
+      return t`File upload`;
     case "WEB_CLIPPER":
     case "WEBCLIPPER":
       return t`Web Clipper`;
@@ -225,8 +227,7 @@ export const getActivityText = ({
     return (
       <Trans>
         moved the card from <TextHighlight>{truncate(fromList)}</TextHighlight>{" "}
-        to{" "}
-        <TextHighlight>{truncate(toList)}</TextHighlight>
+        to <TextHighlight>{truncate(toList)}</TextHighlight>
       </Trans>
     );
   }

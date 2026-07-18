@@ -1,19 +1,17 @@
 import type { Readable } from "node:stream";
-
 import { Upload } from "@aws-sdk/lib-storage";
 
 import type { dbClient } from "@kan/db/client";
-import {
-  shortlistJobQueue,
-  shortlistSourceObjects,
-} from "@kan/db/schema";
-import { createS3Client, generateUID } from "@kan/shared/utils";
+import type {
+  ShortlistSourceObjectType,
+  ShortlistSourceType,
+} from "@kan/shared/constants";
+import { shortlistJobQueue, shortlistSourceObjects } from "@kan/db/schema";
 import {
   SHORTLIST_JOB_STATUSES,
   SHORTLIST_JOB_TYPES,
-  type ShortlistSourceObjectType,
-  type ShortlistSourceType,
 } from "@kan/shared/constants";
+import { createS3Client, deleteObject, generateUID } from "@kan/shared/utils";
 
 interface StoreShortlistSourceObjectInput {
   db: dbClient;
@@ -72,22 +70,28 @@ export async function storeShortlistSourceObject(
     leavePartsOnError: false,
   }).done();
 
-  const [object] = await input.db
-    .insert(shortlistSourceObjects)
-    .values({
-      boardId: input.boardId,
-      bucket: input.bucket,
-      contentType: input.contentType,
-      createdBy: input.createdBy,
-      fileSize: input.contentLength,
-      metadataJson: input.metadata ?? null,
-      objectType: input.objectType,
-      originalFilename: sanitizedFilename,
-      s3Key,
-      sourceId: input.sourceId,
-      sourceType: input.sourceType,
-    })
-    .returning({ id: shortlistSourceObjects.id });
+  let object: { id: string } | undefined;
+  try {
+    [object] = await input.db
+      .insert(shortlistSourceObjects)
+      .values({
+        boardId: input.boardId,
+        bucket: input.bucket,
+        contentType: input.contentType,
+        createdBy: input.createdBy,
+        fileSize: input.contentLength,
+        metadataJson: input.metadata ?? null,
+        objectType: input.objectType,
+        originalFilename: sanitizedFilename,
+        s3Key,
+        sourceId: input.sourceId,
+        sourceType: input.sourceType,
+      })
+      .returning({ id: shortlistSourceObjects.id });
+  } catch (error) {
+    await deleteObject(input.bucket, s3Key).catch(() => undefined);
+    throw error;
+  }
 
   return {
     id: object?.id ?? null,
@@ -95,7 +99,9 @@ export async function storeShortlistSourceObject(
   };
 }
 
-export async function enqueueShortlistSource(input: EnqueueShortlistSourceInput) {
+export async function enqueueShortlistSource(
+  input: EnqueueShortlistSourceInput,
+) {
   const [job] = await input.db
     .insert(shortlistJobQueue)
     .values({
@@ -107,9 +113,28 @@ export async function enqueueShortlistSource(input: EnqueueShortlistSourceInput)
       sourceType: input.sourceType,
       status: SHORTLIST_JOB_STATUSES.PENDING,
     })
+    .onConflictDoNothing({
+      target: [
+        shortlistJobQueue.sourceType,
+        shortlistJobQueue.sourceId,
+        shortlistJobQueue.jobType,
+      ],
+    })
     .returning({ id: shortlistJobQueue.id });
 
-  return job?.id ?? null;
+  if (job?.id) return job.id;
+
+  const existing = await input.db.query.shortlistJobQueue.findFirst({
+    columns: { id: true },
+    where: (queue, { and, eq }) =>
+      and(
+        eq(queue.sourceType, input.sourceType),
+        eq(queue.sourceId, input.sourceId),
+        eq(queue.jobType, SHORTLIST_JOB_TYPES.CLASSIFY_SOURCE),
+      ),
+  });
+
+  return existing?.id ?? null;
 }
 
 export function sanitizeShortlistFilename(filename: string): string {

@@ -1,20 +1,20 @@
 import { t } from "@lingui/core/macro";
+import { env } from "next-runtime-env";
 import { useRef, useState } from "react";
 import {
   HiCheckCircle,
   HiOutlineDocumentArrowUp,
   HiXMark,
 } from "react-icons/hi2";
-import { env } from "next-runtime-env";
 
-import Button from "~/components/Button";
 import { Alert } from "~/components/Alert";
+import Button from "~/components/Button";
 import { useModal } from "~/providers/modal";
 import { usePopup } from "~/providers/popup";
 
 const MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024;
 const ALLOWED_EXTENSIONS = new Set(["txt", "doc", "docx", "odt", "pdf"]);
-const ACCEPTED_FILE_TYPES = ".txt,.doc,.docx,.odt,.pdf";
+const ACCEPTED_FILE_TYPES = ".txt,.docx,.odt,.pdf";
 
 export function SavedFileUploadForm({
   boardPublicId,

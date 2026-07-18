@@ -2,7 +2,6 @@ export const SHORTLIST_SUPPORTED_ATTACHMENT_EXTENSIONS = [
   "pdf",
   "txt",
   "odt",
-  "doc",
   "docx",
 ] as const;
 
@@ -20,6 +19,7 @@ export type ShortlistSourceType =
 
 export const SHORTLIST_SOURCE_OBJECT_TYPES = {
   ATTACHMENT_FILE: "ATTACHMENT_FILE",
+  EMAIL_CURRENT: "EMAIL_CURRENT",
   EMAIL_EML: "EMAIL_EML",
   EMAIL_HTML: "EMAIL_HTML",
   EMAIL_TEXT: "EMAIL_TEXT",

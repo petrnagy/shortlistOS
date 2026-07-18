@@ -1,7 +1,11 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-const { mockDb, mockLogger } = vi.hoisted(() => {
+import { createDrizzleClient } from "@kan/db/client";
+
+import handler from "../../pages/api/shortlist_magic_clip";
+
+const { mockDb, mockEnqueue, mockLogger, mockStoreObject } = vi.hoisted(() => {
   const now = new Date();
   const tomorrow = new Date(now);
   tomorrow.setUTCDate(tomorrow.getUTCDate() + 1);
@@ -33,7 +37,9 @@ const { mockDb, mockLogger } = vi.hoisted(() => {
       values: vi.fn((value: unknown) => {
         state.insertedValues.push(value);
 
-        return Promise.resolve([{ id: "clip-row-id" }]);
+        return {
+          returning: vi.fn(() => Promise.resolve([{ id: "clip-row-id" }])),
+        };
       }),
     })),
   };
@@ -45,6 +51,10 @@ const { mockDb, mockLogger } = vi.hoisted(() => {
       info: vi.fn(),
       warn: vi.fn(),
     },
+    mockEnqueue: vi.fn(() => Promise.resolve("job-id")),
+    mockStoreObject: vi.fn(() =>
+      Promise.resolve({ id: "object-id", s3Key: "sources/webpage.html" }),
+    ),
   };
 });
 
@@ -52,9 +62,15 @@ vi.mock("~/env", () => ({
   env: {
     BREVO_MAGIC_INBOX_WEBHOOK_SECRET: "test-inbox-secret",
     SHORTLIST_MAGIC_CLIP_WEBHOOK_SECRET: "test-clip-secret",
+    SHORTLIST_SOURCE_BUCKET_NAME: "source-bucket",
     STRIPE_SECRET_KEY: "test-stripe-secret",
     STRIPE_SHORTLIST_WEBHOOK_SECRET: "test-stripe-webhook-secret",
   },
+}));
+
+vi.mock("~/utils/shortlistSourceIntake", () => ({
+  enqueueShortlistSource: mockEnqueue,
+  storeShortlistSourceObject: mockStoreObject,
 }));
 
 vi.mock("@kan/db/client", () => ({
@@ -64,10 +80,6 @@ vi.mock("@kan/db/client", () => ({
 vi.mock("@kan/logger", () => ({
   createLogger: vi.fn(() => mockLogger),
 }));
-
-import { createDrizzleClient } from "@kan/db/client";
-
-import handler from "../../pages/api/shortlist_magic_clip";
 
 const mockCreateDrizzleClient = createDrizzleClient as ReturnType<typeof vi.fn>;
 
@@ -115,6 +127,8 @@ describe("shortlist magic clip endpoint", () => {
       },
     ];
     mockDb._state.insertedValues = [];
+    mockEnqueue.mockClear();
+    mockStoreObject.mockClear();
   });
 
   it("inserts a clip for a Powerpack user that owns the board", async () => {
@@ -139,10 +153,25 @@ describe("shortlist magic clip endpoint", () => {
       {
         boardId: 123,
         createdBy: "user-id",
-        rawHtml: "<html><body>Job</body></html>",
+        metadataJson: { boardPublicId: "boardABC" },
         url: "https://example.com/job",
       },
     ]);
+    expect(mockStoreObject).toHaveBeenCalledOnce();
+    expect(mockStoreObject).toHaveBeenCalledWith(
+      expect.objectContaining({
+        boardId: 123,
+        objectType: "WEBPAGE_HTML",
+        sourceId: "clip-row-id",
+      }),
+    );
+    expect(mockEnqueue).toHaveBeenCalledWith(
+      expect.objectContaining({
+        boardId: 123,
+        sourceId: "clip-row-id",
+        sourceType: "WEBPAGE",
+      }),
+    );
   });
 
   it("rejects unauthorized clip requests before creating a database client", async () => {

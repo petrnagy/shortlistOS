@@ -1,7 +1,14 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-const { mockDb, mockLogger } = vi.hoisted(() => {
+import { createDrizzleClient } from "@kan/db/client";
+
+import handler, {
+  getCurrentEmailMessage,
+  parseMagicInboxRecipientsFromBrevoEmail,
+} from "../../pages/api/shortlist_magic_inbox/incoming_webhook";
+
+const { mockDb, mockEnqueue, mockLogger, mockStoreObject } = vi.hoisted(() => {
   const now = new Date();
   const tomorrow = new Date(now);
   tomorrow.setUTCDate(tomorrow.getUTCDate() + 1);
@@ -50,6 +57,10 @@ const { mockDb, mockLogger } = vi.hoisted(() => {
       info: vi.fn(),
       warn: vi.fn(),
     },
+    mockEnqueue: vi.fn(() => Promise.resolve("job-id")),
+    mockStoreObject: vi.fn(() =>
+      Promise.resolve({ id: "object-id", s3Key: "sources/object" }),
+    ),
   };
 });
 
@@ -57,10 +68,17 @@ vi.mock("~/env", () => ({
   env: {
     BREVO_MAGIC_INBOX_WEBHOOK_SECRET: "test-webhook-secret",
     NEXT_PUBLIC_MAGIC_INBOX_DOMAIN: "magic-inbox.shortlistos.co",
+    SHORTLIST_SOURCE_BUCKET_NAME: "source-bucket",
     SHORTLIST_MAGIC_CLIP_WEBHOOK_SECRET: "test-clip-secret",
     STRIPE_SECRET_KEY: "test-stripe-secret",
     STRIPE_SHORTLIST_WEBHOOK_SECRET: "test-stripe-webhook-secret",
   },
+}));
+
+vi.mock("~/utils/shortlistSourceIntake", () => ({
+  enqueueShortlistSource: mockEnqueue,
+  sanitizeShortlistFilename: (filename: string) => filename,
+  storeShortlistSourceObject: mockStoreObject,
 }));
 
 vi.mock("@kan/db/client", () => ({
@@ -70,12 +88,6 @@ vi.mock("@kan/db/client", () => ({
 vi.mock("@kan/logger", () => ({
   createLogger: vi.fn(() => mockLogger),
 }));
-
-import { createDrizzleClient } from "@kan/db/client";
-
-import handler, {
-  parseMagicInboxRecipientsFromBrevoEmail,
-} from "../../pages/api/shortlist_magic_inbox/incoming_webhook";
 
 const mockCreateDrizzleClient = createDrizzleClient as ReturnType<typeof vi.fn>;
 
@@ -141,12 +153,15 @@ const createBrevoPayload = () => ({
           ContentLength: 168910,
           ContentID: "f_kejnjyug1",
           DownloadToken: "def",
+          Base64Content: Buffer.from("PDF fixture").toString("base64"),
         },
       ],
       Headers: {
         "Message-ID":
           "<CAN0zNmMsj_xOx8hCREv3rbovcYE3m5rZh8eRe+QSKC0yff_W6A@mail.gmail.com>",
         Subject: "Re: Summer brochure 2021",
+        "In-Reply-To": "<previous-message@example.com>",
+        References: "<root-message@example.com> <previous-message@example.com>",
         To: "Shortlist Magic Inbox <boardABC.userHash123@magic-inbox.shortlistos.co>",
       },
     },
@@ -170,6 +185,8 @@ describe("shortlist magic inbox webhook", () => {
     ];
     mockDb._state.insertedRows = [{ id: "inbox-row-id" }];
     mockDb._state.insertedValues = [];
+    mockEnqueue.mockClear();
+    mockStoreObject.mockClear();
   });
 
   it("parses board id and user public secret from the final magic inbox address", () => {
@@ -183,6 +200,18 @@ describe("shortlist magic inbox webhook", () => {
     expect(recipient).toEqual({
       boardPublicId: "boardABC",
       userPublicSecret: "userHash123",
+    });
+  });
+
+  it("separates the newest plain-text reply from quoted email history", () => {
+    expect(
+      getCurrentEmailMessage({
+        RawTextBody:
+          "The salary increased to EUR 90,000.\nOn Monday Jane wrote:\nOld salary EUR 70,000",
+      }),
+    ).toMatchObject({
+      content: "The salary increased to EUR 90,000.",
+      contentType: "text/plain",
     });
   });
 
@@ -200,21 +229,30 @@ describe("shortlist magic inbox webhook", () => {
     });
     expect(mockCreateDrizzleClient).toHaveBeenCalledTimes(1);
     expect(mockDb._state.insertedValues).toEqual([
-      {
+      expect.objectContaining({
         boardId: 123,
-        contentType: "application/json",
         createdBy: "owner-user-id",
         externId:
           "<CAN0zNmMsj_xOx8hCREv3rbovcYE3m5rZh8eRe+QSKC0yff_W6A@mail.gmail.com>",
-        processedAt: null,
-        processingLog: "Received from Brevo and awaiting processing.",
-        processingResult: "RETRY",
-        processingTries: 0,
-        rawContent: JSON.stringify(createBrevoPayload().items[0]),
-        source: "BREVO",
-        userId: "owner-user-id",
-      },
+        hasSupportedAttachment: true,
+        inReplyTo: "<previous-message@example.com>",
+        referencesJson: [
+          "<root-message@example.com>",
+          "<previous-message@example.com>",
+        ],
+      }),
     ]);
+    expect(mockStoreObject).toHaveBeenCalledTimes(4);
+    expect(mockStoreObject).toHaveBeenCalledWith(
+      expect.objectContaining({ objectType: "EMAIL_CURRENT" }),
+    );
+    expect(mockStoreObject).toHaveBeenCalledWith(
+      expect.objectContaining({
+        filename: "summer2021.pdf",
+        objectType: "ATTACHMENT_FILE",
+      }),
+    );
+    expect(mockEnqueue).toHaveBeenCalledOnce();
   });
 
   it("treats an existing MessageId as a duplicate through on-conflict no-op", async () => {

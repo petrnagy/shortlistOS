@@ -79,6 +79,8 @@ export const shortlistEmailSources = pgTable(
     fromEmail: text("fromEmail"),
     fromName: text("fromName"),
     subject: text("subject"),
+    inReplyTo: text("inReplyTo"),
+    referencesJson: jsonb("referencesJson"),
     sentAt: timestamp("sentAt"),
     hasSupportedAttachment: boolean("hasSupportedAttachment")
       .notNull()
@@ -91,7 +93,10 @@ export const shortlistEmailSources = pgTable(
     index("shortlist_email_source_created_by_idx").on(table.createdBy),
     index("shortlist_email_source_board_idx").on(table.boardId),
     index("shortlist_email_source_created_at_idx").on(table.createdAt),
-    uniqueIndex("shortlist_email_source_extern_id_idx").on(table.externId),
+    uniqueIndex("shortlist_email_source_extern_board_idx").on(
+      table.externId,
+      table.boardId,
+    ),
   ],
 ).enableRLS();
 
@@ -239,24 +244,75 @@ export const shortlistJobQueue = pgTable(
   (table) => [
     index("shortlist_job_queue_status_idx").on(table.status),
     index("shortlist_job_queue_run_after_idx").on(table.runAfter),
-    index("shortlist_job_queue_source_idx").on(table.sourceType, table.sourceId),
+    index("shortlist_job_queue_source_idx").on(
+      table.sourceType,
+      table.sourceId,
+    ),
+    uniqueIndex("shortlist_job_queue_source_job_idx").on(
+      table.sourceType,
+      table.sourceId,
+      table.jobType,
+    ),
     index("shortlist_job_queue_board_idx").on(table.boardId),
     index("shortlist_job_queue_created_by_idx").on(table.createdBy),
   ],
 ).enableRLS();
 
-export const shortlistJobQueueRelations = relations(shortlistJobQueue, ({ one }) => ({
-  createdByUser: one(users, {
-    fields: [shortlistJobQueue.createdBy],
-    references: [users.id],
-    relationName: "shortlistJobQueueCreatedByUser",
+export const shortlistJobQueueRelations = relations(
+  shortlistJobQueue,
+  ({ one }) => ({
+    createdByUser: one(users, {
+      fields: [shortlistJobQueue.createdBy],
+      references: [users.id],
+      relationName: "shortlistJobQueueCreatedByUser",
+    }),
+    board: one(boards, {
+      fields: [shortlistJobQueue.boardId],
+      references: [boards.id],
+      relationName: "shortlistJobQueueBoard",
+    }),
   }),
-  board: one(boards, {
-    fields: [shortlistJobQueue.boardId],
-    references: [boards.id],
-    relationName: "shortlistJobQueueBoard",
+);
+
+export const shortlistSourceCards = pgTable(
+  "shortlist_source_card",
+  {
+    id: uuid("id")
+      .notNull()
+      .primaryKey()
+      .default(sql`uuid_generate_v4()`),
+    sourceType: varchar("sourceType", { length: 20 }).notNull(),
+    sourceId: uuid("sourceId").notNull(),
+    cardId: bigint("cardId", { mode: "number" })
+      .notNull()
+      .references(() => cards.id, { onDelete: "cascade" }),
+    matchType: varchar("matchType", { length: 40 }).notNull(),
+    contentHash: varchar("contentHash", { length: 64 }),
+    classificationJson: jsonb("classificationJson"),
+    fieldProvenanceJson: jsonb("fieldProvenanceJson"),
+    createdAt: timestamp("createdAt").notNull().defaultNow(),
+    updatedAt: timestamp("updatedAt"),
+  },
+  (table) => [
+    uniqueIndex("shortlist_source_card_source_idx").on(
+      table.sourceType,
+      table.sourceId,
+    ),
+    index("shortlist_source_card_card_idx").on(table.cardId),
+    index("shortlist_source_card_hash_idx").on(table.contentHash),
+  ],
+).enableRLS();
+
+export const shortlistSourceCardsRelations = relations(
+  shortlistSourceCards,
+  ({ one }) => ({
+    card: one(cards, {
+      fields: [shortlistSourceCards.cardId],
+      references: [cards.id],
+      relationName: "shortlistSourceCardsCard",
+    }),
   }),
-}));
+);
 
 export const shortlistSalaryCache = pgTable(
   "shortlist_salary_cache",

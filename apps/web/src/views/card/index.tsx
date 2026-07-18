@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import { t } from "@lingui/core/macro";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { FaRegCircleUser } from "react-icons/fa6";
 import {
   HiOutlineBanknotes,
   HiOutlineBars3BottomLeft,
@@ -26,16 +27,17 @@ import {
   HiStar,
   HiXMark,
 } from "react-icons/hi2";
-import { FaRegCircleUser } from "react-icons/fa6";
 import { IoChevronForwardSharp } from "react-icons/io5";
 import { LuTreePalm } from "react-icons/lu";
 
+import type {
+  CardContactMethodType,
+  CardContactRole,
+} from "@kan/shared/constants";
 import { authClient } from "@kan/auth/client";
 import {
   CARD_CONTACT_METHOD_TYPE_OPTIONS,
   CARD_CONTACT_ROLE_OPTIONS,
-  type CardContactMethodType,
-  type CardContactRole,
 } from "@kan/shared/constants";
 
 import Avatar from "~/components/Avatar";
@@ -46,8 +48,8 @@ import LabelIcon from "~/components/LabelIcon";
 import Modal from "~/components/modal";
 import { NewWorkspaceForm } from "~/components/NewWorkspaceForm";
 import { PageHead } from "~/components/PageHead";
-import { Tooltip } from "~/components/Tooltip";
 import Toggle from "~/components/Toggle";
+import { Tooltip } from "~/components/Tooltip";
 import { EditYouTubeModal } from "~/components/YouTubeEmbed/EditYouTubeModal";
 import { usePermissions } from "~/hooks/usePermissions";
 import { useModal } from "~/providers/modal";
@@ -376,6 +378,8 @@ const formatCreatedSourceTooltip = (source: string) => {
       return t`Created manually`;
     case "EMAIL_INBOX":
       return t`Created via Magic Inbox`;
+    case "FILE_UPLOAD":
+      return t`Created from an uploaded file`;
     case "WEB_CLIPPER":
     case "WEBCLIPPER":
       return t`Created via Web Clipper`;
@@ -834,14 +838,8 @@ function ContactsSection({
           const MethodIcon = getContactMethodIcon(method.type);
 
           return (
-            <div
-              key={method.id}
-              className={contactMethodEditRowClass}
-            >
-              <Tooltip
-                content={t`Change type`}
-                placement="top"
-              >
+            <div key={method.id} className={contactMethodEditRowClass}>
+              <Tooltip content={t`Change type`} placement="top">
                 <div className="relative flex h-6 w-[22px] items-center justify-center rounded-[5px] text-light-900 hover:bg-light-200 dark:text-dark-900 dark:hover:bg-dark-200">
                   <MethodIcon className="h-4 w-4 text-light-900 dark:text-dark-900" />
                   <select

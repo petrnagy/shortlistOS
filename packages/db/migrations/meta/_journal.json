@@ -372,6 +372,13 @@
       "when": 1784206800000,
       "tag": "20260716130000_SetShortlistRobotV2Avatar",
       "breakpoints": true
+    },
+    {
+      "idx": 53,
+      "version": "7",
+      "when": 1784376000000,
+      "tag": "20260718120000_AddShortlistSourceCardLinks",
+      "breakpoints": true
     }
   ]
 }
