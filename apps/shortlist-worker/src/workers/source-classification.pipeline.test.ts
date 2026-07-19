@@ -88,6 +88,7 @@ describe("mocked multi-source email classification pipeline", () => {
       apiKey: "mock-key",
       existingTitle: null,
       model: "mock-model",
+      timeZone: "Europe/Budapest",
       sourceContent: {
         clippedAt: new Date("2026-07-19T10:00:00.000Z"),
         content: "unused combined content",
@@ -109,6 +110,9 @@ describe("mocked multi-source email classification pipeline", () => {
     });
 
     expect(classifyFactsMock).toHaveBeenCalledTimes(3);
+    expect(classifyFactsMock).toHaveBeenCalledWith(
+      expect.objectContaining({ timeZone: "Europe/Budapest" }),
+    );
     expect(result.classification).toMatchObject({
       isJobOpportunity: true,
       companyName: "Acme",
@@ -139,6 +143,7 @@ describe("mocked multi-source email classification pipeline", () => {
       apiKey: "mock-key",
       existingTitle: null,
       model: "mock-model",
+      timeZone: "America/New_York",
       sourceContent: {
         clippedAt: new Date(),
         content: "unused",

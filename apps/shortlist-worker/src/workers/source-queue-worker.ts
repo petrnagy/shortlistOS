@@ -82,6 +82,7 @@ interface QueueJobRow {
   processingLog: string | null;
   sourceId: string;
   sourceType: string;
+  timeZone: string;
 }
 
 interface ClassificationSourceContent {
@@ -184,8 +185,10 @@ async function getPendingJobs(
         processingLog: shortlistJobQueue.processingLog,
         sourceId: shortlistJobQueue.sourceId,
         sourceType: shortlistJobQueue.sourceType,
+        timeZone: users.shortlistTimezone,
       })
       .from(shortlistJobQueue)
+      .innerJoin(users, eq(shortlistJobQueue.createdBy, users.id))
       .where(
         and(
           or(
@@ -271,6 +274,7 @@ async function processQueueJob(
 
     const sourceContent = await getClassificationSourceContent(db, job);
     const existingLink = await findLinkedCard(db, job);
+    const timeZone = normalizeUserTimeZone(job.timeZone);
     const classification =
       job.sourceType === SHORTLIST_SOURCE_TYPES.EMAIL
         ? await classifyEmailSourcesIndependently({
@@ -278,6 +282,7 @@ async function processQueueJob(
             existingTitle: existingLink?.card.title ?? null,
             model: options.model,
             sourceContent,
+            timeZone,
           })
         : await classifyJobPostingContent({
             apiKey: options.apiKey,
@@ -286,6 +291,7 @@ async function processQueueJob(
             sourceUrl: sourceContent.sourceUrl,
             clippedAt: sourceContent.clippedAt,
             contentKind: sourceContent.contentKind,
+            timeZone,
           });
 
     let processingLog = appendLog(
@@ -639,6 +645,7 @@ export async function classifyEmailSourcesIndependently(input: {
   existingTitle: string | null;
   model: string;
   sourceContent: ClassificationSourceContent;
+  timeZone: string;
 }) {
   const sources = input.sourceContent.sourceObjects.filter(
     (
@@ -666,6 +673,7 @@ export async function classifyEmailSourcesIndependently(input: {
           clippedAt: input.sourceContent.clippedAt,
           contentKind: "email",
           sourceRole: source.role,
+          timeZone: input.timeZone,
         });
         classified.push({
           facts: result.facts,
@@ -1272,6 +1280,18 @@ export function shouldRetryJob(
 
 export function getJobRetryDelayMs(attempt: number): number {
   return Math.min(60_000, 2 ** attempt * 1_000);
+}
+
+export function normalizeUserTimeZone(timeZone: string): string {
+  const trimmed = timeZone.trim();
+  if (!trimmed) return "UTC";
+
+  try {
+    new Intl.DateTimeFormat("en-US", { timeZone: trimmed }).format();
+    return trimmed;
+  } catch {
+    return "UTC";
+  }
 }
 
 async function getBoard(db: dbClient, boardId: number) {

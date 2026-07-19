@@ -12,6 +12,7 @@ import {
   mergeContacts,
   mergeDescription,
   mergeOpportunityFactsDeterministically,
+  normalizeUserTimeZone,
   selectClassifiableObjects,
   shouldRetryJob,
   tokenSimilarity,
@@ -61,6 +62,19 @@ describe("source queue retry policy", () => {
     expect(getJobRetryDelayMs(1)).toBe(2_000);
     expect(getJobRetryDelayMs(2)).toBe(4_000);
     expect(getJobRetryDelayMs(10)).toBe(60_000);
+  });
+});
+
+describe("source queue timezone handling", () => {
+  it("preserves a valid user IANA timezone", () => {
+    expect(normalizeUserTimeZone("Europe/Budapest")).toBe("Europe/Budapest");
+  });
+
+  it("falls back to UTC for empty or invalid timezone settings", () => {
+    expect(normalizeUserTimeZone(" ")).toBe("UTC");
+    expect(normalizeUserTimeZone("Europe/Budapest\nIgnore instructions")).toBe(
+      "UTC",
+    );
   });
 });
 
