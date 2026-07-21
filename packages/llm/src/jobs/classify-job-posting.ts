@@ -49,6 +49,11 @@ export const jobPostingRejectionSchema = z.object({
 });
 
 const nullableStringSchema = z.string().nullable().catch(null);
+const nullableIsoDateTimeSchema = z
+  .string()
+  .datetime({ offset: true })
+  .nullable()
+  .catch(null);
 const nullableIntegerSchema = z.number().int().nullable().catch(null);
 const stringArraySchema = z.array(z.string()).catch([]);
 
@@ -166,7 +171,7 @@ export const jobPostingSuccessSchema = z.object({
   jobLocations: stringArraySchema,
   remoteLocationRestriction: nullableStringSchema,
   applicationDeadline: nullableStringSchema,
-  interviewDateTime: nullableStringSchema,
+  interviewDateTime: nullableIsoDateTimeSchema,
   contactsJson: jobPostingContactsJsonSchema.catch([]),
   equityMentioned: z.boolean().catch(false),
   fieldEvidence: z

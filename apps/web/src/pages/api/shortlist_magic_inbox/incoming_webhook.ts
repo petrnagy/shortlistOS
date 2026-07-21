@@ -346,7 +346,10 @@ async function storeBrevoEmailObjects(input: {
     if (object.id) objectIds.push(object.id);
   }
 
-  for (const supportedAttachment of input.supportedAttachments) {
+  for (const [
+    attachmentIndex,
+    supportedAttachment,
+  ] of input.supportedAttachments.entries()) {
     const attachment = await getAttachmentUpload(supportedAttachment);
 
     if (!attachment) {
@@ -373,6 +376,7 @@ async function storeBrevoEmailObjects(input: {
       metadata: {
         "message-id": input.email.MessageId ?? "",
         "original-filename": sanitizeShortlistFilename(attachment.filename),
+        "source-order": String(attachmentIndex),
       },
       objectType: SHORTLIST_SOURCE_OBJECT_TYPES.ATTACHMENT_FILE,
       sourceId: input.sourceId,

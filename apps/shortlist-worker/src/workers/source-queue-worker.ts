@@ -490,6 +490,10 @@ async function getClassificationSourceContent(
         eq(shortlistSourceObjects.sourceType, job.sourceType),
         eq(shortlistSourceObjects.sourceId, job.sourceId),
       ),
+    )
+    .orderBy(
+      asc(shortlistSourceObjects.createdAt),
+      asc(shortlistSourceObjects.id),
     );
 
   const selectedObjects = selectClassifiableObjects(job.sourceType, objects);
@@ -662,7 +666,7 @@ export async function classifyEmailSourcesIndependently(input: {
   const classified: ClassifiedEmailSource[] = [];
   const classificationErrors: string[] = [];
 
-  await Promise.all(
+  const classificationResults = await Promise.all(
     sources.map(async (source) => {
       try {
         const result = await classifyOpportunityFactsContent({
@@ -675,21 +679,30 @@ export async function classifyEmailSourcesIndependently(input: {
           sourceRole: source.role,
           timeZone: input.timeZone,
         });
-        classified.push({
-          facts: result.facts,
-          filename: source.sourceObject.originalFilename,
-          model: result.model,
-          rawResponse: result.rawResponse,
-          role: source.role,
-          warnings: result.warnings,
-        });
+        return {
+          classified: {
+            facts: result.facts,
+            filename: source.sourceObject.originalFilename,
+            model: result.model,
+            rawResponse: result.rawResponse,
+            role: source.role,
+            warnings: result.warnings,
+          } satisfies ClassifiedEmailSource,
+          error: null,
+        };
       } catch (error) {
-        classificationErrors.push(
-          `${source.sourceObject.originalFilename}: ${formatError(error)}`,
-        );
+        return {
+          classified: null,
+          error: `${source.sourceObject.originalFilename}: ${formatError(error)}`,
+        };
       }
     }),
   );
+
+  for (const result of classificationResults) {
+    if (result.classified) classified.push(result.classified);
+    if (result.error) classificationErrors.push(result.error);
+  }
 
   if (classified.length === 0 && classificationErrors.length > 0) {
     throw new Error(
@@ -733,12 +746,14 @@ export function mergeOpportunityFactsDeterministically(
   const attachments = relevant.filter((source) => source.role === "ATTACHMENT");
   const merged: Partial<OpportunityFacts> = {};
 
+  // Lowest to highest priority. Reversing supplemental attachments makes the
+  // earliest attachment win while still keeping quoted history at the bottom.
   for (const source of history) assignFacts(merged, source.facts, "fill");
+  for (const source of attachments.slice(1).reverse()) {
+    assignFacts(merged, source.facts, "overwrite");
+  }
   for (const source of current) assignFacts(merged, source.facts, "overwrite");
   if (attachments[0]) assignFacts(merged, attachments[0].facts, "overwrite");
-  for (const source of attachments.slice(1)) {
-    assignFacts(merged, source.facts, "fill");
-  }
 
   const explicitCorrections = new Set(
     current.flatMap((source) => source.facts.explicitCorrections),
@@ -886,7 +901,7 @@ export function selectClassifiableObjects(
     );
     const body = current ?? html ?? text;
 
-    return objects
+    const selected = objects
       .filter(
         (object) =>
           object === body ||
@@ -897,15 +912,28 @@ export function selectClassifiableObjects(
       .map((object) => ({
         role:
           object.objectType === SHORTLIST_SOURCE_OBJECT_TYPES.ATTACHMENT_FILE
-            ? "ATTACHMENT"
+            ? ("ATTACHMENT" as const)
             : object === body
-              ? "CURRENT_EMAIL"
-              : "QUOTED_HISTORY",
+              ? ("CURRENT_EMAIL" as const)
+              : ("QUOTED_HISTORY" as const),
         shouldExtract:
           object.objectType !== SHORTLIST_SOURCE_OBJECT_TYPES.EMAIL_EML ||
           !body,
         sourceObject: object,
       }));
+    const attachments = selected
+      .filter((source) => source.role === "ATTACHMENT")
+      .sort(
+        (left, right) =>
+          getSourceObjectOrder(left.sourceObject.metadataJson) -
+          getSourceObjectOrder(right.sourceObject.metadataJson),
+      );
+    let attachmentIndex = 0;
+
+    return selected.map((source) => {
+      if (source.role !== "ATTACHMENT") return source;
+      return attachments[attachmentIndex++] ?? source;
+    });
   }
 
   const object = objects.find((candidate) =>
@@ -926,6 +954,17 @@ export function selectClassifiableObjects(
         },
       ]
     : [];
+}
+
+function getSourceObjectOrder(metadata: unknown): number {
+  if (!metadata || typeof metadata !== "object") {
+    return Number.MAX_SAFE_INTEGER;
+  }
+  const value = (metadata as Record<string, unknown>)["source-order"];
+  const parsed = typeof value === "number" ? value : Number(value);
+  return Number.isInteger(parsed) && parsed >= 0
+    ? parsed
+    : Number.MAX_SAFE_INTEGER;
 }
 
 function sourceRolePriority(role: ExtractedSourceObject["role"]): number {
