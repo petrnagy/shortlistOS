@@ -302,4 +302,81 @@ describe("shortlist magic inbox webhook", () => {
     expect(mockCreateDrizzleClient).not.toHaveBeenCalled();
     expect(mockDb._state.insertedValues).toEqual([]);
   });
+
+  it("rejects malformed Brevo payloads before creating a database client", async () => {
+    const response = createResponse();
+
+    await handler(createRequest({ body: { items: "not-an-array" } }), response);
+
+    expect(response.status).toHaveBeenCalledWith(400);
+    expect(response.json).toHaveBeenCalledWith({
+      message: "Invalid Brevo payload",
+    });
+    expect(mockCreateDrizzleClient).not.toHaveBeenCalled();
+    expect(mockStoreObject).not.toHaveBeenCalled();
+    expect(mockEnqueue).not.toHaveBeenCalled();
+  });
+
+  it("skips emails without a stable Brevo MessageId", async () => {
+    const payload = createBrevoPayload();
+    delete (payload.items[0] as { MessageId?: string } | undefined)?.MessageId;
+    const response = createResponse();
+
+    await handler(createRequest({ body: payload }), response);
+
+    expect(response.status).toHaveBeenCalledWith(200);
+    expect(response.json).toHaveBeenCalledWith({
+      duplicates: 0,
+      inserted: 0,
+      received: 1,
+      skipped: 1,
+    });
+    expect(mockDb._state.insertedValues).toEqual([]);
+    expect(mockStoreObject).not.toHaveBeenCalled();
+    expect(mockEnqueue).not.toHaveBeenCalled();
+  });
+
+  it("ignores unsupported attachments while still queueing the email body", async () => {
+    const payload = createBrevoPayload();
+    const item = payload.items[0];
+    expect(item).toBeDefined();
+    if (!item) return;
+    item.Attachments = [
+      {
+        Base64Content: Buffer.from("legacy document").toString("base64"),
+        ContentID: "legacy-content-id",
+        ContentLength: 15,
+        ContentType: "application/msword",
+        DownloadToken: "legacy-download-token",
+        Name: "legacy-offer.doc",
+      },
+    ];
+    const response = createResponse();
+
+    await handler(createRequest({ body: payload }), response);
+
+    expect(response.status).toHaveBeenCalledWith(200);
+    expect(mockStoreObject).toHaveBeenCalledTimes(3);
+    expect(mockStoreObject).not.toHaveBeenCalledWith(
+      expect.objectContaining({ objectType: "ATTACHMENT_FILE" }),
+    );
+    expect(mockEnqueue).toHaveBeenCalledOnce();
+    expect(mockDb._state.insertedValues).toEqual([
+      expect.objectContaining({ hasSupportedAttachment: false }),
+    ]);
+  });
+
+  it("rejects non-POST webhook requests without side effects", async () => {
+    const response = createResponse();
+
+    await handler(
+      createRequest({ body: createBrevoPayload(), method: "GET" }),
+      response,
+    );
+
+    expect(response.status).toHaveBeenCalledWith(405);
+    expect(mockCreateDrizzleClient).not.toHaveBeenCalled();
+    expect(mockStoreObject).not.toHaveBeenCalled();
+    expect(mockEnqueue).not.toHaveBeenCalled();
+  });
 });

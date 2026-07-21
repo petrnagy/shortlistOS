@@ -76,9 +76,51 @@ const createRequest = (filename: string) =>
     query: { boardPublicId: "boardABC12345" },
   }) as unknown as NextApiRequest;
 
+const invalidUploadCases: [
+  string,
+  {
+    headers?: NextApiRequest["headers"];
+    query?: NextApiRequest["query"];
+  },
+  string,
+][] = [
+  [
+    "an invalid board id",
+    { query: { boardPublicId: "short" } },
+    "Invalid boardPublicId",
+  ],
+  [
+    "a missing content type",
+    { headers: { "content-type": undefined } },
+    "Missing content type",
+  ],
+  [
+    "an invalid content length",
+    { headers: { "content-length": "not-a-number" } },
+    "Missing or invalid content length",
+  ],
+  [
+    "an empty upload",
+    { headers: { "content-length": "0" } },
+    "Missing or invalid content length",
+  ],
+  [
+    "an oversized upload",
+    { headers: { "content-length": String(10 * 1024 * 1024 + 1) } },
+    "File too large",
+  ],
+];
+
 describe("direct shortlist file upload", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    assertPermissionMock.mockResolvedValue(undefined);
+    boardLookupMock.mockResolvedValue({ id: 42, workspaceId: 7 });
+    enqueueMock.mockResolvedValue("job-id");
+    storeObjectMock.mockResolvedValue({
+      id: "object-id",
+      s3Key: "sources/offer.pdf",
+    });
   });
 
   it("stores and queues an authenticated supported upload", async () => {
@@ -114,6 +156,64 @@ describe("direct shortlist file upload", () => {
     expect(response.json).toHaveBeenCalledWith({
       error: "Unsupported file type",
     });
+    expect(storeObjectMock).not.toHaveBeenCalled();
+    expect(enqueueMock).not.toHaveBeenCalled();
+  });
+
+  it.each(invalidUploadCases)("rejects %s before storing or queueing", async (_label, overrides, error) => {
+    const request = createRequest("offer.pdf") as NextApiRequest &
+      Record<string, unknown>;
+    if (overrides.headers) {
+      request.headers = { ...request.headers, ...overrides.headers };
+    }
+    if (overrides.query) request.query = overrides.query;
+    const response = createResponse();
+
+    await handler(request, response);
+
+    expect(response.status).toHaveBeenCalledWith(400);
+    expect(response.json).toHaveBeenCalledWith({ error });
+    expect(mockDb.insert).not.toHaveBeenCalled();
+    expect(storeObjectMock).not.toHaveBeenCalled();
+    expect(enqueueMock).not.toHaveBeenCalled();
+  });
+
+  it("rejects an upload for an unknown board before creating a source", async () => {
+    boardLookupMock.mockResolvedValueOnce(null as never);
+    const response = createResponse();
+
+    await handler(createRequest("offer.pdf"), response);
+
+    expect(response.status).toHaveBeenCalledWith(404);
+    expect(response.json).toHaveBeenCalledWith({ error: "Board not found" });
+    expect(mockDb.insert).not.toHaveBeenCalled();
+    expect(storeObjectMock).not.toHaveBeenCalled();
+    expect(enqueueMock).not.toHaveBeenCalled();
+  });
+
+  it("rejects an upload without card creation permission", async () => {
+    assertPermissionMock.mockRejectedValueOnce(new Error("Forbidden"));
+    const response = createResponse();
+
+    await handler(createRequest("offer.pdf"), response);
+
+    expect(response.status).toHaveBeenCalledWith(403);
+    expect(response.json).toHaveBeenCalledWith({ error: "Permission denied" });
+    expect(mockDb.insert).not.toHaveBeenCalled();
+    expect(storeObjectMock).not.toHaveBeenCalled();
+    expect(enqueueMock).not.toHaveBeenCalled();
+  });
+
+  it("rejects non-POST uploads before authentication or storage", async () => {
+    const request = createRequest("offer.pdf");
+    request.method = "GET";
+    const response = createResponse();
+
+    await handler(request, response);
+
+    expect(response.status).toHaveBeenCalledWith(405);
+    expect(contextMock).not.toHaveBeenCalled();
+    expect(mockDb.insert).not.toHaveBeenCalled();
     expect(storeObjectMock).not.toHaveBeenCalled();
     expect(enqueueMock).not.toHaveBeenCalled();
   });

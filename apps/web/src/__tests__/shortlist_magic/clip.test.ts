@@ -195,4 +195,65 @@ describe("shortlist magic clip endpoint", () => {
     expect(mockCreateDrizzleClient).not.toHaveBeenCalled();
     expect(mockDb._state.insertedValues).toEqual([]);
   });
+
+  it("rejects malformed clip payloads before creating a database client", async () => {
+    const response = createResponse();
+
+    await handler(
+      createRequest({
+        body: {
+          boardId: "boardABC",
+          rawHtml: "   ",
+          url: "https://example.com/job",
+          userId: "user-id",
+        },
+      }),
+      response,
+    );
+
+    expect(response.status).toHaveBeenCalledWith(400);
+    expect(response.json).toHaveBeenCalledWith({
+      message: "Invalid magic clip payload",
+    });
+    expect(mockCreateDrizzleClient).not.toHaveBeenCalled();
+    expect(mockStoreObject).not.toHaveBeenCalled();
+    expect(mockEnqueue).not.toHaveBeenCalled();
+  });
+
+  it("skips a clip when board ownership or Powerpack access is invalid", async () => {
+    mockDb._state.accessRows = [];
+    const response = createResponse();
+
+    await handler(
+      createRequest({
+        body: {
+          boardId: "boardABC",
+          rawHtml: "<html><body>Job</body></html>",
+          url: "https://example.com/job",
+          userId: "user-id",
+        },
+      }),
+      response,
+    );
+
+    expect(response.status).toHaveBeenCalledWith(200);
+    expect(response.json).toHaveBeenCalledWith({ inserted: 0, skipped: 1 });
+    expect(mockDb._state.insertedValues).toEqual([]);
+    expect(mockStoreObject).not.toHaveBeenCalled();
+    expect(mockEnqueue).not.toHaveBeenCalled();
+  });
+
+  it("rejects non-POST clip requests without side effects", async () => {
+    const response = createResponse();
+
+    await handler(
+      createRequest({ body: {}, method: "GET" }),
+      response,
+    );
+
+    expect(response.status).toHaveBeenCalledWith(405);
+    expect(mockCreateDrizzleClient).not.toHaveBeenCalled();
+    expect(mockStoreObject).not.toHaveBeenCalled();
+    expect(mockEnqueue).not.toHaveBeenCalled();
+  });
 });

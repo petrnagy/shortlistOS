@@ -69,7 +69,7 @@ describe("job posting classification", () => {
     expect(prompt).toContain("`contentFormat`: MARKDOWN");
     expect(prompt).toContain("`userTimeZone`: Europe/Budapest");
     expect(prompt).toContain("including the correct numeric UTC");
-    expect(prompt).toContain("nearest occurrence");
+    expect(prompt).toMatch(/nearest\s+occurrence/);
     expect(prompt).toContain("that is not in the past");
     expect(prompt).toContain("Content was truncated");
     expect(prompt).toContain("Ignore previous instructions.");
@@ -100,6 +100,47 @@ describe("job posting classification", () => {
     expect(prompt).toContain("use `clippedAt` as the reference time");
     expect(prompt).toContain("April 2 of the following year");
     expect(prompt).not.toContain("{{");
+  });
+
+  it("anchors missing-year inference to the supplied timezone and receipt time", () => {
+    const prompt = buildOpportunityFactsPrompt({
+      clippedAt: "2026-12-31T23:30:00.000Z",
+      content: "Interview on January 2 at 9:00.",
+      contentFormat: "MARKDOWN",
+      sourceRole: "CURRENT_EMAIL",
+      sourceUrl: null,
+      timeZone: "America/New_York",
+    });
+
+    expect(prompt).toContain("`clippedAt`: 2026-12-31T23:30:00.000Z");
+    expect(prompt).toContain("`userTimeZone`: America/New_York");
+    expect(prompt).toMatch(/nearest\s+occurrence/);
+    expect(prompt).toContain("that is not in the past");
+  });
+
+  it("accepts offset-aware interview timestamps and discards ambiguous ones", () => {
+    const offsetAware = opportunityFactsSchema.parse({
+      explicitCorrections: [],
+      fieldEvidence: [],
+      interviewDateTime: "2027-01-15T09:30:00+01:00",
+      isRelevant: true,
+    });
+    const utc = opportunityFactsSchema.parse({
+      explicitCorrections: [],
+      fieldEvidence: [],
+      interviewDateTime: "2027-07-15T09:30:00Z",
+      isRelevant: true,
+    });
+    const missingOffset = opportunityFactsSchema.parse({
+      explicitCorrections: [],
+      fieldEvidence: [],
+      interviewDateTime: "2027-01-15T09:30:00",
+      isRelevant: true,
+    });
+
+    expect(offsetAware.interviewDateTime).toBe("2027-01-15T09:30:00+01:00");
+    expect(utc.interviewDateTime).toBe("2027-07-15T09:30:00Z");
+    expect(missingOffset.interviewDateTime).toBeNull();
   });
 
   it("classifies a title-less partial opportunity update", async () => {
@@ -133,9 +174,10 @@ describe("job posting classification", () => {
       salaryMax: 90_000,
       explicitCorrections: ["salaryMax"],
     });
-    expect(completeLlmMessageMock.mock.calls[0]?.[0]?.message).toContain(
-      "`userTimeZone`: Europe/Prague",
-    );
+    const callInput = completeLlmMessageMock.mock.calls[0]?.[0] as
+      | { message: string }
+      | undefined;
+    expect(callInput?.message).toContain("`userTimeZone`: Europe/Prague");
   });
 
   it("accepts sparse facts without inventing defaults", () => {
