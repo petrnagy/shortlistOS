@@ -86,6 +86,16 @@ export interface OpenWebNinjaConnectorOptions {
   fetchImpl?: typeof fetch;
 }
 
+export class OpenWebNinjaHttpError extends Error {
+  constructor(
+    message: string,
+    readonly status: number,
+  ) {
+    super(message);
+    this.name = "OpenWebNinjaHttpError";
+  }
+}
+
 export class OpenWebNinjaConnector {
   private readonly apiKey: string;
   private readonly baseUrl: string;
@@ -127,8 +137,9 @@ export class OpenWebNinjaConnector {
     });
     if (!response.ok) {
       const body = await response.text().catch(() => "");
-      throw new Error(
+      throw new OpenWebNinjaHttpError(
         `OpenWebNinja request failed with ${response.status}${body ? `: ${body.slice(0, 300)}` : ""}`,
+        response.status,
       );
     }
 

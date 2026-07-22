@@ -47,6 +47,16 @@ import {
 
 import { buildCardDescription } from "../utils/build-card-description";
 import { extractSourceText } from "../utils/extract-source-text";
+import {
+  beginProviderRequest,
+  completeProviderRequest,
+  countDailyAccountProviderRequests,
+  failProviderRequest,
+  getUtcDayStart,
+  linkSourceProviderRequestsToCard,
+  PROVIDERS,
+  recordDailyProviderLimitNotice,
+} from "../utils/provider-requests";
 
 const logger = createLogger("shortlist-worker:source-queue-worker");
 
@@ -57,6 +67,7 @@ type QueueProcessingStatus =
   (typeof SHORTLIST_JOB_STATUSES)[keyof typeof SHORTLIST_JOB_STATUSES];
 
 interface ProcessShortlistJobQueueBatchOptions {
+  accountDailyRequestLimit?: number;
   apiKey: string;
   model: string;
   retryLimit: number;
@@ -274,25 +285,70 @@ async function processQueueJob(
 
     const sourceContent = await getClassificationSourceContent(db, job);
     const existingLink = await findLinkedCard(db, job);
+    const llmRequestLimit = options.accountDailyRequestLimit ?? 250;
+    const dayStart = getUtcDayStart();
+    if (
+      (await countDailyAccountProviderRequests(
+        db,
+        job.createdBy,
+        PROVIDERS.LLM,
+        dayStart,
+      )) >= llmRequestLimit
+    ) {
+      if (existingLink) {
+        await addLlmLimitNotice(
+          db,
+          existingLink.cardId,
+          job.createdBy,
+          dayStart,
+        );
+      }
+      return deferJobForDailyLimit(db, job, {
+        log,
+        message: "This account has reached its daily LLM classification limit.",
+      });
+    }
     const timeZone = normalizeUserTimeZone(job.timeZone);
     const classification =
       job.sourceType === SHORTLIST_SOURCE_TYPES.EMAIL
         ? await classifyEmailSourcesIndependently({
             apiKey: options.apiKey,
+            classifySource: (classificationInput) =>
+              runTrackedLlmRequest(
+                db,
+                job,
+                existingLink?.cardId ?? null,
+                "OPPORTUNITY_FACTS_CLASSIFICATION",
+                {
+                  model: options.model,
+                  sourceRole: classificationInput.sourceRole,
+                },
+                llmRequestLimit,
+                () => classifyOpportunityFactsContent(classificationInput),
+              ),
             existingTitle: existingLink?.card.title ?? null,
             model: options.model,
             sourceContent,
             timeZone,
           })
-        : await classifyJobPostingContent({
-            apiKey: options.apiKey,
-            model: options.model,
-            htmlContent: sourceContent.content,
-            sourceUrl: sourceContent.sourceUrl,
-            clippedAt: sourceContent.clippedAt,
-            contentKind: sourceContent.contentKind,
-            timeZone,
-          });
+        : await runTrackedLlmRequest(
+            db,
+            job,
+            existingLink?.cardId ?? null,
+            "JOB_POSTING_CLASSIFICATION",
+            { model: options.model, sourceType: job.sourceType },
+            llmRequestLimit,
+            () =>
+              classifyJobPostingContent({
+                apiKey: options.apiKey,
+                model: options.model,
+                htmlContent: sourceContent.content,
+                sourceUrl: sourceContent.sourceUrl,
+                clippedAt: sourceContent.clippedAt,
+                contentKind: sourceContent.contentKind,
+                timeZone,
+              }),
+          );
 
     let processingLog = appendLog(
       log,
@@ -339,6 +395,7 @@ async function processQueueJob(
         );
 
     if (duplicate) {
+      await linkSourceProviderRequestsToCard(db, job.id, duplicate.cardId);
       const updateResult = await enrichDuplicateCard(db, {
         classification: classification.classification,
         duplicate,
@@ -373,6 +430,8 @@ async function processQueueJob(
       position: "end",
     });
     incompleteCreatedCardId = createdCard.id;
+
+    await linkSourceProviderRequestsToCard(db, job.id, createdCard.id);
 
     await addRobotProcessingHistory(db, {
       boardWorkspaceId: board.workspaceId,
@@ -436,6 +495,13 @@ async function processQueueJob(
       }
     }
 
+    if (error instanceof DailyProviderLimitError) {
+      return deferJobForDailyLimit(db, job, {
+        log,
+        message: formatError(error),
+      });
+    }
+
     const shouldRetry = shouldRetryJob(
       attempt,
       job.maxAttempts,
@@ -467,6 +533,57 @@ async function processQueueJob(
     );
 
     return status;
+  }
+}
+
+async function runTrackedLlmRequest<T>(
+  db: dbClient,
+  job: QueueJobRow,
+  cardId: number | null,
+  endpoint: string,
+  requestJson: unknown,
+  accountDailyRequestLimit: number,
+  operation: () => Promise<T>,
+): Promise<T> {
+  const dayStart = getUtcDayStart();
+  if (
+    (await countDailyAccountProviderRequests(
+      db,
+      job.createdBy,
+      PROVIDERS.LLM,
+      dayStart,
+    )) >= accountDailyRequestLimit
+  ) {
+    if (cardId !== null) {
+      await addLlmLimitNotice(db, cardId, job.createdBy, dayStart);
+    }
+    throw new DailyProviderLimitError(
+      "This account has reached its daily LLM classification limit.",
+    );
+  }
+
+  const historyId = await beginProviderRequest(db, {
+    accountId: job.createdBy,
+    cardId,
+    endpoint,
+    provider: PROVIDERS.LLM,
+    requestJson,
+    sourceJobId: job.id,
+  });
+  try {
+    const result = await operation();
+    await completeProviderRequest(db, historyId, { completed: true });
+    return result;
+  } catch (error) {
+    await failProviderRequest(db, historyId, formatError(error));
+    throw error;
+  }
+}
+
+class DailyProviderLimitError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "DailyProviderLimitError";
   }
 }
 
@@ -646,6 +763,9 @@ const MERGEABLE_FACT_FIELDS = [
 
 export async function classifyEmailSourcesIndependently(input: {
   apiKey: string;
+  classifySource?: (
+    input: Parameters<typeof classifyOpportunityFactsContent>[0],
+  ) => ReturnType<typeof classifyOpportunityFactsContent>;
   existingTitle: string | null;
   model: string;
   sourceContent: ClassificationSourceContent;
@@ -669,7 +789,9 @@ export async function classifyEmailSourcesIndependently(input: {
   const classificationResults = await Promise.all(
     sources.map(async (source) => {
       try {
-        const result = await classifyOpportunityFactsContent({
+        const result = await (
+          input.classifySource ?? classifyOpportunityFactsContent
+        )({
           apiKey: input.apiKey,
           model: input.model,
           htmlContent: source.content,
@@ -1150,6 +1272,26 @@ async function createRobotCommentActivity(
   );
 }
 
+const LLM_LIMIT_COMMENT =
+  "Your account has reached its daily automated classification limit. This source will be retried tomorrow. If you need a higher limit, contact us at support@shortlistos.co.";
+
+async function addLlmLimitNotice(
+  db: dbClient,
+  cardId: number,
+  accountId: string,
+  dayStart: Date,
+) {
+  const shouldCreate = await recordDailyProviderLimitNotice(db, {
+    accountId,
+    cardId,
+    provider: PROVIDERS.LLM,
+    since: dayStart,
+  });
+  if (shouldCreate) {
+    await createRobotCommentActivity(db, cardId, LLM_LIMIT_COMMENT);
+  }
+}
+
 async function attachOriginalSourceFile(
   db: dbClient,
   args: {
@@ -1277,6 +1419,32 @@ async function finishJobWithStatus(
   });
 
   return values.status;
+}
+
+async function deferJobForDailyLimit(
+  db: dbClient,
+  job: QueueJobRow,
+  values: { log: string; message: string },
+): Promise<QueueProcessingStatus> {
+  const tomorrowUtc = new Date(getUtcDayStart().getTime() + 24 * 60 * 60 * 1_000);
+  await db
+    .update(shortlistJobQueue)
+    .set({
+      attempts: job.attempts,
+      error: values.message,
+      lockedAt: null,
+      lockedBy: null,
+      processedAt: null,
+      processingLog: appendLog(
+        values.log,
+        `${values.message} Deferred until ${tomorrowUtc.toISOString()}.`,
+      ),
+      runAfter: tomorrowUtc,
+      status: SHORTLIST_JOB_STATUSES.RETRY,
+      updatedAt: new Date(),
+    })
+    .where(eq(shortlistJobQueue.id, job.id));
+  return SHORTLIST_JOB_STATUSES.RETRY;
 }
 
 async function finishJob(

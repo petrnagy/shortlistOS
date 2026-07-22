@@ -90,6 +90,9 @@ export const cards = pgTable(
     shortlistDataFetchNeeded: boolean("shortlist_dataFetchNeeded")
       .notNull()
       .default(false),
+    shortlistDataFetchRequestedBy: uuid(
+      "shortlist_dataFetchRequestedBy",
+    ).references(() => users.id, { onDelete: "set null" }),
     shortlistCompanyName: varchar("shortlist_companyName", { length: 255 }),
     shortlistJobPostingUrl: text("shortlist_jobPostingUrl"),
     shortlistSalaryMin: integer("shortlist_salaryMin"),

@@ -22,6 +22,10 @@ try {
   while (!stopping) {
     const result = await processShortlistJobQueueBatch(db, {
       apiKey: getRequiredEnv("LLM_CONNECTOR_API_KEY"),
+      accountDailyRequestLimit: getNumberEnv(
+        "SHORTLIST_LLM_ACCOUNT_DAILY_REQUEST_LIMIT",
+        250,
+      ),
       model: getRequiredEnv("LLM_CONNECTOR_MODEL"),
       retryLimit: getNumberEnv("INBOX_CLIP_RETRY_LIMIT", 3),
     });

@@ -9,6 +9,12 @@ const db = createDrizzleClient();
 try {
   const result = await processEnrichmentQueueBatch(db, {
     apiKey: getRequiredEnv("OPENWEBNINJA_API_KEY"),
+    cacheReuseDays: getNumberEnv("OPENWEBNINJA_SALARY_CACHE_REUSE_DAYS", 30),
+    accountDailyRequestLimit: getNumberEnv(
+      "OPENWEBNINJA_ACCOUNT_DAILY_REQUEST_LIMIT",
+      250,
+    ),
+    frankfurterBaseUrl: process.env.FRANKFURTER_BASE_URL,
     retryLimit: getNumberEnv("OPENWEBNINJA_RETRY_LIMIT", 3),
   });
   logger.info(result, "Enrichment queue processing finished");

@@ -43,7 +43,10 @@ export async function markCardsForEnrichment(
 
   await db
     .update(cards)
-    .set({ shortlistDataFetchNeeded: true })
+    .set({
+      shortlistDataFetchNeeded: true,
+      shortlistDataFetchRequestedBy: input.createdBy,
+    })
     .where(
       and(
         inArray(cards.id, cardIds),

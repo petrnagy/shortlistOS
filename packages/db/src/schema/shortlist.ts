@@ -284,6 +284,9 @@ export const shortlistEnrichmentJobs = pgTable(
     cardId: bigint("cardId", { mode: "number" })
       .notNull()
       .references(() => cards.id, { onDelete: "cascade" }),
+    requestedBy: uuid("requestedBy").references(() => users.id, {
+      onDelete: "set null",
+    }),
     enrichmentType: varchar("enrichmentType", { length: 20 }).notNull(),
     status: varchar("status", { length: 20 }).notNull(),
     requestKey: varchar("requestKey", { length: 64 }).notNull(),
@@ -323,6 +326,67 @@ export const shortlistEnrichmentJobsRelations = relations(
     }),
   }),
 );
+
+export const shortlistProviderRequests = pgTable(
+  "shortlist_provider_request",
+  {
+    id: uuid("id")
+      .notNull()
+      .primaryKey()
+      .default(sql`uuid_generate_v4()`),
+    cardId: bigint("cardId", { mode: "number" }).references(() => cards.id, {
+      onDelete: "cascade",
+    }),
+    accountId: uuid("accountId").references(() => users.id, {
+      onDelete: "cascade",
+    }),
+    sourceJobId: uuid("sourceJobId").references(() => shortlistJobQueue.id, {
+      onDelete: "set null",
+    }),
+    enrichmentJobId: uuid("enrichmentJobId").references(
+      () => shortlistEnrichmentJobs.id,
+      { onDelete: "set null" },
+    ),
+    provider: varchar("provider", { length: 30 }).notNull(),
+    endpoint: varchar("endpoint", { length: 80 }).notNull(),
+    status: varchar("status", { length: 20 }).notNull(),
+    requestKey: varchar("requestKey", { length: 64 }).notNull(),
+    jobTitleNormalized: varchar("jobTitleNormalized", { length: 255 }),
+    location: varchar("location", { length: 255 }),
+    regionKey: varchar("regionKey", { length: 20 }),
+    requestJson: jsonb("requestJson").notNull(),
+    responseJson: jsonb("responseJson"),
+    duplicateOfId: uuid("duplicateOfId"),
+    error: text("error"),
+    requestedAt: timestamp("requestedAt").notNull().defaultNow(),
+    fetchedAt: timestamp("fetchedAt"),
+    createdAt: timestamp("createdAt").notNull().defaultNow(),
+    updatedAt: timestamp("updatedAt"),
+  },
+  (table) => [
+    index("shortlist_provider_request_card_provider_idx").on(
+      table.cardId,
+      table.provider,
+    ),
+    index("shortlist_provider_request_account_daily_idx").on(
+      table.accountId,
+      table.provider,
+      table.requestedAt,
+    ),
+    index("shortlist_provider_request_salary_cache_idx").on(
+      table.provider,
+      table.endpoint,
+      table.location,
+      table.fetchedAt,
+    ),
+    index("shortlist_provider_request_title_idx").on(table.jobTitleNormalized),
+    index("shortlist_provider_request_request_key_idx").on(table.requestKey),
+    index("shortlist_provider_request_source_job_idx").on(table.sourceJobId),
+    index("shortlist_provider_request_enrichment_job_idx").on(
+      table.enrichmentJobId,
+    ),
+  ],
+).enableRLS();
 
 export const shortlistSourceCards = pgTable(
   "shortlist_source_card",

@@ -28,6 +28,7 @@ import {
   lists,
   shortlistEmailSources,
   shortlistJobQueue,
+  shortlistProviderRequests,
   shortlistSourceCards,
   shortlistSourceObjects,
   users,
@@ -287,7 +288,9 @@ maybeDescribe("critical source ingestion pipelines", () => {
   it("fails permanently after three classifier attempts without creating a card", async () => {
     const current = requireFixture();
     const response = createResponse();
-    classifyFullMock.mockRejectedValue(new Error("Simulated persistent LLM outage"));
+    classifyFullMock.mockRejectedValue(
+      new Error("Simulated persistent LLM outage"),
+    );
 
     await clipHandler(
       createJsonRequest({
@@ -835,6 +838,90 @@ maybeDescribe("critical source ingestion pipelines", () => {
     expect(cardsOnBoard[0]?.dueDate?.toISOString()).toBe(
       "2027-05-05T07:00:00.000Z",
     );
+  });
+
+  it("blocks LLM calls at the daily account limit and comments only once", async () => {
+    const current = requireFixture();
+    const existing = await createExistingCard(current, {
+      companyName: "Limited Company",
+      title: "Limited Engineer",
+    });
+    const previousMessageId = `<limited-root-${generateUID()}@pipeline.test>`;
+    const [previousSource] = await db
+      .insert(shortlistEmailSources)
+      .values({
+        boardId: current.boardId,
+        createdBy: current.userId,
+        externId: previousMessageId,
+      })
+      .returning({ id: shortlistEmailSources.id });
+    if (!previousSource) throw new Error("Failed to create previous source");
+    await db.insert(shortlistSourceCards).values({
+      cardId: existing.id,
+      matchType: "CREATED",
+      sourceId: previousSource.id,
+      sourceType: "EMAIL",
+    });
+    await db.insert(shortlistProviderRequests).values(
+      [1, 2].map((index) => ({
+        accountId: current.userId,
+        cardId: existing.id,
+        endpoint: "OPPORTUNITY_FACTS_CLASSIFICATION",
+        fetchedAt: new Date(),
+        provider: "LLM",
+        requestJson: { index },
+        requestKey: `llm-limit-${index}-${generateUID()}`,
+        responseJson: { completed: true },
+        status: "COMPLETED",
+      })),
+    );
+
+    const callsBefore = classifyFactsMock.mock.calls.length;
+    const fullCallsBefore = classifyFullMock.mock.calls.length;
+    await submitPipelineClip(current, {
+      marker: "PIPELINE_ACCOUNT_LIMIT",
+      url: `https://pipeline.test/jobs/account-limit-${generateUID()}`,
+    });
+    expect(
+      await processFixtureJobAttempt(current, {
+        accountDailyRequestLimit: 2,
+      }),
+    ).toMatchObject({
+      attempts: 0,
+      error: "This account has reached its daily LLM classification limit.",
+      status: "RETRY",
+    });
+    expect(classifyFullMock).toHaveBeenCalledTimes(fullCallsBefore);
+
+    for (const suffix of ["one", "two"]) {
+      const response = createResponse();
+      await inboxHandler(
+        createJsonRequest({
+          authorization: "Bearer pipeline-brevo-secret",
+          body: createBrevoPayload(current, {
+            body: "THREAD_UPDATE interview moved",
+            headers: { "In-Reply-To": previousMessageId },
+            messageId: `<limited-${suffix}-${generateUID()}@pipeline.test>`,
+          }),
+        }),
+        response as never,
+      );
+      expect(
+        await processFixtureJobAttempt(current, {
+          accountDailyRequestLimit: 2,
+        }),
+      ).toMatchObject({
+        error: "This account has reached its daily LLM classification limit.",
+        status: "RETRY",
+      });
+    }
+
+    expect(classifyFactsMock).toHaveBeenCalledTimes(callsBefore);
+    expect(
+      (await getCardComments(existing.id)).filter((comment) =>
+        comment.includes("daily automated classification limit"),
+      ),
+    ).toHaveLength(1);
   });
 
   it("preserves populated fields unless the new source explicitly corrects them", async () => {
@@ -1486,13 +1573,17 @@ async function processFixtureJob(current: PipelineFixture) {
   expect(job).toMatchObject({ error: null, status: "COMPLETED" });
 }
 
-async function processFixtureJobAttempt(current: PipelineFixture) {
+async function processFixtureJobAttempt(
+  current: PipelineFixture,
+  options: { accountDailyRequestLimit?: number } = {},
+) {
   await db
     .update(shortlistJobQueue)
     .set({ runAfter: new Date(0) })
     .where(eq(shortlistJobQueue.boardId, current.boardId));
   await processShortlistJobQueueBatch(db, {
     apiKey: "pipeline-key",
+    accountDailyRequestLimit: options.accountDailyRequestLimit,
     limit: 25,
     model: "pipeline-model",
     retryLimit: 3,

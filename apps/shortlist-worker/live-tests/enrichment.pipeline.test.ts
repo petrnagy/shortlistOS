@@ -19,6 +19,7 @@ import {
   comments,
   lists,
   shortlistEnrichmentJobs,
+  shortlistProviderRequests,
   users,
   workspaceMembers,
   workspaces,
@@ -31,6 +32,7 @@ import {
   prepareEnrichmentQueue,
   processEnrichmentQueueBatch,
 } from "../src/workers/enrichment-worker";
+import { cleanupOpenWebNinjaCache } from "../src/workers/provider-cache-worker";
 
 const shouldRun = Boolean(process.env.POSTGRES_URL);
 const maybeDescribe = shouldRun ? describe : describe.skip;
@@ -39,6 +41,7 @@ interface Fixture {
   boardId: number;
   cardId: number;
   cardPublicId: string;
+  listId: number;
   userId: string;
   workspaceId: number;
 }
@@ -82,6 +85,7 @@ maybeDescribe("OpenWebNinja enrichment pipeline", () => {
         apiKey: "test-openwebninja-key",
         baseUrl: "https://openwebninja.pipeline.test",
         fetchImpl: fetchMock,
+        regionConfig: [],
       }),
     ).toMatchObject({ completed: 2, selected: 2 });
 
@@ -110,9 +114,9 @@ maybeDescribe("OpenWebNinja enrichment pipeline", () => {
       ranges: [
         {
           currency: "EUR",
-          label: "Prague, Czechia",
-          max: 120_000,
-          min: 80_000,
+          max: 10_000,
+          min: 6_667,
+          scope: "LOCAL",
         },
       ],
     });
@@ -179,6 +183,7 @@ maybeDescribe("OpenWebNinja enrichment pipeline", () => {
       await processEnrichmentQueueBatch(db, {
         apiKey: "key",
         fetchImpl: emptyFetch,
+        regionConfig: [],
       }),
     ).toMatchObject({ completed: 1 });
     const [cardAfterEmptyResponse] = await db
@@ -221,6 +226,7 @@ maybeDescribe("OpenWebNinja enrichment pipeline", () => {
       await processEnrichmentQueueBatch(db, {
         apiKey: "key",
         fetchImpl: failingFetch,
+        regionConfig: [],
       }),
     ).toMatchObject({ retried: 1 });
     await makeJobsRunnable(fixture.cardId);
@@ -228,6 +234,7 @@ maybeDescribe("OpenWebNinja enrichment pipeline", () => {
       await processEnrichmentQueueBatch(db, {
         apiKey: "key",
         fetchImpl: failingFetch,
+        regionConfig: [],
       }),
     ).toMatchObject({ retried: 1 });
     await makeJobsRunnable(fixture.cardId);
@@ -235,6 +242,7 @@ maybeDescribe("OpenWebNinja enrichment pipeline", () => {
       await processEnrichmentQueueBatch(db, {
         apiKey: "key",
         fetchImpl: failingFetch,
+        regionConfig: [],
       }),
     ).toMatchObject({ failed: 1 });
     expect(failingFetch).toHaveBeenCalledTimes(3);
@@ -247,6 +255,7 @@ maybeDescribe("OpenWebNinja enrichment pipeline", () => {
     await processEnrichmentQueueBatch(db, {
       apiKey: "key",
       fetchImpl: fetchMock,
+      regionConfig: [],
     });
 
     await db
@@ -288,6 +297,219 @@ maybeDescribe("OpenWebNinja enrichment pipeline", () => {
       type: "card.updated.shortlistField",
     });
     expect(await getFetchNeeded(fixture.cardId)).toBe(false);
+  });
+
+  it("samples configured regions, converts currencies, and reuses similar-title cache rows", async () => {
+    fixture = await createFixture({ companyEnabled: false });
+    await db
+      .update(cards)
+      .set({
+        shortlistSalaryCurrency: "CZK",
+        shortlistSalaryInterval: "PER_MONTH",
+        title: "Senior PHP Developer",
+      })
+      .where(eq(cards.id, fixture.cardId));
+    await prepareEnrichmentQueue(db);
+    const fetchMock = createRegionalFetchMock();
+    const regionConfig = [
+      { countries: ["Germany", "France"], key: "EU" as const },
+      { countries: ["United Kingdom"], key: "UK" as const },
+      {
+        countries: ["Germany", "United Kingdom"],
+        key: "GLOBAL" as const,
+      },
+    ];
+
+    await processEnrichmentQueueBatch(db, {
+      apiKey: "key",
+      fetchImpl: fetchMock,
+      fxFetchImpl: fetchMock,
+      regionConfig,
+    });
+
+    const [firstCard] = await db
+      .select({ salaryData: cards.shortlistSalaryData })
+      .from(cards)
+      .where(eq(cards.id, fixture.cardId));
+    expect(firstCard?.salaryData).toMatchObject({
+      currency: "CZK",
+      period: "PER_MONTH",
+      ranges: [
+        { scope: "LOCAL" },
+        { max: 62_500, min: 37_500, sampleCount: 2, scope: "EU" },
+        { max: 60_000, min: 30_000, sampleCount: 1, scope: "UK" },
+        { max: 55_000, min: 27_500, sampleCount: 2, scope: "GLOBAL" },
+      ],
+    });
+    const callsAfterFirstCard = fetchMock.mock.calls.length;
+    expect(callsAfterFirstCard).toBeGreaterThanOrEqual(4);
+
+    const secondCard = await cardRepo.create(db, {
+      createdBy: fixture.userId,
+      description: "Similar title cache test",
+      listId: fixture.listId,
+      position: "end",
+      shortlistJobLocation: "Prague, Czechia",
+      shortlistSalaryCurrency: "CZK",
+      shortlistSalaryInterval: "PER_MONTH",
+      title: "PHP Developer",
+      workspaceId: fixture.workspaceId,
+    });
+    await prepareEnrichmentQueue(db);
+    await processEnrichmentQueueBatch(db, {
+      apiKey: "key",
+      fetchImpl: fetchMock,
+      fxFetchImpl: fetchMock,
+      regionConfig,
+    });
+
+    expect(fetchMock).toHaveBeenCalledTimes(callsAfterFirstCard);
+    const duplicateRows = await db
+      .select({ status: shortlistProviderRequests.status })
+      .from(shortlistProviderRequests)
+      .where(eq(shortlistProviderRequests.cardId, secondCard.id));
+    expect(duplicateRows).toHaveLength(6);
+    expect(duplicateRows.every((row) => row.status === "DUPLICATE")).toBe(true);
+  });
+
+  it("stops external requests at the daily account limit and comments only once", async () => {
+    fixture = await createFixture({ companyEnabled: false });
+    const fixtureUserId = fixture.userId;
+    await prepareEnrichmentQueue(db);
+    const fetchMock = createRegionalFetchMock();
+    const options = {
+      apiKey: "key",
+      accountDailyRequestLimit: 2,
+      fetchImpl: fetchMock,
+      fxFetchImpl: fetchMock,
+      regionConfig: [{ countries: ["Germany", "France"], key: "EU" as const }],
+    };
+
+    await processEnrichmentQueueBatch(db, options);
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+    expect(
+      await db
+        .select({ accountId: shortlistProviderRequests.accountId })
+        .from(shortlistProviderRequests)
+        .where(eq(shortlistProviderRequests.cardId, fixture.cardId))
+        .then((rows) =>
+          rows
+            .filter((row) => row.accountId !== null)
+            .every((row) => row.accountId === fixtureUserId),
+        ),
+    ).toBe(true);
+    expect(
+      await db
+        .select({ comment: comments.comment })
+        .from(comments)
+        .where(eq(comments.cardId, fixture.cardId))
+        .then((rows) =>
+          rows.filter((row) =>
+            row.comment.includes("daily external data request limit"),
+          ),
+        ),
+    ).toHaveLength(1);
+
+    const secondCard = await cardRepo.create(db, {
+      createdBy: fixture.userId,
+      description: "Account quota test",
+      listId: fixture.listId,
+      position: "end",
+      shortlistJobLocation: "Brno, Czechia",
+      shortlistSalaryCurrency: "CZK",
+      shortlistSalaryInterval: "PER_MONTH",
+      title: "Distinct Account-Limited Role",
+      workspaceId: fixture.workspaceId,
+    });
+    await db
+      .update(cards)
+      .set({
+        shortlistDataFetchNeeded: true,
+        shortlistDataFetchRequestedBy: fixture.userId,
+      })
+      .where(eq(cards.id, secondCard.id));
+    await prepareEnrichmentQueue(db);
+    await processEnrichmentQueueBatch(db, options);
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+    expect(
+      await db
+        .select({ comment: comments.comment })
+        .from(comments)
+        .where(eq(comments.cardId, secondCard.id)),
+    ).toHaveLength(0);
+
+    await db
+      .update(shortlistEnrichmentJobs)
+      .set({ fetchedAt: new Date(0) })
+      .where(eq(shortlistEnrichmentJobs.cardId, fixture.cardId));
+    await cardActivityRepo.create(db, {
+      cardId: fixture.cardId,
+      createdBy: fixture.userId,
+      fromTitle: "Try enrichment after limit",
+      type: "card.updated.shortlistField",
+    });
+    await prepareEnrichmentQueue(db);
+    await processEnrichmentQueueBatch(db, options);
+
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+    expect(
+      await db
+        .select({ comment: comments.comment })
+        .from(comments)
+        .where(eq(comments.cardId, fixture.cardId))
+        .then((rows) =>
+          rows.filter((row) =>
+            row.comment.includes("daily external data request limit"),
+          ),
+        ),
+    ).toHaveLength(1);
+  });
+
+  it("deletes only expired OpenWebNinja cache rows", async () => {
+    fixture = await createFixture({ companyEnabled: false });
+    const now = new Date("2026-07-23T12:00:00.000Z");
+    await db.insert(shortlistProviderRequests).values([
+      {
+        accountId: fixture.userId,
+        endpoint: "OLD_SALARY",
+        provider: "OPENWEBNINJA",
+        requestedAt: new Date("2026-06-22T11:59:59.000Z"),
+        requestJson: {},
+        requestKey: randomUUID(),
+        status: "COMPLETED",
+      },
+      {
+        accountId: fixture.userId,
+        endpoint: "FRESH_SALARY",
+        provider: "OPENWEBNINJA",
+        requestedAt: new Date("2026-06-24T12:00:00.000Z"),
+        requestJson: {},
+        requestKey: randomUUID(),
+        status: "COMPLETED",
+      },
+      {
+        accountId: fixture.userId,
+        endpoint: "OLD_CLASSIFICATION",
+        provider: "LLM",
+        requestedAt: new Date("2025-01-01T00:00:00.000Z"),
+        requestJson: {},
+        requestKey: randomUUID(),
+        status: "COMPLETED",
+      },
+    ]);
+
+    await expect(
+      cleanupOpenWebNinjaCache(db, { now, retentionDays: 30 }),
+    ).resolves.toMatchObject({ deleted: 1, retentionDays: 30 });
+
+    const remaining = await db
+      .select({ endpoint: shortlistProviderRequests.endpoint })
+      .from(shortlistProviderRequests)
+      .where(eq(shortlistProviderRequests.accountId, fixture.userId));
+    expect(remaining.map((row) => row.endpoint).sort()).toEqual([
+      "FRESH_SALARY",
+      "OLD_CLASSIFICATION",
+    ]);
   });
 });
 
@@ -374,9 +596,81 @@ async function createFixture(
     boardId: board.id,
     cardId: card.id,
     cardPublicId: card.publicId,
+    listId: list.id,
     userId,
     workspaceId: workspace.id,
   };
+}
+
+function createRegionalFetchMock() {
+  return vi.fn((input: Parameters<typeof fetch>[0]) => {
+    const url = new URL(
+      input instanceof Request
+        ? input.url
+        : input instanceof URL
+          ? input.href
+          : input,
+    );
+    if (url.pathname.includes("/v2/rate/")) {
+      const [, , , base, quote] = url.pathname.split("/");
+      const rate = base === "EUR" ? 25 : base === "GBP" ? 30 : 1;
+      return Promise.resolve(
+        new Response(
+          JSON.stringify({ base, date: "2026-07-22", quote, rate }),
+          { status: 200 },
+        ),
+      );
+    }
+
+    const location = url.searchParams.get("location") ?? "Prague, Czechia";
+    const values: Record<
+      string,
+      { currency: string; max: number; median: number; min: number }
+    > = {
+      France: { currency: "EUR", max: 3_000, median: 2_500, min: 2_000 },
+      Germany: { currency: "EUR", max: 2_000, median: 1_500, min: 1_000 },
+      "Prague, Czechia": {
+        currency: "CZK",
+        max: 200,
+        median: 150,
+        min: 100,
+      },
+      "United Kingdom": {
+        currency: "GBP",
+        max: 2_000,
+        median: 1_500,
+        min: 1_000,
+      },
+    };
+    const salary = values[location] ?? {
+      currency: "CZK",
+      max: 200,
+      median: 150,
+      min: 100,
+    };
+    return Promise.resolve(
+      new Response(
+        JSON.stringify({
+          data: [
+            {
+              confidence: "CONFIDENT",
+              job_title: "Senior PHP Developer",
+              location,
+              max_salary: salary.max,
+              median_salary: salary.median,
+              min_salary: salary.min,
+              publisher_link: "https://example.test/salary",
+              publisher_name: "Employer data",
+              salary_currency: salary.currency,
+              salary_period: "MONTH",
+            },
+          ],
+          status: "OK",
+        }),
+        { status: 200 },
+      ),
+    );
+  });
 }
 
 function createProviderFetchMock() {

@@ -386,6 +386,34 @@
       "when": 1784672086501,
       "tag": "20260721221446_AddShortlistEnrichmentQueue",
       "breakpoints": true
+    },
+    {
+      "idx": 55,
+      "version": "7",
+      "when": 1784752455740,
+      "tag": "20260722203415_AddShortlistProviderRequestHistory",
+      "breakpoints": true
+    },
+    {
+      "idx": 56,
+      "version": "7",
+      "when": 1784753457710,
+      "tag": "20260722205057_CascadeProviderRequestsWithSourceJobs",
+      "breakpoints": true
+    },
+    {
+      "idx": 57,
+      "version": "7",
+      "when": 1784754778086,
+      "tag": "20260722211258_AddDailyAccountProviderLimits",
+      "breakpoints": true
+    },
+    {
+      "idx": 58,
+      "version": "7",
+      "when": 1784755287444,
+      "tag": "20260722212127_PreserveDailyProviderUsage",
+      "breakpoints": true
     }
   ]
 }

@@ -14,6 +14,7 @@
     "process-inbox": "dotenv -e ../../.env -- tsx src/jobs/process-inbox.ts",
     "prepare-enrichment": "dotenv -e ../../.env -- tsx src/jobs/prepare-enrichment.ts",
     "process-enrichment": "dotenv -e ../../.env -- tsx src/jobs/process-enrichment.ts",
+    "cleanup-openwebninja-cache": "dotenv -e ../../.env -- tsx src/jobs/cleanup-openwebninja-cache.ts",
     "start-enrichment": "dotenv -e ../../.env -- tsx src/jobs/watch-enrichment.ts",
     "start": "dotenv -e ../../.env -- tsx src/jobs/watch-sources.ts",
     "test:pipeline": "dotenv -e ../../.env -- vitest run live-tests",

@@ -28,6 +28,12 @@ try {
     const prepared = await prepareEnrichmentQueue(db);
     const processed = await processEnrichmentQueueBatch(db, {
       apiKey,
+      cacheReuseDays: getNumberEnv("OPENWEBNINJA_SALARY_CACHE_REUSE_DAYS", 30),
+      accountDailyRequestLimit: getNumberEnv(
+        "OPENWEBNINJA_ACCOUNT_DAILY_REQUEST_LIMIT",
+        250,
+      ),
+      frankfurterBaseUrl: process.env.FRANKFURTER_BASE_URL,
       retryLimit,
     });
     if (prepared.selected > 0 || processed.selected > 0) {

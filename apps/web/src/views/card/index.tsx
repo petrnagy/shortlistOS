@@ -90,7 +90,7 @@ const JOB_TYPE_OPTIONS = [
   "TEMPORARY",
   "FREELANCE",
 ] as const;
-const SALARY_REGIONS = ["EU", "US", "UK", "APAC", "Global"] as const;
+const SALARY_REGIONS = ["EU", "US", "UK", "APAC", "GLOBAL"] as const;
 const SALARY_INTERVAL_OPTIONS = [
   { value: "PER_YEAR", label: t`per year` },
   { value: "PER_MONTH", label: t`per month` },
@@ -263,14 +263,6 @@ const CURRENCY_OPTIONS = [
   { code: "ZMW", symbol: "ZK" },
   { code: "ZWG", symbol: "ZiG" },
 ] as const;
-const TEST_SALARY_COMPARISON_DATA = {
-  EU: { min: 55000, max: 92000, currency: "EUR" },
-  US: { min: 95000, max: 160000, currency: "USD" },
-  UK: { min: 62000, max: 105000, currency: "GBP" },
-  APAC: { min: 40000, max: 75000, currency: "USD" },
-  Global: { min: 50000, max: 90000, currency: "USD" },
-} as const;
-
 type JobLocationType = (typeof JOB_LOCATION_TYPE_OPTIONS)[number];
 type ContactRole = CardContactRole;
 type ContactMethodType = CardContactMethodType;
@@ -479,7 +471,7 @@ const formatCurrencyAmount = (
   const compact =
     Math.abs(amount) >= 1000 ? `${Math.round(amount / 1000)}k` : `${amount}`;
 
-  return `${symbol ? symbol : currency ? `${currency} ` : ""}${compact}`;
+  return `${symbol ?? (currency ? `${currency} ` : "")}${compact}`;
 };
 
 const formatSalaryRange = (range: SalaryRange) => {
@@ -524,14 +516,29 @@ const toSalaryRange = (value: unknown): SalaryRange | null => {
   return { min, max, currency };
 };
 
+const SALARY_REGION_LABELS: Record<SalaryRegion, string> = {
+  EU: t`EU average`,
+  US: t`US average`,
+  UK: t`UK average`,
+  APAC: t`APAC average`,
+  GLOBAL: t`Global average`,
+};
+
+const getSalaryRangeLabel = (value: unknown) => {
+  if (!isRecord(value) || typeof value.scope !== "string") {
+    return t`Similar offers in the area`;
+  }
+  if (value.scope === "LOCAL") return t`Similar offers in the area`;
+  return SALARY_REGIONS.includes(value.scope as SalaryRegion)
+    ? SALARY_REGION_LABELS[value.scope as SalaryRegion]
+    : t`Market average`;
+};
+
 const getSalaryComparisonRanges = (salaryData: unknown) => {
   if (isRecord(salaryData) && Array.isArray(salaryData.ranges)) {
     return salaryData.ranges
       .map((value) => ({
-        label:
-          isRecord(value) && typeof value.label === "string"
-            ? value.label
-            : t`Market`,
+        label: getSalaryRangeLabel(value),
         range: toSalaryRange(value),
       }))
       .filter((item): item is { label: string; range: SalaryRange } =>
@@ -547,14 +554,16 @@ const getSalaryComparisonRanges = (salaryData: unknown) => {
 
   return SALARY_REGIONS.map((region) => {
     const value = isRecord(source)
-      ? (source[region] ?? source[region.toLowerCase()])
+      ? (source[region] ??
+        source[region.toLowerCase()] ??
+        (region === "GLOBAL" ? source.Global : undefined))
       : undefined;
 
     return {
-      label: region,
+      label: SALARY_REGION_LABELS[region],
       range: toSalaryRange(value),
     };
-  }).filter((item): item is { label: SalaryRegion; range: SalaryRange } =>
+  }).filter((item): item is { label: string; range: SalaryRange } =>
     Boolean(item.range),
   );
 };
@@ -601,18 +610,8 @@ function SalaryComparisonBars({
     );
   }
 
-  const summary =
-    isRecord(salaryData) && typeof salaryData.summary === "string"
-      ? salaryData.summary
-      : null;
-
   return (
-    <div className="space-y-2">
-      {summary && (
-        <p className="pb-1 text-xs leading-5 text-light-900 dark:text-dark-900">
-          {summary}
-        </p>
-      )}
+    <div className="space-y-4">
       {rows.map(({ label, range, displayRange }) => {
         const rangeMin = range.min ?? range.max ?? minValue;
         const rangeMax = range.max ?? range.min ?? rangeMin;
@@ -620,27 +619,22 @@ function SalaryComparisonBars({
         const width = Math.max(3, ((rangeMax - rangeMin) / span) * 100);
 
         return (
-          <div
-            key={label}
-            className="grid grid-cols-[44px_1fr] items-center gap-2"
-          >
-            <span className="text-xs font-light text-light-900 dark:text-dark-900">
+          <div key={label} className="space-y-1">
+            <span className="block text-xs font-medium text-light-900 dark:text-dark-900">
               {label}
             </span>
-            <div>
-              <div className="relative h-3 rounded-full bg-light-200 dark:bg-dark-200">
-                <div
-                  className="absolute top-0 h-3 rounded-full bg-light-900 dark:bg-dark-900"
-                  style={{
-                    left: `${Math.min(100, Math.max(0, left))}%`,
-                    width: `${Math.min(100, width)}%`,
-                  }}
-                />
-              </div>
-              <p className="mt-1 text-xs text-light-900 dark:text-dark-900">
-                {formatSalaryRange(displayRange)}
-              </p>
+            <div className="relative h-3 rounded-full bg-light-200 dark:bg-dark-200">
+              <div
+                className="absolute top-0 h-3 rounded-full bg-light-900 dark:bg-dark-900"
+                style={{
+                  left: `${Math.min(100, Math.max(0, left))}%`,
+                  width: `${Math.min(100, width)}%`,
+                }}
+              />
             </div>
+            <p className="text-xs text-light-900 dark:text-dark-900">
+              {formatSalaryRange(displayRange)}
+            </p>
           </div>
         );
       })}
@@ -1878,9 +1872,7 @@ export function CardRightPanel({ isTemplate }: { isTemplate?: boolean }) {
               <div className="pt-3">
                 <SalaryComparisonBars
                   offer={salaryOffer}
-                  salaryData={
-                    card?.shortlistSalaryData ?? TEST_SALARY_COMPARISON_DATA
-                  }
+                  salaryData={card?.shortlistSalaryData}
                 />
               </div>
             )}
