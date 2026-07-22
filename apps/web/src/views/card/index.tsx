@@ -525,6 +525,20 @@ const toSalaryRange = (value: unknown): SalaryRange | null => {
 };
 
 const getSalaryComparisonRanges = (salaryData: unknown) => {
+  if (isRecord(salaryData) && Array.isArray(salaryData.ranges)) {
+    return salaryData.ranges
+      .map((value) => ({
+        label:
+          isRecord(value) && typeof value.label === "string"
+            ? value.label
+            : t`Market`,
+        range: toSalaryRange(value),
+      }))
+      .filter((item): item is { label: string; range: SalaryRange } =>
+        Boolean(item.range),
+      );
+  }
+
   const source = isRecord(salaryData)
     ? isRecord(salaryData.comparedRanges)
       ? salaryData.comparedRanges
@@ -537,10 +551,10 @@ const getSalaryComparisonRanges = (salaryData: unknown) => {
       : undefined;
 
     return {
-      region,
+      label: region,
       range: toSalaryRange(value),
     };
-  }).filter((item): item is { region: SalaryRegion; range: SalaryRange } =>
+  }).filter((item): item is { label: SalaryRegion; range: SalaryRange } =>
     Boolean(item.range),
   );
 };
@@ -565,7 +579,7 @@ function SalaryComparisonBars({
         ]
       : []),
     ...comparisonRanges.map((item) => ({
-      label: item.region,
+      label: item.label,
       range: item.range,
       displayRange: item.range,
     })),
@@ -587,8 +601,18 @@ function SalaryComparisonBars({
     );
   }
 
+  const summary =
+    isRecord(salaryData) && typeof salaryData.summary === "string"
+      ? salaryData.summary
+      : null;
+
   return (
     <div className="space-y-2">
+      {summary && (
+        <p className="pb-1 text-xs leading-5 text-light-900 dark:text-dark-900">
+          {summary}
+        </p>
+      )}
       {rows.map(({ label, range, displayRange }) => {
         const rangeMin = range.min ?? range.max ?? minValue;
         const rangeMax = range.max ?? range.min ?? rangeMin;

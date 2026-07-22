@@ -274,6 +274,56 @@ export const shortlistJobQueueRelations = relations(
   }),
 );
 
+export const shortlistEnrichmentJobs = pgTable(
+  "shortlist_enrichment_job",
+  {
+    id: uuid("id")
+      .notNull()
+      .primaryKey()
+      .default(sql`uuid_generate_v4()`),
+    cardId: bigint("cardId", { mode: "number" })
+      .notNull()
+      .references(() => cards.id, { onDelete: "cascade" }),
+    enrichmentType: varchar("enrichmentType", { length: 20 }).notNull(),
+    status: varchar("status", { length: 20 }).notNull(),
+    requestKey: varchar("requestKey", { length: 64 }).notNull(),
+    requestJson: jsonb("requestJson").notNull(),
+    responseJson: jsonb("responseJson"),
+    summary: text("summary"),
+    attempts: smallint("attempts").notNull().default(0),
+    maxAttempts: smallint("maxAttempts").notNull().default(3),
+    runAfter: timestamp("runAfter").notNull().defaultNow(),
+    lockedAt: timestamp("lockedAt"),
+    lockedBy: varchar("lockedBy", { length: 100 }),
+    fetchedAt: timestamp("fetchedAt"),
+    error: text("error"),
+    createdAt: timestamp("createdAt").notNull().defaultNow(),
+    updatedAt: timestamp("updatedAt"),
+  },
+  (table) => [
+    uniqueIndex("shortlist_enrichment_job_card_type_idx").on(
+      table.cardId,
+      table.enrichmentType,
+    ),
+    index("shortlist_enrichment_job_status_run_after_idx").on(
+      table.status,
+      table.runAfter,
+    ),
+    index("shortlist_enrichment_job_request_key_idx").on(table.requestKey),
+  ],
+).enableRLS();
+
+export const shortlistEnrichmentJobsRelations = relations(
+  shortlistEnrichmentJobs,
+  ({ one }) => ({
+    card: one(cards, {
+      fields: [shortlistEnrichmentJobs.cardId],
+      references: [cards.id],
+      relationName: "shortlistEnrichmentJobsCard",
+    }),
+  }),
+);
+
 export const shortlistSourceCards = pgTable(
   "shortlist_source_card",
   {

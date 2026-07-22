@@ -12,6 +12,8 @@ import {
 } from "@kan/db/schema";
 import { generateUID } from "@kan/shared/utils";
 
+import { markCardsForEnrichment } from "./shortlistEnrichment.repo";
+
 export const getCount = async (db: dbClient) => {
   const result = await db.select({ count: count() }).from(cardActivities);
 
@@ -70,6 +72,11 @@ export const create = async (
     })
     .returning({ id: cardActivities.id });
 
+  await markCardsForEnrichment(db, {
+    cardIds: [activityInput.cardId],
+    createdBy: activityInput.createdBy,
+  });
+
   return result;
 };
 
@@ -104,6 +111,19 @@ export const bulkCreate = async (
     .insert(cardActivities)
     .values(activitiesWithPublicIds)
     .returning({ id: cardActivities.id });
+
+  const activitiesByUser = new Map<string, typeof activityInputs>();
+  for (const activity of activityInputs) {
+    const activities = activitiesByUser.get(activity.createdBy) ?? [];
+    activities.push(activity);
+    activitiesByUser.set(activity.createdBy, activities);
+  }
+  for (const [createdBy, activities] of activitiesByUser) {
+    await markCardsForEnrichment(db, {
+      cardIds: activities.map((activity) => activity.cardId),
+      createdBy,
+    });
+  }
 
   return results;
 };
@@ -273,7 +293,9 @@ export const getPaginatedUserActivities = async (
     .limit(limit + 1);
 
   const hasMore = activityRows.length > limit;
-  const activityIds = activityRows.slice(0, limit).map((activity) => activity.id);
+  const activityIds = activityRows
+    .slice(0, limit)
+    .map((activity) => activity.id);
 
   if (activityIds.length === 0) {
     return {

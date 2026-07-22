@@ -379,6 +379,13 @@
       "when": 1784376000000,
       "tag": "20260718120000_AddShortlistSourceCardLinks",
       "breakpoints": true
+    },
+    {
+      "idx": 54,
+      "version": "7",
+      "when": 1784672086501,
+      "tag": "20260721221446_AddShortlistEnrichmentQueue",
+      "breakpoints": true
     }
   ]
 }

@@ -12,6 +12,9 @@
     "process-sources": "dotenv -e ../../.env -- tsx src/jobs/process-sources.ts",
     "process-clip": "dotenv -e ../../.env -- tsx src/jobs/process-clip.ts",
     "process-inbox": "dotenv -e ../../.env -- tsx src/jobs/process-inbox.ts",
+    "prepare-enrichment": "dotenv -e ../../.env -- tsx src/jobs/prepare-enrichment.ts",
+    "process-enrichment": "dotenv -e ../../.env -- tsx src/jobs/process-enrichment.ts",
+    "start-enrichment": "dotenv -e ../../.env -- tsx src/jobs/watch-enrichment.ts",
     "start": "dotenv -e ../../.env -- tsx src/jobs/watch-sources.ts",
     "test:pipeline": "dotenv -e ../../.env -- vitest run live-tests",
     "typecheck": "tsc --noEmit --emitDeclarationOnly false"

@@ -21,7 +21,7 @@ import { checklists } from "./checklists";
 import { imports } from "./imports";
 import { labels } from "./labels";
 import { lists } from "./lists";
-import { shortlistActivityLogs } from "./shortlist";
+import { shortlistActivityLogs, shortlistEnrichmentJobs } from "./shortlist";
 import { users } from "./users";
 import { workspaceMembers } from "./workspaces";
 
@@ -87,6 +87,9 @@ export const cards = pgTable(
     dueDate: timestamp("dueDate"),
     contactsJson: json("contactsJson"),
     manualUpdatedOnly: boolean("manualUpdatedOnly").notNull().default(false),
+    shortlistDataFetchNeeded: boolean("shortlist_dataFetchNeeded")
+      .notNull()
+      .default(false),
     shortlistCompanyName: varchar("shortlist_companyName", { length: 255 }),
     shortlistJobPostingUrl: text("shortlist_jobPostingUrl"),
     shortlistSalaryMin: integer("shortlist_salaryMin"),
@@ -159,6 +162,7 @@ export const cardsRelations = relations(cards, ({ one, many }) => ({
   checklists: many(checklists),
   attachments: many(cardAttachments),
   shortlistActivityLogs: many(shortlistActivityLogs),
+  shortlistEnrichmentJobs: many(shortlistEnrichmentJobs),
 }));
 
 export const cardActivities = pgTable("card_activity", {

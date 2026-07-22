@@ -26,6 +26,8 @@ import {
 } from "@kan/db/schema";
 import { generateUID } from "@kan/shared/utils";
 
+import { markCardsForEnrichment } from "./shortlistEnrichment.repo";
+
 export const getCount = async (db: dbClient) => {
   const result = await db
     .select({ count: count() })
@@ -157,6 +159,11 @@ export const create = async (
       createdBy: cardInput.createdBy,
     });
 
+    await markCardsForEnrichment(tx, {
+      cardIds: [result[0].id],
+      createdBy: cardInput.createdBy,
+    });
+
     const countExpr = sql<number>`COUNT(*)`.mapWith(Number);
 
     const duplicateIndices = await tx
@@ -246,7 +253,9 @@ export const update = async (
     shortlistSalaryMax?: number | null;
     shortlistSalaryCurrency?: string | null;
     shortlistSalaryInterval?: string;
+    shortlistSalaryData?: unknown;
     shortlistCompanyRatingAggregated?: string | null;
+    shortlistCompanySentimentBlob?: unknown;
     shortlistCompanySentimentSummary?: string | null;
     shortlistCardSource?: string;
     shortlistJobLocation?: string | null;
@@ -265,7 +274,9 @@ export const update = async (
       description: cardInput.description,
       dueDate: cardInput.dueDate !== undefined ? cardInput.dueDate : undefined,
       contactsJson:
-        cardInput.contactsJson !== undefined ? cardInput.contactsJson : undefined,
+        cardInput.contactsJson !== undefined
+          ? cardInput.contactsJson
+          : undefined,
       manualUpdatedOnly: cardInput.manualUpdatedOnly,
       shortlistCompanyName: cardInput.shortlistCompanyName,
       shortlistJobPostingUrl: cardInput.shortlistJobPostingUrl,
@@ -273,8 +284,10 @@ export const update = async (
       shortlistSalaryMax: cardInput.shortlistSalaryMax,
       shortlistSalaryCurrency: cardInput.shortlistSalaryCurrency,
       shortlistSalaryInterval: cardInput.shortlistSalaryInterval,
+      shortlistSalaryData: cardInput.shortlistSalaryData,
       shortlistCompanyRatingAggregated:
         cardInput.shortlistCompanyRatingAggregated,
+      shortlistCompanySentimentBlob: cardInput.shortlistCompanySentimentBlob,
       shortlistCompanySentimentSummary:
         cardInput.shortlistCompanySentimentSummary,
       shortlistCardSource: cardInput.shortlistCardSource,
