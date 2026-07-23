@@ -14,6 +14,7 @@ import {
   HiOutlineChatBubbleLeftRight,
   HiOutlineDocumentText,
   HiOutlineEnvelope,
+  HiOutlineInformationCircle,
   HiOutlineLink,
   HiOutlineLockClosed,
   HiOutlineMapPin,
@@ -57,6 +58,7 @@ import { usePopup } from "~/providers/popup";
 import { useWorkspace } from "~/providers/workspace";
 import { api } from "~/utils/api";
 import { invalidateCard } from "~/utils/cardInvalidation";
+import { formatCompactCurrencyRange } from "~/utils/currency";
 import { formatMemberDisplayName, getAvatarUrl } from "~/utils/helpers";
 import { isSuperAdmin as isSuperAdminHelper } from "~/utils/is-super-admin";
 import { DeleteLabelConfirmation } from "../../components/DeleteLabelConfirmation";
@@ -90,7 +92,7 @@ const JOB_TYPE_OPTIONS = [
   "TEMPORARY",
   "FREELANCE",
 ] as const;
-const SALARY_REGIONS = ["EU", "US", "UK", "APAC", "GLOBAL"] as const;
+const SALARY_REGIONS = ["EU", "UK", "US", "APAC", "GLOBAL"] as const;
 const SALARY_INTERVAL_OPTIONS = [
   { value: "PER_YEAR", label: t`per year` },
   { value: "PER_MONTH", label: t`per month` },
@@ -311,11 +313,18 @@ interface SalaryRange {
   currency: string | null;
 }
 
-interface SalaryComparisonRow {
+interface SalaryComparisonItem {
   label: string;
   range: SalaryRange;
-  displayRange: SalaryRange;
+  scope: "LOCAL" | SalaryRegion;
 }
+
+type SalaryBenchmarkStatus =
+  | "ABOVE"
+  | "BELOW"
+  | "OVERLAPS"
+  | "SLIGHTLY_ABOVE"
+  | "SLIGHTLY_BELOW";
 
 interface ShortlistUpdateFields {
   shortlistCompanyName?: string | null;
@@ -459,47 +468,8 @@ const commitOnEnter = (
   commit();
 };
 
-const formatCurrencyAmount = (
-  amount: number | null,
-  currency: string | null,
-) => {
-  if (amount === null) return "";
-
-  const symbol = CURRENCY_OPTIONS.find(
-    (option) => option.code === currency,
-  )?.symbol;
-  const compact =
-    Math.abs(amount) >= 1000 ? `${Math.round(amount / 1000)}k` : `${amount}`;
-
-  return `${symbol ?? (currency ? `${currency} ` : "")}${compact}`;
-};
-
-const formatSalaryRange = (range: SalaryRange) => {
-  if (range.min === null && range.max === null) return "";
-  if (range.min !== null && range.max !== null && range.min !== range.max) {
-    return `${formatCurrencyAmount(range.min, range.currency)} – ${formatCurrencyAmount(range.max, range.currency)}`;
-  }
-
-  return formatCurrencyAmount(range.min ?? range.max, range.currency);
-};
-
 const formatDisplayUrl = (url: string) =>
   url.replace(/^https?:\/\//i, "").replace(/^www\./i, "");
-
-const getOfferComparisonRange = (offer: SalaryRange) => {
-  const value = offer.min ?? offer.max;
-  if (value === null) return null;
-
-  if (offer.min !== null && offer.max !== null && offer.min !== offer.max) {
-    return offer;
-  }
-
-  return {
-    min: Math.round(value * 0.9),
-    max: Math.round(value * 1.1),
-    currency: offer.currency,
-  };
-};
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === "object" && value !== null && !Array.isArray(value);
@@ -526,23 +496,35 @@ const SALARY_REGION_LABELS: Record<SalaryRegion, string> = {
 
 const getSalaryRangeLabel = (value: unknown) => {
   if (!isRecord(value) || typeof value.scope !== "string") {
-    return t`Similar offers in the area`;
+    return t`Offers in the area`;
   }
-  if (value.scope === "LOCAL") return t`Similar offers in the area`;
+  if (value.scope === "LOCAL") return t`Offers in the area`;
   return SALARY_REGIONS.includes(value.scope as SalaryRegion)
     ? SALARY_REGION_LABELS[value.scope as SalaryRegion]
     : t`Market average`;
 };
 
-const getSalaryComparisonRanges = (salaryData: unknown) => {
+const getSalaryRangeScope = (value: unknown): "LOCAL" | SalaryRegion | null => {
+  if (!isRecord(value) || typeof value.scope !== "string") return null;
+  if (value.scope === "LOCAL") return "LOCAL";
+  return SALARY_REGIONS.includes(value.scope as SalaryRegion)
+    ? (value.scope as SalaryRegion)
+    : null;
+};
+
+const getSalaryComparisonRanges = (
+  salaryData: unknown,
+): SalaryComparisonItem[] => {
   if (isRecord(salaryData) && Array.isArray(salaryData.ranges)) {
     return salaryData.ranges
       .map((value) => ({
         label: getSalaryRangeLabel(value),
         range: toSalaryRange(value),
+        scope: getSalaryRangeScope(value),
       }))
-      .filter((item): item is { label: string; range: SalaryRange } =>
-        Boolean(item.range),
+      .filter(
+        (item): item is SalaryComparisonItem =>
+          item.range !== null && item.scope !== null,
       );
   }
 
@@ -552,92 +534,255 @@ const getSalaryComparisonRanges = (salaryData: unknown) => {
       : salaryData
     : {};
 
-  return SALARY_REGIONS.map((region) => {
+  return SALARY_REGIONS.flatMap((region): SalaryComparisonItem[] => {
     const value = isRecord(source)
       ? (source[region] ??
         source[region.toLowerCase()] ??
         (region === "GLOBAL" ? source.Global : undefined))
       : undefined;
+    const range = toSalaryRange(value);
 
-    return {
-      label: SALARY_REGION_LABELS[region],
-      range: toSalaryRange(value),
-    };
-  }).filter((item): item is { label: string; range: SalaryRange } =>
-    Boolean(item.range),
-  );
+    return range
+      ? [{ label: SALARY_REGION_LABELS[region], range, scope: region }]
+      : [];
+  });
 };
 
-function SalaryComparisonBars({
+const getSalaryBounds = (range: SalaryRange) => {
+  const value = range.min ?? range.max;
+  if (value === null) return null;
+  return {
+    max: range.max ?? value,
+    min: range.min ?? value,
+  };
+};
+
+const compareSalaryRanges = (
+  offer: SalaryRange,
+  market: SalaryRange,
+): { gap: number | null; status: SalaryBenchmarkStatus } => {
+  const offerBounds = getSalaryBounds(offer);
+  const marketBounds = getSalaryBounds(market);
+  if (!offerBounds || !marketBounds) {
+    return { gap: null, status: "OVERLAPS" };
+  }
+
+  const offerMidpoint = (offerBounds.min + offerBounds.max) / 2;
+  const slightGapThreshold = Math.max(1, Math.abs(offerMidpoint) * 0.1);
+  if (offerBounds.max < marketBounds.min) {
+    const gap = marketBounds.min - offerBounds.max;
+    return {
+      gap,
+      status: gap <= slightGapThreshold ? "SLIGHTLY_BELOW" : "BELOW",
+    };
+  }
+  if (offerBounds.min > marketBounds.max) {
+    const gap = offerBounds.min - marketBounds.max;
+    return {
+      gap,
+      status: gap <= slightGapThreshold ? "SLIGHTLY_ABOVE" : "ABOVE",
+    };
+  }
+  return { gap: null, status: "OVERLAPS" };
+};
+
+const getSalaryStatusLabel = (status: SalaryBenchmarkStatus) => {
+  switch (status) {
+    case "ABOVE":
+      return t`Above range`;
+    case "BELOW":
+      return t`Below range`;
+    case "SLIGHTLY_ABOVE":
+      return t`Slightly above`;
+    case "SLIGHTLY_BELOW":
+      return t`Slightly below`;
+    case "OVERLAPS":
+      return t`Overlaps`;
+  }
+};
+
+const getSalaryStatusClass = (status: SalaryBenchmarkStatus) => {
+  if (status === "ABOVE" || status === "SLIGHTLY_ABOVE") {
+    return "border-green-500/30 bg-green-50 text-green-700 dark:border-green-400/30 dark:bg-green-950/30 dark:text-green-300";
+  }
+  if (status === "OVERLAPS") {
+    return "border-blue-500/30 bg-blue-50 text-blue-700 dark:border-blue-400/30 dark:bg-blue-950/30 dark:text-blue-300";
+  }
+  return "border-amber-500/40 bg-amber-50 text-amber-700 dark:border-amber-400/30 dark:bg-amber-950/30 dark:text-amber-300";
+};
+
+const getSalaryIntervalSuffix = (interval: SalaryInterval) => {
+  switch (interval) {
+    case "PER_YEAR":
+      return t`/yr`;
+    case "PER_MONTH":
+      return t`/mo`;
+    case "PER_WEEK":
+      return t`/wk`;
+    case "PER_DAY":
+      return t`/d`;
+    case "PER_HOUR":
+      return t`/hr`;
+  }
+};
+
+function SalaryRangeValue({ range }: { range: SalaryRange }) {
+  const formatted = formatCompactCurrencyRange(range);
+  if (!formatted) return null;
+
+  const currencySymbol = formatted.symbol ? (
+    <span className="font-normal text-light-700 dark:text-dark-700">
+      {formatted.symbol}
+    </span>
+  ) : null;
+  const spacingClass = formatted.usesSymbolSpacing ? "gap-1" : "gap-0";
+
+  return (
+    <span className={`inline-flex items-baseline ${spacingClass}`}>
+      {formatted.symbolPosition === "prefix" && currencySymbol}
+      <span>{formatted.amount}</span>
+      {formatted.symbolPosition === "suffix" && currencySymbol}
+    </span>
+  );
+}
+
+function SalaryBenchmarkRow({
+  item,
+  offer,
+}: {
+  item: SalaryComparisonItem;
+  offer: SalaryRange;
+}) {
+  const comparison = compareSalaryRanges(offer, item.range);
+  return (
+    <div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3 px-4 py-2.5">
+      <div className="min-w-0">
+        <p className="text-xs font-medium leading-4 text-light-1000 dark:text-dark-1000">
+          {item.label}
+        </p>
+        <span
+          className={`mt-1 inline-flex rounded-md border px-2 py-0.5 text-[11px] font-medium leading-4 ${getSalaryStatusClass(comparison.status)}`}
+        >
+          {getSalaryStatusLabel(comparison.status)}
+        </span>
+      </div>
+      <p className="whitespace-nowrap text-right text-xs font-medium leading-4 text-light-1000 dark:text-dark-1000">
+        <SalaryRangeValue range={item.range} />
+      </p>
+    </div>
+  );
+}
+
+function SalaryBenchmark({
+  interval,
   offer,
   salaryData,
 }: {
+  interval: SalaryInterval;
   offer: SalaryRange;
   salaryData: unknown;
 }) {
   const comparisonRanges = getSalaryComparisonRanges(salaryData);
-  const offerComparisonRange = getOfferComparisonRange(offer);
-  const rows: SalaryComparisonRow[] = [
-    ...(offerComparisonRange
-      ? [
-          {
-            label: t`Offer`,
-            range: offerComparisonRange,
-            displayRange: offer,
-          },
-        ]
-      : []),
-    ...comparisonRanges.map((item) => ({
-      label: item.label,
-      range: item.range,
-      displayRange: item.range,
-    })),
-  ];
-  const allRanges = rows.map((item) => item.range);
+  const localMarket = comparisonRanges.find((item) => item.scope === "LOCAL");
+  const otherMarkets = SALARY_REGIONS.map((region) =>
+    comparisonRanges.find((item) => item.scope === region),
+  ).filter((item): item is SalaryComparisonItem => item !== undefined);
+  const hasOffer = getSalaryBounds(offer) !== null;
 
-  const values = allRanges.flatMap((range) =>
-    [range.min, range.max].filter((value): value is number => value !== null),
-  );
-  const minValue = values.length ? Math.min(...values) : 0;
-  const maxValue = values.length ? Math.max(...values) : 0;
-  const span = Math.max(1, maxValue - minValue);
-
-  if (rows.length === 0) {
+  if (!hasOffer) {
     return (
       <p className="text-sm text-light-700 dark:text-dark-800">
-        {t`No salary comparison data yet.`}
+        {t`Add your offer to compare it with market benchmarks.`}
       </p>
     );
   }
 
   return (
-    <div className="space-y-4">
-      {rows.map(({ label, range, displayRange }) => {
-        const rangeMin = range.min ?? range.max ?? minValue;
-        const rangeMax = range.max ?? range.min ?? rangeMin;
-        const left = ((rangeMin - minValue) / span) * 100;
-        const width = Math.max(3, ((rangeMax - rangeMin) / span) * 100);
-
-        return (
-          <div key={label} className="space-y-1">
-            <span className="block text-xs font-medium text-light-900 dark:text-dark-900">
-              {label}
+    <div className="space-y-5">
+      <div className="flex items-center gap-3 rounded-xl border border-violet-200 bg-violet-50/70 px-4 py-3.5 dark:border-violet-800/60 dark:bg-violet-950/20">
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-violet-200 bg-violet-100 text-violet-700 dark:border-violet-700 dark:bg-violet-900/50 dark:text-violet-300">
+          <HiOutlineStar className="h-5 w-5" />
+        </div>
+        <div>
+          <p className="text-xs font-semibold text-violet-700 dark:text-violet-300">
+            {t`Your offer`}
+          </p>
+          <p className="mt-0.5 flex flex-wrap items-baseline gap-x-1.5 text-base font-bold tracking-tight text-light-1000 dark:text-dark-1000">
+            <span className="whitespace-nowrap">
+              <SalaryRangeValue range={offer} />
             </span>
-            <div className="relative h-3 rounded-full bg-light-200 dark:bg-dark-200">
-              <div
-                className="absolute top-0 h-3 rounded-full bg-light-900 dark:bg-dark-900"
-                style={{
-                  left: `${Math.min(100, Math.max(0, left))}%`,
-                  width: `${Math.min(100, width)}%`,
-                }}
-              />
+            <span className="whitespace-nowrap text-xs font-normal text-light-700 dark:text-dark-700">
+              {getSalaryIntervalSuffix(interval)}
+            </span>
+          </p>
+        </div>
+      </div>
+
+      {localMarket && (
+        <div>
+          <p className="mb-2 text-xs font-medium text-light-900 dark:text-dark-900">
+            {t`Local market`}
+          </p>
+          <div className="rounded-xl border border-amber-300/70 bg-amber-50/40 p-4 dark:border-amber-700/50 dark:bg-amber-950/10">
+            <div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3">
+              <p className="text-xs font-semibold leading-4 text-light-1000 dark:text-dark-1000">
+                {localMarket.label}
+              </p>
+              <p className="whitespace-nowrap text-right text-xs font-semibold leading-4 text-light-1000 dark:text-dark-1000">
+                <SalaryRangeValue range={localMarket.range} />
+              </p>
             </div>
-            <p className="text-xs text-light-900 dark:text-dark-900">
-              {formatSalaryRange(displayRange)}
-            </p>
+            {(() => {
+              const comparison = compareSalaryRanges(offer, localMarket.range);
+              return (
+                <div className="mt-2 flex items-start justify-between gap-2">
+                  <span
+                    className={`inline-flex rounded-md border px-2 py-0.5 text-[11px] font-medium leading-4 ${getSalaryStatusClass(comparison.status)}`}
+                  >
+                    {getSalaryStatusLabel(comparison.status)}
+                  </span>
+                  {comparison.gap !== null && (
+                    <span className="ml-auto text-right text-[11px] leading-4 text-light-700 dark:text-dark-700">
+                      {t`Gap: at least`}{" "}
+                      <SalaryRangeValue
+                        range={{
+                          currency: offer.currency,
+                          max: null,
+                          min: comparison.gap,
+                        }}
+                      />
+                    </span>
+                  )}
+                </div>
+              );
+            })()}
           </div>
-        );
-      })}
+        </div>
+      )}
+
+      {otherMarkets.length > 0 && (
+        <div>
+          <p className="mb-2 text-xs font-medium text-light-900 dark:text-dark-900">
+            {t`Other markets`}
+          </p>
+          <div className="divide-y divide-light-300 overflow-hidden rounded-xl border border-light-300 dark:divide-dark-300 dark:border-dark-300">
+            {otherMarkets.map((item) => (
+              <SalaryBenchmarkRow key={item.scope} item={item} offer={offer} />
+            ))}
+          </div>
+        </div>
+      )}
+
+      {comparisonRanges.length === 0 && (
+        <p className="text-sm text-light-700 dark:text-dark-800">
+          {t`No salary comparison data yet.`}
+        </p>
+      )}
+
+      <div className="flex items-center gap-2 border-t border-light-300 pt-4 text-xs text-light-700 dark:border-dark-300 dark:text-dark-700">
+        <HiOutlineInformationCircle className="h-4 w-4 shrink-0" />
+        <span>{t`Benchmarks updated monthly. Source: shortlistOS data.`}</span>
+      </div>
     </div>
   );
 }
@@ -1390,6 +1535,11 @@ export function CardRightPanel({ isTemplate }: { isTemplate?: boolean }) {
     max: card?.shortlistSalaryMax ?? null,
     currency: card?.shortlistSalaryCurrency ?? null,
   };
+  const salaryInterval = SALARY_INTERVAL_OPTIONS.some(
+    (option) => option.value === card?.shortlistSalaryInterval,
+  )
+    ? (card?.shortlistSalaryInterval as SalaryInterval)
+    : "PER_MONTH";
   const salaryIntervalLabel =
     SALARY_INTERVAL_OPTIONS.find(
       (option) => option.value === card?.shortlistSalaryInterval,
@@ -1861,7 +2011,10 @@ export function CardRightPanel({ isTemplate }: { isTemplate?: boolean }) {
               onClick={() => setIsSalaryComparisonOpen((current) => !current)}
               className="flex w-full items-center justify-between rounded-[5px] py-1 text-left text-xs font-medium text-light-900 hover:text-light-1000 dark:text-dark-900 dark:hover:text-dark-1000"
             >
-              <span>{t`Compare salary`}</span>
+              <span className="flex items-center gap-1.5">
+                {t`Salary benchmark`}
+                <HiOutlineInformationCircle className="h-3.5 w-3.5 text-light-700 dark:text-dark-700" />
+              </span>
               <IoChevronForwardSharp
                 className={`h-3 w-3 transition-transform ${
                   isSalaryComparisonOpen ? "rotate-90" : ""
@@ -1870,7 +2023,8 @@ export function CardRightPanel({ isTemplate }: { isTemplate?: boolean }) {
             </button>
             {isSalaryComparisonOpen && (
               <div className="pt-3">
-                <SalaryComparisonBars
+                <SalaryBenchmark
+                  interval={salaryInterval}
                   offer={salaryOffer}
                   salaryData={card?.shortlistSalaryData}
                 />
