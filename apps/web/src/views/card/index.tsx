@@ -631,9 +631,7 @@ function SalaryRangeValue({ range }: { range: SalaryRange }) {
   if (!formatted) return null;
 
   const currencySymbol = formatted.symbol ? (
-    <span className="font-normal text-light-700 dark:text-dark-700">
-      {formatted.symbol}
-    </span>
+    <span className="font-normal">{formatted.symbol}</span>
   ) : null;
   const spacingClass = formatted.usesSymbolSpacing ? "gap-1" : "gap-0";
 
