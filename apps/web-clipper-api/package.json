@@ -19,6 +19,7 @@
     "@kan/auth": "workspace:*",
     "@kan/db": "workspace:^",
     "@kan/logger": "workspace:^",
+    "@kan/shared": "workspace:^",
     "dotenv-cli": "^7.4.4",
     "drizzle-orm": "^0.42.0",
     "jose": "^6.1.2",

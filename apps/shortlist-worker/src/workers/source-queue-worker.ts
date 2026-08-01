@@ -25,6 +25,7 @@ import {
   shortlistSourceObjects,
   shortlistWebpageSources,
   users,
+  webClipperClips,
 } from "@kan/db/schema";
 import {
   classifyJobPostingContent,
@@ -169,6 +170,7 @@ export async function processShortlistJobQueueBatch(
 
   for (const job of jobs) {
     const status = await processQueueJob(db, job, options);
+    await syncWebClipperStatus(db, job, status);
 
     if (status === SHORTLIST_JOB_STATUSES.COMPLETED) result.completed += 1;
     if (status === SHORTLIST_JOB_STATUSES.DUPLICATE) result.duplicates += 1;
@@ -239,10 +241,112 @@ async function getPendingJobs(
             jobs.map((job) => job.id),
           ),
         );
+
+      const webClipperClipIds = jobs
+        .map((job) => getWebClipperClipId(job.payloadJson))
+        .filter((id): id is string => id !== null);
+      if (webClipperClipIds.length > 0) {
+        await tx
+          .update(webClipperClips)
+          .set({
+            processingStartedAt: new Date(),
+            status: "PROCESSING",
+            updatedAt: new Date(),
+          })
+          .where(inArray(webClipperClips.id, webClipperClipIds));
+      }
     }
 
     return jobs;
   });
+}
+
+function getWebClipperClipId(payload: unknown): string | null {
+  if (!payload || typeof payload !== "object") return null;
+  const clipId = (payload as Record<string, unknown>).webClipperClipId;
+  return typeof clipId === "string" ? clipId : null;
+}
+
+async function syncWebClipperStatus(
+  db: dbClient,
+  job: QueueJobRow,
+  status: QueueProcessingStatus,
+) {
+  const clipId = getWebClipperClipId(job.payloadJson);
+  if (!clipId) return;
+
+  if (status === SHORTLIST_JOB_STATUSES.RETRY) {
+    await db
+      .update(webClipperClips)
+      .set({ status: "QUEUED", updatedAt: new Date() })
+      .where(eq(webClipperClips.id, clipId));
+    return;
+  }
+
+  const [result] = await db
+    .select({
+      boardName: boards.name,
+      cardId: cards.id,
+      companyName: cards.shortlistCompanyName,
+      jobTitle: cards.title,
+      matchType: shortlistSourceCards.matchType,
+      processingLog: shortlistJobQueue.processingLog,
+    })
+    .from(shortlistJobQueue)
+    .leftJoin(
+      shortlistSourceCards,
+      and(
+        eq(shortlistSourceCards.sourceType, shortlistJobQueue.sourceType),
+        eq(shortlistSourceCards.sourceId, shortlistJobQueue.sourceId),
+      ),
+    )
+    .leftJoin(cards, eq(cards.id, shortlistSourceCards.cardId))
+    .leftJoin(boards, eq(boards.id, shortlistJobQueue.boardId))
+    .where(eq(shortlistJobQueue.id, job.id))
+    .limit(1);
+
+  const completedAt = new Date();
+  const rawContentCleanup = {
+    encryptedHtml: null,
+    encryptedJsonLd: null,
+    rawContentDeletedAt: completedAt,
+  };
+
+  if (
+    status === SHORTLIST_JOB_STATUSES.COMPLETED ||
+    status === SHORTLIST_JOB_STATUSES.DUPLICATE
+  ) {
+    const created = result?.matchType === "CREATED";
+    await db
+      .update(webClipperClips)
+      .set({
+        ...rawContentCleanup,
+        cardId: created ? result.cardId : null,
+        completedAt,
+        duplicateCardId: created ? null : result?.cardId,
+        resultBoardName: result?.boardName,
+        resultCompanyName: result?.companyName,
+        resultJobTitle: result?.jobTitle,
+        status: created ? "CREATED" : "ALREADY_EXISTS",
+        updatedAt: completedAt,
+      })
+      .where(eq(webClipperClips.id, clipId));
+    return;
+  }
+
+  const notAJob = result?.processingLog?.includes(
+    "Classification rejected this source",
+  );
+  await db
+    .update(webClipperClips)
+    .set({
+      ...rawContentCleanup,
+      completedAt,
+      errorCode: notAJob ? null : "PROCESSING_FAILED",
+      status: notAJob ? "NOT_A_JOB" : "FAILED",
+      updatedAt: completedAt,
+    })
+    .where(eq(webClipperClips.id, clipId));
 }
 
 async function processQueueJob(
@@ -1528,7 +1632,9 @@ async function deferJobForDailyLimit(
   job: QueueJobRow,
   values: { log: string; message: string },
 ): Promise<QueueProcessingStatus> {
-  const tomorrowUtc = new Date(getUtcDayStart().getTime() + 24 * 60 * 60 * 1_000);
+  const tomorrowUtc = new Date(
+    getUtcDayStart().getTime() + 24 * 60 * 60 * 1_000,
+  );
   await db
     .update(shortlistJobQueue)
     .set({

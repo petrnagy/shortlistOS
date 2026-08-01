@@ -7,20 +7,30 @@
  * Proprietary: shortlistOS Powerpack feature. Not part of the open-source distribution.
  */
 import { randomUUID } from "node:crypto";
-import { and, asc, eq, gt, isNull, or } from "drizzle-orm";
+import { and, asc, desc, eq, gt, gte, isNull, ne, or, sql } from "drizzle-orm";
 
 import type { dbClient } from "@kan/db/client";
 import {
   boards,
   cards,
+  shortlistJobQueue,
+  shortlistSourceObjects,
+  shortlistWebpageSources,
   users,
   webClipperClips,
   webClipperPairings,
   webClipperRefreshTokens,
   workspaceMembers,
 } from "@kan/db/schema";
+import {
+  SHORTLIST_JOB_STATUSES,
+  SHORTLIST_JOB_TYPES,
+  SHORTLIST_SOURCE_OBJECT_TYPES,
+  SHORTLIST_SOURCE_TYPES,
+} from "@kan/shared/constants";
+import { deleteObject, generateUID, putObject } from "@kan/shared/utils";
 
-import { WEB_CLIPPER_CLIENT_ID } from "./config";
+import { config, WEB_CLIPPER_CLIENT_ID } from "./config";
 import {
   derivePairingAuthorizationCode,
   encryptSnapshot,
@@ -32,6 +42,7 @@ import {
 
 const PAIRING_LIFETIME_MS = 5 * 60 * 1000;
 const REFRESH_TOKEN_LIFETIME_MS = 60 * 24 * 60 * 60 * 1000;
+const CLIP_DEDUPLICATION_WINDOW_MS = 24 * 60 * 60 * 1000;
 
 export const getUserById = (db: dbClient, userId: string) =>
   db.query.users.findFirst({
@@ -205,8 +216,7 @@ export const exchangeAuthorizationCode = (
     });
 
     if (
-      !codeRecord ||
-      !codeRecord.userId ||
+      !codeRecord?.userId ||
       !verifyPkce(input.codeVerifier, codeRecord.codeChallenge)
     ) {
       return null;
@@ -374,6 +384,7 @@ export const createClip = async (
   input: {
     userId: string;
     boardId: number;
+    boardPublicId: string;
     page: {
       url: string;
       canonicalUrl: string | null;
@@ -386,24 +397,116 @@ export const createClip = async (
     client: { extensionVersion: string; browser: string };
   },
 ) => {
-  const [clip] = await db
-    .insert(webClipperClips)
-    .values({
-      userId: input.userId,
-      boardId: input.boardId,
-      sourceUrl: input.page.url,
-      canonicalUrl: input.page.canonicalUrl,
-      pageTitle: input.page.title,
-      pageLanguage: input.page.language,
-      pageCapturedAt: new Date(input.page.capturedAt),
-      encryptedHtml: encryptSnapshot(input.page.html),
-      encryptedJsonLd: encryptSnapshot(JSON.stringify(input.page.jsonLd)),
-      extensionVersion: input.client.extensionVersion,
-      browser: input.client.browser,
-    })
-    .returning({ id: webClipperClips.id, status: webClipperClips.status });
-  if (!clip) throw new Error("Unable to persist clip");
-  return clip;
+  const sourceId = randomUUID();
+  const html = Buffer.from(input.page.html, "utf8");
+  const s3Key = [
+    input.boardId,
+    input.boardPublicId,
+    "webpage",
+    "webpage_html",
+    `${generateUID()}-webpage.html`,
+  ].join("/");
+
+  try {
+    return await db.transaction(async (tx) => {
+      await tx.execute(
+        sql`select pg_advisory_xact_lock(hashtextextended(${`${input.userId}:${input.boardId}:${input.page.url}`}, 0))`,
+      );
+
+      const recentClip = await tx.query.webClipperClips.findFirst({
+        columns: { id: true, status: true },
+        orderBy: desc(webClipperClips.createdAt),
+        where: and(
+          eq(webClipperClips.userId, input.userId),
+          eq(webClipperClips.boardId, input.boardId),
+          eq(webClipperClips.sourceUrl, input.page.url),
+          gte(
+            webClipperClips.createdAt,
+            new Date(Date.now() - CLIP_DEDUPLICATION_WINDOW_MS),
+          ),
+          ne(webClipperClips.status, "FAILED"),
+        ),
+      });
+      if (recentClip) return { ...recentClip, deduplicated: true as const };
+
+      await putObject(
+        config.SHORTLIST_SOURCE_BUCKET_NAME,
+        s3Key,
+        html,
+        "text/html",
+      );
+      const [clip] = await tx
+        .insert(webClipperClips)
+        .values({
+          userId: input.userId,
+          boardId: input.boardId,
+          sourceUrl: input.page.url,
+          canonicalUrl: input.page.canonicalUrl,
+          pageTitle: input.page.title,
+          pageLanguage: input.page.language,
+          pageCapturedAt: new Date(input.page.capturedAt),
+          encryptedHtml: encryptSnapshot(input.page.html),
+          encryptedJsonLd: encryptSnapshot(JSON.stringify(input.page.jsonLd)),
+          extensionVersion: input.client.extensionVersion,
+          browser: input.client.browser,
+        })
+        .returning({ id: webClipperClips.id, status: webClipperClips.status });
+      if (!clip) throw new Error("Unable to persist clip");
+
+      await tx.insert(shortlistWebpageSources).values({
+        id: sourceId,
+        createdBy: input.userId,
+        boardId: input.boardId,
+        url: input.page.canonicalUrl ?? input.page.url,
+        metadataJson: {
+          boardPublicId: input.boardPublicId,
+          capturedAt: input.page.capturedAt,
+          clipId: clip.id,
+          language: input.page.language,
+          pageTitle: input.page.title,
+        },
+      });
+
+      const [sourceObject] = await tx
+        .insert(shortlistSourceObjects)
+        .values({
+          boardId: input.boardId,
+          bucket: config.SHORTLIST_SOURCE_BUCKET_NAME,
+          contentType: "text/html",
+          createdBy: input.userId,
+          fileSize: html.byteLength,
+          metadataJson: { clipId: clip.id },
+          objectType: SHORTLIST_SOURCE_OBJECT_TYPES.WEBPAGE_HTML,
+          originalFilename: "webpage.html",
+          s3Key,
+          sourceId,
+          sourceType: SHORTLIST_SOURCE_TYPES.WEBPAGE,
+        })
+        .returning({ id: shortlistSourceObjects.id });
+      if (!sourceObject) throw new Error("Unable to persist source object");
+
+      await tx.insert(shortlistJobQueue).values({
+        boardId: input.boardId,
+        createdBy: input.userId,
+        jobType: SHORTLIST_JOB_TYPES.CLASSIFY_SOURCE,
+        payloadJson: {
+          objectId: sourceObject.id,
+          sourceUrl: input.page.canonicalUrl ?? input.page.url,
+          webClipperClipId: clip.id,
+        },
+        sourceId,
+        sourceType: SHORTLIST_SOURCE_TYPES.WEBPAGE,
+        status: SHORTLIST_JOB_STATUSES.PENDING,
+      });
+
+      return { ...clip, deduplicated: false as const };
+    });
+  } catch (error) {
+    await deleteObject(config.SHORTLIST_SOURCE_BUCKET_NAME, s3Key).catch(
+      () => undefined,
+    );
+    throw error;
+  }
 };
 
 export const getClipStatus = async (

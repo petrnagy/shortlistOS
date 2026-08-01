@@ -21,6 +21,7 @@ const environmentSchema = z.object({
   WEB_CLIPPER_ACCESS_TOKEN_SECRET: z.string().min(32),
   WEB_CLIPPER_ENCRYPTION_KEY: z.string().min(32),
   WEB_CLIPPER_ALLOWED_ORIGINS: z.string().default(""),
+  SHORTLIST_SOURCE_BUCKET_NAME: z.string().min(1),
   WEB_CLIPPER_API_PORT: z.coerce.number().int().min(1).max(65535).default(3010),
   NEXT_PUBLIC_BASE_URL: z.string().url().default("http://localhost:3000"),
   NODE_ENV: z

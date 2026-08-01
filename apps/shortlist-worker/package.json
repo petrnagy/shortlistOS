@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "build": "tsc",
-    "dev": "node -e \"console.log('shortlist-worker dev does not start processors. Run pnpm process-sources explicitly.')\"",
+    "dev": "dotenv -e ../../.env -- tsx watch src/jobs/watch-sources.ts",
     "format": "prettier --check . --ignore-path ../../.gitignore",
     "lint": "eslint",
     "process-sources": "dotenv -e ../../.env -- tsx src/jobs/process-sources.ts",

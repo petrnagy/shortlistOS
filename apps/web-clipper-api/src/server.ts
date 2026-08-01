@@ -121,21 +121,22 @@ const readBody = async (request: IncomingMessage, limit: number) => {
 const readJson = async (request: IncomingMessage, limit = 64 * 1024) =>
   JSON.parse(await readBody(request, limit)) as unknown;
 
+const HTML_ESCAPE_MAP: Readonly<Record<string, string>> = {
+  "&": "&amp;",
+  "<": "&lt;",
+  ">": "&gt;",
+  '"': "&quot;",
+  "'": "&#039;",
+};
+
 const escapeHtml = (value: string) =>
   value.replace(
     /[&<>"']/g,
-    (character) =>
-      ({
-        "&": "&amp;",
-        "<": "&lt;",
-        ">": "&gt;",
-        '"': "&quot;",
-        "'": "&#039;",
-      })[character] ?? character,
+    (character) => HTML_ESCAPE_MAP[character] ?? character,
   );
 
 const translateScope = (scope: string) =>
-  webClipperStrings.scopes[scope as keyof typeof webClipperStrings.scopes] ??
+  (webClipperStrings.scopes as Readonly<Record<string, string>>)[scope] ??
   scope;
 
 const renderPaperGrainBackground =
@@ -795,9 +796,16 @@ export const createWebClipperServer = (database?: dbClient) => {
         const clip = await createClip(db, {
           userId: claims.sub,
           boardId: board.id,
+          boardPublicId: board.publicId,
           page: parsedBody.data.page,
           client: parsedBody.data.client,
         });
+        if (clip.deduplicated) {
+          logger.info(
+            { clipId: clip.id },
+            "Reused recent Web Clipper submission",
+          );
+        }
         return sendJson(response, 202, {
           clipId: clip.id,
           status: clip.status,
