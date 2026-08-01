@@ -16,3 +16,4 @@ export * from "./permissions";
 export * from "./notifications";
 export * from "./shortlist";
 export * from "./webhooks";
+export * from "./web-clipper";

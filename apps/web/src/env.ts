@@ -85,6 +85,7 @@ export const env = createEnv({
     SHORTLIST_SOURCE_BUCKET_NAME: z.string().optional(),
     EMAIL_FROM: z.string().optional(),
     REDIS_URL: z.string().url().optional().or(z.literal("")),
+    WEB_CLIPPER_API_URL: z.string().url().optional(),
   },
 
   /**
