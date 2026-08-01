@@ -29,6 +29,7 @@ import {
 import {
   classifyJobPostingContent,
   classifyOpportunityFactsContent,
+  extractJobDescriptionMarkdown,
   jobPostingSuccessSchema,
 } from "@kan/llm";
 import { createLogger } from "@kan/logger";
@@ -369,6 +370,34 @@ async function processQueueJob(
       return SHORTLIST_JOB_STATUSES.FAILED;
     }
 
+    let sanitizedDescriptionMarkdown: string | null = null;
+    if (job.sourceType === SHORTLIST_SOURCE_TYPES.WEBPAGE) {
+      const webpageHtml = getOriginalWebpageHtml(sourceContent.sourceObjects);
+      if (webpageHtml) {
+        const extractedDescription = await runTrackedLlmRequest(
+          db,
+          job,
+          existingLink?.cardId ?? null,
+          "JOB_DESCRIPTION_MARKDOWN_EXTRACTION",
+          { model: options.model, sourceType: job.sourceType },
+          llmRequestLimit,
+          () =>
+            extractJobDescriptionMarkdown({
+              apiKey: options.apiKey,
+              model: options.model,
+              htmlContent: webpageHtml,
+              sourceUrl: sourceContent.sourceUrl,
+            }),
+        );
+        sanitizedDescriptionMarkdown =
+          extractedDescription.markdown.trim() || null;
+        processingLog = appendLog(
+          processingLog,
+          `Sanitized job description extracted using ${extractedDescription.model}.`,
+        );
+      }
+    }
+
     const cardInput = buildCardInput(
       classification.classification,
       sourceContent.sourceUrl,
@@ -400,6 +429,7 @@ async function processQueueJob(
         classification: classification.classification,
         duplicate,
         job,
+        sanitizedDescriptionMarkdown,
         sourceContent,
         uploadedCardObjectKeys,
       });
@@ -438,6 +468,8 @@ async function processQueueJob(
       cardId: createdCard.id,
       cardPublicId: createdCard.publicId,
       job,
+      jobTitle: cardInput.title,
+      sanitizedDescriptionMarkdown,
       sourceContent,
       uploadedCardObjectKeys,
     });
@@ -1146,13 +1178,19 @@ async function addRobotProcessingHistory(
     cardId: number;
     cardPublicId: string;
     job: QueueJobRow;
+    jobTitle: string;
+    sanitizedDescriptionMarkdown: string | null;
     sourceContent: ClassificationSourceContent;
     uploadedCardObjectKeys: string[];
   },
 ) {
   const sourceFiles = getSourceFilesForCard(args.sourceContent.sourceObjects);
   const filenames = sourceFiles.map((source) =>
-    getDisplayFilename(source.sourceObject),
+    getCardSourceFilename(
+      source.sourceObject,
+      args.job.sourceType,
+      args.jobTitle,
+    ),
   );
   const intakeLabel = getSourceIntakeLabel(args.job.sourceType);
 
@@ -1170,7 +1208,11 @@ async function addRobotProcessingHistory(
 
   const attachedFilenames: string[] = [];
   for (const source of sourceFiles) {
-    const filename = getDisplayFilename(source.sourceObject);
+    const filename = getCardSourceFilename(
+      source.sourceObject,
+      args.job.sourceType,
+      args.jobTitle,
+    );
     const attachment = await attachOriginalSourceFile(db, {
       buffer: source.buffer,
       cardId: args.cardId,
@@ -1178,6 +1220,24 @@ async function addRobotProcessingHistory(
       contentType: source.sourceObject.contentType,
       filename,
       fileSize: source.sourceObject.fileSize,
+      workspaceId: args.boardWorkspaceId,
+      onUploaded: (s3Key) => args.uploadedCardObjectKeys.push(s3Key),
+    });
+    attachedFilenames.push(attachment.originalFilename);
+  }
+
+  if (args.sanitizedDescriptionMarkdown) {
+    const markdownBuffer = Buffer.from(
+      args.sanitizedDescriptionMarkdown,
+      "utf8",
+    );
+    const attachment = await attachOriginalSourceFile(db, {
+      buffer: markdownBuffer,
+      cardId: args.cardId,
+      cardPublicId: args.cardPublicId,
+      contentType: "text/markdown; charset=utf-8",
+      filename: `${slugifyJobTitle(args.jobTitle)}.md`,
+      fileSize: markdownBuffer.byteLength,
       workspaceId: args.boardWorkspaceId,
       onUploaded: (s3Key) => args.uploadedCardObjectKeys.push(s3Key),
     });
@@ -1364,6 +1424,48 @@ function getSourceIntakeLabel(sourceType: string) {
 function getDisplayFilename(sourceObject: SourceObjectForClassification) {
   const metadataFilename = getMetadataFilename(sourceObject.metadataJson);
   return truncateFilename(metadataFilename ?? sourceObject.originalFilename);
+}
+
+function getCardSourceFilename(
+  sourceObject: SourceObjectForClassification,
+  sourceType: string,
+  jobTitle: string,
+): string {
+  if (
+    sourceType === SHORTLIST_SOURCE_TYPES.WEBPAGE &&
+    sourceObject.objectType === SHORTLIST_SOURCE_OBJECT_TYPES.WEBPAGE_HTML
+  ) {
+    return `${slugifyJobTitle(jobTitle)}.html`;
+  }
+
+  return getDisplayFilename(sourceObject);
+}
+
+export function slugifyJobTitle(jobTitle: string): string {
+  const slug = jobTitle
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 180)
+    .replace(/-+$/g, "");
+
+  return slug || "job-posting";
+}
+
+function getOriginalWebpageHtml(
+  sources: ExtractedSourceObject[],
+): string | null {
+  const source = sources.find(
+    (candidate) =>
+      candidate.buffer &&
+      candidate.sourceObject.objectType ===
+        SHORTLIST_SOURCE_OBJECT_TYPES.WEBPAGE_HTML,
+  );
+  if (!source?.buffer) return null;
+  const html = source.buffer.toString("utf8").trim();
+  return html ? html : null;
 }
 
 function getMetadataFilename(metadata: unknown): string | null {
@@ -1863,6 +1965,7 @@ async function enrichDuplicateCard(
     >;
     duplicate: DuplicateMatch;
     job: QueueJobRow;
+    sanitizedDescriptionMarkdown: string | null;
     sourceContent: ClassificationSourceContent;
     uploadedCardObjectKeys: string[];
   },
@@ -1908,6 +2011,8 @@ async function enrichDuplicateCard(
     cardId: args.duplicate.cardId,
     cardPublicId: args.duplicate.cardPublicId,
     job: args.job,
+    jobTitle: incoming.title,
+    sanitizedDescriptionMarkdown: args.sanitizedDescriptionMarkdown,
     sourceContent: args.sourceContent,
     uploadedCardObjectKeys: args.uploadedCardObjectKeys,
   });

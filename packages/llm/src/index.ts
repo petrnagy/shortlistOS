@@ -14,17 +14,22 @@ export {
 
 export {
   buildOpportunityFactsPrompt,
+  buildJobDescriptionMarkdownPrompt,
   buildJobPostingClassificationPrompt,
   classifyOpportunityFactsContent,
   classifyJobPostingContent,
+  extractJobDescriptionMarkdown,
   convertHtmlToJobPostingMarkdown,
   jobPostingClassificationSchema,
   jobPostingSuccessSchema,
   opportunityFactsSchema,
+  sanitizeJobDescriptionMarkdown,
   type ClassifyOpportunityFactsInput,
   type ClassifyOpportunityFactsResult,
   type ClassifyJobPostingContentInput,
   type ClassifyJobPostingContentResult,
   type JobPostingClassification,
+  type ExtractJobDescriptionMarkdownInput,
+  type ExtractJobDescriptionMarkdownResult,
   type OpportunityFacts,
 } from "./jobs/classify-job-posting";
