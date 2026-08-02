@@ -12,6 +12,7 @@ import posthog from "posthog-js";
 import { PostHogProvider } from "posthog-js/react";
 import { useEffect } from "react";
 
+import { GlobalFeedbackModal } from "~/components/GlobalFeedbackModal";
 import { FontSizeProvider } from "~/providers/font-size";
 import { KeyboardShortcutProvider } from "~/providers/keyboard-shortcuts";
 import { LinguiProviderWrapper } from "~/providers/lingui";
@@ -92,6 +93,7 @@ const MyApp: AppType = ({ Component, pageProps }: AppPropsWithLayout) => {
               >
                 <ModalProvider>
                   <PopupProvider>
+                    <GlobalFeedbackModal />
                     {posthogKey ? (
                       <PostHogProvider client={posthog}>
                         {getLayout(<Component {...pageProps} />)}
