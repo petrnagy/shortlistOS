@@ -28,7 +28,7 @@ export const env = createEnv({
     POSTGRES_URL: z.string().url().optional().or(z.literal("")),
     TRELLO_APP_API_KEY: z.string().optional(),
     TRELLO_APP_SECRET: z.string().optional(),
-    // Proprietary shortlistOS Powerpack and Magic Inbox functionality.
+    // Optional shortlistOS Powerpack and Magic Inbox functionality.
     STRIPE_SECRET_KEY: z.string().optional(),
     STRIPE_SHORTLIST_WEBHOOK_SECRET: z.string().optional(),
     BREVO_API_KEY: z.string().optional(),
@@ -106,7 +106,7 @@ export const env = createEnv({
     NEXT_PUBLIC_AVATAR_BUCKET_NAME: z.string().optional(),
     NEXT_PUBLIC_ATTACHMENTS_BUCKET_NAME: z.string().optional(),
     NEXT_PUBLIC_STORAGE_DOMAIN: z.string().optional(),
-    // Proprietary shortlistOS Powerpack and Magic Inbox functionality.
+    // Optional shortlistOS Powerpack and Magic Inbox functionality.
     NEXT_PUBLIC_MAGIC_INBOX_DOMAIN: z.string().optional(),
     NEXT_PUBLIC_USE_VIRTUAL_HOSTED_URLS: z
       .string()

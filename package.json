@@ -1,6 +1,7 @@
 {
-  "name": "kan",
+  "name": "shortlistos",
   "private": true,
+  "license": "AGPL-3.0-or-later",
   "engines": {
     "node": ">=20.18.1",
     "pnpm": "^9.14.2"

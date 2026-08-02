@@ -2,7 +2,7 @@
   "name": "@kan/shortlist-worker",
   "private": true,
   "version": "0.1.0",
-  "description": "Proprietary shortlistOS background workers. Not part of the open-source distribution.",
+  "description": "shortlistOS background workers for capture and enrichment jobs.",
   "type": "module",
   "scripts": {
     "build": "tsc",
@@ -21,7 +21,7 @@
     "typecheck": "tsc --noEmit --emitDeclarationOnly false"
   },
   "author": "Petr Nagy / shortlistOS",
-  "license": "UNLICENSED",
+  "license": "AGPL-3.0-or-later",
   "dependencies": {
     "@kan/db": "workspace:^",
     "@kan/llm": "workspace:*",

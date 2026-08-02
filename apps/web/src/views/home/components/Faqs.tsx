@@ -101,7 +101,7 @@ const Faqs = () => {
           <Trans>
             We are using the{" "}
             <Link
-              href="https://github.com/kan-bn/kan/blob/main/LICENSE"
+                href="https://github.com/petrnagy/shortlistOS/blob/main/LICENSE"
               className="underline"
             >
               AGPL-3.0 license

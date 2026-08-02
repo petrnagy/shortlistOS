@@ -2,7 +2,7 @@
   "name": "@kan/web-clipper-api",
   "private": true,
   "version": "0.1.0",
-  "description": "Proprietary shortlistOS Web Clipper authorization and API service.",
+  "description": "shortlistOS Web Clipper authorization and API service.",
   "type": "module",
   "scripts": {
     "build": "tsc",
@@ -14,7 +14,7 @@
     "typecheck": "tsc --noEmit --emitDeclarationOnly false"
   },
   "author": "Petr Nagy / shortlistOS",
-  "license": "UNLICENSED",
+  "license": "AGPL-3.0-or-later",
   "dependencies": {
     "@kan/auth": "workspace:*",
     "@kan/db": "workspace:^",

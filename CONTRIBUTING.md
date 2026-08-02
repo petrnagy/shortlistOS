@@ -5,7 +5,7 @@ Thank you for your interest in contributing to Kan! This document provides guide
 ## Getting Started
 
 1. Fork the repository
-2. Clone your fork: `git clone https://github.com/YOUR-USERNAME/kan.git`
+2. Clone shortlistOS: `git clone https://github.com/petrnagy/shortlistOS.git`
 3. Create a new branch: `git checkout -b feat/your-feature-name`
 4. Install dependencies: `pnpm install`
 5. Copy `.env.example` to `.env` and configure your environment variables

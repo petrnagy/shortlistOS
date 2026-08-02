@@ -36,7 +36,7 @@
     {
       "name": "GitHub",
       "icon": "github",
-      "url": "https://github.com/kanbn"
+      "url": "https://github.com/petrnagy/shortlistOS"
     }
   ],
   "navigation": [
@@ -67,6 +67,6 @@
   ],
   "footerSocials": {
     "discord": "https://discord.gg/e6ejRb6CmT",
-    "github": "https://github.com/kanbn"
+    "github": "https://github.com/petrnagy/shortlistOS"
   }
 }

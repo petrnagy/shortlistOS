@@ -49,14 +49,14 @@ services:
       - AXIOM_TOKEN=${AXIOM_TOKEN}
       - AXIOM_DATASET=${AXIOM_DATASET}
 
-      # Proprietary shortlistOS Powerpack and Magic Inbox features
+      # shortlistOS Powerpack and Magic Inbox features
       - NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=${NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY}
       - STRIPE_SHORTLIST_WEBHOOK_SECRET=${STRIPE_SHORTLIST_WEBHOOK_SECRET}
       - BREVO_API_KEY=${BREVO_API_KEY}
       - BREVO_MAGIC_INBOX_WEBHOOK_SECRET=${BREVO_MAGIC_INBOX_WEBHOOK_SECRET}
       - SHORTLIST_MAGIC_CLIP_WEBHOOK_SECRET=${SHORTLIST_MAGIC_CLIP_WEBHOOK_SECRET}
 
-      # Proprietary shortlistOS LLM connector for Powerpack background jobs
+      # shortlistOS LLM connector for Powerpack background jobs
       - LLM_CONNECTOR_API_KEY=${LLM_CONNECTOR_API_KEY}
       - LLM_CONNECTOR_MODEL=${LLM_CONNECTOR_MODEL}
       - INBOX_CLIP_RETRY_LIMIT=${INBOX_CLIP_RETRY_LIMIT}
