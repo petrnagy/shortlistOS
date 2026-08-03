@@ -334,7 +334,7 @@ const BoardsSettings = ({
         <AutomationCard
           icon={<HiOutlineEnvelope className="h-4 w-4" />}
           title={t`Email to this shortlist`}
-          description={t`Get a personalized email address for this shortlist. Forward job leads or recruiter messages here and they will land in your shortlist inbox.`}
+          description={t`Generate a special email address where you can forward any job offer from a recruiter, friend, or newsletter. You can also forward updates about opportunities that already exist in your workspace.`}
           isChecked={displayPowerpackToggle(isMagicInboxEnabled)}
           onToggle={() =>
             updatePowerpackSetting({
@@ -344,22 +344,27 @@ const BoardsSettings = ({
           disabled={mockupsDisabled}
         >
           {displayPowerpackToggle(isMagicInboxEnabled) ? (
-            <div className="flex flex-col gap-2 sm:flex-row">
-              <input
-                readOnly
-                value={magicInboxAddress}
-                className="min-w-0 flex-1 rounded-md border-0 bg-light-100 px-3 py-2 text-sm text-light-900 shadow-sm ring-1 ring-inset ring-light-300 dark:bg-dark-200 dark:text-dark-900 dark:ring-dark-400"
-              />
-              <Button
-                type="button"
-                variant="secondary"
-                size="sm"
-                disabled={mockupsDisabled}
-                onClick={handleCopyMagicInboxAddress}
-                iconLeft={<HiOutlineClipboardDocument className="h-4 w-4" />}
-              >
-                {t`Copy`}
-              </Button>
+            <div className="space-y-2">
+              <div className="flex flex-col gap-2 sm:flex-row">
+                <input
+                  readOnly
+                  value={magicInboxAddress}
+                  className="min-w-0 flex-1 rounded-md border-0 bg-light-100 px-3 py-2 text-sm text-light-900 shadow-sm ring-1 ring-inset ring-light-300 dark:bg-dark-200 dark:text-dark-900 dark:ring-dark-400"
+                />
+                <Button
+                  type="button"
+                  variant="secondary"
+                  size="sm"
+                  disabled={mockupsDisabled}
+                  onClick={handleCopyMagicInboxAddress}
+                  iconLeft={<HiOutlineClipboardDocument className="h-4 w-4" />}
+                >
+                  {t`Copy`}
+                </Button>
+              </div>
+              <p className="text-xs leading-5 text-amber-700 dark:text-amber-300">
+                {t`Do not share this address with anyone, and do not publish it anywhere.`}
+              </p>
             </div>
           ) : null}
         </AutomationCard>

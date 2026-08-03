@@ -102,9 +102,13 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
       : params.boardId
     : null;
 
-  const updateBoard = api.board.update.useMutation();
+  const updateBoard = api.board.update.useMutation({
+    onSuccess: async () => {
+      await utils.board.all.invalidate();
+    },
+  });
 
-  const { register, handleSubmit, setValue, watch } =
+  const { register, handleSubmit, setValue, setFocus } =
     useForm<UpdateBoardInput>({
       defaultValues: {
         boardPublicId: "",
@@ -297,13 +301,11 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
   const tutorialSavedListPublicId = boardData?.lists.find(
     (list) => list.name.trim().toLowerCase() === "saved",
   )?.publicId;
-  const currentBoardName = watch("name");
-
   useEffect(() => {
-    if (isSuccess && currentBoardName !== boardName) {
+    if (isSuccess) {
       setValue("name", boardName);
     }
-  }, [isSuccess, boardName, currentBoardName, setValue]);
+  }, [isSuccess, boardName, setValue]);
 
   const openNewListForm = (publicBoardId: string) => {
     openModal("NEW_LIST");
@@ -313,6 +315,12 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
   const openNewCardForm = (publicListId: string) => {
     openModal("NEW_CARD");
     setSelectedPublicListId(publicListId);
+  };
+
+  const handleStartRename = () => {
+    requestAnimationFrame(() => {
+      setFocus("name", { shouldSelect: true });
+    });
   };
 
   const handleCardContextMenuAction = (action: CardContextMenuAction) => {
@@ -670,6 +678,7 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
               isArchived={boardData?.isArchived ?? false}
               isFavorite={boardData?.favorite}
               boardName={boardData?.name}
+              onRename={handleStartRename}
             />
           </div>
         </div>

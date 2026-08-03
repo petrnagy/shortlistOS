@@ -65,6 +65,15 @@ export default function SideNavigation({
       { enabled: !!workspace.publicId && workspace.publicId.length >= 12 },
     );
 
+  const { data: shortlists } = api.board.all.useQuery(
+    {
+      workspacePublicId: workspace.publicId,
+      type: "regular",
+      archived: false,
+    },
+    { enabled: !!workspace.publicId },
+  );
+
   const subscriptions = workspaceData?.subscriptions as
     | Subscription[]
     | undefined;
@@ -188,7 +197,7 @@ export default function SideNavigation({
           <div className="hidden h-[45px] items-center justify-between pb-3 md:flex">
             {!isCollapsed && (
               <Link
-                href={`${env("NEXT_PUBLIC_BASE_URL") ?? ""}`}
+                href="/"
                 className="block"
               >
                 <h1 className="pl-2 text-[16px] font-bold tracking-tight text-neutral-900 dark:text-dark-1000">
@@ -230,6 +239,36 @@ export default function SideNavigation({
                   onCloseSideNav={onCloseSideNav}
                   keyboardShortcut={item.keyboardShortcut}
                 />
+                {item.href === "/boards" &&
+                !isCollapsed &&
+                shortlists?.length ? (
+                  <ul
+                    role="list"
+                    className="ml-7 mt-1 hidden min-w-0 max-w-full space-y-0.5 pl-2 md:block"
+                  >
+                    {shortlists.map((shortlist) => {
+                      const href = `/boards/${shortlist.publicId}`;
+                      const isCurrent = router.asPath.startsWith(href);
+
+                      return (
+                        <li key={shortlist.publicId} className="min-w-0">
+                          <Link
+                            href={href}
+                            aria-current={isCurrent ? "page" : undefined}
+                            className={twMerge(
+                              "block w-full overflow-hidden text-ellipsis whitespace-nowrap rounded-md px-2 py-1.5 text-sm hover:bg-light-200 hover:text-light-1000 dark:hover:bg-dark-200 dark:hover:text-dark-1000",
+                              isCurrent
+                                ? "font-medium text-light-1000 dark:text-dark-1000"
+                                : "text-neutral-600 dark:text-dark-900",
+                            )}
+                          >
+                            {shortlist.name}
+                          </Link>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                ) : null}
               </li>
             ))}
           </ul>

@@ -5,6 +5,7 @@ import {
   HiLink,
   HiOutlineCog6Tooth,
   HiOutlineDocumentDuplicate,
+  HiOutlinePencil,
   HiOutlineStar,
   HiOutlineTrash,
   HiStar,
@@ -25,6 +26,7 @@ export default function BoardDropdown({
   boardPublicId,
   isFavorite,
   boardName,
+  onRename,
 }: {
   isTemplate: boolean;
   isLoading: boolean;
@@ -32,6 +34,7 @@ export default function BoardDropdown({
   isArchived?: boolean;
   isFavorite?: boolean;
   boardName?: string;
+  onRename: () => void;
 }) {
   const router = useRouter();
   const { openModal } = useModal();
@@ -111,6 +114,17 @@ export default function BoardDropdown({
             label: t`Edit board URL`,
             action: () => openModal("UPDATE_BOARD_SLUG"),
             icon: <HiLink className="h-[16px] w-[16px] text-dark-900" />,
+          },
+        ]
+      : []),
+    ...(!isTemplate && canEditBoard && !isArchived
+      ? [
+          {
+            label: t`Rename shortlist`,
+            action: onRename,
+            icon: (
+              <HiOutlinePencil className="h-[16px] w-[16px] text-dark-900" />
+            ),
           },
         ]
       : []),

@@ -110,12 +110,16 @@ export default function HomeView() {
       answer: t`Yes. The base version is completely free, including unlimited shortlists, unlimited opportunities, notes, attachments, activity history, and data export. Powerpack is optional and adds automation and AI features.`,
     },
     {
-      question: t`What does Powerpack add?`,
-      answer: t`Powerpack adds the browser clipper, Magic Inbox, reminders and follow-up nudges, salary insights, and automatic opportunity updates.`,
+      question: t`What is Powerpack?`,
+      answer: t`Powerpack adds tools that take care of repetitive work. The browser clipper lets you save a job posting directly from your browser and turns its key details into an organized opportunity. With Magic Inbox, you can forward job alerts and recruiter emails to create new opportunities or update existing ones automatically. Powerpack also adds reminders, follow-up nudges, and salary insights to help you keep your search moving.`,
     },
     {
       question: t`Is Powerpack a subscription?`,
       answer: t`No. Powerpack costs $29 and remains active for three months. There is no automatic renewal or recurring payment.`,
+    },
+    {
+      question: t`Do I need Powerpack to use shortlistOS?`,
+      answer: t`No. The free base version gives you everything you need to organize and track your job search. Powerpack is optional and adds automation and AI features that reduce repetitive work.`,
     },
     {
       question: t`What happens when Powerpack expires?`,
@@ -131,11 +135,19 @@ export default function HomeView() {
     },
     {
       question: t`Can I use Powerpack with a self-hosted installation?`,
-      answer: t`No. Powerpack is currently available only with the hosted version of shortlistOS. Self-hosted installations include the open-source core without the hosted automation and AI features.`,
+      answer: t`Yes. Powerpack and all of its features are open source and included with the rest of the shortlistOS code on GitHub. With the required infrastructure and configuration, you can self-host the complete application, including its automation and AI features.`,
     },
     {
       question: t`Where is my data hosted?`,
       answer: t`Account data is hosted in Germany. Uploaded files and attachments are stored on AWS in Stockholm. Some Powerpack features send the relevant content to Mistral for processing, such as the contents of a clipped job posting or an email forwarded to Magic Inbox.`,
+    },
+    {
+      question: t`Can shortlistOS automatically apply to jobs for me?`,
+      answer: t`No. shortlistOS makes the job search process much more convenient, but it cannot do the actual legwork for you. No one can—and anyone who claims otherwise is misleading you.`,
+    },
+    {
+      question: t`Can I manage more than one job search?`,
+      answer: t`Yes. You can create unlimited shortlists and keep separate searches organized by role, industry, location, or however else you prefer.`,
     },
   ];
 
