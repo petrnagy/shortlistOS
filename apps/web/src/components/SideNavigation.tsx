@@ -258,7 +258,7 @@ export default function SideNavigation({
                             className={twMerge(
                               "block w-full overflow-hidden text-ellipsis whitespace-nowrap rounded-md px-2 py-1.5 text-sm hover:bg-light-200 hover:text-light-1000 dark:hover:bg-dark-200 dark:hover:text-dark-1000",
                               isCurrent
-                                ? "font-medium text-light-1000 dark:text-dark-1000"
+                                ? "bg-light-200 font-medium text-light-1000 dark:bg-dark-200 dark:text-dark-1000"
                                 : "text-neutral-600 dark:text-dark-900",
                             )}
                           >

@@ -88,7 +88,7 @@ const Footer = () => {
       links: [
         { label: t`Features`, href: "/#product" },
         { label: t`Powerpack`, href: "/#powerpack" },
-        { label: t`Pricing`, href: "/#pricing" },
+        { label: t`Pricing`, href: "/pricing" },
       ],
     },
     {

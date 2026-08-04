@@ -11,11 +11,11 @@ import { PageHead } from "~/components/PageHead";
 import { useLocalisation } from "~/hooks/useLocalisation";
 import { api } from "~/utils/api";
 import { getAvatarUrl } from "~/utils/helpers";
+import { getMilestoneActivityIds } from "~/utils/shortlist-stages";
 import {
   getActivityIcon,
   getActivityText,
   getUserDisplayName,
-  isMilestoneActivity,
   MilestoneBadge,
 } from "~/views/card/components/ActivityList";
 
@@ -86,6 +86,7 @@ export default function ActivityLog() {
   };
 
   const isInitialLoading = isFetching && activities.length === 0;
+  const milestoneActivityIds = getMilestoneActivityIds(activities);
 
   return (
     <>
@@ -124,7 +125,8 @@ export default function ActivityLog() {
                       toList: activity.toList?.name ?? null,
                       memberName: activity.member?.user?.name ?? null,
                       memberEmail: activity.member?.user?.email ?? null,
-                      isSelf: activity.member?.user?.id === sessionData?.user.id,
+                      isSelf:
+                        activity.member?.user?.id === sessionData?.user.id,
                       label: activity.label?.name ?? null,
                       fromTitle: activity.fromTitle ?? null,
                       fromDescription: activity.fromDescription ?? null,
@@ -141,7 +143,9 @@ export default function ActivityLog() {
                     const cardLinkConnector = getCardLinkConnector(
                       activity.type,
                     );
-                    const isMilestone = isMilestoneActivity(activity.type);
+                    const isMilestone = milestoneActivityIds.has(
+                      activity.publicId,
+                    );
                     const timestamp = formatDistanceToNow(
                       new Date(activity.createdAt),
                       {

@@ -28,13 +28,11 @@ import Avatar from "~/components/Avatar";
 import { useLocalisation } from "~/hooks/useLocalisation";
 import { api } from "~/utils/api";
 import { getAvatarUrl } from "~/utils/helpers";
+import { getMilestoneActivityIds } from "~/utils/shortlist-stages";
 import Comment from "./Comment";
 
 type ActivityType =
   NonNullable<GetCardByIdOutput>["activities"][number]["type"];
-
-export const isMilestoneActivity = (type: ActivityType | string) =>
-  type === "card.updated.list";
 
 type ActivityWithMergedLabels =
   GetCardActivitiesOutput["activities"][number] & {
@@ -590,6 +588,7 @@ const ActivityList = ({
   const isFetching = isFetchingFirst || isLoadingMore;
   const isLoading =
     cardIsLoading || (isFetchingFirst && allActivities.length === 0);
+  const milestoneActivityIds = getMilestoneActivityIds(allActivities);
 
   return (
     <div className="flex flex-col space-y-4 pt-4">
@@ -636,7 +635,7 @@ const ActivityList = ({
 
         if (!activityText) return null;
 
-        const isMilestone = isMilestoneActivity(activity.type);
+        const isMilestone = milestoneActivityIds.has(activity.publicId);
         const timestamp = formatDistanceToNow(new Date(activity.createdAt), {
           addSuffix: true,
           locale: dateLocale,
