@@ -120,17 +120,6 @@ export default function BoardDropdown({
     ...(!isTemplate && canEditBoard && !isArchived
       ? [
           {
-            label: t`Rename shortlist`,
-            action: onRename,
-            icon: (
-              <HiOutlinePencil className="h-[16px] w-[16px] text-dark-900" />
-            ),
-          },
-        ]
-      : []),
-    ...(!isTemplate && canEditBoard
-      ? [
-          {
             label: t`Shortlist settings`,
             action: () => void router.push(`/boards/${boardPublicId}/settings`),
             icon: (
@@ -148,6 +137,17 @@ export default function BoardDropdown({
               <HiStar className="h-[16px] w-[16px] text-dark-900" />
             ) : (
               <HiOutlineStar className="h-[16px] w-[16px] text-dark-900" />
+            ),
+          },
+        ]
+      : []),
+    ...(!isTemplate && canEditBoard && !isArchived
+      ? [
+          {
+            label: t`Rename shortlist`,
+            action: onRename,
+            icon: (
+              <HiOutlinePencil className="h-[16px] w-[16px] text-dark-900" />
             ),
           },
         ]

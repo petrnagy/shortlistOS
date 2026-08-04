@@ -3,14 +3,17 @@ import { useRouter } from "next/router";
 import { t } from "@lingui/core/macro";
 import { motion } from "framer-motion";
 import {
+  HiEllipsisHorizontal,
   HiOutlineCog6Tooth,
   HiOutlineRectangleStack,
   HiOutlineStar,
   HiOutlineTrash,
   HiStar,
 } from "react-icons/hi2";
+import { IoArchiveOutline } from "react-icons/io5";
 
 import Button from "~/components/Button";
+import Dropdown from "~/components/Dropdown";
 import PaperGrainBackground from "~/components/PaperGrainBackground";
 import { Tooltip } from "~/components/Tooltip";
 import { usePermissions } from "~/hooks/usePermissions";
@@ -28,7 +31,7 @@ export function BoardsList({
   const router = useRouter();
   const { workspace } = useWorkspace();
   const { openModal } = useModal();
-  const { canCreateBoard, canDeleteBoard } = usePermissions();
+  const { canCreateBoard, canDeleteBoard, canArchiveBoard } = usePermissions();
 
   const utils = api.useUtils();
   const updateBoard = api.board.update.useMutation({
@@ -68,13 +71,11 @@ export function BoardsList({
     void router.push(`/boards/${boardPublicId}/settings`);
   };
 
-  const handleOpenDeleteBoard = (
-    e: React.MouseEvent,
-    boardPublicId: string,
-  ) => {
-    e.preventDefault();
-    e.stopPropagation();
-    openModal("DELETE_BOARD", boardPublicId);
+  const handleUnarchiveBoard = (boardPublicId: string) => {
+    updateBoard.mutate({
+      boardPublicId,
+      isArchived: false,
+    });
   };
 
   if (isLoading)
@@ -145,34 +146,63 @@ export function BoardsList({
           >
             <div className="group relative mr-5 flex h-[150px] w-full items-center justify-center rounded-md border border-dashed border-light-400 bg-light-50 shadow-sm hover:bg-light-200 dark:border-dark-600 dark:bg-dark-50 dark:hover:bg-dark-100">
               <PaperGrainBackground />
-              {!isTemplate && (
+              {!isTemplate && !archived && (
                 <button
                   onClick={(e) => handleOpenBoardSettings(e, board.publicId)}
-                  className="absolute right-10 top-3 z-10 rounded p-1 opacity-100 transition-all hover:bg-light-300 dark:hover:bg-dark-200 md:opacity-0 md:group-hover:opacity-100"
+                  className="absolute right-10 top-3 z-10 rounded p-1 transition-all hover:bg-light-300 dark:hover:bg-dark-200"
                   aria-label="Open board settings"
                 >
                   <HiOutlineCog6Tooth className="h-5 w-5 text-neutral-700 dark:text-dark-800" />
                 </button>
               )}
-              {archived && !isTemplate && canDeleteBoard ? (
-                <button
-                  onClick={(e) => handleOpenDeleteBoard(e, board.publicId)}
-                  className="absolute right-3 top-3 z-10 rounded p-1 opacity-100 transition-all hover:bg-light-300 dark:hover:bg-dark-200 md:opacity-0 md:group-hover:opacity-100"
-                  aria-label="Delete shortlist"
+              {archived &&
+              !isTemplate &&
+              (canArchiveBoard || canDeleteBoard) ? (
+                <div
+                  className="absolute right-3 top-3 z-20"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                  }}
                 >
-                  <HiOutlineTrash className="h-5 w-5 text-neutral-700 dark:text-dark-800" />
-                </button>
+                  <Dropdown
+                    disabled={updateBoard.isPending}
+                    items={[
+                      ...(canArchiveBoard
+                        ? [
+                            {
+                              label: t`Unarchive shortlist`,
+                              action: () => handleUnarchiveBoard(board.publicId),
+                              icon: (
+                                <IoArchiveOutline className="h-4 w-4 text-dark-900" />
+                              ),
+                            },
+                          ]
+                        : []),
+                      ...(canDeleteBoard
+                        ? [
+                            {
+                              label: t`Delete shortlist`,
+                              action: () =>
+                                openModal("DELETE_BOARD", board.publicId),
+                              icon: (
+                                <HiOutlineTrash className="h-4 w-4 text-dark-900" />
+                              ),
+                            },
+                          ]
+                        : []),
+                    ]}
+                  >
+                    <HiEllipsisHorizontal className="h-5 w-5 text-neutral-700 dark:text-dark-800" />
+                  </Dropdown>
+                </div>
               ) : null}
               {!archived ? (
                 <button
                   onClick={(e) =>
                     handleToggleFavorite(e, board.publicId, board.favorite)
                   }
-                  className={`absolute right-3 top-3 z-10 rounded p-1 transition-all hover:bg-light-300 dark:hover:bg-dark-200 ${
-                    board.favorite
-                      ? ""
-                      : "md:opacity-0 md:group-hover:opacity-100"
-                  }`}
+                  className="absolute right-3 top-3 z-10 rounded p-1 transition-all hover:bg-light-300 dark:hover:bg-dark-200"
                   aria-label={
                     board.favorite
                       ? "Remove from favorites"
