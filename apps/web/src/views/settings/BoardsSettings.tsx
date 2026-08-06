@@ -13,6 +13,7 @@ import {
   HiOutlineSparkles,
 } from "react-icons/hi2";
 
+import { Alert } from "~/components/Alert";
 import Button from "~/components/Button";
 import Toggle from "~/components/Toggle";
 import { env } from "~/env";
@@ -133,7 +134,7 @@ const ReminderRow = ({
     </div>
     <select
       value={dayValue}
-      disabled={disabled}
+      disabled={disabled || !isChecked}
       onChange={(event) => onDayChange(Number(event.target.value))}
       className="h-8 w-24 rounded-md border-0 bg-light-100 px-2 text-xs text-light-1000 shadow-sm ring-1 ring-inset ring-light-300 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-dark-200 dark:text-dark-1000 dark:ring-dark-400"
     >
@@ -362,9 +363,9 @@ const BoardsSettings = ({
                   {t`Copy`}
                 </Button>
               </div>
-              <p className="text-xs leading-5 text-amber-700 dark:text-amber-300">
+              <Alert variant="info" title={t`Keep this address private`}>
                 {t`Do not share this address with anyone, and do not publish it anywhere.`}
-              </p>
+              </Alert>
             </div>
           ) : null}
         </AutomationCard>
