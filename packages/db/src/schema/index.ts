@@ -15,4 +15,5 @@ export * from "./workspaceInviteLinks";
 export * from "./permissions";
 export * from "./notifications";
 export * from "./shortlist";
+export * from "./shortlistAutomation";
 export * from "./webhooks";

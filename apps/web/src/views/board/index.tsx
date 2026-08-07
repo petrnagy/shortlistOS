@@ -37,6 +37,7 @@ import { useWorkspace } from "~/providers/workspace";
 import { api } from "~/utils/api";
 import { formatToArray } from "~/utils/helpers";
 import { isSuperAdmin } from "~/utils/is-super-admin";
+import { hasActivePowerpack } from "~/utils/powerpack";
 import { DeleteCardConfirmation } from "~/views/card/components/DeleteCardConfirmation";
 import BoardDropdown from "./components/BoardDropdown";
 import { BoardOpportunityTutorial } from "./components/BoardOpportunityTutorial";
@@ -86,6 +87,7 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
 
   const { canCreateList, canEditList, canEditCard, canEditBoard } =
     usePermissions();
+  const { data: currentUser } = api.user.getUser.useQuery();
 
   const { tooltipContent: createListShortcutTooltipContent } =
     useKeyboardShortcut({
@@ -128,7 +130,6 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
       name: values.name,
     });
   };
-
 
   const semanticFilters = formatToArray(router.query.dueDate) as (
     | "overdue"
@@ -845,7 +846,9 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
                                               card.shortlistJobLocationType
                                             }
                                             isCardAgingEnabled={
-                                              boardData.shortlistIsCardAgingEnabled
+                                              boardData.shortlistIsCardAgingEnabled &&
+                                              !isBoardArchived &&
+                                              hasActivePowerpack(currentUser)
                                             }
                                           />
                                         </Link>

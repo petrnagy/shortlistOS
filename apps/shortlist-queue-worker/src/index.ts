@@ -8,8 +8,8 @@
  */
 import { createLogger } from "@kan/logger";
 
-const logger = createLogger("shortlist-worker");
+const logger = createLogger("shortlist-queue-worker");
 
 logger.info(
-  "shortlist-worker has no default daemon yet. Run process-sources.",
+  "shortlist-queue-worker has no default daemon yet. Run process-sources.",
 );

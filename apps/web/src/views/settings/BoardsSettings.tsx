@@ -13,12 +13,12 @@ import {
   HiOutlineSparkles,
 } from "react-icons/hi2";
 
+import type { RouterInputs } from "~/utils/api";
 import { Alert } from "~/components/Alert";
 import Button from "~/components/Button";
 import Toggle from "~/components/Toggle";
 import { env } from "~/env";
 import { usePopup } from "~/providers/popup";
-import type { RouterInputs } from "~/utils/api";
 import { api } from "~/utils/api";
 import { hasActivePowerpack } from "~/utils/powerpack";
 
@@ -183,8 +183,16 @@ const BoardsSettings = ({
         : window.location.origin;
     const key = encodeURIComponent(user?.shortlistFeedSecret ?? "");
 
-    return `${origin}/calendar/shortlist/${boardPublicId || "board"}.ics?key=${key}`;
-  }, [boardPublicId, user?.shortlistFeedSecret]);
+    const userSecret = encodeURIComponent(
+      user?.shortlistUserPublicSecret ?? "user",
+    );
+
+    return `${origin}/calendar/shortlist/${boardPublicId || "board"}/u/${userSecret}.ics?key=${key}`;
+  }, [
+    boardPublicId,
+    user?.shortlistFeedSecret,
+    user?.shortlistUserPublicSecret,
+  ]);
 
   const magicInboxAddress = useMemo(() => {
     const domain = env.NEXT_PUBLIC_MAGIC_INBOX_DOMAIN ?? "";
@@ -402,7 +410,7 @@ const BoardsSettings = ({
                 </Button>
               </div>
             ) : null}
-            <div className="flex flex-wrap gap-x-4 gap-y-2 text-sm">
+            <div className="flex flex-wrap gap-x-1 gap-y-2 text-sm">
               {t`How to subscribe in`}:
               <Link
                 href="#google-calendar-ics-guide"
@@ -447,8 +455,7 @@ const BoardsSettings = ({
                   isChecked={displayPowerpackToggle(isSavedReminderEnabled)}
                   onToggle={() =>
                     updatePowerpackSetting({
-                      shortlistIsSavedReminderEnabled:
-                        !isSavedReminderEnabled,
+                      shortlistIsSavedReminderEnabled: !isSavedReminderEnabled,
                     })
                   }
                   dayValue={savedReminderDays}

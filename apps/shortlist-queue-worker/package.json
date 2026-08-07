@@ -1,12 +1,12 @@
 {
-  "name": "@kan/shortlist-worker",
+  "name": "@kan/shortlist-queue-worker",
   "private": true,
   "version": "0.1.0",
   "description": "Proprietary shortlistOS background workers. Not part of the open-source distribution.",
   "type": "module",
   "scripts": {
     "build": "tsc",
-    "dev": "node -e \"console.log('shortlist-worker dev does not start processors. Run pnpm process-sources explicitly.')\"",
+    "dev": "node -e \"console.log('shortlist-queue-worker dev does not start processors. Run pnpm process-sources explicitly.')\"",
     "format": "prettier --check . --ignore-path ../../.gitignore",
     "lint": "eslint",
     "process-sources": "dotenv -e ../../.env -- tsx src/jobs/process-sources.ts",

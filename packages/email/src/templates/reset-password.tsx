@@ -8,14 +8,13 @@ import { Html } from "@react-email/html";
 import { Link } from "@react-email/link";
 import { Preview } from "@react-email/preview";
 import { Text } from "@react-email/text";
-import { env } from "next-runtime-env";
+
+import { getBaseUrl } from "../utils/get-base-url";
 
 export const ResetPasswordTemplate = ({
   resetPasswordUrl,
-  resetPasswordToken,
 }: {
   resetPasswordUrl?: string;
-  resetPasswordToken?: string;
 }) => (
   <Html>
     <Head />
@@ -93,13 +92,13 @@ export const ResetPasswordTemplate = ({
         />
         <Text style={{ color: "#7e7e7e" }}>
           <Link
-            href={env("NEXT_PUBLIC_BASE_URL")}
+            href={getBaseUrl()}
             target="_blank"
             style={{ color: "#7e7e7e", textDecoration: "underline" }}
           >
             shortlistOS
           </Link>
-          , the open source Trello alternative.
+          , the open source job search organizer.
         </Text>
       </Container>
     </Body>

@@ -10,7 +10,7 @@ import { promisify } from "node:util";
 import { createLogger } from "@kan/logger";
 import { getShortlistFileExtension } from "@kan/shared/constants";
 
-const logger = createLogger("shortlist-worker:extract-source-text");
+const logger = createLogger("shortlist-queue-worker:extract-source-text");
 const require = createRequire(import.meta.url);
 const execFileAsync = promisify(execFile);
 const OCR_TIMEOUT_MS = 120_000;

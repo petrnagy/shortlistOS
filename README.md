@@ -169,6 +169,84 @@ pnpm db:migrate
 pnpm dev
 ```
 
+### Background Workers
+
+Powerpack automation runs in separate worker processes. Apply database migrations before starting them:
+
+```bash
+pnpm db:migrate
+```
+
+Run each required worker as an independent, continuously running production process:
+
+```bash
+# Magic Inbox and web clipper source queue
+pnpm --filter @kan/shortlist-queue-worker start
+
+# Salary and company enrichment queue
+pnpm --filter @kan/shortlist-queue-worker start-enrichment
+
+# Daily reminders and Monday weekly digests
+pnpm --filter @kan/shortlist-automation-email-worker start
+
+# Automatic card archiving and Ghosted labeling
+pnpm --filter @kan/shortlist-automation-card-worker start
+```
+
+The email and card automation workers check for work once per hour. Reminder emails are generated for 07:00 in the user's configured timezone, and weekly digests are generated at 07:00 on Monday. Durable database queues prevent completed daily or weekly jobs from being generated again after a worker restart.
+
+All workers skip deleted or archived shortlists and re-check Powerpack access immediately before processing. The automation workers intentionally remain idle during `pnpm dev`; run their `start` scripts explicitly when testing worker behavior locally.
+
+### Email Template Preview
+
+Preview every production React Email template locally with:
+
+```bash
+pnpm --filter @kan/email run:dev
+```
+
+Open [http://localhost:3002](http://localhost:3002). The preview server reads directly from `packages/email/src/templates`, which is the same template directory used by the application and automation email worker.
+
+### Powerpack API Endpoints
+
+The Powerpack checkout and Magic Inbox integrations expose the following REST endpoints from the web application:
+
+| Method | Endpoint                                        | Authentication                                             | Purpose                                                                                                                                                                                                                                    |
+| ------ | ----------------------------------------------- | ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `POST` | `/api/shortlist_stripe/create_checkout_session` | Signed-in shortlistOS session                              | Creates a one-time Stripe Checkout session for Powerpack and returns `{ "sessionId": "..." }`. The optional JSON body `{ "withPowerpack": "yes" }` preserves the Powerpack purchase flow through the success, cancel, and login redirects. |
+| `POST` | `/api/shortlist_stripe/webhook`                 | Stripe signature in the `Stripe-Signature` header          | Handles `checkout.session.completed`. A paid checkout grants or extends Powerpack for the user identified by the Checkout metadata or client reference ID.                                                                                 |
+| `POST` | `/api/shortlist_magic_inbox/incoming_webhook`   | `Authorization: Bearer <BREVO_MAGIC_INBOX_WEBHOOK_SECRET>` | Receives Brevo inbound-email batches, stores supported message bodies and attachments, and enqueues Magic Inbox processing. `/api/magic_inbox/incoming_webhook` is retained as a compatibility alias.                                      |
+
+#### Stripe configuration
+
+Set `STRIPE_SECRET_KEY`, `STRIPE_SHORTLIST_WEBHOOK_SECRET`, and `NEXT_PUBLIC_BASE_URL`. In Stripe, create a webhook destination pointing to:
+
+```text
+https://your-shortlistos-domain.example/api/shortlist_stripe/webhook
+```
+
+Subscribe it to `checkout.session.completed` and copy that destination's signing secret into `STRIPE_SHORTLIST_WEBHOOK_SECRET`. Stripe must send the original request body; the endpoint disables Next.js body parsing so signature verification uses the raw payload.
+
+The checkout-session endpoint is intended to be called by the signed-in web client. It returns `401` with a `loginUrl` when no valid shortlistOS session is present.
+
+#### Brevo Magic Inbox configuration
+
+Set `BREVO_MAGIC_INBOX_WEBHOOK_SECRET`, `NEXT_PUBLIC_MAGIC_INBOX_DOMAIN`, `SHORTLIST_SOURCE_BUCKET_NAME`, and the S3-compatible storage variables. Set `BREVO_API_KEY` when Brevo attachments need to be downloaded using attachment tokens.
+
+Configure Brevo's inbound webhook destination as:
+
+```text
+https://your-shortlistos-domain.example/api/shortlist_magic_inbox/incoming_webhook
+```
+
+Brevo must send `POST` requests with the configured secret as a Bearer token. The JSON payload must contain an `items` array of inbound messages. Magic Inbox recipients use this address format:
+
+```text
+{boardPublicId}.{userPublicSecret}@{NEXT_PUBLIC_MAGIC_INBOX_DOMAIN}
+```
+
+Duplicate messages are ignored using the message ID and shortlist combination. Messages are also skipped when the address cannot be resolved, Magic Inbox is disabled, the shortlist is archived or deleted, or its owner's Powerpack is inactive.
+
 ## Known Issues / TO FIX
 
 `pnpm --filter @kan/web typecheck` currently has existing project-level blockers:

@@ -1,12 +1,29 @@
 import { createHash } from "node:crypto";
-import { and, asc, eq, inArray, isNull, lt, lte, or, sql } from "drizzle-orm";
+import {
+  and,
+  asc,
+  eq,
+  gte,
+  inArray,
+  isNull,
+  lt,
+  lte,
+  or,
+  sql,
+} from "drizzle-orm";
 import { z } from "zod";
 
 import type { dbClient } from "@kan/db/client";
 import * as cardRepo from "@kan/db/repository/card.repo";
 import * as cardActivityRepo from "@kan/db/repository/cardActivity.repo";
 import * as cardCommentRepo from "@kan/db/repository/cardComment.repo";
-import { boards, cards, lists, shortlistEnrichmentJobs } from "@kan/db/schema";
+import {
+  boards,
+  cards,
+  lists,
+  shortlistEnrichmentJobs,
+  users,
+} from "@kan/db/schema";
 import { createLogger } from "@kan/logger";
 import { SHORTLIST_ROBOT_USER } from "@kan/shared/constants";
 
@@ -43,7 +60,7 @@ import {
 } from "../utils/provider-requests";
 import { getSalaryRegionConfig } from "../utils/salary-regions";
 
-const logger = createLogger("shortlist-worker:enrichment-worker");
+const logger = createLogger("shortlist-queue-worker:enrichment-worker");
 const CACHE_TTL_MS = 7 * 24 * 60 * 60 * 1_000;
 const DEFAULT_BATCH_LIMIT = 25;
 
@@ -322,6 +339,7 @@ async function claimJobs(
       .innerJoin(cards, eq(shortlistEnrichmentJobs.cardId, cards.id))
       .innerJoin(lists, eq(cards.listId, lists.id))
       .innerJoin(boards, eq(lists.boardId, boards.id))
+      .innerJoin(users, eq(boards.createdBy, users.id))
       .where(
         and(
           or(
@@ -339,6 +357,10 @@ async function claimJobs(
           ),
           lte(shortlistEnrichmentJobs.runAfter, new Date()),
           isNull(cards.deletedAt),
+          isNull(boards.deletedAt),
+          eq(boards.isArchived, false),
+          lte(users.shortlistPowerpackActivatedAt, new Date()),
+          gte(users.shortlistPowerpackExpiresAt, new Date()),
         ),
       )
       .orderBy(

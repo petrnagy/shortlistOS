@@ -34,6 +34,7 @@ export async function markCardsForEnrichment(
       and(
         eq(lists.id, cards.listId),
         isNull(boards.deletedAt),
+        eq(boards.isArchived, false),
         or(
           eq(boards.shortlistIsSalaryDataEnabled, true),
           eq(boards.shortlistIsCompanySentimentEnabled, true),

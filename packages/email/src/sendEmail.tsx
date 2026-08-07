@@ -3,11 +3,16 @@ import nodemailer from "nodemailer";
 
 import { createLogger } from "@kan/logger";
 
+import AppliedFollowUpTemplate from "./templates/applied-follow-up";
 import FeedbackNotificationTemplate from "./templates/feedback-notification";
+import InterviewingNudgeTemplate from "./templates/interviewing-nudge";
 import JoinWorkspaceTemplate from "./templates/join-workspace";
 import MagicLinkTemplate from "./templates/magic-link";
 import MentionTemplate from "./templates/mention";
+import NegotiatingNudgeTemplate from "./templates/negotiating-nudge";
 import ResetPasswordTemplate from "./templates/reset-password";
+import SavedReminderTemplate from "./templates/saved-reminder";
+import WeeklyDigestTemplate from "./templates/weekly-digest";
 
 const log = createLogger("email");
 
@@ -16,14 +21,24 @@ type Templates =
   | "JOIN_WORKSPACE"
   | "RESET_PASSWORD"
   | "MENTION"
-  | "FEEDBACK_NOTIFICATION";
+  | "FEEDBACK_NOTIFICATION"
+  | "SHORTLIST_SAVED_REMINDER"
+  | "SHORTLIST_APPLIED_FOLLOW_UP"
+  | "SHORTLIST_INTERVIEWING_NUDGE"
+  | "SHORTLIST_NEGOTIATING_NUDGE"
+  | "SHORTLIST_WEEKLY_DIGEST";
 
-const emailTemplates: Record<Templates, React.ComponentType<any>> = {
+const emailTemplates: Record<Templates, React.ElementType> = {
   MAGIC_LINK: MagicLinkTemplate,
   JOIN_WORKSPACE: JoinWorkspaceTemplate,
   RESET_PASSWORD: ResetPasswordTemplate,
   MENTION: MentionTemplate,
   FEEDBACK_NOTIFICATION: FeedbackNotificationTemplate,
+  SHORTLIST_SAVED_REMINDER: SavedReminderTemplate,
+  SHORTLIST_APPLIED_FOLLOW_UP: AppliedFollowUpTemplate,
+  SHORTLIST_INTERVIEWING_NUDGE: InterviewingNudgeTemplate,
+  SHORTLIST_NEGOTIATING_NUDGE: NegotiatingNudgeTemplate,
+  SHORTLIST_WEEKLY_DIGEST: WeeklyDigestTemplate,
 };
 
 const transporter = nodemailer.createTransport({
@@ -32,13 +47,13 @@ const transporter = nodemailer.createTransport({
   secure:
     process.env.SMTP_SECURE === undefined
       ? true
-      : process.env.SMTP_SECURE?.toLowerCase() === "true",
+      : process.env.SMTP_SECURE.toLowerCase() === "true",
   tls: {
     // do not fail on invalid certs
     rejectUnauthorized:
       process.env.SMTP_REJECT_UNAUTHORIZED === undefined
         ? true
-        : process.env.SMTP_REJECT_UNAUTHORIZED?.toLowerCase() === "true",
+        : process.env.SMTP_REJECT_UNAUTHORIZED.toLowerCase() === "true",
   },
   ...(process.env.SMTP_USER &&
     process.env.SMTP_PASSWORD && {

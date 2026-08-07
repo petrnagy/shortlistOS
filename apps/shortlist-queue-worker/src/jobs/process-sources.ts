@@ -11,7 +11,7 @@ import { createLogger } from "@kan/logger";
 
 import { processShortlistJobQueueBatch } from "../workers/source-queue-worker";
 
-const logger = createLogger("shortlist-worker:process-sources");
+const logger = createLogger("shortlist-queue-worker:process-sources");
 
 const db = createDrizzleClient();
 

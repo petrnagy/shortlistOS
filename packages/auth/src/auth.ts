@@ -38,10 +38,14 @@ export const initAuth = (db: dbClient) => {
       // to register even when public sign-up is disabled.
       disableSignUp: false,
       sendResetPassword: async (data) => {
-        await sendEmail(data.user.email, "Reset Password", "RESET_PASSWORD", {
-          resetPasswordUrl: data.url,
-          resetPasswordToken: data.token,
-        });
+        await sendEmail(
+          data.user.email,
+          "Reset your shortlistOS password",
+          "RESET_PASSWORD",
+          {
+            resetPasswordUrl: data.url,
+          },
+        );
       },
     },
     socialProviders: configuredProviders,

@@ -3,7 +3,7 @@ import { createLogger } from "@kan/logger";
 
 import { prepareEnrichmentQueue } from "../workers/enrichment-worker";
 
-const logger = createLogger("shortlist-worker:prepare-enrichment");
+const logger = createLogger("shortlist-queue-worker:prepare-enrichment");
 const db = createDrizzleClient();
 
 try {

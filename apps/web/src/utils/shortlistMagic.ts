@@ -6,8 +6,8 @@
  * Copyright: Copyright (c) 2026 Petr Nagy.
  * Proprietary: shortlistOS Powerpack feature. Not part of the open-source distribution.
  */
-import { and, eq, isNull } from "drizzle-orm";
 import type { NextApiRequest } from "next";
+import { and, eq, isNull } from "drizzle-orm";
 
 import type { createDrizzleClient } from "@kan/db/client";
 import { boards, users } from "@kan/db/schema";
@@ -63,6 +63,7 @@ export const resolveOwnedBoardWithActivePowerpack = async (
         eq(boards.publicId, input.boardPublicId),
         eq(boards.createdBy, input.userId),
         eq(users.id, input.userId),
+        eq(boards.isArchived, false),
         isNull(boards.deletedAt),
       ),
     )
@@ -97,6 +98,8 @@ export const resolveMagicInboxRecipientAccess = async (
       and(
         eq(boards.publicId, input.boardPublicId),
         eq(users.shortlistUserPublicSecret, input.userPublicSecret),
+        eq(boards.shortlistIsMagicInboxEnabled, true),
+        eq(boards.isArchived, false),
         isNull(boards.deletedAt),
       ),
     )

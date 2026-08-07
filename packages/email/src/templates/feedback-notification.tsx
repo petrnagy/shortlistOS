@@ -7,8 +7,9 @@ import { Html } from "@react-email/html";
 import { Link } from "@react-email/link";
 import { Preview } from "@react-email/preview";
 import { Text } from "@react-email/text";
-import { env } from "next-runtime-env";
 import * as React from "react";
+
+import { getBaseUrl } from "../utils/get-base-url";
 
 export const FeedbackNotificationTemplate = ({
   feedback,
@@ -91,7 +92,7 @@ export const FeedbackNotificationTemplate = ({
         <Text style={{ color: "#7e7e7e" }}>
           Sent from{" "}
           <Link
-            href={env("NEXT_PUBLIC_BASE_URL")}
+            href={getBaseUrl()}
             target="_blank"
             style={{ color: "#7e7e7e", textDecoration: "underline" }}
           >

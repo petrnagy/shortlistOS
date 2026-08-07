@@ -7,7 +7,18 @@
  * Proprietary: shortlistOS Powerpack feature. Not part of the open-source distribution.
  */
 import { createHash } from "node:crypto";
-import { and, asc, eq, inArray, isNull, lt, lte, or, sql } from "drizzle-orm";
+import {
+  and,
+  asc,
+  eq,
+  gte,
+  inArray,
+  isNull,
+  lt,
+  lte,
+  or,
+  sql,
+} from "drizzle-orm";
 
 import type { dbClient } from "@kan/db/client";
 import type { JobPostingClassification, OpportunityFacts } from "@kan/llm";
@@ -58,7 +69,7 @@ import {
   recordDailyProviderLimitNotice,
 } from "../utils/provider-requests";
 
-const logger = createLogger("shortlist-worker:source-queue-worker");
+const logger = createLogger("shortlist-queue-worker:source-queue-worker");
 
 const JOB_BATCH_LIMIT = 25;
 const SAVED_LIST_NAME = "Saved";
@@ -228,7 +239,7 @@ async function getPendingJobs(
         .set({
           attempts: sql`${shortlistJobQueue.attempts} + 1`,
           lockedAt: new Date(),
-          lockedBy: `shortlist-worker:${process.pid}`,
+          lockedBy: `shortlist-queue-worker:${process.pid}`,
           status: SHORTLIST_JOB_STATUSES.PROCESSING,
           updatedAt: new Date(),
         })
@@ -261,7 +272,7 @@ async function processQueueJob(
   try {
     await ensureShortlistRobotUser(db);
 
-    const board = await getBoard(db, job.boardId);
+    const board = await getBoard(db, job.boardId, job.sourceType);
 
     if (!board) {
       return finishJobWithStatus(db, job, {
@@ -1426,7 +1437,9 @@ async function deferJobForDailyLimit(
   job: QueueJobRow,
   values: { log: string; message: string },
 ): Promise<QueueProcessingStatus> {
-  const tomorrowUtc = new Date(getUtcDayStart().getTime() + 24 * 60 * 60 * 1_000);
+  const tomorrowUtc = new Date(
+    getUtcDayStart().getTime() + 24 * 60 * 60 * 1_000,
+  );
   await db
     .update(shortlistJobQueue)
     .set({
@@ -1501,15 +1514,33 @@ export function normalizeUserTimeZone(timeZone: string): string {
   }
 }
 
-async function getBoard(db: dbClient, boardId: number) {
-  return db.query.boards.findFirst({
-    columns: {
-      id: true,
-      publicId: true,
-      workspaceId: true,
-    },
-    where: and(eq(boards.id, boardId), isNull(boards.deletedAt)),
-  });
+async function getBoard(
+  db: dbClient,
+  boardId: number,
+  sourceType: QueueJobRow["sourceType"],
+) {
+  const [board] = await db
+    .select({
+      id: boards.id,
+      publicId: boards.publicId,
+      workspaceId: boards.workspaceId,
+    })
+    .from(boards)
+    .innerJoin(users, eq(boards.createdBy, users.id))
+    .where(
+      and(
+        eq(boards.id, boardId),
+        eq(boards.isArchived, false),
+        isNull(boards.deletedAt),
+        lte(users.shortlistPowerpackActivatedAt, new Date()),
+        gte(users.shortlistPowerpackExpiresAt, new Date()),
+        sourceType === SHORTLIST_SOURCE_TYPES.EMAIL
+          ? eq(boards.shortlistIsMagicInboxEnabled, true)
+          : undefined,
+      ),
+    )
+    .limit(1);
+  return board;
 }
 
 async function getSavedList(db: dbClient, boardId: number) {

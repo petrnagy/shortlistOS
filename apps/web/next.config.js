@@ -28,7 +28,6 @@ const config = {
     ],
   },
 
-
   /** Enables hot reloading for local packages without a build step */
   transpilePackages: [
     "@kan/api",
@@ -80,8 +79,8 @@ const config = {
         destination: "/settings/account",
       },
       {
-        source: "/calendar/shortlist/:boardPublicId.ics",
-        destination: "/api/shortlist_calendar/:boardPublicId",
+        source: "/calendar/shortlist/:boardPublicId/u/:userSecret.ics",
+        destination: "/api/shortlist_calendar/:boardPublicId/:userSecret",
       },
     ];
   },

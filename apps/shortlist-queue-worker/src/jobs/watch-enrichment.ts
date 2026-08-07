@@ -6,7 +6,7 @@ import {
   processEnrichmentQueueBatch,
 } from "../workers/enrichment-worker";
 
-const logger = createLogger("shortlist-worker:watch-enrichment");
+const logger = createLogger("shortlist-queue-worker:watch-enrichment");
 const db = createDrizzleClient();
 const apiKey = getRequiredEnv("OPENWEBNINJA_API_KEY");
 const pollIntervalMs = getNumberEnv(

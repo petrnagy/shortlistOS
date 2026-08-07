@@ -1,0 +1,33 @@
+{
+  "name": "@kan/shortlist-automation-email-worker",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "dev": "node -e \"console.log('Email automation worker is idle in dev. Run pnpm start explicitly.')\"",
+    "start": "dotenv -e ../../.env -- tsx src/index.ts",
+    "lint": "eslint",
+    "typecheck": "tsc --noEmit --emitDeclarationOnly false",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@kan/db": "workspace:^",
+    "@kan/email": "workspace:^",
+    "@kan/logger": "workspace:^",
+    "dotenv-cli": "^7.4.4",
+    "drizzle-orm": "^0.42.0",
+    "tsx": "^4.20.3"
+  },
+  "devDependencies": {
+    "@kan/eslint-config": "workspace:*",
+    "@kan/prettier-config": "workspace:*",
+    "@kan/tsconfig": "workspace:*",
+    "@types/node": "^20.17.7",
+    "eslint": "catalog:",
+    "prettier": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "^3.0.0"
+  },
+  "prettier": "@kan/prettier-config"
+}

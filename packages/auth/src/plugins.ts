@@ -260,9 +260,7 @@ export function createPlugins(db: dbClient) {
           } else {
             await sendEmail(
               normalizedEmail,
-              process.env.NEXT_PUBLIC_WHITE_LABEL_HIDE_POWERED_BY === "true"
-                ? "Sign in to your account"
-                : "Sign in to Kan",
+              "Sign in to shortlistOS",
               "MAGIC_LINK",
               {
                 magicLoginUrl: url,

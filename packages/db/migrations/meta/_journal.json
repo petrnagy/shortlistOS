@@ -414,6 +414,13 @@
       "when": 1784755287444,
       "tag": "20260722212127_PreserveDailyProviderUsage",
       "breakpoints": true
+    },
+    {
+      "idx": 59,
+      "version": "7",
+      "when": 1785878330347,
+      "tag": "20260804211850_AddShortlistAutomationQueues",
+      "breakpoints": true
     }
   ]
 }

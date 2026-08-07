@@ -6,7 +6,7 @@ import { createLogger } from "@kan/logger";
 
 import { processShortlistJobQueueBatch } from "../workers/source-queue-worker";
 
-const logger = createLogger("shortlist-worker:watch-sources");
+const logger = createLogger("shortlist-queue-worker:watch-sources");
 const db = createDrizzleClient();
 const pollIntervalMs = getNumberEnv("SHORTLIST_WORKER_POLL_INTERVAL_MS", 5_000);
 let stopping = false;
