@@ -1,6 +1,7 @@
 {
-  "name": "kan",
+  "name": "shortlistos",
   "private": true,
+  "license": "AGPL-3.0-or-later",
   "engines": {
     "node": ">=20.18.1",
     "pnpm": "^9.14.2"
@@ -14,7 +15,7 @@
     "db:push": "turbo -F @kan/db push",
     "db:studio": "turbo -F @kan/db studio",
     "dev": "turbo watch dev --continue",
-    "dev:next": "turbo watch dev -F @kan/web...",
+    "dev:next": "turbo watch dev -F @kan/web... -F @kan/web-clipper-api",
     "format": "turbo run format --continue -- --cache --cache-location .cache/.prettiercache",
     "format:fix": "turbo run format --continue -- --write --cache --cache-location .cache/.prettiercache",
     "lint": "turbo run lint --continue -- --cache --cache-location .cache/.eslintcache",

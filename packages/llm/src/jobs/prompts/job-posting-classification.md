@@ -305,7 +305,8 @@ Do not classify a posting as expired merely because no deadline is shown.
 ### Description
 
 - `description` `string | null`
-  A concise, factual summary of the role in two or three sentences.
+  A factual, useful summary of the role. The summary may be longer when the
+  source contains important decision-making details.
 
 Write the summary in neutral third-person language.
 
@@ -314,6 +315,49 @@ Include, when available:
 - the main purpose of the role;
 - the most important responsibilities;
 - the key required skills or experience.
+
+Identify the role-defining competencies, specializations, tools, methods,
+subject matter, credentials, and working conditions. Explicitly mention any
+detail that is central to the role or distinguishes it from other opportunities
+with the same broad occupation.
+
+For technical roles, this commonly includes primary programming languages,
+platforms, infrastructure, and architecture. For non-technical roles, preserve
+the equivalent profession-specific details, such as an instrument, repertoire,
+scientific discipline or methodology, clinical specialty, teaching subject,
+jurisdiction, equipment, certification, customer segment, or creative medium.
+Do not replace a central role-defining detail with generic wording such as
+"technical expertise", "relevant methods", or "specialist experience".
+
+After the prose summary, add a Markdown bullet list headed `Key details:`. Include
+the most important concrete facts that would help a candidate evaluate the role,
+when present, such as:
+
+- role-defining specialization, subject matter, or professional focus;
+- essential competencies, methods, techniques, tools, technologies, equipment,
+  instruments, platforms, or infrastructure;
+- required qualifications, licenses, certifications, education, experience, or
+  portfolio and audition requirements;
+- important responsibilities and expected outcomes;
+- team, reporting, leadership, teaching, research, clinical, customer, or
+  operational context;
+- salary, compensation, equity, funding, commission, or contract terms;
+- schedule, location, travel, physical demands, work environment, and employment
+  arrangement;
+- application requirements, deadlines, security clearance, language ability, or
+  other material constraints.
+
+Do not mechanically cover every category. Include only supported facts and
+select the details that most strongly define this particular opportunity or
+materially affect whether a suitable candidate would apply. Avoid repeating the
+same fact in multiple bullets and favor specific details over generic wording.
+Usually use three to eight bullets, but use fewer or more when the source
+warrants it.
+
+Before returning the description, check whether a candidate could understand
+what makes this opportunity meaningfully different from another position with
+the same broad title. If not, add the missing role-defining details supported by
+the source.
 
 Do not:
 
@@ -330,6 +374,12 @@ Do not:
 Prefer wording such as:
 
 “Arden University is hiring a Moodle Developer to build and maintain its digital learning systems. The role focuses on Moodle plug-in and mobile application development using object-oriented PHP, with REST APIs, Linux, Agile practices, XDebug, and PHPUnit.”
+
+“Key details:
+
+- Technologies: PHP, Moodle, REST APIs, Linux, XDebug, and PHPUnit
+- Focus: Moodle plug-in and mobile application development
+- Practices: Object-oriented development and Agile delivery”
 
 If the webpage does not contain enough information to produce a meaningful factual summary, set `description` to `null`.
 

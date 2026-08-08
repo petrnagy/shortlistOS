@@ -17,3 +17,4 @@ export * from "./notifications";
 export * from "./shortlist";
 export * from "./shortlistAutomation";
 export * from "./webhooks";
+export * from "./web-clipper";

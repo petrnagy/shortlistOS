@@ -1,5 +1,6 @@
 {
   "name": "@kan/eslint-config",
+  "license": "AGPL-3.0-or-later",
   "private": true,
   "version": "0.3.0",
   "type": "module",

@@ -2,9 +2,9 @@
  * Author: Petr Nagy / shortlistOS
  * URL: https://petrnagy.cz
  * Since: 2026-07-15
- * License: No license. All rights reserved.
+ * License: GNU Affero General Public License v3.0 or later (AGPL-3.0-or-later).
  * Copyright: Copyright (c) 2026 Petr Nagy.
- * Proprietary: shortlistOS Powerpack feature. Not part of the open-source distribution.
+ * This file is part of shortlistOS.
  */
 import { createHash } from "node:crypto";
 import {
@@ -36,10 +36,12 @@ import {
   shortlistSourceObjects,
   shortlistWebpageSources,
   users,
+  webClipperClips,
 } from "@kan/db/schema";
 import {
   classifyJobPostingContent,
   classifyOpportunityFactsContent,
+  extractJobDescriptionMarkdown,
   jobPostingSuccessSchema,
 } from "@kan/llm";
 import { createLogger } from "@kan/logger";
@@ -180,6 +182,7 @@ export async function processShortlistJobQueueBatch(
 
   for (const job of jobs) {
     const status = await processQueueJob(db, job, options);
+    await syncWebClipperStatus(db, job, status);
 
     if (status === SHORTLIST_JOB_STATUSES.COMPLETED) result.completed += 1;
     if (status === SHORTLIST_JOB_STATUSES.DUPLICATE) result.duplicates += 1;
@@ -250,10 +253,112 @@ async function getPendingJobs(
             jobs.map((job) => job.id),
           ),
         );
+
+      const webClipperClipIds = jobs
+        .map((job) => getWebClipperClipId(job.payloadJson))
+        .filter((id): id is string => id !== null);
+      if (webClipperClipIds.length > 0) {
+        await tx
+          .update(webClipperClips)
+          .set({
+            processingStartedAt: new Date(),
+            status: "PROCESSING",
+            updatedAt: new Date(),
+          })
+          .where(inArray(webClipperClips.id, webClipperClipIds));
+      }
     }
 
     return jobs;
   });
+}
+
+function getWebClipperClipId(payload: unknown): string | null {
+  if (!payload || typeof payload !== "object") return null;
+  const clipId = (payload as Record<string, unknown>).webClipperClipId;
+  return typeof clipId === "string" ? clipId : null;
+}
+
+async function syncWebClipperStatus(
+  db: dbClient,
+  job: QueueJobRow,
+  status: QueueProcessingStatus,
+) {
+  const clipId = getWebClipperClipId(job.payloadJson);
+  if (!clipId) return;
+
+  if (status === SHORTLIST_JOB_STATUSES.RETRY) {
+    await db
+      .update(webClipperClips)
+      .set({ status: "QUEUED", updatedAt: new Date() })
+      .where(eq(webClipperClips.id, clipId));
+    return;
+  }
+
+  const [result] = await db
+    .select({
+      boardName: boards.name,
+      cardId: cards.id,
+      companyName: cards.shortlistCompanyName,
+      jobTitle: cards.title,
+      matchType: shortlistSourceCards.matchType,
+      processingLog: shortlistJobQueue.processingLog,
+    })
+    .from(shortlistJobQueue)
+    .leftJoin(
+      shortlistSourceCards,
+      and(
+        eq(shortlistSourceCards.sourceType, shortlistJobQueue.sourceType),
+        eq(shortlistSourceCards.sourceId, shortlistJobQueue.sourceId),
+      ),
+    )
+    .leftJoin(cards, eq(cards.id, shortlistSourceCards.cardId))
+    .leftJoin(boards, eq(boards.id, shortlistJobQueue.boardId))
+    .where(eq(shortlistJobQueue.id, job.id))
+    .limit(1);
+
+  const completedAt = new Date();
+  const rawContentCleanup = {
+    encryptedHtml: null,
+    encryptedJsonLd: null,
+    rawContentDeletedAt: completedAt,
+  };
+
+  if (
+    status === SHORTLIST_JOB_STATUSES.COMPLETED ||
+    status === SHORTLIST_JOB_STATUSES.DUPLICATE
+  ) {
+    const created = result?.matchType === "CREATED";
+    await db
+      .update(webClipperClips)
+      .set({
+        ...rawContentCleanup,
+        cardId: created ? result.cardId : null,
+        completedAt,
+        duplicateCardId: created ? null : result?.cardId,
+        resultBoardName: result?.boardName,
+        resultCompanyName: result?.companyName,
+        resultJobTitle: result?.jobTitle,
+        status: created ? "CREATED" : "ALREADY_EXISTS",
+        updatedAt: completedAt,
+      })
+      .where(eq(webClipperClips.id, clipId));
+    return;
+  }
+
+  const notAJob = result?.processingLog?.includes(
+    "Classification rejected this source",
+  );
+  await db
+    .update(webClipperClips)
+    .set({
+      ...rawContentCleanup,
+      completedAt,
+      errorCode: notAJob ? null : "PROCESSING_FAILED",
+      status: notAJob ? "NOT_A_JOB" : "FAILED",
+      updatedAt: completedAt,
+    })
+    .where(eq(webClipperClips.id, clipId));
 }
 
 async function processQueueJob(
@@ -400,6 +505,34 @@ async function processQueueJob(
       });
     }
 
+    let sanitizedDescriptionMarkdown: string | null = null;
+    if (job.sourceType === SHORTLIST_SOURCE_TYPES.WEBPAGE) {
+      const webpageHtml = getOriginalWebpageHtml(sourceContent.sourceObjects);
+      if (webpageHtml) {
+        const extractedDescription = await runTrackedLlmRequest(
+          db,
+          job,
+          existingLink?.cardId ?? null,
+          "JOB_DESCRIPTION_MARKDOWN_EXTRACTION",
+          { model: options.model, sourceType: job.sourceType },
+          llmRequestLimit,
+          () =>
+            extractJobDescriptionMarkdown({
+              apiKey: options.apiKey,
+              model: options.model,
+              htmlContent: webpageHtml,
+              sourceUrl: sourceContent.sourceUrl,
+            }),
+        );
+        sanitizedDescriptionMarkdown =
+          extractedDescription.markdown.trim() || null;
+        processingLog = appendLog(
+          processingLog,
+          `Sanitized job description extracted using ${extractedDescription.model}.`,
+        );
+      }
+    }
+
     const cardInput = buildCardInput(
       classification.classification,
       sourceContent.sourceUrl,
@@ -431,6 +564,7 @@ async function processQueueJob(
         classification: classification.classification,
         duplicate,
         job,
+        sanitizedDescriptionMarkdown,
         sourceContent,
         uploadedCardObjectKeys,
       });
@@ -471,6 +605,8 @@ async function processQueueJob(
       cardId: createdCard.id,
       cardPublicId: createdCard.publicId,
       job,
+      jobTitle: cardInput.title,
+      sanitizedDescriptionMarkdown,
       sourceContent,
       uploadedCardObjectKeys,
     });
@@ -1174,13 +1310,19 @@ async function addRobotProcessingHistory(
     cardId: number;
     cardPublicId: string;
     job: QueueJobRow;
+    jobTitle: string;
+    sanitizedDescriptionMarkdown: string | null;
     sourceContent: ClassificationSourceContent;
     uploadedCardObjectKeys: string[];
   },
 ) {
   const sourceFiles = getSourceFilesForCard(args.sourceContent.sourceObjects);
   const filenames = sourceFiles.map((source) =>
-    getDisplayFilename(source.sourceObject),
+    getCardSourceFilename(
+      source.sourceObject,
+      args.job.sourceType,
+      args.jobTitle,
+    ),
   );
   const intakeLabel = getSourceIntakeLabel(args.job.sourceType);
 
@@ -1198,7 +1340,11 @@ async function addRobotProcessingHistory(
 
   const attachedFilenames: string[] = [];
   for (const source of sourceFiles) {
-    const filename = getDisplayFilename(source.sourceObject);
+    const filename = getCardSourceFilename(
+      source.sourceObject,
+      args.job.sourceType,
+      args.jobTitle,
+    );
     const attachment = await attachOriginalSourceFile(db, {
       buffer: source.buffer,
       cardId: args.cardId,
@@ -1206,6 +1352,24 @@ async function addRobotProcessingHistory(
       contentType: source.sourceObject.contentType,
       filename,
       fileSize: source.sourceObject.fileSize,
+      workspaceId: args.boardWorkspaceId,
+      onUploaded: (s3Key) => args.uploadedCardObjectKeys.push(s3Key),
+    });
+    attachedFilenames.push(attachment.originalFilename);
+  }
+
+  if (args.sanitizedDescriptionMarkdown) {
+    const markdownBuffer = Buffer.from(
+      args.sanitizedDescriptionMarkdown,
+      "utf8",
+    );
+    const attachment = await attachOriginalSourceFile(db, {
+      buffer: markdownBuffer,
+      cardId: args.cardId,
+      cardPublicId: args.cardPublicId,
+      contentType: "text/markdown; charset=utf-8",
+      filename: `${slugifyJobTitle(args.jobTitle)}.md`,
+      fileSize: markdownBuffer.byteLength,
       workspaceId: args.boardWorkspaceId,
       onUploaded: (s3Key) => args.uploadedCardObjectKeys.push(s3Key),
     });
@@ -1392,6 +1556,48 @@ function getSourceIntakeLabel(sourceType: string) {
 function getDisplayFilename(sourceObject: SourceObjectForClassification) {
   const metadataFilename = getMetadataFilename(sourceObject.metadataJson);
   return truncateFilename(metadataFilename ?? sourceObject.originalFilename);
+}
+
+function getCardSourceFilename(
+  sourceObject: SourceObjectForClassification,
+  sourceType: string,
+  jobTitle: string,
+): string {
+  if (
+    sourceType === SHORTLIST_SOURCE_TYPES.WEBPAGE &&
+    sourceObject.objectType === SHORTLIST_SOURCE_OBJECT_TYPES.WEBPAGE_HTML
+  ) {
+    return `${slugifyJobTitle(jobTitle)}.html`;
+  }
+
+  return getDisplayFilename(sourceObject);
+}
+
+export function slugifyJobTitle(jobTitle: string): string {
+  const slug = jobTitle
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 180)
+    .replace(/-+$/g, "");
+
+  return slug || "job-posting";
+}
+
+function getOriginalWebpageHtml(
+  sources: ExtractedSourceObject[],
+): string | null {
+  const source = sources.find(
+    (candidate) =>
+      candidate.buffer &&
+      candidate.sourceObject.objectType ===
+        SHORTLIST_SOURCE_OBJECT_TYPES.WEBPAGE_HTML,
+  );
+  if (!source?.buffer) return null;
+  const html = source.buffer.toString("utf8").trim();
+  return html ? html : null;
 }
 
 function getMetadataFilename(metadata: unknown): string | null {
@@ -1911,6 +2117,7 @@ async function enrichDuplicateCard(
     >;
     duplicate: DuplicateMatch;
     job: QueueJobRow;
+    sanitizedDescriptionMarkdown: string | null;
     sourceContent: ClassificationSourceContent;
     uploadedCardObjectKeys: string[];
   },
@@ -1958,6 +2165,8 @@ async function enrichDuplicateCard(
     cardId: args.duplicate.cardId,
     cardPublicId: args.duplicate.cardPublicId,
     job: args.job,
+    jobTitle: incoming.title,
+    sanitizedDescriptionMarkdown: args.sanitizedDescriptionMarkdown,
     sourceContent: args.sourceContent,
     uploadedCardObjectKeys: args.uploadedCardObjectKeys,
   });

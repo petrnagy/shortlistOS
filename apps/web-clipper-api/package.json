@@ -1,0 +1,40 @@
+{
+  "name": "@kan/web-clipper-api",
+  "private": true,
+  "version": "0.1.0",
+  "description": "shortlistOS Web Clipper authorization and API service.",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "dev": "dotenv -e ../../.env -- tsx watch src/index.ts",
+    "format": "prettier --check . --ignore-path ../../.gitignore",
+    "lint": "eslint",
+    "start": "dotenv -e ../../.env -- tsx src/index.ts",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit --emitDeclarationOnly false"
+  },
+  "author": "Petr Nagy / shortlistOS",
+  "license": "AGPL-3.0-or-later",
+  "dependencies": {
+    "@kan/auth": "workspace:*",
+    "@kan/db": "workspace:^",
+    "@kan/logger": "workspace:^",
+    "@kan/shared": "workspace:^",
+    "dotenv-cli": "^7.4.4",
+    "drizzle-orm": "^0.42.0",
+    "jose": "^6.1.2",
+    "tsx": "^4.20.3",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@kan/eslint-config": "workspace:*",
+    "@kan/prettier-config": "workspace:*",
+    "@kan/tsconfig": "workspace:*",
+    "@types/node": "^20.17.7",
+    "eslint": "catalog:",
+    "prettier": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "^3.0.0"
+  },
+  "prettier": "@kan/prettier-config"
+}

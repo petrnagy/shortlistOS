@@ -2,20 +2,23 @@
  * Author: Petr Nagy / shortlistOS
  * URL: https://petrnagy.cz
  * Since: 2026-06-23
- * License: No license. All rights reserved.
+ * License: GNU Affero General Public License v3.0 or later (AGPL-3.0-or-later).
  * Copyright: Copyright (c) 2026 Petr Nagy.
- * Proprietary: shortlistOS Powerpack feature. Not part of the open-source distribution.
+ * This file is part of shortlistOS.
  */
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import {
+  buildJobDescriptionMarkdownPrompt,
   buildJobPostingClassificationPrompt,
   buildOpportunityFactsPrompt,
   classifyJobPostingContent,
   classifyOpportunityFactsContent,
   convertHtmlToJobPostingMarkdown,
+  extractJobDescriptionMarkdown,
   jobPostingClassificationSchema,
   opportunityFactsSchema,
+  sanitizeJobDescriptionMarkdown,
 } from "./classify-job-posting";
 
 const { completeLlmMessageMock } = vi.hoisted(() => ({
@@ -81,6 +84,57 @@ describe("job posting classification", () => {
       "then `QUOTED_HISTORY`, and finally `EXISTING_CARD`",
     );
     expect(prompt).not.toContain("{{");
+    expect(prompt).toContain("Key details:");
+    expect(prompt).toContain("role-defining competencies");
+    expect(prompt).toContain("instrument, repertoire");
+    expect(prompt).toContain("scientific discipline or methodology");
+    expect(prompt).toContain("same broad title");
+  });
+
+  it("builds a focused Markdown extraction prompt", () => {
+    const prompt = buildJobDescriptionMarkdownPrompt({
+      content: "# Engineer\nBuild services.",
+      contentFormat: "MARKDOWN",
+      sourceUrl: "https://jobs.example.com/engineer",
+      warnings: [],
+    });
+
+    expect(prompt).toContain("Select only the primary job title");
+    expect(prompt).toContain("do not summarize, rewrite");
+    expect(prompt).toContain("https://jobs.example.com/engineer");
+    expect(prompt).not.toContain("{{");
+  });
+
+  it("sanitizes extracted Markdown locally", () => {
+    expect(
+      sanitizeJobDescriptionMarkdown(`\`\`\`markdown
+# Engineer
+
+<script>alert(1)</script>Build **Python** services.
+[Unsafe](javascript:alert(1))
+\`\`\``),
+    ).toBe("# Engineer\n\nBuild **Python** services.\nUnsafe)");
+  });
+
+  it("extracts and sanitizes job-description Markdown", async () => {
+    completeLlmMessageMock.mockResolvedValueOnce({
+      content:
+        "```markdown\n# Data Engineer\n\nBuild <b>Python</b> services.\n```",
+      model: "test-model",
+      raw: { id: "description-1" },
+    });
+
+    const result = await extractJobDescriptionMarkdown({
+      apiKey: "key",
+      model: "model",
+      htmlContent: "<h1>Data Engineer</h1><p>Build Python services.</p>",
+      sourceUrl: "https://jobs.example.com/data-engineer",
+    });
+
+    expect(result.markdown).toBe("# Data Engineer\n\nBuild Python services.");
+    expect(completeLlmMessageMock.mock.calls[0]?.[0]).not.toHaveProperty(
+      "responseFormat",
+    );
   });
 
   it("builds a source-local facts prompt that forbids LLM merge logic", () => {

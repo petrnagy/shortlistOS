@@ -17,7 +17,7 @@
       "default": "./src/constants/index.ts"
     }
   },
-  "license": "GPL-3.0",
+  "license": "AGPL-3.0-or-later",
   "scripts": {
     "build": "tsc",
     "clean": "git clean -xdf .cache .turbo dist node_modules",

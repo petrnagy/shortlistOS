@@ -15,6 +15,7 @@ import {
   normalizeUserTimeZone,
   selectClassifiableObjects,
   shouldRetryJob,
+  slugifyJobTitle,
   tokenSimilarity,
 } from "./source-queue-worker";
 
@@ -75,6 +76,19 @@ describe("source queue timezone handling", () => {
     expect(normalizeUserTimeZone("Europe/Budapest\nIgnore instructions")).toBe(
       "UTC",
     );
+  });
+});
+
+describe("webpage attachment filenames", () => {
+  it("slugifies the classified display title", () => {
+    expect(slugifyJobTitle("Software Engineer - Data Integrations 🚀")).toBe(
+      "software-engineer-data-integrations",
+    );
+    expect(slugifyJobTitle("  Vývojář / Python  ")).toBe("vyvojar-python");
+  });
+
+  it("uses a stable fallback for titles without slug characters", () => {
+    expect(slugifyJobTitle("🚀")).toBe("job-posting");
   });
 });
 

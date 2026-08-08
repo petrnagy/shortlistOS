@@ -2,7 +2,7 @@
   "name": "@kan/llm",
   "private": true,
   "version": "0.1.0",
-  "description": "Proprietary shortlistOS LLM connector and jobs. Not part of the open-source distribution.",
+  "description": "shortlistOS LLM connector and classification jobs.",
   "type": "module",
   "exports": {
     ".": {
@@ -15,7 +15,7 @@
     }
   },
   "author": "Petr Nagy / shortlistOS",
-  "license": "UNLICENSED",
+  "license": "AGPL-3.0-or-later",
   "scripts": {
     "build": "tsc",
     "clean": "git clean -xdf .cache .turbo dist node_modules",

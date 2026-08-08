@@ -418,6 +418,27 @@
     {
       "idx": 59,
       "version": "7",
+      "when": 1785186128636,
+      "tag": "20260727210208_AddWebClipperApi",
+      "breakpoints": true
+    },
+    {
+      "idx": 60,
+      "version": "7",
+      "when": 1785276401812,
+      "tag": "20260728220641_AddWebClipperAuthorizationTransactions",
+      "breakpoints": true
+    },
+    {
+      "idx": 61,
+      "version": "7",
+      "when": 1785618000000,
+      "tag": "20260801210000_AddWebClipperPairings",
+      "breakpoints": true
+    },
+    {
+      "idx": 62,
+      "version": "7",
       "when": 1785878330347,
       "tag": "20260804211850_AddShortlistAutomationQueues",
       "breakpoints": true

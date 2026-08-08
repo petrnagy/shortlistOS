@@ -75,6 +75,14 @@ const config = {
   async rewrites() {
     return [
       {
+        source: "/web-clipper/connect",
+        destination: "/api/web-clipper-connect",
+      },
+      {
+        source: "/api/web-clipper/:path*",
+        destination: `${env("WEB_CLIPPER_API_URL") ?? "http://127.0.0.1:3010"}/api/web-clipper/:path*`,
+      },
+      {
         source: "/settings",
         destination: "/settings/account",
       },

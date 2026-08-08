@@ -2,9 +2,9 @@
  * Author: Petr Nagy / shortlistOS
  * URL: https://petrnagy.cz
  * Since: 2026-06-23
- * License: No license. All rights reserved.
+ * License: GNU Affero General Public License v3.0 or later (AGPL-3.0-or-later).
  * Copyright: Copyright (c) 2026 Petr Nagy.
- * Proprietary: shortlistOS Powerpack feature. Not part of the open-source distribution.
+ * This file is part of shortlistOS.
  */
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
@@ -28,6 +28,12 @@ const JOB_POSTING_CLASSIFICATION_TEMPLATE = readFileSync(
 const OPPORTUNITY_FACTS_CLASSIFICATION_TEMPLATE = readFileSync(
   fileURLToPath(
     new URL("./prompts/opportunity-facts-classification.md", import.meta.url),
+  ),
+  "utf8",
+).trim();
+const JOB_DESCRIPTION_MARKDOWN_TEMPLATE = readFileSync(
+  fileURLToPath(
+    new URL("./prompts/job-description-markdown.md", import.meta.url),
   ),
   "utf8",
 ).trim();
@@ -243,6 +249,21 @@ export interface ClassifyOpportunityFactsResult {
   warnings: string[];
 }
 
+export interface ExtractJobDescriptionMarkdownInput {
+  apiKey: string;
+  model: string;
+  htmlContent: string;
+  sourceUrl?: string | null;
+  maxContentChars?: number;
+}
+
+export interface ExtractJobDescriptionMarkdownResult {
+  markdown: string;
+  model: string;
+  rawResponse: unknown;
+  warnings: string[];
+}
+
 interface PreparedContent {
   content: string;
   contentFormat: "MARKDOWN" | "RAW_HTML";
@@ -324,6 +345,84 @@ export async function classifyOpportunityFactsContent({
     rawResponse: response.raw,
     warnings: preparedContent.warnings,
   };
+}
+
+export async function extractJobDescriptionMarkdown({
+  apiKey,
+  model,
+  htmlContent,
+  sourceUrl = null,
+  maxContentChars = DEFAULT_MAX_CONTENT_CHARS,
+}: ExtractJobDescriptionMarkdownInput): Promise<ExtractJobDescriptionMarkdownResult> {
+  const preparedContent = prepareClassificationContent(
+    htmlContent,
+    maxContentChars,
+  );
+  const response = await completeLlmMessage({
+    apiKey,
+    model,
+    message: buildJobDescriptionMarkdownPrompt({
+      content: preparedContent.content,
+      contentFormat: preparedContent.contentFormat,
+      sourceUrl,
+      warnings: preparedContent.warnings,
+    }),
+  });
+
+  return {
+    markdown: sanitizeJobDescriptionMarkdown(response.content),
+    model: response.model,
+    rawResponse: response.raw,
+    warnings: preparedContent.warnings,
+  };
+}
+
+export function buildJobDescriptionMarkdownPrompt({
+  content,
+  contentFormat,
+  sourceUrl,
+  warnings,
+}: {
+  content: string;
+  contentFormat: "MARKDOWN" | "RAW_HTML";
+  sourceUrl: string | null;
+  warnings: string[];
+}): string {
+  return renderPromptTemplate(JOB_DESCRIPTION_MARKDOWN_TEMPLATE, {
+    CONTENT: content,
+    CONTENT_FORMAT: contentFormat,
+    CONVERSION_WARNINGS: JSON.stringify(warnings),
+    SOURCE_URL: sourceUrl ?? "null",
+  });
+}
+
+export function sanitizeJobDescriptionMarkdown(markdown: string): string {
+  const withoutFences = markdown
+    .trim()
+    .replace(/^```(?:markdown|md)?\s*\n?/i, "")
+    .replace(/\n?```\s*$/i, "");
+  const withoutControlCharacters = Array.from(withoutFences)
+    .filter((character) => {
+      const codePoint = character.codePointAt(0) ?? 0;
+      return (
+        codePoint === 9 ||
+        codePoint === 10 ||
+        (codePoint >= 32 && codePoint !== 127)
+      );
+    })
+    .join("");
+
+  return withoutControlCharacters
+    .replace(/<(script|style)\b[^>]*>[\s\S]*?<\/\1\s*>/gi, "")
+    .replace(/<[^>]*>/g, "")
+    .replace(
+      /\[([^\]]+)\]\(\s*(?:javascript|data|vbscript|file):[^)]*\)/gi,
+      "$1",
+    )
+    .replace(/\r\n?/g, "\n")
+    .replace(/[ \t]+$/gm, "")
+    .replace(/\n{4,}/g, "\n\n\n")
+    .trim();
 }
 
 export function buildOpportunityFactsPrompt({
