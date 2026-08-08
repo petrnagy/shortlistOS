@@ -50,6 +50,7 @@ export async function getShortlistCalendar(
         eq(cards.listId, lists.id),
         isNull(cards.deletedAt),
         isNotNull(cards.dueDate),
+        eq(cards.manualUpdatedOnly, false),
       ),
     )
     .where(

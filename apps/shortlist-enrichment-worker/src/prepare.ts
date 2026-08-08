@@ -1,9 +1,8 @@
 import { createDrizzleClient } from "@kan/db/client";
 import { createLogger } from "@kan/logger";
+import { prepareEnrichmentQueue } from "@kan/shortlist-queue-worker/enrichment";
 
-import { prepareEnrichmentQueue } from "../workers/enrichment-worker";
-
-const logger = createLogger("shortlist-queue-worker:prepare-enrichment");
+const logger = createLogger("shortlist-enrichment-worker:prepare");
 const db = createDrizzleClient();
 
 try {

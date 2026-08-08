@@ -43,6 +43,7 @@ export async function enqueueDueCardAutomations(
       and(
         isNull(boards.deletedAt),
         eq(boards.isArchived, false),
+        eq(cards.manualUpdatedOnly, false),
         lte(users.shortlistPowerpackActivatedAt, now),
         sql`${users.shortlistPowerpackExpiresAt} >= ${now}`,
       ),
@@ -226,6 +227,7 @@ async function getEligibleCardContext(
         eq(boards.id, job.boardId),
         isNull(boards.deletedAt),
         eq(boards.isArchived, false),
+        eq(cards.manualUpdatedOnly, false),
         lte(users.shortlistPowerpackActivatedAt, new Date()),
         sql`${users.shortlistPowerpackExpiresAt} >= now()`,
       ),

@@ -1,12 +1,12 @@
 import { createDrizzleClient } from "@kan/db/client";
 import { createLogger } from "@kan/logger";
-
 import {
+  DEFAULT_OPENWEBNINJA_ACCOUNT_DAILY_REQUEST_LIMIT,
   prepareEnrichmentQueue,
   processEnrichmentQueueBatch,
-} from "../workers/enrichment-worker";
+} from "@kan/shortlist-queue-worker/enrichment";
 
-const logger = createLogger("shortlist-queue-worker:watch-enrichment");
+const logger = createLogger("shortlist-enrichment-worker");
 const db = createDrizzleClient();
 const apiKey = getRequiredEnv("OPENWEBNINJA_API_KEY");
 const pollIntervalMs = getNumberEnv(
@@ -31,7 +31,7 @@ try {
       cacheReuseDays: getNumberEnv("OPENWEBNINJA_SALARY_CACHE_REUSE_DAYS", 30),
       accountDailyRequestLimit: getNumberEnv(
         "OPENWEBNINJA_ACCOUNT_DAILY_REQUEST_LIMIT",
-        250,
+        DEFAULT_OPENWEBNINJA_ACCOUNT_DAILY_REQUEST_LIMIT,
       ),
       frankfurterBaseUrl: process.env.FRANKFURTER_BASE_URL,
       retryLimit,

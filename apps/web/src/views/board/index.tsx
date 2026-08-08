@@ -847,6 +847,7 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
                                             }
                                             isCardAgingEnabled={
                                               boardData.shortlistIsCardAgingEnabled &&
+                                              !card.manualUpdatedOnly &&
                                               !isBoardArchived &&
                                               hasActivePowerpack(currentUser)
                                             }

@@ -9,6 +9,7 @@
 import { createDrizzleClient } from "@kan/db/client";
 import { createLogger } from "@kan/logger";
 
+import { DEFAULT_LLM_ACCOUNT_DAILY_REQUEST_LIMIT } from "../utils/provider-requests";
 import { processShortlistJobQueueBatch } from "../workers/source-queue-worker";
 
 const logger = createLogger("shortlist-queue-worker:process-sources");
@@ -20,7 +21,7 @@ try {
     apiKey: getRequiredEnv("LLM_CONNECTOR_API_KEY"),
     accountDailyRequestLimit: getNumberEnv(
       "SHORTLIST_LLM_ACCOUNT_DAILY_REQUEST_LIMIT",
-      250,
+      DEFAULT_LLM_ACCOUNT_DAILY_REQUEST_LIMIT,
     ),
     model: getRequiredEnv("LLM_CONNECTOR_MODEL"),
     retryLimit: getNumberEnv("INBOX_CLIP_RETRY_LIMIT", 3),

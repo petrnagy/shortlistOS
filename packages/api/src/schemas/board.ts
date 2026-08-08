@@ -44,6 +44,7 @@ const boardDetailCardSchema = z.object({
   shortlistCompanyName: z.string().nullable(),
   shortlistJobLocationType: z.string().nullable(),
   lastActivity: z.date().nullable(),
+  manualUpdatedOnly: z.boolean(),
   labels: z.array(labelSchema),
   members: z.array(boardCardMemberSchema),
   attachments: z.array(z.object({ publicId: z.string() })),

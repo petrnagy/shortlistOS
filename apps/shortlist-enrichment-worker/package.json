@@ -1,0 +1,33 @@
+{
+  "name": "@kan/shortlist-enrichment-worker",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "dev": "node -e \"console.log('Enrichment worker is idle in dev. Run pnpm start explicitly.')\"",
+    "start": "dotenv -e ../../.env -- tsx src/index.ts",
+    "prepare": "dotenv -e ../../.env -- tsx src/prepare.ts",
+    "process": "dotenv -e ../../.env -- tsx src/process.ts",
+    "cleanup-cache": "dotenv -e ../../.env -- tsx src/cleanup-cache.ts",
+    "lint": "eslint",
+    "typecheck": "tsc --noEmit --emitDeclarationOnly false"
+  },
+  "dependencies": {
+    "@kan/db": "workspace:^",
+    "@kan/logger": "workspace:^",
+    "@kan/shortlist-queue-worker": "workspace:^",
+    "dotenv-cli": "^7.4.4",
+    "tsx": "^4.20.3"
+  },
+  "devDependencies": {
+    "@kan/eslint-config": "workspace:*",
+    "@kan/prettier-config": "workspace:*",
+    "@kan/tsconfig": "workspace:*",
+    "@types/node": "^20.17.7",
+    "eslint": "catalog:",
+    "prettier": "catalog:",
+    "typescript": "catalog:"
+  },
+  "prettier": "@kan/prettier-config"
+}

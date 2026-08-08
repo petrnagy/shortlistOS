@@ -180,11 +180,11 @@ pnpm db:migrate
 Run each required worker as an independent, continuously running production process:
 
 ```bash
-# Magic Inbox and web clipper source queue
+# Magic Inbox and web clipper classification queue
 pnpm --filter @kan/shortlist-queue-worker start
 
 # Salary and company enrichment queue
-pnpm --filter @kan/shortlist-queue-worker start-enrichment
+pnpm --filter @kan/shortlist-enrichment-worker start
 
 # Daily reminders and Monday weekly digests
 pnpm --filter @kan/shortlist-automation-email-worker start

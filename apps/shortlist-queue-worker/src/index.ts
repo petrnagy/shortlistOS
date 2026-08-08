@@ -6,10 +6,4 @@
  * Copyright: Copyright (c) 2026 Petr Nagy.
  * Proprietary: shortlistOS Powerpack feature. Not part of the open-source distribution.
  */
-import { createLogger } from "@kan/logger";
-
-const logger = createLogger("shortlist-queue-worker");
-
-logger.info(
-  "shortlist-queue-worker has no default daemon yet. Run process-sources.",
-);
+await import("./jobs/watch-sources");

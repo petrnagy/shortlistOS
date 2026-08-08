@@ -279,6 +279,7 @@ export const getByPublicId = async (
               cardNumber: true,
               shortlistCompanyName: true,
               shortlistJobLocationType: true,
+              manualUpdatedOnly: true,
             },
             with: {
               labels: {

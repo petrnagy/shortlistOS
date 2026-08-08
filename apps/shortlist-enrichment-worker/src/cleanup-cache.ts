@@ -1,9 +1,8 @@
 import { createDrizzleClient } from "@kan/db/client";
 import { createLogger } from "@kan/logger";
+import { cleanupOpenWebNinjaCache } from "@kan/shortlist-queue-worker/enrichment";
 
-import { cleanupOpenWebNinjaCache } from "../workers/provider-cache-worker";
-
-const logger = createLogger("shortlist-queue-worker:cleanup-openwebninja-cache");
+const logger = createLogger("shortlist-enrichment-worker:cleanup-cache");
 const db = createDrizzleClient();
 
 try {

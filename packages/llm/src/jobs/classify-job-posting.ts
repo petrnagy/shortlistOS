@@ -18,7 +18,7 @@ import {
 
 import { completeLlmMessage } from "../llm-connector";
 
-const DEFAULT_MAX_CONTENT_CHARS = 60_000;
+const DEFAULT_MAX_CONTENT_CHARS = 30_000;
 const JOB_POSTING_CLASSIFICATION_TEMPLATE = readFileSync(
   fileURLToPath(
     new URL("./prompts/job-posting-classification.md", import.meta.url),

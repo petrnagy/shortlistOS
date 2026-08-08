@@ -17,6 +17,9 @@ export const PROVIDER_REQUEST_STATUSES = {
   PENDING: "PENDING",
 } as const;
 
+export const DEFAULT_LLM_ACCOUNT_DAILY_REQUEST_LIMIT = 250;
+export const DEFAULT_OPENWEBNINJA_ACCOUNT_DAILY_REQUEST_LIMIT = 250;
+
 type Provider = (typeof PROVIDERS)[keyof typeof PROVIDERS];
 
 interface RequestIdentity {
@@ -70,6 +73,78 @@ export async function beginProviderRequest(
 
   if (!row) throw new Error("Unable to create provider request history");
   return row.id;
+}
+
+export async function reserveProviderRequest(
+  db: dbClient,
+  input: RequestIdentity & { limit: number; since: Date },
+): Promise<string | null> {
+  if (!input.accountId) {
+    throw new Error("An account is required to reserve a provider request");
+  }
+  if (!Number.isInteger(input.limit) || input.limit < 1) {
+    throw new Error("Provider request limit must be a positive integer");
+  }
+  const accountId = input.accountId;
+
+  return db.transaction(async (tx) => {
+    const lockKey = createProviderQuotaLockKey(
+      accountId,
+      input.provider,
+      input.since,
+    );
+    await tx.execute(sql`select pg_advisory_xact_lock(hashtext(${lockKey}))`);
+
+    const [usage] = await tx
+      .select({ value: count() })
+      .from(shortlistProviderRequests)
+      .where(
+        and(
+          eq(shortlistProviderRequests.accountId, accountId),
+          eq(shortlistProviderRequests.provider, input.provider),
+          gte(shortlistProviderRequests.requestedAt, input.since),
+          ne(
+            shortlistProviderRequests.status,
+            PROVIDER_REQUEST_STATUSES.DUPLICATE,
+          ),
+        ),
+      );
+
+    if ((usage?.value ?? 0) >= input.limit) return null;
+
+    const [row] = await tx
+      .insert(shortlistProviderRequests)
+      .values({
+        accountId,
+        cardId: input.cardId,
+        endpoint: input.endpoint,
+        enrichmentJobId: input.enrichmentJobId,
+        jobTitleNormalized: input.jobTitleNormalized,
+        location: input.location,
+        provider: input.provider,
+        regionKey: input.regionKey,
+        requestJson: input.requestJson,
+        requestKey: createProviderRequestKey(
+          input.provider,
+          input.endpoint,
+          input.requestJson,
+        ),
+        sourceJobId: input.sourceJobId,
+        status: PROVIDER_REQUEST_STATUSES.PENDING,
+      })
+      .returning({ id: shortlistProviderRequests.id });
+
+    if (!row) throw new Error("Unable to reserve provider request");
+    return row.id;
+  });
+}
+
+export function createProviderQuotaLockKey(
+  accountId: string,
+  provider: Provider,
+  since: Date,
+): string {
+  return `${accountId}:${provider}:${since.toISOString().slice(0, 10)}`;
 }
 
 export async function completeProviderRequest(

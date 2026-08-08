@@ -168,6 +168,7 @@ export function NewCardForm({
               cardNumber: null,
               shortlistCompanyName: args.shortlistCompanyName ?? null,
               shortlistJobLocationType: null,
+              manualUpdatedOnly: false,
               lastActivity: null,
               comments: [],
               checklists: [],

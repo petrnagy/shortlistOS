@@ -46,8 +46,8 @@ import {
 import {
   beginProviderRequest,
   completeProviderRequest,
-  countDailyAccountProviderRequests,
   createProviderRequestKey,
+  DEFAULT_OPENWEBNINJA_ACCOUNT_DAILY_REQUEST_LIMIT,
   failProviderRequest,
   findFreshRequestByKey,
   findReusableSalaryRequest,
@@ -57,6 +57,7 @@ import {
   PROVIDERS,
   recordDailyProviderLimitNotice,
   recordDuplicateProviderRequest,
+  reserveProviderRequest,
 } from "../utils/provider-requests";
 import { getSalaryRegionConfig } from "../utils/salary-regions";
 
@@ -141,11 +142,16 @@ export async function prepareEnrichmentQueue(
     .from(cards)
     .innerJoin(lists, eq(cards.listId, lists.id))
     .innerJoin(boards, eq(lists.boardId, boards.id))
+    .innerJoin(users, eq(boards.createdBy, users.id))
     .where(
       and(
         eq(cards.shortlistDataFetchNeeded, true),
+        eq(cards.manualUpdatedOnly, false),
         isNull(cards.deletedAt),
         isNull(boards.deletedAt),
+        eq(boards.isArchived, false),
+        lte(users.shortlistPowerpackActivatedAt, now),
+        gte(users.shortlistPowerpackExpiresAt, now),
       ),
     )
     .orderBy(asc(cards.updatedAt), asc(cards.id))
@@ -300,7 +306,9 @@ export async function processEnrichmentQueueBatch(
   for (const job of jobs) {
     const status = await processJob(db, job, connector, fxConnector, {
       cacheReuseDays: options.cacheReuseDays ?? 30,
-      accountDailyRequestLimit: options.accountDailyRequestLimit ?? 250,
+      accountDailyRequestLimit:
+        options.accountDailyRequestLimit ??
+        DEFAULT_OPENWEBNINJA_ACCOUNT_DAILY_REQUEST_LIMIT,
       regionConfig: options.regionConfig ?? getSalaryRegionConfig(),
       retryLimit: options.retryLimit ?? 3,
     });
@@ -357,6 +365,7 @@ async function claimJobs(
           ),
           lte(shortlistEnrichmentJobs.runAfter, new Date()),
           isNull(cards.deletedAt),
+          eq(cards.manualUpdatedOnly, false),
           isNull(boards.deletedAt),
           eq(boards.isArchived, false),
           lte(users.shortlistPowerpackActivatedAt, new Date()),
@@ -521,7 +530,13 @@ async function processSalaryJob(
   }
 
   if (limitReached) {
-    await addExternalLimitNotice(db, job.cardId, accountId, dayStart);
+    await addExternalLimitNotice(
+      db,
+      job.cardId,
+      accountId,
+      dayStart,
+      job.enrichmentType,
+    );
   }
 
   if (samples.length === 0) {
@@ -530,6 +545,13 @@ async function processSalaryJob(
       summary: limitReached
         ? "The account's daily external data request limit has been reached."
         : `No salary benchmarks are currently available for ${request.jobTitle}.`,
+    };
+  }
+
+  if (!(await canApplyEnrichment(db, job.cardId, job.enrichmentType))) {
+    return {
+      responseJson: { limitReached, sampleCount: samples.length },
+      summary: "Automation was disabled before salary insights were applied.",
     };
   }
 
@@ -624,17 +646,7 @@ async function getSalarySample(
     }
   }
 
-  const requestCount = await countDailyAccountProviderRequests(
-    db,
-    input.accountId,
-    PROVIDERS.OPENWEBNINJA,
-    getUtcDayStart(),
-  );
-  if (requestCount >= input.accountDailyRequestLimit) {
-    return { limitReached: true, result: null };
-  }
-
-  const historyId = await beginProviderRequest(db, {
+  const historyId = await reserveProviderRequest(db, {
     accountId: input.accountId,
     cardId: job.cardId,
     endpoint: "JOB_SALARY",
@@ -644,7 +656,10 @@ async function getSalarySample(
     provider: PROVIDERS.OPENWEBNINJA,
     regionKey: input.scope,
     requestJson,
+    limit: input.accountDailyRequestLimit,
+    since: getUtcDayStart(),
   });
+  if (!historyId) return { limitReached: true, result: null };
   try {
     const response = await connector.getJobSalary({
       jobTitle: input.jobTitle,
@@ -667,23 +682,8 @@ async function processCompanyJob(
 ): Promise<{ responseJson: unknown; summary: string }> {
   const accountId = getJobAccountId(job);
   const dayStart = getUtcDayStart();
-  const requestCount = await countDailyAccountProviderRequests(
-    db,
-    accountId,
-    PROVIDERS.OPENWEBNINJA,
-    dayStart,
-  );
-  if (requestCount >= options.accountDailyRequestLimit) {
-    await addExternalLimitNotice(db, job.cardId, accountId, dayStart);
-    return {
-      responseJson: null,
-      summary:
-        "The account's daily external data request limit has been reached.",
-    };
-  }
-
   const requestJson = { query: request.companyName };
-  const historyId = await beginProviderRequest(db, {
+  const historyId = await reserveProviderRequest(db, {
     accountId,
     cardId: job.cardId,
     endpoint: "COMPANY_SEARCH",
@@ -691,7 +691,23 @@ async function processCompanyJob(
     location: normalizeLocation(request.companyLocation ?? ""),
     provider: PROVIDERS.OPENWEBNINJA,
     requestJson,
+    limit: options.accountDailyRequestLimit,
+    since: dayStart,
   });
+  if (!historyId) {
+    await addExternalLimitNotice(
+      db,
+      job.cardId,
+      accountId,
+      dayStart,
+      job.enrichmentType,
+    );
+    return {
+      responseJson: null,
+      summary:
+        "The account's daily external data request limit has been reached.",
+    };
+  }
   let response: Awaited<ReturnType<OpenWebNinjaConnector["searchCompanies"]>>;
   try {
     response = await connector.searchCompanies({ query: request.companyName });
@@ -705,7 +721,10 @@ async function processCompanyJob(
   const summary = company
     ? summarizeCompany(company)
     : `No sufficiently confident employer match is currently available for ${request.companyName}.`;
-  if (company) {
+  if (
+    company &&
+    (await canApplyEnrichment(db, job.cardId, job.enrichmentType))
+  ) {
     await cardRepo.update(
       db,
       {
@@ -913,7 +932,10 @@ async function addExternalLimitNotice(
   cardId: number,
   accountId: string,
   dayStart: Date,
+  enrichmentType: string,
 ) {
+  if (!(await canApplyEnrichment(db, cardId, enrichmentType))) return;
+
   const shouldCreate = await recordDailyProviderLimitNotice(db, {
     accountId,
     cardId,
@@ -937,6 +959,38 @@ async function addExternalLimitNotice(
       type: "card.updated.comment.added",
     });
   }
+}
+
+async function canApplyEnrichment(
+  db: dbClient,
+  cardId: number,
+  enrichmentType: string,
+): Promise<boolean> {
+  const now = new Date();
+  const featureEnabled =
+    enrichmentType === ENRICHMENT_TYPES.SALARY
+      ? eq(boards.shortlistIsSalaryDataEnabled, true)
+      : eq(boards.shortlistIsCompanySentimentEnabled, true);
+  const [eligible] = await db
+    .select({ id: cards.id })
+    .from(cards)
+    .innerJoin(lists, eq(cards.listId, lists.id))
+    .innerJoin(boards, eq(lists.boardId, boards.id))
+    .innerJoin(users, eq(boards.createdBy, users.id))
+    .where(
+      and(
+        eq(cards.id, cardId),
+        eq(cards.manualUpdatedOnly, false),
+        isNull(cards.deletedAt),
+        eq(boards.isArchived, false),
+        featureEnabled,
+        isNull(boards.deletedAt),
+        lte(users.shortlistPowerpackActivatedAt, now),
+        gte(users.shortlistPowerpackExpiresAt, now),
+      ),
+    )
+    .limit(1);
+  return !!eligible;
 }
 
 function getJobAccountId(job: EnrichmentJobRow): string {

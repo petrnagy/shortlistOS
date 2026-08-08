@@ -10,6 +10,7 @@ import { Mistral } from "@mistralai/mistralai";
 
 export interface CompleteLlmMessageInput {
   apiKey: string;
+  maxTokens?: number;
   model: string;
   message: string;
   responseFormat?: "json_object";
@@ -32,6 +33,7 @@ interface ChatCompletionLike {
 
 export async function completeLlmMessage({
   apiKey,
+  maxTokens = 2_000,
   model,
   message,
   responseFormat,
@@ -52,12 +54,17 @@ export async function completeLlmMessage({
     throw new Error("LLM connector message is required.");
   }
 
+  if (!Number.isInteger(maxTokens) || maxTokens < 1) {
+    throw new Error("LLM connector max tokens must be a positive integer.");
+  }
+
   const client = new Mistral({
     apiKey: trimmedApiKey,
   });
 
   const completion = (await client.chat.complete({
     model: trimmedModel,
+    maxTokens,
     messages: [
       {
         role: "user",
@@ -71,7 +78,9 @@ export async function completeLlmMessage({
     }),
   })) as ChatCompletionLike;
 
-  const content = normalizeTextContent(completion.choices?.[0]?.message?.content);
+  const content = normalizeTextContent(
+    completion.choices?.[0]?.message?.content,
+  );
 
   if (!content) {
     throw new Error("LLM connector response did not include text content.");

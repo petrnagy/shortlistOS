@@ -59,14 +59,15 @@ import {
 import { buildCardDescription } from "../utils/build-card-description";
 import { extractSourceText } from "../utils/extract-source-text";
 import {
-  beginProviderRequest,
   completeProviderRequest,
   countDailyAccountProviderRequests,
+  DEFAULT_LLM_ACCOUNT_DAILY_REQUEST_LIMIT,
   failProviderRequest,
   getUtcDayStart,
   linkSourceProviderRequestsToCard,
   PROVIDERS,
   recordDailyProviderLimitNotice,
+  reserveProviderRequest,
 } from "../utils/provider-requests";
 
 const logger = createLogger("shortlist-queue-worker:source-queue-worker");
@@ -296,7 +297,17 @@ async function processQueueJob(
 
     const sourceContent = await getClassificationSourceContent(db, job);
     const existingLink = await findLinkedCard(db, job);
-    const llmRequestLimit = options.accountDailyRequestLimit ?? 250;
+    if (existingLink?.card.manualUpdatedOnly) {
+      return finishJobWithStatus(db, job, {
+        attempt,
+        log,
+        message: `Card ${existingLink.cardPublicId} has automatic updates disabled.`,
+        status: SHORTLIST_JOB_STATUSES.DUPLICATE,
+      });
+    }
+    const llmRequestLimit =
+      options.accountDailyRequestLimit ??
+      DEFAULT_LLM_ACCOUNT_DAILY_REQUEST_LIMIT;
     const dayStart = getUtcDayStart();
     if (
       (await countDailyAccountProviderRequests(
@@ -380,6 +391,15 @@ async function processQueueJob(
       return SHORTLIST_JOB_STATUSES.FAILED;
     }
 
+    if (!(await getBoard(db, job.boardId, job.sourceType))) {
+      return finishJobWithStatus(db, job, {
+        attempt,
+        log: processingLog,
+        message: `Automation was disabled for board ${job.boardId} before the classification could be applied.`,
+        status: SHORTLIST_JOB_STATUSES.FAILED,
+      });
+    }
+
     const cardInput = buildCardInput(
       classification.classification,
       sourceContent.sourceUrl,
@@ -441,6 +461,8 @@ async function processQueueJob(
       position: "end",
     });
     incompleteCreatedCardId = createdCard.id;
+
+    await requestCardEnrichment(db, createdCard.id, job.createdBy);
 
     await linkSourceProviderRequestsToCard(db, job.id, createdCard.id);
 
@@ -557,14 +579,17 @@ async function runTrackedLlmRequest<T>(
   operation: () => Promise<T>,
 ): Promise<T> {
   const dayStart = getUtcDayStart();
-  if (
-    (await countDailyAccountProviderRequests(
-      db,
-      job.createdBy,
-      PROVIDERS.LLM,
-      dayStart,
-    )) >= accountDailyRequestLimit
-  ) {
+  const historyId = await reserveProviderRequest(db, {
+    accountId: job.createdBy,
+    cardId,
+    endpoint,
+    limit: accountDailyRequestLimit,
+    provider: PROVIDERS.LLM,
+    requestJson,
+    since: dayStart,
+    sourceJobId: job.id,
+  });
+  if (!historyId) {
     if (cardId !== null) {
       await addLlmLimitNotice(db, cardId, job.createdBy, dayStart);
     }
@@ -573,14 +598,6 @@ async function runTrackedLlmRequest<T>(
     );
   }
 
-  const historyId = await beginProviderRequest(db, {
-    accountId: job.createdBy,
-    cardId,
-    endpoint,
-    provider: PROVIDERS.LLM,
-    requestJson,
-    sourceJobId: job.id,
-  });
   try {
     const result = await operation();
     await completeProviderRequest(db, historyId, { completed: true });
@@ -1907,6 +1924,7 @@ async function enrichDuplicateCard(
     .limit(1);
   const existing = context[0];
   if (!existing) throw new Error("Duplicate card no longer exists");
+  if (existing.card.manualUpdatedOnly) return { changedFields: [] };
 
   const incoming = buildCardInput(
     args.classification,
@@ -1931,6 +1949,7 @@ async function enrichDuplicateCard(
     await cardRepo.update(db, patch, {
       cardPublicId: args.duplicate.cardPublicId,
     });
+    await requestCardEnrichment(db, args.duplicate.cardId, args.job.createdBy);
     await createUpdateActivities(db, existing.card, patch, changedFields);
   }
 
@@ -1959,6 +1978,27 @@ async function enrichDuplicateCard(
   });
 
   return { changedFields };
+}
+
+async function requestCardEnrichment(
+  db: dbClient,
+  cardId: number,
+  accountId: string,
+): Promise<void> {
+  await db
+    .update(cards)
+    .set({
+      shortlistDataFetchNeeded: true,
+      shortlistDataFetchRequestedBy: accountId,
+      updatedAt: new Date(),
+    })
+    .where(
+      and(
+        eq(cards.id, cardId),
+        eq(cards.manualUpdatedOnly, false),
+        isNull(cards.deletedAt),
+      ),
+    );
 }
 
 export function buildEnrichmentPatch(

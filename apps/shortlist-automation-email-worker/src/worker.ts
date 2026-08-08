@@ -70,7 +70,14 @@ export async function enqueueDueAutomationEmails(
     .from(boards)
     .innerJoin(users, eq(boards.createdBy, users.id))
     .leftJoin(lists, and(eq(lists.boardId, boards.id), isNull(lists.deletedAt)))
-    .leftJoin(cards, and(eq(cards.listId, lists.id), isNull(cards.deletedAt)))
+    .leftJoin(
+      cards,
+      and(
+        eq(cards.listId, lists.id),
+        isNull(cards.deletedAt),
+        eq(cards.manualUpdatedOnly, false),
+      ),
+    )
     .where(
       and(
         isNull(boards.deletedAt),
@@ -280,6 +287,7 @@ async function getEligibleEmailContext(
       and(
         job.cardId === null ? sql`false` : eq(cards.id, job.cardId),
         isNull(cards.deletedAt),
+        eq(cards.manualUpdatedOnly, false),
       ),
     )
     .leftJoin(lists, and(eq(cards.listId, lists.id), isNull(lists.deletedAt)))
@@ -358,7 +366,14 @@ async function getDigestCounts(db: dbClient, boardId: number): Promise<string> {
   const rows = await db
     .select({ stage: lists.name, count: sql<number>`count(${cards.id})::int` })
     .from(lists)
-    .leftJoin(cards, and(eq(cards.listId, lists.id), isNull(cards.deletedAt)))
+    .leftJoin(
+      cards,
+      and(
+        eq(cards.listId, lists.id),
+        isNull(cards.deletedAt),
+        eq(cards.manualUpdatedOnly, false),
+      ),
+    )
     .where(and(eq(lists.boardId, boardId), isNull(lists.deletedAt)))
     .groupBy(lists.id, lists.name)
     .orderBy(asc(lists.index));
