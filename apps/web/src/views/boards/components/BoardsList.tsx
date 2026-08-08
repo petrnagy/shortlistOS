@@ -50,24 +50,16 @@ export function BoardsList({
   );
 
   const handleToggleFavorite = (
-    e: React.MouseEvent,
     boardPublicId: string,
     currentFavorite: boolean | undefined,
   ) => {
-    e.preventDefault();
-    e.stopPropagation();
     updateBoard.mutate({
       boardPublicId,
       favorite: !currentFavorite,
     });
   };
 
-  const handleOpenBoardSettings = (
-    e: React.MouseEvent,
-    boardPublicId: string,
-  ) => {
-    e.preventDefault();
-    e.stopPropagation();
+  const handleOpenBoardSettings = (boardPublicId: string) => {
     void router.push(`/boards/${boardPublicId}/settings`);
   };
 
@@ -146,18 +138,8 @@ export function BoardsList({
           >
             <div className="group relative mr-5 flex h-[150px] w-full items-center justify-center rounded-md border border-dashed border-light-400 bg-light-50 shadow-sm hover:bg-light-200 dark:border-dark-600 dark:bg-dark-50 dark:hover:bg-dark-100">
               <PaperGrainBackground />
-              {!isTemplate && !archived && (
-                <button
-                  onClick={(e) => handleOpenBoardSettings(e, board.publicId)}
-                  className="absolute right-10 top-3 z-10 rounded p-1 transition-all hover:bg-light-300 dark:hover:bg-dark-200"
-                  aria-label="Open board settings"
-                >
-                  <HiOutlineCog6Tooth className="h-5 w-5 text-neutral-700 dark:text-dark-800" />
-                </button>
-              )}
-              {archived &&
-              !isTemplate &&
-              (canArchiveBoard || canDeleteBoard) ? (
+              {(!archived ||
+                (!isTemplate && (canArchiveBoard || canDeleteBoard))) && (
                 <div
                   className="absolute right-3 top-3 z-20"
                   onClick={(e) => {
@@ -168,18 +150,50 @@ export function BoardsList({
                   <Dropdown
                     disabled={updateBoard.isPending}
                     items={[
-                      ...(canArchiveBoard
+                      ...(!archived && !isTemplate
+                        ? [
+                            {
+                              label: t`Shortlist settings`,
+                              action: () =>
+                                handleOpenBoardSettings(board.publicId),
+                              icon: (
+                                <HiOutlineCog6Tooth className="h-4 w-4 text-dark-900" />
+                              ),
+                            },
+                          ]
+                        : []),
+                      ...(!archived
+                        ? [
+                            {
+                              label: board.favorite
+                                ? t`Remove from favorites`
+                                : t`Add to favorites`,
+                              action: () =>
+                                handleToggleFavorite(
+                                  board.publicId,
+                                  board.favorite,
+                                ),
+                              icon: board.favorite ? (
+                                <HiStar className="h-4 w-4 text-dark-900" />
+                              ) : (
+                                <HiOutlineStar className="h-4 w-4 text-dark-900" />
+                              ),
+                            },
+                          ]
+                        : []),
+                      ...(archived && canArchiveBoard
                         ? [
                             {
                               label: t`Unarchive shortlist`,
-                              action: () => handleUnarchiveBoard(board.publicId),
+                              action: () =>
+                                handleUnarchiveBoard(board.publicId),
                               icon: (
                                 <IoArchiveOutline className="h-4 w-4 text-dark-900" />
                               ),
                             },
                           ]
                         : []),
-                      ...(canDeleteBoard
+                      ...(archived && canDeleteBoard
                         ? [
                             {
                               label: t`Delete shortlist`,
@@ -196,26 +210,7 @@ export function BoardsList({
                     <HiEllipsisHorizontal className="h-5 w-5 text-neutral-700 dark:text-dark-800" />
                   </Dropdown>
                 </div>
-              ) : null}
-              {!archived ? (
-                <button
-                  onClick={(e) =>
-                    handleToggleFavorite(e, board.publicId, board.favorite)
-                  }
-                  className="absolute right-3 top-3 z-10 rounded p-1 transition-all hover:bg-light-300 dark:hover:bg-dark-200"
-                  aria-label={
-                    board.favorite
-                      ? "Remove from favorites"
-                      : "Add to favorites"
-                  }
-                >
-                  {board.favorite ? (
-                    <HiStar className="h-5 w-5 text-neutral-700 dark:text-dark-1000" />
-                  ) : (
-                    <HiOutlineStar className="h-5 w-5 text-neutral-700 dark:text-dark-800" />
-                  )}
-                </button>
-              ) : null}
+              )}
               <p className="relative z-10 px-4 text-[14px] font-bold text-neutral-700 dark:text-dark-1000">
                 {board.name}
               </p>
