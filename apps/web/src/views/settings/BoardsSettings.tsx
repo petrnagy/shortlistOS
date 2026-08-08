@@ -134,7 +134,7 @@ const ReminderRow = ({
     </div>
     <select
       value={dayValue}
-      disabled={disabled || !isChecked}
+      disabled={Boolean(disabled) || !isChecked}
       onChange={(event) => onDayChange(Number(event.target.value))}
       className="h-8 w-24 rounded-md border-0 bg-light-100 px-2 text-xs text-light-1000 shadow-sm ring-1 ring-inset ring-light-300 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-dark-200 dark:text-dark-1000 dark:ring-dark-400"
     >
@@ -330,7 +330,7 @@ const BoardsSettings = ({
         <AutomationCard
           icon={<HiOutlineSparkles className="h-4 w-4" />}
           title={t`Company sentiment`}
-          description={t`Automatically researches the company behind each opening across social networks, hiring portals, funding news, layoff signals, and other public sources, then summarizes the rating, risks, and recent context for you.`}
+          description={t`Automatically retrieves Glassdoor employer data for the company behind each opportunity, including ratings, company details, and workplace insights.`}
           isChecked={displayPowerpackToggle(isCompanySentimentEnabled)}
           onToggle={() =>
             updatePowerpackSetting({
@@ -381,7 +381,7 @@ const BoardsSettings = ({
         <AutomationCard
           icon={<HiOutlineCalendarDays className="h-4 w-4" />}
           title={t`Calendar feed`}
-          description={t`Export all planned interviews from this shortlist as an iCal feed for Google Calendar, Outlook, or any calendar app. Never miss an interview again.`}
+          description={t`Export opportunity due dates from this shortlist as an iCal feed for Google Calendar, Outlook, or any calendar app.`}
           isChecked={displayPowerpackToggle(isCalendarFeedEnabled)}
           onToggle={() =>
             updatePowerpackSetting({
@@ -581,7 +581,7 @@ const BoardsSettings = ({
         <AutomationCard
           icon={<HiOutlineChartBar className="h-4 w-4" />}
           title={t`Weekly digest`}
-          description={t`Send me a weekly summary of every opportunity in this shortlist, including which ones need attention next.`}
+          description={t`Send me a weekly summary with the number of opportunities in each stage of this shortlist.`}
           isChecked={displayPowerpackToggle(isWeeklyDigestEnabled)}
           onToggle={() =>
             updatePowerpackSetting({

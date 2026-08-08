@@ -90,7 +90,7 @@
     "origin": [
       [
         "src/views/settings/PowerpackSettings.tsx",
-        64
+        62
       ]
     ],
     "translation": "{0} et {1}"
@@ -111,7 +111,7 @@
       ],
       [
         "src/views/settings/PowerpackSettings.tsx",
-        52
+        50
       ]
     ],
     "translation": "{0} jours"
@@ -159,7 +159,7 @@
     "origin": [
       [
         "src/views/settings/PowerpackSettings.tsx",
-        56
+        54
       ]
     ],
     "translation": "{0} heures"
@@ -175,7 +175,7 @@
     "origin": [
       [
         "src/views/board/components/NewCardForm.tsx",
-        527
+        528
       ]
     ],
     "translation": "{0} étiquettes"
@@ -191,7 +191,7 @@
     "origin": [
       [
         "src/views/settings/PowerpackSettings.tsx",
-        47
+        45
       ]
     ],
     "translation": "{0} mois"
@@ -245,7 +245,7 @@
     "origin": [
       [
         "src/views/settings/PowerpackSettings.tsx",
-        70
+        68
       ]
     ],
     "translation": "{0} et {lastPart}"
@@ -439,7 +439,7 @@
       ],
       [
         "src/views/settings/PowerpackSettings.tsx",
-        52
+        50
       ]
     ],
     "translation": "1 jour"
@@ -451,7 +451,7 @@
     "origin": [
       [
         "src/views/settings/PowerpackSettings.tsx",
-        56
+        54
       ]
     ],
     "translation": "1 heure"
@@ -467,7 +467,7 @@
       ],
       [
         "src/views/settings/PowerpackSettings.tsx",
-        46
+        45
       ]
     ],
     "translation": "1 mois"
@@ -550,7 +550,7 @@
     "origin": [
       [
         "src/views/settings/PowerpackSettings.tsx",
-        501
+        495
       ]
     ],
     "translation": "3 mois pour {POWERPACK_PRICE}"
@@ -846,7 +846,7 @@
     "origin": [
       [
         "src/views/settings/PowerpackSettings.tsx",
-        486
+        480
       ]
     ],
     "translation": "Actif jusqu’au {formattedPowerpackExpiry}"
@@ -918,7 +918,7 @@
       ],
       [
         "src/views/settings/PowerpackSettings.tsx",
-        93
+        91
       ]
     ],
     "translation": "Chronologie d’activité par opportunité"
@@ -961,7 +961,6 @@
     "translation": "Ajouter un élément..."
   },
   "BkekbE": {
-    "translation": "",
     "message": "Add an opportunity",
     "placeholders": {},
     "comments": [],
@@ -970,7 +969,8 @@
         "src/pages/get-started.tsx",
         21
       ]
-    ]
+    ],
+    "translation": ""
   },
   "Gxxi5J": {
     "message": "Add checklist",
@@ -1157,6 +1157,10 @@
       [
         "src/views/board/components/BoardDropdown.tsx",
         134
+      ],
+      [
+        "src/views/boards/components/BoardsList.tsx",
+        170
       ]
     ],
     "translation": "Ajouter aux favoris"
@@ -1498,7 +1502,7 @@
     "origin": [
       [
         "src/views/settings/PowerpackSettings.tsx",
-        411
+        405
       ]
     ],
     "translation": "Après 3 mois, les fonctionnalités de Powerpack se mettent en pause, mais rien ne disparaît. Chaque opportunité, note, donnée salariale et carte reste exactement à sa place. Poursuivez votre recherche sans Powerpack ou achetez 3 mois supplémentaires si vous avez de nouveau besoin de la magie. Aucun prélèvement automatique, jamais."
@@ -1598,7 +1602,7 @@
     "origin": [
       [
         "src/views/settings/PowerpackSettings.tsx",
-        481
+        475
       ]
     ],
     "translation": "Je l’ai déjà !"
@@ -2100,7 +2104,7 @@
     "origin": [
       [
         "src/views/board/components/NewCardForm.tsx",
-        385
+        386
       ]
     ],
     "translation": "chez"
@@ -2140,7 +2144,7 @@
       ],
       [
         "src/views/settings/PowerpackSettings.tsx",
-        183
+        181
       ]
     ],
     "translation": "Archiver automatiquement les opportunités enregistrées devenues obsolètes"
@@ -2153,10 +2157,6 @@
       [
         "src/views/pricing/components/FeatureComparisonTable.tsx",
         105
-      ],
-      [
-        "src/views/settings/PowerpackSettings.tsx",
-        168
       ]
     ],
     "translation": "Déplacer automatiquement vers Sans réponse après une période de silence dans Candidature envoyée"
@@ -2189,6 +2189,18 @@
     ],
     "translation": "Automatique"
   },
+  "y+0VlG": {
+    "message": "Automatic company ratings and employer insights from Glassdoor",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/settings/PowerpackSettings.tsx",
+        141
+      ]
+    ],
+    "translation": ""
+  },
   "V2ICFL": {
     "message": "Automatic company sentiment from Glassdoor and social channels",
     "placeholders": {},
@@ -2197,10 +2209,6 @@
       [
         "src/views/pricing/components/FeatureComparisonTable.tsx",
         80
-      ],
-      [
-        "src/views/settings/PowerpackSettings.tsx",
-        143
       ]
     ],
     "translation": "Analyse automatique de la réputation de l’entreprise sur Glassdoor et les réseaux sociaux"
@@ -2252,7 +2260,7 @@
       ],
       [
         "src/views/settings/PowerpackSettings.tsx",
-        128
+        126
       ]
     ],
     "translation": "Fourchette salariale automatique pour le poste ciblé"
@@ -2281,8 +2289,33 @@
     ],
     "translation": "Enrichit automatiquement chaque opportunité avec des références salariales pour les États-Unis, l’UE, le Royaume-Uni, l’APAC et le marché mondial, afin de comparer rapidement une offre localement et à l’international."
   },
+  "SPmCA1": {
+    "message": "Automatically mark opportunities as Ghosted after silence in Applied",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/settings/PowerpackSettings.tsx",
+        166
+      ]
+    ],
+    "translation": ""
+  },
   "zq4Mfs": {
     "message": "Automatically researches the company behind each opening across social networks, hiring portals, funding news, layoff signals, and other public sources, then summarizes the rating, risks, and recent context for you.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/settings/BoardsSettings.tsx",
+        374
+      ]
+    ],
+    "translation": "Recherche automatiquement l’entreprise derrière chaque offre sur les réseaux sociaux, portails de recrutement, actualités de financement, signaux de licenciements et autres sources publiques, puis résume sa note, les risques et le contexte récent.",
+    "obsolete": true
+  },
+  "FHHkg6": {
+    "message": "Automatically retrieves Glassdoor employer data for the company behind each opportunity, including ratings, company details, and workplace insights.",
     "placeholders": {},
     "comments": [],
     "origin": [
@@ -2291,7 +2324,7 @@
         333
       ]
     ],
-    "translation": "Recherche automatiquement l’entreprise derrière chaque offre sur les réseaux sociaux, portails de recrutement, actualités de financement, signaux de licenciements et autres sources publiques, puis résume sa note, les risques et le contexte récent."
+    "translation": ""
   },
   "FFv0Vh": {
     "message": "Automation",
@@ -2320,7 +2353,7 @@
       ],
       [
         "src/views/settings/PowerpackSettings.tsx",
-        150
+        148
       ]
     ],
     "translation": "Automatisations et suggestions"
@@ -2912,6 +2945,18 @@
     ],
     "translation": "Flux de calendrier copié"
   },
+  "Y4v6kT": {
+    "message": "Calendar feed for opportunity due dates",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/settings/PowerpackSettings.tsx",
+        156
+      ]
+    ],
+    "translation": ""
+  },
   "t6FvJH": {
     "message": "Can add comments",
     "placeholders": {},
@@ -3459,7 +3504,7 @@
       ],
       [
         "src/views/settings/PowerpackSettings.tsx",
-        110
+        108
       ]
     ],
     "translation": "Enregistrement des opportunités"
@@ -3499,7 +3544,7 @@
       ],
       [
         "src/views/settings/PowerpackSettings.tsx",
-        153
+        151
       ]
     ],
     "translation": "Vieillissement des cartes : indication visuelle de l’inactivité des opportunités"
@@ -3540,7 +3585,7 @@
       ],
       [
         "src/views/settings/PowerpackSettings.tsx",
-        103
+        101
       ]
     ],
     "translation": "Champs de la carte : entreprise, poste, date d’entretien, contacts"
@@ -3787,7 +3832,7 @@
     "origin": [
       [
         "src/views/settings/PowerpackSettings.tsx",
-        343
+        341
       ]
     ],
     "translation": "Erreur de paiement"
@@ -4077,7 +4122,7 @@
     "origin": [
       [
         "src/views/board/components/NewCardForm.tsx",
-        390
+        391
       ],
       [
         "src/views/card/index.tsx",
@@ -4671,7 +4716,7 @@
     "origin": [
       [
         "src/views/board/components/NewCardForm.tsx",
-        603
+        604
       ]
     ],
     "translation": "Créer"
@@ -4703,7 +4748,7 @@
       ],
       [
         "src/views/board/components/NewCardForm.tsx",
-        592
+        593
       ],
       [
         "src/views/board/components/NewListForm.tsx",
@@ -4796,7 +4841,7 @@
     "origin": [
       [
         "src/views/boards/components/BoardsList.tsx",
-        116
+        108
       ],
       [
         "src/views/boards/index.tsx",
@@ -4824,7 +4869,7 @@
     "origin": [
       [
         "src/views/board/components/NewCardForm.tsx",
-        489
+        490
       ],
       [
         "src/views/card/components/LabelSelector.tsx",
@@ -5081,7 +5126,7 @@
       ],
       [
         "src/views/settings/PowerpackSettings.tsx",
-        218
+        216
       ]
     ],
     "translation": "Export CSV"
@@ -5546,7 +5591,7 @@
       ],
       [
         "src/views/boards/components/BoardsList.tsx",
-        185
+        199
       ]
     ],
     "translation": "Supprimer la shortlist"
@@ -6320,13 +6365,21 @@
       [
         "src/views/pricing/components/FeatureComparisonTable.tsx",
         100
-      ],
-      [
-        "src/views/settings/PowerpackSettings.tsx",
-        163
       ]
     ],
     "translation": "Rappels par e-mail pour les entretiens et prochaines actions"
+  },
+  "wqXpGs": {
+    "message": "Email reminders when opportunities need attention",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/settings/PowerpackSettings.tsx",
+        161
+      ]
+    ],
+    "translation": ""
   },
   "s8p8Pb": {
     "message": "Email to this shortlist",
@@ -6446,7 +6499,6 @@
     "translation": "Saisissez un titre personnalisé"
   },
   "7wUDbm": {
-    "translation": "",
     "message": "Enter a password or leave blank for a magic link",
     "placeholders": {},
     "comments": [],
@@ -6455,7 +6507,8 @@
         "src/components/AuthForm.tsx",
         422
       ]
-    ]
+    ],
+    "translation": ""
   },
   "rQRXo8": {
     "message": "Enter new secret to update",
@@ -6921,10 +6974,11 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        384
+        425
       ]
     ],
-    "translation": "Exportez tous les entretiens prévus de cette shortlist sous forme de flux iCal pour Google Calendar, Outlook ou toute application de calendrier. Ne manquez plus jamais un entretien."
+    "translation": "Exportez tous les entretiens prévus de cette shortlist sous forme de flux iCal pour Google Calendar, Outlook ou toute application de calendrier. Ne manquez plus jamais un entretien.",
+    "obsolete": true
   },
   "lpYill": {
     "message": "Export failed",
@@ -6949,6 +7003,18 @@
       ]
     ],
     "translation": "Exporter mes données"
+  },
+  "PLw+K8": {
+    "message": "Export opportunity due dates from this shortlist as an iCal feed for Google Calendar, Outlook, or any calendar app.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/settings/BoardsSettings.tsx",
+        384
+      ]
+    ],
+    "translation": ""
   },
   "6sIaEZ": {
     "message": "Export ready",
@@ -7175,7 +7241,7 @@
       ],
       [
         "src/views/settings/PowerpackSettings.tsx",
-        419
+        413
       ]
     ],
     "translation": "Fonctionnalité"
@@ -7346,7 +7412,7 @@
       ],
       [
         "src/views/settings/PowerpackSettings.tsx",
-        173
+        171
       ]
     ],
     "translation": "Suggestion de relance lorsqu’une entreprise ne répond plus"
@@ -7577,7 +7643,7 @@
       ],
       [
         "src/views/settings/PowerpackSettings.tsx",
-        208
+        206
       ]
     ],
     "translation": "Téléchargement complet des données à tout moment"
@@ -7739,7 +7805,6 @@
     "obsolete": true
   },
   "QiC9jK": {
-    "translation": "",
     "message": "Get started | shortlistOS",
     "placeholders": {},
     "comments": [],
@@ -7748,7 +7813,8 @@
         "src/pages/get-started.tsx",
         35
       ]
-    ]
+    ],
+    "translation": ""
   },
   "6FsGbN": {
     "message": "Get started by creating a new {0}",
@@ -7761,7 +7827,7 @@
     "origin": [
       [
         "src/views/boards/components/BoardsList.tsx",
-        103
+        95
       ]
     ],
     "translation": "Commencez en créant un nouveau {0}"
@@ -8087,10 +8153,6 @@
       [
         "src/views/pricing/components/FeatureComparisonTable.tsx",
         95
-      ],
-      [
-        "src/views/settings/PowerpackSettings.tsx",
-        158
       ]
     ],
     "translation": "Synchronisation Google Calendar des entretiens et relances"
@@ -8721,7 +8783,7 @@
     "origin": [
       [
         "src/views/board/components/NewCardForm.tsx",
-        544
+        545
       ],
       [
         "src/views/card/index.tsx",
@@ -8951,7 +9013,7 @@
       ],
       [
         "src/views/settings/PowerpackSettings.tsx",
-        78
+        76
       ]
     ],
     "translation": "Espace de recherche d’emploi avec pipeline glisser-déposer"
@@ -8987,7 +9049,7 @@
     "origin": [
       [
         "src/views/board/components/NewCardForm.tsx",
-        398
+        399
       ]
     ],
     "translation": "URL de l’offre d’emploi"
@@ -9011,7 +9073,7 @@
     "origin": [
       [
         "src/views/board/components/NewCardForm.tsx",
-        374
+        375
       ]
     ],
     "translation": "Intitulé du poste"
@@ -9160,7 +9222,6 @@
     "translation": "Gardez à l'esprit que cette action est irréversible."
   },
   "2q4Xaq": {
-    "translation": "",
     "message": "Keep it moving",
     "placeholders": {},
     "comments": [],
@@ -9169,7 +9230,8 @@
         "src/pages/get-started.tsx",
         26
       ]
-    ]
+    ],
+    "translation": ""
   },
   "7NWwrd": {
     "message": "Keep the job description, company details, salary, contacts, notes, files, and interview dates together.",
@@ -9184,7 +9246,6 @@
     "translation": "Regroupez la description du poste, les informations sur l’entreprise, le salaire, les contacts, les notes, les fichiers et les dates d’entretien."
   },
   "gzTBW/": {
-    "translation": "",
     "message": "Keep this address private",
     "placeholders": {},
     "comments": [],
@@ -9193,7 +9254,8 @@
         "src/views/settings/BoardsSettings.tsx",
         374
       ]
-    ]
+    ],
+    "translation": ""
   },
   "h7MgpO": {
     "message": "Keyboard Shortcuts",
@@ -9246,7 +9308,7 @@
       ],
       [
         "src/views/board/components/NewCardForm.tsx",
-        493
+        494
       ],
       [
         "src/views/card/index.tsx",
@@ -9396,11 +9458,11 @@
     "origin": [
       [
         "src/views/settings/PowerpackSettings.tsx",
-        60
+        58
       ],
       [
         "src/views/settings/PowerpackSettings.tsx",
-        63
+        61
       ]
     ],
     "translation": "moins d’une heure"
@@ -9606,7 +9668,7 @@
     "origin": [
       [
         "src/views/boards/components/BoardsList.tsx",
-        102
+        94
       ]
     ],
     "translation": "Les listes archivées apparaîtront ici."
@@ -9715,7 +9777,7 @@
       ],
       [
         "src/views/settings/PowerpackSettings.tsx",
-        133
+        131
       ]
     ],
     "translation": "Données salariales adaptées au lieu : votre pays, l’UE et les États-Unis"
@@ -9830,7 +9892,7 @@
       ],
       [
         "src/views/settings/PowerpackSettings.tsx",
-        213
+        211
       ]
     ],
     "translation": "Conçu et hébergé dans l’UE"
@@ -9886,7 +9948,7 @@
       ],
       [
         "src/views/settings/PowerpackSettings.tsx",
-        118
+        116
       ]
     ],
     "translation": "Magic Inbox : transférez n’importe quel e-mail d’emploi pour créer ou mettre à jour automatiquement des cartes"
@@ -10107,7 +10169,7 @@
       ],
       [
         "src/views/board/components/NewCardForm.tsx",
-        451
+        452
       ],
       [
         "src/views/card/index.tsx",
@@ -10180,7 +10242,7 @@
     "origin": [
       [
         "src/views/settings/PowerpackSettings.tsx",
-        291
+        289
       ]
     ],
     "translation": "Variable d’environnement NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY manquante."
@@ -10246,7 +10308,6 @@
     "translation": "Déplacez les cartes entre Enregistrées, Candidatures, Entretiens et les étapes suivantes à mesure que votre recherche avance. Les détails de la carte contiennent davantage de champs, et chaque activité et étape clé est enregistrée."
   },
   "8bxbpj": {
-    "translation": "",
     "message": "Move opportunities through each stage and always know what needs your attention next.",
     "placeholders": {},
     "comments": [],
@@ -10255,7 +10316,8 @@
         "src/pages/get-started.tsx",
         27
       ]
-    ]
+    ],
+    "translation": ""
   },
   "51UCsN": {
     "message": "Move to another list",
@@ -10546,7 +10608,7 @@
     "origin": [
       [
         "src/views/board/components/NewCardForm.tsx",
-        356
+        357
       ]
     ],
     "translation": "Nouvelle opportunité"
@@ -10677,7 +10739,7 @@
     "origin": [
       [
         "src/views/boards/components/BoardsList.tsx",
-        98
+        90
       ]
     ],
     "translation": "Aucun {0}"
@@ -10738,7 +10800,7 @@
     "origin": [
       [
         "src/views/boards/components/BoardsList.tsx",
-        97
+        89
       ]
     ],
     "translation": "Aucune liste archivée"
@@ -10939,7 +11001,7 @@
       ],
       [
         "src/views/settings/PowerpackSettings.tsx",
-        203
+        201
       ]
     ],
     "translation": "Aucun suivi, aucune publicité, conforme aux principes du RGPD"
@@ -11041,7 +11103,7 @@
       ],
       [
         "src/views/settings/PowerpackSettings.tsx",
-        98
+        96
       ]
     ],
     "translation": "Notes et fichiers joints"
@@ -11081,7 +11143,7 @@
       ],
       [
         "src/views/settings/PowerpackSettings.tsx",
-        188
+        186
       ]
     ],
     "translation": "Suggestions lorsque les entretiens ou négociations perdent leur élan"
@@ -11236,7 +11298,7 @@
     "origin": [
       [
         "src/views/settings/PowerpackSettings.tsx",
-        408
+        402
       ]
     ],
     "translation": "Un paiement unique de {POWERPACK_PRICE} vous donne 3 mois d’accès complet. Aucun abonnement. La recherche d’emploi est déjà assez stressante."
@@ -11334,7 +11396,6 @@
     "translation": "Amis open source"
   },
   "auJJVd": {
-    "translation": "",
     "message": "Open your workspace",
     "placeholders": {},
     "comments": [],
@@ -11343,7 +11404,8 @@
         "src/pages/get-started.tsx",
         89
       ]
-    ]
+    ],
+    "translation": ""
   },
   "wKBCKv": {
     "message": "Open-source job search CRM with optional automation for the repetitive parts.",
@@ -11579,7 +11641,6 @@
     "translation": "Mot de passe modifié"
   },
   "izFJzY": {
-    "translation": "",
     "message": "Password is required because email sending is disabled.",
     "placeholders": {},
     "comments": [],
@@ -11588,7 +11649,8 @@
         "src/components/AuthForm.tsx",
         259
       ]
-    ]
+    ],
+    "translation": ""
   },
   "r6BgwX": {
     "message": "Password is required to login.",
@@ -12139,7 +12201,7 @@
       ],
       [
         "src/views/board/components/NewCardForm.tsx",
-        213
+        214
       ],
       [
         "src/views/board/components/NewListForm.tsx",
@@ -12443,7 +12505,7 @@
     "origin": [
       [
         "src/views/settings/PowerpackSettings.tsx",
-        398
+        394
       ]
     ],
     "translation": "Powerpack actif"
@@ -12613,7 +12675,7 @@
       ],
       [
         "src/views/settings/PowerpackSettings.tsx",
-        200
+        198
       ]
     ],
     "translation": "Confidentialité et données"
@@ -12933,7 +12995,7 @@
       ],
       [
         "src/views/settings/PowerpackSettings.tsx",
-        178
+        176
       ]
     ],
     "translation": "Rappel lorsqu’une opportunité enregistrée reste inactive trop longtemps"
@@ -12986,6 +13048,10 @@
       [
         "src/views/board/components/BoardDropdown.tsx",
         134
+      ],
+      [
+        "src/views/boards/components/BoardsList.tsx",
+        169
       ]
     ],
     "translation": "Retirer des favoris"
@@ -13404,7 +13470,7 @@
       ],
       [
         "src/views/settings/PowerpackSettings.tsx",
-        125
+        123
       ]
     ],
     "translation": "Informations sur les salaires et les entreprises"
@@ -13433,6 +13499,18 @@
     ],
     "translation": "Informations salariales pour chaque poste"
   },
+  "1th7qC": {
+    "message": "Salary market benchmarks: EU, US, and global",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/settings/PowerpackSettings.tsx",
+        136
+      ]
+    ],
+    "translation": ""
+  },
   "3JZqRN": {
     "message": "Salary percentile benchmarks: EU, US, and global",
     "placeholders": {},
@@ -13441,10 +13519,6 @@
       [
         "src/views/pricing/components/FeatureComparisonTable.tsx",
         75
-      ],
-      [
-        "src/views/settings/PowerpackSettings.tsx",
-        138
       ]
     ],
     "translation": "Références de percentiles salariaux : UE, États-Unis et monde"
@@ -13525,7 +13599,7 @@
       ],
       [
         "src/views/settings/PowerpackSettings.tsx",
-        113
+        111
       ]
     ],
     "translation": "Enregistrez des offres en un clic avec Web Clipper"
@@ -13555,7 +13629,6 @@
     "translation": "Enregistrer l’URL de l’offre"
   },
   "yr1aY/": {
-    "translation": "",
     "message": "Save the role, company, job posting, notes, and interview date in one place.",
     "placeholders": {},
     "comments": [],
@@ -13564,7 +13637,8 @@
         "src/pages/get-started.tsx",
         22
       ]
-    ]
+    ],
+    "translation": ""
   },
   "MdwUGG": {
     "message": "Save time with reusable board templates.",
@@ -13886,10 +13960,23 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
+        625
+      ]
+    ],
+    "translation": "Envoyez-moi un résumé hebdomadaire de toutes les opportunités de cette shortlist, notamment celles qui nécessitent ensuite mon attention.",
+    "obsolete": true
+  },
+  "iXAW7V": {
+    "message": "Send me a weekly summary with the number of opportunities in each stage of this shortlist.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/settings/BoardsSettings.tsx",
         584
       ]
     ],
-    "translation": "Envoyez-moi un résumé hebdomadaire de toutes les opportunités de cette shortlist, notamment celles qui nécessitent ensuite mon attention."
+    "translation": ""
   },
   "Qmfwhb": {
     "message": "Send me an email reminder",
@@ -14164,7 +14251,7 @@
     "origin": [
       [
         "src/views/settings/PowerpackSettings.tsx",
-        390
+        388
       ]
     ],
     "translation": "Paramètres | Powerpack"
@@ -14257,6 +14344,10 @@
       [
         "src/views/board/components/BoardDropdown.tsx",
         123
+      ],
+      [
+        "src/views/boards/components/BoardsList.tsx",
+        156
       ]
     ],
     "translation": "Paramètres de la shortlist"
@@ -14292,7 +14383,7 @@
       ],
       [
         "src/views/settings/PowerpackSettings.tsx",
-        422
+        416
       ]
     ],
     "translation": "shortlistOS"
@@ -14308,7 +14399,7 @@
       ],
       [
         "src/views/settings/PowerpackSettings.tsx",
-        425
+        419
       ]
     ],
     "translation": "shortlistOS + Powerpack ⚡"
@@ -14338,7 +14429,6 @@
     "translation": "shortlistOS est un produit indépendant, pas une plateforme de recrutement, un réseau publicitaire ou une entreprise financée par du capital-risque."
   },
   "7HUSxz": {
-    "translation": "",
     "message": "shortlistOS keeps every opportunity, conversation, and milestone together so you can spend less time remembering and more time moving forward.",
     "placeholders": {},
     "comments": [],
@@ -14347,7 +14437,8 @@
         "src/pages/get-started.tsx",
         53
       ]
-    ]
+    ],
+    "translation": ""
   },
   "NDyHVE": {
     "message": "shortlistOS tracks your job search.",
@@ -14356,7 +14447,7 @@
     "origin": [
       [
         "src/views/settings/PowerpackSettings.tsx",
-        405
+        399
       ]
     ],
     "translation": "shortlistOS suit votre recherche d’emploi."
@@ -14905,7 +14996,7 @@
     "origin": [
       [
         "src/views/settings/PowerpackSettings.tsx",
-        290
+        288
       ]
     ],
     "translation": "Stripe n'est pas configuré"
@@ -15504,7 +15595,7 @@
     "origin": [
       [
         "src/views/settings/PowerpackSettings.tsx",
-        393
+        391
       ]
     ],
     "translation": "Le Powerpack"
@@ -15516,7 +15607,7 @@
     "origin": [
       [
         "src/views/settings/PowerpackSettings.tsx",
-        406
+        400
       ]
     ],
     "translation": "Powerpack s'en charge pour vous."
@@ -16069,7 +16160,6 @@
     "translation": "Transformez les e-mails d’emploi en opportunités organisées"
   },
   "2pRjWf": {
-    "translation": "",
     "message": "Turn your job search into a clear next step",
     "placeholders": {},
     "comments": [],
@@ -16078,7 +16168,8 @@
         "src/pages/get-started.tsx",
         50
       ]
-    ]
+    ],
+    "translation": ""
   },
   "CL5jVa": {
     "message": "TXT, Word, OpenDocument, or PDF. Maximum 10 MB.",
@@ -16220,7 +16311,7 @@
     "origin": [
       [
         "src/views/board/components/NewCardForm.tsx",
-        210
+        211
       ]
     ],
     "translation": "Impossible de créer la carte"
@@ -16468,7 +16559,7 @@
     "origin": [
       [
         "src/views/settings/PowerpackSettings.tsx",
-        347
+        345
       ]
     ],
     "translation": "Impossible de lancer le paiement pour le moment. Veuillez réessayer."
@@ -16741,7 +16832,7 @@
       ],
       [
         "src/views/boards/components/BoardsList.tsx",
-        174
+        187
       ]
     ],
     "translation": "Désarchiver la shortlist"
@@ -16996,7 +17087,7 @@
       ],
       [
         "src/views/settings/PowerpackSettings.tsx",
-        88
+        86
       ]
     ],
     "translation": "Opportunités illimitées par shortlist"
@@ -17041,7 +17132,7 @@
       ],
       [
         "src/views/settings/PowerpackSettings.tsx",
-        83
+        81
       ]
     ],
     "translation": "Shortlists illimitées"
@@ -17438,7 +17529,6 @@
     "translation": ""
   },
   "b9iaPc": {
-    "translation": "",
     "message": "Use a shortlist for one job search, client pipeline, or focused group of opportunities.",
     "placeholders": {},
     "comments": [],
@@ -17447,7 +17537,8 @@
         "src/pages/get-started.tsx",
         17
       ]
-    ]
+    ],
+    "translation": ""
   },
   "XG6hC+": {
     "message": "Use shortlistOS your way.",
@@ -17927,6 +18018,18 @@
     ],
     "translation": "Récapitulatif hebdomadaire"
   },
+  "lhAf3H": {
+    "message": "Weekly digest with opportunity counts by pipeline stage",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/settings/PowerpackSettings.tsx",
+        191
+      ]
+    ],
+    "translation": ""
+  },
   "DBzbJU": {
     "message": "Weekly digest: what needs your attention right now",
     "placeholders": {},
@@ -17935,16 +18038,11 @@
       [
         "src/views/pricing/components/FeatureComparisonTable.tsx",
         130
-      ],
-      [
-        "src/views/settings/PowerpackSettings.tsx",
-        193
       ]
     ],
     "translation": "Récapitulatif hebdomadaire : ce qui requiert votre attention maintenant"
   },
   "ChMJaA": {
-    "translation": "",
     "message": "Welcome aboard",
     "placeholders": {},
     "comments": [],
@@ -17953,7 +18051,8 @@
         "src/pages/get-started.tsx",
         47
       ]
-    ]
+    ],
+    "translation": ""
   },
   "9eF5oV": {
     "message": "Welcome back",
@@ -18052,6 +18151,19 @@
       ]
     ],
     "translation": ""
+  },
+  "nNq+/l": {
+    "message": "When off, AI and background automations are paused for this shortlist.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/settings/BoardsSettings.tsx",
+        345
+      ]
+    ],
+    "translation": "",
+    "obsolete": true
   },
   "JBshTl": {
     "message": "When off, AI and background automations cannot edit this card.",
@@ -18524,7 +18636,7 @@
     "origin": [
       [
         "src/views/settings/PowerpackSettings.tsx",
-        401
+        395
       ]
     ],
     "translation": "Vous profitez actuellement de toute la puissance de Powerpack et continuerez d'en bénéficier pendant encore {remainingPowerpackTime}."
@@ -18633,7 +18745,7 @@
       ],
       [
         "src/views/boards/components/BoardsList.tsx",
-        107
+        99
       ],
       [
         "src/views/boards/index.tsx",
@@ -18951,7 +19063,7 @@
       ],
       [
         "src/views/settings/PowerpackSettings.tsx",
-        75
+        73
       ]
     ],
     "translation": "Votre recherche d'emploi en un coup d'œil"

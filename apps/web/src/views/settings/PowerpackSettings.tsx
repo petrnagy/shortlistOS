@@ -42,9 +42,7 @@ const formatPowerpackRemainingTime = (expiresAt: Date) => {
 
   if (duration.months) {
     parts.push(
-      duration.months === 1
-        ? t`1 month`
-        : t`${duration.months} months`,
+      duration.months === 1 ? t`1 month` : t`${duration.months} months`,
     );
   }
 
@@ -135,12 +133,12 @@ const featureGroups: { title: string; items: FeatureRow[] }[] = [
         inPowerpack: true,
       },
       {
-        label: t`Salary percentile benchmarks: EU, US, and global`,
+        label: t`Salary market benchmarks: EU, US, and global`,
         inFree: false,
         inPowerpack: true,
       },
       {
-        label: t`Automatic company sentiment from Glassdoor and social channels`,
+        label: t`Automatic company ratings and employer insights from Glassdoor`,
         inFree: false,
         inPowerpack: true,
       },
@@ -155,17 +153,17 @@ const featureGroups: { title: string; items: FeatureRow[] }[] = [
         inPowerpack: true,
       },
       {
-        label: t`Google Calendar sync for interviews and follow-ups`,
+        label: t`Calendar feed for opportunity due dates`,
         inFree: false,
         inPowerpack: true,
       },
       {
-        label: t`Email reminders for upcoming interviews and next actions`,
+        label: t`Email reminders when opportunities need attention`,
         inFree: false,
         inPowerpack: true,
       },
       {
-        label: t`Auto-move to ghosted after silence in Applied`,
+        label: t`Automatically mark opportunities as Ghosted after silence in Applied`,
         inFree: false,
         inPowerpack: true,
       },
@@ -190,7 +188,7 @@ const featureGroups: { title: string; items: FeatureRow[] }[] = [
         inPowerpack: true,
       },
       {
-        label: t`Weekly digest: what needs your attention right now`,
+        label: t`Weekly digest with opportunity counts by pipeline stage`,
         inFree: false,
         inPowerpack: true,
       },
@@ -393,11 +391,7 @@ export default function PowerpackSettings() {
           {t`The Powerpack`}
         </h2>
         {remainingPowerpackTime && (
-          <Alert
-            variant="success"
-            title={t`Powerpack active`}
-            className="mb-6"
-          >
+          <Alert variant="success" title={t`Powerpack active`} className="mb-6">
             {t`You are currently enjoying the full power of the Powerpack, and will continue to enjoy it for another ${remainingPowerpackTime}.`}
           </Alert>
         )}
