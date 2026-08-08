@@ -13,6 +13,7 @@ import NegotiatingNudgeTemplate from "./templates/negotiating-nudge";
 import ResetPasswordTemplate from "./templates/reset-password";
 import SavedReminderTemplate from "./templates/saved-reminder";
 import WeeklyDigestTemplate from "./templates/weekly-digest";
+import WelcomeTemplate from "./templates/welcome";
 
 const log = createLogger("email");
 
@@ -22,6 +23,7 @@ type Templates =
   | "RESET_PASSWORD"
   | "MENTION"
   | "FEEDBACK_NOTIFICATION"
+  | "WELCOME"
   | "SHORTLIST_SAVED_REMINDER"
   | "SHORTLIST_APPLIED_FOLLOW_UP"
   | "SHORTLIST_INTERVIEWING_NUDGE"
@@ -34,6 +36,7 @@ const emailTemplates: Record<Templates, React.ElementType> = {
   RESET_PASSWORD: ResetPasswordTemplate,
   MENTION: MentionTemplate,
   FEEDBACK_NOTIFICATION: FeedbackNotificationTemplate,
+  WELCOME: WelcomeTemplate,
   SHORTLIST_SAVED_REMINDER: SavedReminderTemplate,
   SHORTLIST_APPLIED_FOLLOW_UP: AppliedFollowUpTemplate,
   SHORTLIST_INTERVIEWING_NUDGE: InterviewingNudgeTemplate,

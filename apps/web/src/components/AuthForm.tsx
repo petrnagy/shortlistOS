@@ -158,7 +158,6 @@ export function Auth({
   isSignUp,
   callbackURL: callbackURLProp,
 }: AuthProps) {
-  const [isCloudEnv, setIsCloudEnv] = useState(false);
   const [isLoginWithProviderPending, setIsLoginWithProviderPending] =
     useState<null | AuthProvider>(null);
   const [isCredentialsEnabled, setIsCredentialsEnabled] = useState(false);
@@ -178,8 +177,6 @@ export function Auth({
       env("NEXT_PUBLIC_ALLOW_CREDENTIALS")?.toLowerCase() === "true";
     const emailSendingEnabled =
       env("NEXT_PUBLIC_DISABLE_EMAIL")?.toLowerCase() !== "true";
-    const isCloudEnv = env("NEXT_PUBLIC_KAN_ENV") === "cloud";
-    setIsCloudEnv(isCloudEnv);
     setIsEmailSendingEnabled(emailSendingEnabled);
     setIsCredentialsEnabled(credentialsAllowed);
   }, []);
@@ -243,12 +240,13 @@ export function Auth({
         );
       }
     } else {
-      // Only allow magic link if email sending is enabled and not in sign up mode
-      if (isCloudEnv || (isEmailSendingEnabled && !isSignUp)) {
+      if (isEmailSendingEnabled) {
         await authClient.signIn.magicLink(
           {
             email,
+            name: isSignUp ? name : undefined,
             callbackURL,
+            newUserCallbackURL: isSignUp ? callbackURL : undefined,
           },
           {
             onSuccess: () => setIsMagicLinkSent(true, email),
@@ -258,9 +256,7 @@ export function Auth({
       } else {
         // Provide a clear error feedback when password omitted but magic link unavailable
         setLoginError(
-          isSignUp
-            ? t`Password is required to sign up.`
-            : t`Password is required to login.`,
+          t`Password is required because email sending is disabled.`,
         );
       }
     }
@@ -278,6 +274,8 @@ export function Auth({
       const result = await authClient.signIn.oauth2({
         providerId: "oidc",
         callbackURL,
+        newUserCallbackURL: isSignUp ? callbackURL : undefined,
+        requestSignUp: isSignUp ? true : undefined,
       });
       error = result.error;
     } else {
@@ -285,6 +283,8 @@ export function Auth({
       const result = await authClient.signIn.social({
         provider,
         callbackURL,
+        newUserCallbackURL: isSignUp ? callbackURL : undefined,
+        requestSignUp: isSignUp ? true : undefined,
       });
       error = result.error;
     }
@@ -309,18 +309,17 @@ export function Auth({
   const password = watch("password");
 
   const isMagicLinkAvailable = useMemo(() => {
-    return isCloudEnv || (isEmailSendingEnabled && !isSignUp);
-  }, [isCloudEnv, isEmailSendingEnabled, isSignUp]);
+    return isEmailSendingEnabled;
+  }, [isEmailSendingEnabled]);
 
-  // Determine if we should operate in magic link mode for current form state (login only)
+  // Use a magic link whenever email is enabled and no password was supplied.
   const isMagicLinkMode = useMemo(() => {
-    // Magic link only viable when email sending enabled AND not sign up.
-    if (!isEmailSendingEnabled || isSignUp) return false;
+    if (!isEmailSendingEnabled) return false;
     // If credentials disabled we always default to magic link.
     if (!isCredentialsEnabled) return true;
     // Credentials enabled: user chooses magic link by leaving password blank.
     return !password;
-  }, [isEmailSendingEnabled, isSignUp, isCredentialsEnabled, password]);
+  }, [isEmailSendingEnabled, isCredentialsEnabled, password]);
 
   // Auto-focus password field when an error indicates it's required
   useEffect(() => {
@@ -388,7 +387,7 @@ export function Auth({
             </div>
           )}
           <div className="space-y-2">
-            {isSignUp && isCredentialsEnabled && (
+            {isSignUp && (
               <div>
                 <Input
                   {...register("name", { required: true })}
@@ -417,8 +416,12 @@ export function Auth({
               <div>
                 <Input
                   type="password"
-                  {...register("password", { required: true })}
-                  placeholder={t`Enter your password`}
+                  {...register("password")}
+                  placeholder={
+                    isSignUp && isEmailSendingEnabled
+                      ? t`Enter a password or leave blank for a magic link`
+                      : t`Enter your password`
+                  }
                 />
                 {errors.password && (
                   <p className="mt-2 text-xs text-red-400">

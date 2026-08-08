@@ -3,6 +3,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import * as memberRepo from "@kan/db/repository/member.repo";
 import * as workspaceRepo from "@kan/db/repository/workspace.repo";
+import { sendEmail } from "@kan/email";
 
 import { createDatabaseHooks, getWorkspaceNameForNewUser } from "./hooks";
 
@@ -26,6 +27,7 @@ vi.mock("@kan/db/repository/workspace.repo", () => ({
 
 vi.mock("@kan/email", () => ({
   notificationClient: null,
+  sendEmail: vi.fn(),
 }));
 
 vi.mock("@kan/shared", () => ({
@@ -47,6 +49,7 @@ const mockGetByEmailAndStatus = memberRepo.getByEmailAndStatus as ReturnType<
   typeof vi.fn
 >;
 const mockCreateWorkspace = workspaceRepo.create as ReturnType<typeof vi.fn>;
+const mockSendEmail = sendEmail as ReturnType<typeof vi.fn>;
 
 const db = {} as Parameters<typeof createDatabaseHooks>[0];
 
@@ -258,6 +261,29 @@ describe("createDatabaseHooks", () => {
       await hooks.user.create.after(fakeUser, {});
 
       expect(mockCreateWorkspace).not.toHaveBeenCalled();
+    });
+
+    it("sends a welcome email for every newly created user", async () => {
+      mockGetByEmailAndStatus.mockResolvedValue(undefined);
+
+      await hooks.user.create.after(fakeUser, {});
+
+      expect(mockSendEmail).toHaveBeenCalledWith(
+        "test@example.com",
+        "Welcome to shortlistOS",
+        "WELCOME",
+        { name: "Test User" },
+      );
+    });
+
+    it("does not send a welcome email when email is disabled", async () => {
+      mockEnv.mockImplementation((key: string) =>
+        key === "NEXT_PUBLIC_DISABLE_EMAIL" ? "true" : undefined,
+      );
+
+      await hooks.user.create.after(fakeUser, {});
+
+      expect(mockSendEmail).not.toHaveBeenCalled();
     });
   });
 });

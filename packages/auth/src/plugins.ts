@@ -13,6 +13,7 @@ import { createLogger } from "@kan/logger";
 import { generateUID } from "@kan/shared/utils";
 import { createStripeClient } from "@kan/stripe";
 
+import { isMagicLinkSignUpUrl } from "./magic-link";
 import { socialProvidersPlugin } from "./providers";
 import { triggerWorkflow } from "./utils";
 
@@ -198,8 +199,9 @@ export function createPlugins(db: dbClient) {
         const normalizedEmail = email.trim().toLowerCase();
         const decodedUrl = decodeURIComponent(url);
         const isInvite = decodedUrl.includes("type=invite");
+        const isSignUp = isMagicLinkSignUpUrl(url);
 
-        if (!isInvite) {
+        if (!isInvite && !isSignUp) {
           const existingUser = await userRepo.getByEmail(db, normalizedEmail);
 
           if (!existingUser) {
@@ -210,7 +212,10 @@ export function createPlugins(db: dbClient) {
         }
 
         try {
-          log.info({ email: normalizedEmail, isInvite }, "Sending magic link");
+          log.info(
+            { email: normalizedEmail, isInvite, isSignUp },
+            "Sending magic link",
+          );
           if (isInvite) {
             let inviterName = "";
             let workspaceName = "";
@@ -260,10 +265,13 @@ export function createPlugins(db: dbClient) {
           } else {
             await sendEmail(
               normalizedEmail,
-              "Sign in to shortlistOS",
+              isSignUp
+                ? "Finish signing up for shortlistOS"
+                : "Sign in to shortlistOS",
               "MAGIC_LINK",
               {
                 magicLoginUrl: url,
+                isSignUp: String(isSignUp),
               },
             );
           }

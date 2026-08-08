@@ -7,7 +7,7 @@ import type { dbClient } from "@kan/db/client";
 import * as memberRepo from "@kan/db/repository/member.repo";
 import * as userRepo from "@kan/db/repository/user.repo";
 import * as workspaceRepo from "@kan/db/repository/workspace.repo";
-import { notificationClient } from "@kan/email";
+import { notificationClient, sendEmail } from "@kan/email";
 import { createLogger } from "@kan/logger";
 import {
   createEmailUnsubscribeLink,
@@ -97,6 +97,19 @@ export function createDatabaseHooks(db: dbClient) {
               { err: error, userId: user.id },
               "Error creating default workspace",
             );
+          }
+
+          if (env("NEXT_PUBLIC_DISABLE_EMAIL")?.toLowerCase() !== "true") {
+            try {
+              await sendEmail(user.email, "Welcome to shortlistOS", "WELCOME", {
+                name: user.name ?? "",
+              });
+            } catch (error) {
+              log.error(
+                { err: error, userId: user.id },
+                "Error sending welcome email",
+              );
+            }
           }
 
           let avatarKey = user.image;

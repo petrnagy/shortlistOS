@@ -14,12 +14,18 @@ import { getBaseUrl } from "../utils/get-base-url";
 
 export const MagicLinkTemplate = ({
   magicLoginUrl,
+  isSignUp,
 }: {
   magicLoginUrl?: string;
+  isSignUp?: string;
 }) => (
   <Html>
     <Head />
-    <Preview>Log in with this magic link</Preview>
+    <Preview>
+      {isSignUp === "true"
+        ? "Finish signing up for shortlistOS"
+        : "Log in with this magic link"}
+    </Preview>
     <Body style={{ backgroundColor: "white" }}>
       <Container
         style={{
@@ -44,7 +50,9 @@ export const MagicLinkTemplate = ({
         <Heading
           style={{ fontSize: "24px", fontWeight: "bold", color: "#232323" }}
         >
-          Login to your shortlistOS account
+          {isSignUp === "true"
+            ? "Finish creating your shortlistOS account"
+            : "Login to your shortlistOS account"}
         </Heading>
         <Text
           style={{
@@ -53,7 +61,9 @@ export const MagicLinkTemplate = ({
             color: "#232323",
           }}
         >
-          Click the button below to instantly login to your account.
+          {isSignUp === "true"
+            ? "Click the button below to create your account."
+            : "Click the button below to instantly login to your account."}
         </Text>
         <Button
           target="_blank"
@@ -72,7 +82,9 @@ export const MagicLinkTemplate = ({
             color: "white",
           }}
         >
-          Login to your account
+          {isSignUp === "true"
+            ? "Create your account"
+            : "Login to your account"}
         </Button>
         <Text
           style={{
@@ -81,7 +93,8 @@ export const MagicLinkTemplate = ({
             color: "#7e7e7e",
           }}
         >
-          If you didn&apos;t try to login, you can safely ignore this email.
+          If you didn&apos;t request this link, you can safely ignore this
+          email.
         </Text>
         <Hr
           style={{

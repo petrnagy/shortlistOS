@@ -107,7 +107,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        70
+        71
       ],
       [
         "src/views/settings/PowerpackSettings.tsx",
@@ -207,7 +207,7 @@
     "origin": [
       [
         "src/views/board/index.tsx",
-        606
+        607
       ]
     ],
     "translation": "{0} introuvable"
@@ -435,7 +435,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        70
+        71
       ],
       [
         "src/views/settings/PowerpackSettings.tsx",
@@ -463,7 +463,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        74
+        75
       ],
       [
         "src/views/settings/PowerpackSettings.tsx",
@@ -534,7 +534,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        75
+        76
       ]
     ],
     "translation": "2 mois"
@@ -578,7 +578,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        73
+        74
       ]
     ],
     "translation": "3 semaines"
@@ -886,11 +886,11 @@
       ],
       [
         "src/views/activity-log/index.tsx",
-        92
+        93
       ],
       [
         "src/views/activity-log/index.tsx",
-        99
+        100
       ]
     ],
     "translation": "Journal d'activité"
@@ -959,6 +959,18 @@
       ]
     ],
     "translation": "Ajouter un élément..."
+  },
+  "BkekbE": {
+    "translation": "",
+    "message": "Add an opportunity",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        21
+      ]
+    ]
   },
   "Gxxi5J": {
     "message": "Add checklist",
@@ -1144,7 +1156,7 @@
     "origin": [
       [
         "src/views/board/components/BoardDropdown.tsx",
-        145
+        134
       ]
     ],
     "translation": "Ajouter aux favoris"
@@ -1199,7 +1211,7 @@
     "origin": [
       [
         "src/views/card/components/ActivityList.tsx",
-        151
+        149
       ]
     ],
     "translation": "a ajouté {0} étiquettes : <0>{labelList}</0>"
@@ -1223,7 +1235,7 @@
     "origin": [
       [
         "src/views/card/components/ActivityList.tsx",
-        184
+        182
       ]
     ],
     "translation": "a ajouté une checklist"
@@ -1235,7 +1247,7 @@
     "origin": [
       [
         "src/views/card/components/ActivityList.tsx",
-        187
+        185
       ]
     ],
     "translation": "a ajouté un élément de checklist"
@@ -1247,7 +1259,7 @@
     "origin": [
       [
         "src/views/card/components/ActivityList.tsx",
-        181
+        179
       ]
     ],
     "translation": "a ajouté un commentaire"
@@ -1259,7 +1271,7 @@
     "origin": [
       [
         "src/views/card/components/ActivityList.tsx",
-        177
+        175
       ]
     ],
     "translation": "a ajouté une étiquette à la carte"
@@ -1271,7 +1283,7 @@
     "origin": [
       [
         "src/views/card/components/ActivityList.tsx",
-        179
+        177
       ]
     ],
     "translation": "a ajouté un membre à la carte"
@@ -1283,7 +1295,7 @@
     "origin": [
       [
         "src/views/card/components/ActivityList.tsx",
-        192
+        190
       ]
     ],
     "translation": "a ajouté une pièce jointe"
@@ -1299,7 +1311,7 @@
     "origin": [
       [
         "src/views/card/components/ActivityList.tsx",
-        345
+        343
       ]
     ],
     "translation": "a ajouté une pièce jointe <0>{0}</0>"
@@ -1315,7 +1327,7 @@
     "origin": [
       [
         "src/views/card/components/ActivityList.tsx",
-        275
+        273
       ]
     ],
     "translation": "a ajouté la checklist <0>{0}</0>"
@@ -1331,7 +1343,7 @@
     "origin": [
       [
         "src/views/card/components/ActivityList.tsx",
-        299
+        297
       ]
     ],
     "translation": "a ajouté l'élément de checklist <0>{0}</0>"
@@ -1347,7 +1359,7 @@
     "origin": [
       [
         "src/views/card/components/ActivityList.tsx",
-        259
+        257
       ]
     ],
     "translation": "a ajouté l'étiquette <0>{0}</0>"
@@ -2063,7 +2075,7 @@
     "origin": [
       [
         "src/views/card/components/ActivityList.tsx",
-        239
+        237
       ]
     ],
     "translation": "a assigné <0>{0}</0> à la carte"
@@ -2224,7 +2236,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        310
+        319
       ]
     ],
     "translation": "Données salariales automatiques"
@@ -2252,7 +2264,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        462
+        470
       ]
     ],
     "translation": "Archiver automatiquement"
@@ -2264,7 +2276,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        311
+        320
       ]
     ],
     "translation": "Enrichit automatiquement chaque opportunité avec des références salariales pour les États-Unis, l’UE, le Royaume-Uni, l’APAC et le marché mondial, afin de comparer rapidement une offre localement et à l’international."
@@ -2276,7 +2288,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        324
+        333
       ]
     ],
     "translation": "Recherche automatiquement l’entreprise derrière chaque offre sur les réseaux sociaux, portails de recrutement, actualités de financement, signaux de licenciements et autres sources publiques, puis résume sa note, les risques et le contexte récent."
@@ -2292,7 +2304,7 @@
       ],
       [
         "src/views/settings/BoardsSettings.tsx",
-        282
+        291
       ]
     ],
     "translation": "Automatisation"
@@ -2883,7 +2895,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        374
+        383
       ]
     ],
     "translation": "Flux de calendrier"
@@ -2895,7 +2907,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        243
+        252
       ]
     ],
     "translation": "Flux de calendrier copié"
@@ -3471,7 +3483,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        301
+        310
       ]
     ],
     "translation": "Vieillissement des cartes"
@@ -3569,7 +3581,7 @@
     "origin": [
       [
         "src/views/board/index.tsx",
-        340
+        341
       ],
       [
         "src/views/public/board/CardModal.tsx",
@@ -3698,11 +3710,11 @@
     "origin": [
       [
         "src/views/card/components/ActivityList.tsx",
-        370
+        368
       ],
       [
         "src/views/card/components/ActivityList.tsx",
-        384
+        382
       ]
     ],
     "translation": "a modifié la date d'échéance en <0>{formattedDate}</0>"
@@ -4145,7 +4157,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        323
+        332
       ]
     ],
     "translation": "Réputation de l’entreprise"
@@ -4212,7 +4224,7 @@
     "origin": [
       [
         "src/views/card/components/ActivityList.tsx",
-        189
+        187
       ]
     ],
     "translation": "a terminé un élément de checklist"
@@ -4228,7 +4240,7 @@
     "origin": [
       [
         "src/views/card/components/ActivityList.tsx",
-        316
+        314
       ]
     ],
     "translation": "a terminé l'élément de checklist <0>{0}</0>"
@@ -4463,7 +4475,7 @@
     "origin": [
       [
         "src/components/AuthForm.tsx",
-        442
+        445
       ]
     ],
     "translation": "Continuer avec "
@@ -4479,7 +4491,7 @@
     "origin": [
       [
         "src/components/AuthForm.tsx",
-        360
+        359
       ]
     ],
     "translation": "Continuer avec {0}"
@@ -4531,11 +4543,11 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        362
+        371
       ],
       [
         "src/views/settings/BoardsSettings.tsx",
-        400
+        409
       ]
     ],
     "translation": "Copier"
@@ -4784,7 +4796,7 @@
     "origin": [
       [
         "src/views/boards/components/BoardsList.tsx",
-        115
+        116
       ],
       [
         "src/views/boards/index.tsx",
@@ -4828,11 +4840,11 @@
     "origin": [
       [
         "src/views/board/index.tsx",
-        95
+        97
       ],
       [
         "src/views/board/index.tsx",
-        723
+        724
       ]
     ],
     "translation": "Créer une nouvelle liste"
@@ -4915,6 +4927,10 @@
     "comments": [],
     "origin": [
       [
+        "src/pages/get-started.tsx",
+        16
+      ],
+      [
         "src/views/boards/components/BoardsTutorial.tsx",
         142
       ]
@@ -4980,7 +4996,7 @@
     "origin": [
       [
         "src/views/card/components/ActivityList.tsx",
-        173
+        171
       ]
     ],
     "translation": "a créé la carte"
@@ -5527,6 +5543,10 @@
       [
         "src/views/board/components/BoardDropdown.tsx",
         169
+      ],
+      [
+        "src/views/boards/components/BoardsList.tsx",
+        185
       ]
     ],
     "translation": "Supprimer la shortlist"
@@ -5582,7 +5602,7 @@
     "origin": [
       [
         "src/views/card/components/ActivityList.tsx",
-        186
+        184
       ]
     ],
     "translation": "a supprimé une checklist"
@@ -5594,7 +5614,7 @@
     "origin": [
       [
         "src/views/card/components/ActivityList.tsx",
-        191
+        189
       ]
     ],
     "translation": "a supprimé un élément de checklist"
@@ -5606,7 +5626,7 @@
     "origin": [
       [
         "src/views/card/components/ActivityList.tsx",
-        183
+        181
       ]
     ],
     "translation": "a supprimé un commentaire"
@@ -5622,7 +5642,7 @@
     "origin": [
       [
         "src/views/card/components/ActivityList.tsx",
-        291
+        289
       ]
     ],
     "translation": "a supprimé la checklist <0>{0}</0>"
@@ -5638,7 +5658,7 @@
     "origin": [
       [
         "src/views/card/components/ActivityList.tsx",
-        334
+        332
       ]
     ],
     "translation": "a supprimé l'élément de checklist <0>{0}</0>"
@@ -5699,7 +5719,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        95
+        96
       ]
     ],
     "translation": "Désactivé"
@@ -5807,7 +5827,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        366
+        375
       ]
     ],
     "translation": ""
@@ -6213,7 +6233,7 @@
     "origin": [
       [
         "src/components/AuthForm.tsx",
-        443
+        446
       ]
     ],
     "translation": "e-mail"
@@ -6287,7 +6307,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        431
+        440
       ]
     ],
     "translation": "Rappels par e-mail"
@@ -6315,7 +6335,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        336
+        345
       ]
     ],
     "translation": "Envoyer un e-mail à cette shortlist"
@@ -6339,7 +6359,7 @@
     "origin": [
       [
         "src/views/card/components/ActivityList.tsx",
-        91
+        89
       ]
     ],
     "translation": "vide"
@@ -6351,7 +6371,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        95
+        96
       ]
     ],
     "translation": "Activé"
@@ -6425,6 +6445,18 @@
     ],
     "translation": "Saisissez un titre personnalisé"
   },
+  "7wUDbm": {
+    "translation": "",
+    "message": "Enter a password or leave blank for a magic link",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/components/AuthForm.tsx",
+        422
+      ]
+    ]
+  },
   "rQRXo8": {
     "message": "Enter new secret to update",
     "placeholders": {},
@@ -6468,7 +6500,7 @@
     "origin": [
       [
         "src/components/AuthForm.tsx",
-        407
+        406
       ]
     ],
     "translation": "Saisissez votre adresse e-mail"
@@ -6480,7 +6512,7 @@
     "origin": [
       [
         "src/components/AuthForm.tsx",
-        395
+        394
       ]
     ],
     "translation": "Saisissez votre nom"
@@ -6504,7 +6536,7 @@
     "origin": [
       [
         "src/components/AuthForm.tsx",
-        421
+        423
       ]
     ],
     "translation": "Saisissez votre mot de passe"
@@ -6889,7 +6921,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        375
+        384
       ]
     ],
     "translation": "Exportez tous les entretiens prévus de cette shortlist sous forme de flux iCal pour Google Calendar, Outlook ou toute application de calendrier. Ne manquez plus jamais un entretien."
@@ -7212,7 +7244,7 @@
     "origin": [
       [
         "src/views/card/components/ActivityList.tsx",
-        76
+        74
       ]
     ],
     "translation": "Téléversement de fichier"
@@ -7326,7 +7358,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        487
+        495
       ]
     ],
     "translation": "Rappel de relance"
@@ -7386,7 +7418,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        263
+        272
       ]
     ],
     "translation": "Transférez ou envoyez des e-mails à cette adresse pour les ajouter à cette shortlist."
@@ -7643,7 +7675,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        337
+        346
       ]
     ],
     "translation": ""
@@ -7706,6 +7738,18 @@
     "translation": "Commencer",
     "obsolete": true
   },
+  "QiC9jK": {
+    "translation": "",
+    "message": "Get started | shortlistOS",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        35
+      ]
+    ]
+  },
   "6FsGbN": {
     "message": "Get started by creating a new {0}",
     "placeholders": {
@@ -7717,7 +7761,7 @@
     "origin": [
       [
         "src/views/boards/components/BoardsList.tsx",
-        102
+        103
       ]
     ],
     "translation": "Commencez en créant un nouveau {0}"
@@ -7729,7 +7773,7 @@
     "origin": [
       [
         "src/views/board/index.tsx",
-        708
+        709
       ]
     ],
     "translation": "Commencez en créant une nouvelle liste"
@@ -7811,7 +7855,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        288
+        297
       ]
     ],
     "translation": "Obtenez Powerpack pour automatiser votre recherche d’emploi."
@@ -8030,7 +8074,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        412
+        421
       ]
     ],
     "translation": "Google Calendar"
@@ -8300,7 +8344,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        405
+        414
       ]
     ],
     "translation": "Comment s’abonner dans"
@@ -9115,6 +9159,18 @@
     ],
     "translation": "Gardez à l'esprit que cette action est irréversible."
   },
+  "2q4Xaq": {
+    "translation": "",
+    "message": "Keep it moving",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        26
+      ]
+    ]
+  },
   "7NWwrd": {
     "message": "Keep the job description, company details, salary, contacts, notes, files, and interview dates together.",
     "placeholders": {},
@@ -9126,6 +9182,18 @@
       ]
     ],
     "translation": "Regroupez la description du poste, les informations sur l’entreprise, le salaire, les contacts, les notes, les fichiers et les dates d’entretien."
+  },
+  "gzTBW/": {
+    "translation": "",
+    "message": "Keep this address private",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/settings/BoardsSettings.tsx",
+        374
+      ]
+    ]
   },
   "h7MgpO": {
     "message": "Keyboard Shortcuts",
@@ -9422,7 +9490,7 @@
     "origin": [
       [
         "src/views/card/components/ActivityList.tsx",
-        81
+        79
       ]
     ],
     "translation": "Lien"
@@ -9438,7 +9506,7 @@
       ],
       [
         "src/views/board/index.tsx",
-        338
+        339
       ],
       [
         "src/views/public/board/CardModal.tsx",
@@ -9538,7 +9606,7 @@
     "origin": [
       [
         "src/views/boards/components/BoardsList.tsx",
-        101
+        102
       ]
     ],
     "translation": "Les listes archivées apparaîtront ici."
@@ -9563,7 +9631,7 @@
     "origin": [
       [
         "src/views/card/components/ActivityList.tsx",
-        702
+        701
       ]
     ],
     "translation": "Charger plus de notes"
@@ -9575,11 +9643,11 @@
     "origin": [
       [
         "src/views/activity-log/index.tsx",
-        222
+        226
       ],
       [
         "src/views/card/components/ActivityList.tsx",
-        703
+        702
       ]
     ],
     "translation": "Charger les mises à jour précédentes"
@@ -9603,11 +9671,11 @@
     "origin": [
       [
         "src/views/activity-log/index.tsx",
-        222
+        226
       ],
       [
         "src/views/card/components/ActivityList.tsx",
-        700
+        699
       ]
     ],
     "translation": "Chargement..."
@@ -9786,7 +9854,7 @@
     "origin": [
       [
         "src/views/card/components/ActivityList.tsx",
-        74
+        72
       ],
       [
         "src/views/pricing/components/PricingCards.tsx",
@@ -9802,7 +9870,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        262
+        271
       ]
     ],
     "translation": "Adresse Magic Inbox copiée"
@@ -9830,7 +9898,7 @@
     "origin": [
       [
         "src/components/AuthForm.tsx",
-        443
+        446
       ]
     ],
     "translation": "lien magique"
@@ -9878,7 +9946,7 @@
     "origin": [
       [
         "src/views/card/components/ActivityList.tsx",
-        72
+        70
       ]
     ],
     "translation": "Manuellement"
@@ -9890,7 +9958,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        506
+        514
       ]
     ],
     "translation": "Marquer l’opportunité comme sans réponse"
@@ -9902,7 +9970,7 @@
     "origin": [
       [
         "src/views/card/components/ActivityList.tsx",
-        190
+        188
       ]
     ],
     "translation": "a marqué un élément de la checklist comme incomplet"
@@ -9918,7 +9986,7 @@
     "origin": [
       [
         "src/views/card/components/ActivityList.tsx",
-        325
+        323
       ]
     ],
     "translation": "a marqué l'élément de checklist <0>{0}</0> comme incomplet"
@@ -10003,11 +10071,11 @@
     "origin": [
       [
         "src/views/card/components/ActivityList.tsx",
-        59
+        57
       ],
       [
         "src/views/card/components/ActivityList.tsx",
-        137
+        135
       ],
       [
         "src/views/members/index.tsx",
@@ -10088,7 +10156,7 @@
     "origin": [
       [
         "src/views/card/components/ActivityList.tsx",
-        440
+        438
       ]
     ],
     "translation": "Étape clé"
@@ -10177,6 +10245,18 @@
     ],
     "translation": "Déplacez les cartes entre Enregistrées, Candidatures, Entretiens et les étapes suivantes à mesure que votre recherche avance. Les détails de la carte contiennent davantage de champs, et chaque activité et étape clé est enregistrée."
   },
+  "8bxbpj": {
+    "translation": "",
+    "message": "Move opportunities through each stage and always know what needs your attention next.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        27
+      ]
+    ]
+  },
   "51UCsN": {
     "message": "Move to another list",
     "placeholders": {},
@@ -10217,7 +10297,7 @@
     "origin": [
       [
         "src/views/card/components/ActivityList.tsx",
-        228
+        226
       ]
     ],
     "translation": "a déplacé la carte de <0>{0}</0> vers <1>{1}</1>"
@@ -10249,7 +10329,7 @@
     "origin": [
       [
         "src/views/card/components/ActivityList.tsx",
-        176
+        174
       ]
     ],
     "translation": "a déplacé la carte vers une autre liste"
@@ -10454,7 +10534,7 @@
       ],
       [
         "src/views/board/index.tsx",
-        670
+        671
       ]
     ],
     "translation": "Nouvelle liste"
@@ -10597,7 +10677,7 @@
     "origin": [
       [
         "src/views/boards/components/BoardsList.tsx",
-        97
+        98
       ]
     ],
     "translation": "Aucun {0}"
@@ -10609,7 +10689,7 @@
     "origin": [
       [
         "src/views/activity-log/index.tsx",
-        115
+        116
       ]
     ],
     "translation": "Aucune activité pour le moment."
@@ -10658,7 +10738,7 @@
     "origin": [
       [
         "src/views/boards/components/BoardsList.tsx",
-        96
+        97
       ]
     ],
     "translation": "Aucune liste archivée"
@@ -10670,7 +10750,7 @@
     "origin": [
       [
         "src/components/AuthForm.tsx",
-        374
+        373
       ]
     ],
     "translation": "Aucune méthode d'authentification n'est actuellement disponible"
@@ -10767,7 +10847,7 @@
     "origin": [
       [
         "src/views/board/index.tsx",
-        704
+        705
       ]
     ],
     "translation": "Aucune liste"
@@ -10779,7 +10859,7 @@
     "origin": [
       [
         "src/views/board/index.tsx",
-        709
+        710
       ]
     ],
     "translation": "Aucune liste n'a encore été créée"
@@ -10973,7 +11053,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        530
+        538
       ]
     ],
     "translation": "Me rappeler de relancer le recruteur"
@@ -10985,7 +11065,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        553
+        561
       ]
     ],
     "translation": "Me rappeler de reprendre la négociation"
@@ -11253,6 +11333,18 @@
     ],
     "translation": "Amis open source"
   },
+  "auJJVd": {
+    "translation": "",
+    "message": "Open your workspace",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        89
+      ]
+    ]
+  },
   "wKBCKv": {
     "message": "Open-source job search CRM with optional automation for the repetitive parts.",
     "placeholders": {},
@@ -11308,7 +11400,7 @@
     "origin": [
       [
         "src/components/AuthForm.tsx",
-        385
+        384
       ]
     ],
     "translation": "ou"
@@ -11372,7 +11464,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        421
+        430
       ]
     ],
     "translation": "Outlook.com"
@@ -11486,6 +11578,18 @@
     ],
     "translation": "Mot de passe modifié"
   },
+  "izFJzY": {
+    "translation": "",
+    "message": "Password is required because email sending is disabled.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/components/AuthForm.tsx",
+        259
+      ]
+    ]
+  },
   "r6BgwX": {
     "message": "Password is required to login.",
     "placeholders": {},
@@ -11496,7 +11600,8 @@
         263
       ]
     ],
-    "translation": "Le mot de passe est requis pour se connecter."
+    "translation": "Le mot de passe est requis pour se connecter.",
+    "obsolete": true
   },
   "tTbref": {
     "message": "Password is required to sign up.",
@@ -11508,7 +11613,8 @@
         262
       ]
     ],
-    "translation": "Le mot de passe est requis pour s'inscrire."
+    "translation": "Le mot de passe est requis pour s'inscrire.",
+    "obsolete": true
   },
   "vwGkYB": {
     "message": "Password must be at least 8 characters",
@@ -11553,7 +11659,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        244
+        253
       ]
     ],
     "translation": "Collez-le dans Google Calendar, Outlook ou toute application compatible avec les flux iCal."
@@ -11917,11 +12023,11 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        251
+        260
       ],
       [
         "src/views/settings/BoardsSettings.tsx",
-        270
+        279
       ]
     ],
     "translation": "Veuillez le copier manuellement depuis le champ."
@@ -11933,7 +12039,7 @@
     "origin": [
       [
         "src/components/AuthForm.tsx",
-        411
+        410
       ]
     ],
     "translation": "Veuillez saisir une adresse e-mail valide"
@@ -11945,7 +12051,7 @@
     "origin": [
       [
         "src/components/AuthForm.tsx",
-        399
+        398
       ]
     ],
     "translation": "Veuillez saisir un nom valide"
@@ -11957,7 +12063,7 @@
     "origin": [
       [
         "src/components/AuthForm.tsx",
-        426
+        429
       ]
     ],
     "translation": "Veuillez saisir un mot de passe valide"
@@ -12057,11 +12163,11 @@
       ],
       [
         "src/views/board/index.tsx",
-        233
+        234
       ],
       [
         "src/views/board/index.tsx",
-        289
+        290
       ],
       [
         "src/views/boards/components/ImportBoardsForm.tsx",
@@ -12185,7 +12291,7 @@
       ],
       [
         "src/views/settings/BoardsSettings.tsx",
-        200
+        209
       ],
       [
         "src/views/settings/components/Avatar.tsx",
@@ -12257,7 +12363,7 @@
       ],
       [
         "src/views/board/index.tsx",
-        347
+        348
       ],
       [
         "src/views/card/components/Dropdown.tsx",
@@ -12879,7 +12985,7 @@
     "origin": [
       [
         "src/views/board/components/BoardDropdown.tsx",
-        145
+        134
       ]
     ],
     "translation": "Retirer des favoris"
@@ -12910,7 +13016,7 @@
     "origin": [
       [
         "src/views/card/components/ActivityList.tsx",
-        165
+        163
       ]
     ],
     "translation": "a retiré {0} étiquettes : <0>{labelList}</0>"
@@ -12922,7 +13028,7 @@
     "origin": [
       [
         "src/views/card/components/ActivityList.tsx",
-        178
+        176
       ]
     ],
     "translation": "a retiré une étiquette de la carte"
@@ -12934,7 +13040,7 @@
     "origin": [
       [
         "src/views/card/components/ActivityList.tsx",
-        180
+        178
       ]
     ],
     "translation": "a retiré un membre de la carte"
@@ -12946,7 +13052,7 @@
     "origin": [
       [
         "src/views/card/components/ActivityList.tsx",
-        193
+        191
       ]
     ],
     "translation": "a retiré une pièce jointe"
@@ -12962,7 +13068,7 @@
     "origin": [
       [
         "src/views/card/components/ActivityList.tsx",
-        355
+        353
       ]
     ],
     "translation": "a retiré une pièce jointe <0>{0}</0>"
@@ -12990,7 +13096,7 @@
     "origin": [
       [
         "src/views/card/components/ActivityList.tsx",
-        267
+        265
       ]
     ],
     "translation": "a retiré l'étiquette <0>{0}</0>"
@@ -13002,26 +13108,26 @@
     "origin": [
       [
         "src/views/card/components/ActivityList.tsx",
-        196
+        194
       ],
       [
         "src/views/card/components/ActivityList.tsx",
-        391
+        389
       ]
     ],
     "translation": "a retiré la date d'échéance"
   },
   "cw39MT": {
-    "translation": "",
     "message": "Rename shortlist",
     "placeholders": {},
     "comments": [],
     "origin": [
       [
         "src/views/board/components/BoardDropdown.tsx",
-        123
+        147
       ]
-    ]
+    ],
+    "translation": ""
   },
   "NypLoL": {
     "message": "renamed a checklist",
@@ -13030,7 +13136,7 @@
     "origin": [
       [
         "src/views/card/components/ActivityList.tsx",
-        185
+        183
       ]
     ],
     "translation": "a renommé une checklist"
@@ -13046,7 +13152,7 @@
     "origin": [
       [
         "src/views/card/components/ActivityList.tsx",
-        283
+        281
       ]
     ],
     "translation": "a renommé la checklist <0>{0}</0>"
@@ -13062,7 +13168,7 @@
     "origin": [
       [
         "src/views/card/components/ActivityList.tsx",
-        307
+        305
       ]
     ],
     "translation": "a renommé l'élément de checklist en <0>{0}</0>"
@@ -13448,6 +13554,18 @@
     ],
     "translation": "Enregistrer l’URL de l’offre"
   },
+  "yr1aY/": {
+    "translation": "",
+    "message": "Save the role, company, job posting, notes, and interview date in one place.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        22
+      ]
+    ]
+  },
   "MdwUGG": {
     "message": "Save time with reusable board templates.",
     "placeholders": {},
@@ -13720,7 +13838,7 @@
     "origin": [
       [
         "src/views/card/components/ActivityList.tsx",
-        236
+        234
       ]
     ],
     "translation": "s'est auto-assigné la carte"
@@ -13768,7 +13886,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        576
+        584
       ]
     ],
     "translation": "Envoyez-moi un résumé hebdomadaire de toutes les opportunités de cette shortlist, notamment celles qui nécessitent ensuite mon attention."
@@ -13780,7 +13898,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        445
+        454
       ]
     ],
     "translation": "M’envoyer un rappel par e-mail"
@@ -13934,7 +14052,7 @@
     "origin": [
       [
         "src/views/card/components/ActivityList.tsx",
-        194
+        192
       ]
     ],
     "translation": "a défini la date d'échéance"
@@ -14110,7 +14228,7 @@
       ],
       [
         "src/views/board/index.tsx",
-        572
+        573
       ]
     ],
     "translation": "Shortlist"
@@ -14138,7 +14256,7 @@
     "origin": [
       [
         "src/views/board/components/BoardDropdown.tsx",
-        134
+        123
       ]
     ],
     "translation": "Paramètres de la shortlist"
@@ -14219,6 +14337,18 @@
     ],
     "translation": "shortlistOS est un produit indépendant, pas une plateforme de recrutement, un réseau publicitaire ou une entreprise financée par du capital-risque."
   },
+  "7HUSxz": {
+    "translation": "",
+    "message": "shortlistOS keeps every opportunity, conversation, and milestone together so you can spend less time remembering and more time moving forward.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        53
+      ]
+    ]
+  },
   "NDyHVE": {
     "message": "shortlistOS tracks your job search.",
     "placeholders": {},
@@ -14262,7 +14392,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        302
+        311
       ]
     ],
     "translation": "Affiche des effets visuels de vieillissement sur les cartes selon leur dernière activité. Les cartes de plus d'une semaine prennent progressivement une teinte chaude plus prononcée avec le temps."
@@ -14412,7 +14542,7 @@
     "origin": [
       [
         "src/components/AuthForm.tsx",
-        442
+        445
       ]
     ],
     "translation": "S'inscrire avec "
@@ -14751,7 +14881,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        434
+        443
       ]
     ],
     "translation": "Gardez un œil sur les opportunités qui restent sans réponse avant qu'elles ne passent entre les mailles du filet."
@@ -14787,7 +14917,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        483
+        491
       ]
     ],
     "translation": "Bloquée dans Candidature envoyée"
@@ -14799,7 +14929,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        527
+        535
       ]
     ],
     "translation": "Bloquée dans Entretiens"
@@ -14811,7 +14941,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        550
+        558
       ]
     ],
     "translation": "Bloquée dans Négociation"
@@ -14823,7 +14953,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        441
+        450
       ]
     ],
     "translation": "Bloquée dans Enregistrée"
@@ -14847,11 +14977,11 @@
     "origin": [
       [
         "src/components/AuthForm.tsx",
-        220
+        217
       ],
       [
         "src/components/AuthForm.tsx",
-        237
+        234
       ]
     ],
     "translation": "Succès"
@@ -15013,11 +15143,11 @@
     "origin": [
       [
         "src/views/board/index.tsx",
-        572
+        573
       ],
       [
         "src/views/board/index.tsx",
-        615
+        616
       ]
     ],
     "translation": "Modèle"
@@ -15938,6 +16068,18 @@
     ],
     "translation": "Transformez les e-mails d’emploi en opportunités organisées"
   },
+  "2pRjWf": {
+    "translation": "",
+    "message": "Turn your job search into a clear next step",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        50
+      ]
+    ]
+  },
   "CL5jVa": {
     "message": "TXT, Word, OpenDocument, or PDF. Maximum 10 MB.",
     "placeholders": {},
@@ -16029,7 +16171,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        269
+        278
       ]
     ],
     "translation": "Impossible de copier l'adresse"
@@ -16054,7 +16196,7 @@
     "origin": [
       [
         "src/views/board/index.tsx",
-        345
+        346
       ],
       [
         "src/views/public/board/CardModal.tsx",
@@ -16066,7 +16208,7 @@
       ],
       [
         "src/views/settings/BoardsSettings.tsx",
-        250
+        259
       ]
     ],
     "translation": "Impossible de copier le lien"
@@ -16366,7 +16508,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        197
+        206
       ]
     ],
     "translation": "Impossible de mettre à jour le tableau"
@@ -16402,7 +16544,7 @@
     "origin": [
       [
         "src/views/board/index.tsx",
-        288
+        289
       ],
       [
         "src/views/card/index.tsx",
@@ -16494,7 +16636,7 @@
     "origin": [
       [
         "src/views/board/index.tsx",
-        232
+        233
       ],
       [
         "src/views/card/components/ListSelector.tsx",
@@ -16596,6 +16738,10 @@
       [
         "src/views/board/components/BoardDropdown.tsx",
         158
+      ],
+      [
+        "src/views/boards/components/BoardsList.tsx",
+        174
       ]
     ],
     "translation": "Désarchiver la shortlist"
@@ -16623,7 +16769,7 @@
     "origin": [
       [
         "src/views/card/components/ActivityList.tsx",
-        250
+        248
       ]
     ],
     "translation": "a retiré <0>{0}</0> de la carte"
@@ -16635,7 +16781,7 @@
     "origin": [
       [
         "src/views/card/components/ActivityList.tsx",
-        247
+        245
       ]
     ],
     "translation": "s'est retiré de la carte"
@@ -16973,7 +17119,7 @@
     "origin": [
       [
         "src/views/card/components/ActivityList.tsx",
-        213
+        211
       ]
     ],
     "translation": "a mis à jour <0>{0}</0> de <1>{1}</1> à <2>{2}</2>"
@@ -16985,7 +17131,7 @@
     "origin": [
       [
         "src/views/card/components/ActivityList.tsx",
-        188
+        186
       ]
     ],
     "translation": "a mis à jour un élément de la checklist"
@@ -16997,7 +17143,7 @@
     "origin": [
       [
         "src/views/card/components/ActivityList.tsx",
-        182
+        180
       ]
     ],
     "translation": "a modifié un commentaire"
@@ -17009,7 +17155,7 @@
     "origin": [
       [
         "src/views/card/components/ActivityList.tsx",
-        197
+        195
       ]
     ],
     "translation": "a modifié un champ personnalisé"
@@ -17021,7 +17167,7 @@
     "origin": [
       [
         "src/views/card/components/ActivityList.tsx",
-        175
+        173
       ]
     ],
     "translation": "a mis à jour la description"
@@ -17033,7 +17179,7 @@
     "origin": [
       [
         "src/views/card/components/ActivityList.tsx",
-        195
+        193
       ]
     ],
     "translation": "a mis à jour la date d'échéance"
@@ -17045,7 +17191,7 @@
     "origin": [
       [
         "src/views/card/components/ActivityList.tsx",
-        174
+        172
       ]
     ],
     "translation": "a mis à jour le titre"
@@ -17061,7 +17207,7 @@
     "origin": [
       [
         "src/views/card/components/ActivityList.tsx",
-        205
+        203
       ]
     ],
     "translation": "a mis à jour le titre en <0>{0}</0>"
@@ -17089,7 +17235,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        293
+        302
       ]
     ],
     "translation": "Mettre à niveau"
@@ -17290,6 +17436,18 @@
       ]
     ],
     "translation": ""
+  },
+  "b9iaPc": {
+    "translation": "",
+    "message": "Use a shortlist for one job search, client pipeline, or focused group of opportunities.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        17
+      ]
+    ]
   },
   "XG6hC+": {
     "message": "Use shortlistOS your way.",
@@ -17584,7 +17742,7 @@
     "origin": [
       [
         "src/views/card/components/ActivityList.tsx",
-        79
+        77
       ]
     ],
     "translation": "Web Clipper"
@@ -17764,7 +17922,7 @@
       ],
       [
         "src/views/settings/BoardsSettings.tsx",
-        575
+        583
       ]
     ],
     "translation": "Récapitulatif hebdomadaire"
@@ -17784,6 +17942,18 @@
       ]
     ],
     "translation": "Récapitulatif hebdomadaire : ce qui requiert votre attention maintenant"
+  },
+  "ChMJaA": {
+    "translation": "",
+    "message": "Welcome aboard",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        47
+      ]
+    ]
   },
   "9eF5oV": {
     "message": "Welcome back",
@@ -17978,7 +18148,7 @@
       ],
       [
         "src/views/board/index.tsx",
-        572
+        573
       ],
       [
         "src/views/home/index.tsx",
@@ -18455,15 +18625,15 @@
       ],
       [
         "src/views/board/index.tsx",
-        654
+        655
       ],
       [
         "src/views/board/index.tsx",
-        714
+        715
       ],
       [
         "src/views/boards/components/BoardsList.tsx",
-        106
+        107
       ],
       [
         "src/views/boards/index.tsx",
@@ -18483,7 +18653,7 @@
     "origin": [
       [
         "src/components/AuthForm.tsx",
-        238
+        235
       ]
     ],
     "translation": "Vous avez été connecté avec succès."
@@ -18495,7 +18665,7 @@
     "origin": [
       [
         "src/components/AuthForm.tsx",
-        221
+        218
       ]
     ],
     "translation": "Vous avez été inscrit avec succès."
