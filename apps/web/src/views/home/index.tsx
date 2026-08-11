@@ -24,18 +24,19 @@ import {
 } from "react-icons/fa6";
 import { HiMiniMinusSmall, HiMiniPlusSmall } from "react-icons/hi2";
 
+import type { PricingPlan } from "../pricing/components/PricingCards";
 import { PageHead } from "~/components/PageHead";
 import { env } from "~/env";
 import {
   getPricingPlans,
   PricingCards,
-  type PricingPlan,
 } from "../pricing/components/PricingCards";
 import FinalCta from "./components/FinalCta";
+import { FeatureCard, Section } from "./components/LandingSection";
 import Layout from "./components/Layout";
 
 const primaryCta = t`Get the Powerpack`;
-const secondaryCta = t`Start for Free`;
+const secondaryCta = t`Create free account`;
 const powerpackSignupHref = "/signup?withPowerpack=yes";
 const githubUrl = env.NEXT_PUBLIC_GITHUB_URL ?? "#";
 
@@ -202,26 +203,30 @@ function Hero() {
         <p className="mt-5 max-w-[620px] text-base leading-[1.95rem] text-light-950 dark:text-dark-900 sm:text-lg sm:leading-[2.15rem]">
           {t`Track every opportunity, email, scheduled interview, and follow-up in one private workspace. Get the Powerpack to automate your search.`}
         </p>
-        <div className="mt-7 flex flex-col items-center gap-3 sm:flex-row">
-          <LandingButton
-            href={powerpackSignupHref}
-            variant="primary"
-            dynamicBackground
-            className="w-full sm:w-44"
-          >
-            {primaryCta}
-          </LandingButton>
-          <LandingButton
-            href="/signup"
-            variant="secondary"
-            className="w-full sm:w-44"
-          >
-            {secondaryCta}
-          </LandingButton>
+        <div className="mt-7 flex flex-col items-center gap-3 sm:flex-row sm:items-start">
+          <div className="flex w-full flex-col items-center sm:w-44">
+            <LandingButton
+              href="/signup"
+              variant="secondary"
+              className="w-full"
+            >
+              {secondaryCta}
+            </LandingButton>
+          </div>
+          <div className="flex w-full flex-col items-center sm:w-44">
+            <LandingButton
+              href={powerpackSignupHref}
+              variant="primary"
+              dynamicBackground
+              className="w-full"
+            >
+              {primaryCta}
+            </LandingButton>
+            <p className="mt-2 text-xs leading-5 text-light-900 dark:text-dark-800">
+              {t`3 months for $29 · No recurring payments`}
+            </p>
+          </div>
         </div>
-        <p className="mt-4 text-sm text-light-900 dark:text-dark-800">
-          {t`3 months of automation & AI for $29 · No recurring payments`}
-        </p>
         <Link
           href={githubUrl}
           target="_blank"
@@ -381,11 +386,7 @@ function ProductPreview() {
   );
 }
 
-function PricingSection({
-  plans,
-}: {
-  plans: PricingPlan[];
-}) {
+function PricingSection({ plans }: { plans: PricingPlan[] }) {
   return (
     <Section
       id="pricing"
@@ -397,7 +398,7 @@ function PricingSection({
       <div className="mt-6 text-center">
         <Link
           href="/pricing#compare-features"
-          className="text-sm font-bold text-light-1000 underline underline-offset-4 hover:text-brand-700 dark:text-dark-1000 dark:hover:text-brand-300"
+          className="hover:text-brand-700 dark:hover:text-brand-300 text-sm font-bold text-light-1000 underline underline-offset-4 dark:text-dark-1000"
         >
           {t`Compare features`}
         </Link>
@@ -477,7 +478,7 @@ function PrivacyOpenSourceSection() {
         <div className="mt-4 text-center">
           <Link
             href="/privacy"
-            className="text-sm font-bold text-light-1000 underline underline-offset-4 hover:text-brand-700 dark:text-dark-1000 dark:hover:text-brand-300"
+            className="hover:text-brand-700 dark:hover:text-brand-300 text-sm font-bold text-light-1000 underline underline-offset-4 dark:text-dark-1000"
           >
             {t`Privacy policy`}
           </Link>
@@ -567,67 +568,6 @@ function FaqSection({
   );
 }
 
-function Section({
-  id,
-  eyebrow,
-  title,
-  description,
-  children,
-}: {
-  id?: string;
-  eyebrow: string;
-  title: string;
-  description: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <section id={id} className="scroll-mt-20 px-4 py-14">
-      <div className="mx-auto max-w-[980px]">
-        <div className="mx-auto max-w-[680px] text-center">
-          <p className="bg-brand-600 inline-flex rounded-full px-3 py-1 text-sm font-semibold text-white">
-            {eyebrow}
-          </p>
-          <h2 className="mt-3 text-3xl font-bold leading-[1.35] text-light-1000 dark:text-dark-1000 md:text-4xl">
-            {title}
-          </h2>
-          <p className="mt-4 text-base leading-[1.95rem] text-light-950 dark:text-dark-900">
-            {description}
-          </p>
-        </div>
-        <div className="mt-10">{children}</div>
-      </div>
-    </section>
-  );
-}
-
-function FeatureCard({
-  title,
-  description,
-  accent,
-  icon: Icon,
-}: {
-  title: string;
-  description: string;
-  accent: string;
-  icon: React.ComponentType<{ className?: string }>;
-}) {
-  return (
-    <div className="rounded-2xl border border-light-300 bg-light-50 p-5 shadow-sm transition-transform hover:-translate-y-1 dark:border-dark-300 dark:bg-dark-100">
-      <div
-        className={`flex h-12 w-12 items-center justify-center rounded-xl ${accent}`}
-      >
-        <Icon className="h-5 w-5" />
-      </div>
-      <h3 className="mt-5 text-base font-bold leading-[1.45] text-light-1000 dark:text-dark-1000">
-        {title}
-      </h3>
-      <p className="mt-3 text-sm leading-[1.65rem] text-light-950 dark:text-dark-900">
-        {description}
-      </p>
-    </div>
-  );
-}
-
 function AutomationCard({
   title,
   description,
@@ -673,12 +613,12 @@ function LandingButton({
 }) {
   const classes =
     variant === "primary"
-      ? `rounded-lg px-5 py-3 text-sm font-bold text-white shadow-lg shadow-black/20 transition ${
+      ? `h-11 rounded-lg border border-transparent px-5 text-sm font-bold text-white shadow-lg shadow-black/20 transition ${
           dynamicBackground
             ? "landing-powerpack-cta hover:brightness-110"
             : "bg-brand-600 hover:bg-brand-500"
         }`
-      : "rounded-lg border border-light-400 bg-light-50 px-5 py-3 text-sm font-bold text-light-1000 shadow-sm transition hover:bg-light-100 dark:border-dark-400 dark:bg-dark-100 dark:text-dark-1000 dark:hover:bg-dark-200";
+      : "h-11 rounded-lg border border-light-400 bg-light-50 px-5 text-sm font-bold text-light-1000 shadow-sm transition hover:bg-light-100 dark:border-dark-400 dark:bg-dark-100 dark:text-dark-1000 dark:hover:bg-dark-200";
 
   return (
     <>
