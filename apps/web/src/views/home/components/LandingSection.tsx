@@ -10,7 +10,7 @@ export function Section({
   id?: string;
   eyebrow: string;
   title: string;
-  description: string;
+  description: ReactNode;
   children: ReactNode;
 }) {
   return (
@@ -38,14 +38,20 @@ export function FeatureCard({
   description,
   accent = "bg-brand-100 text-brand-700 dark:bg-brand-500/15 dark:text-brand-300",
   icon: Icon,
+  liftOnHover = true,
 }: {
   title: string;
   description: string;
   accent?: string;
   icon: ComponentType<{ className?: string }>;
+  liftOnHover?: boolean;
 }) {
   return (
-    <div className="rounded-2xl border border-light-300 bg-light-50 p-5 shadow-sm transition-transform hover:-translate-y-1 dark:border-dark-300 dark:bg-dark-100">
+    <div
+      className={`rounded-2xl border border-light-300 bg-light-50 p-5 shadow-sm dark:border-dark-300 dark:bg-dark-100 ${
+        liftOnHover ? "transition-transform hover:-translate-y-1" : ""
+      }`}
+    >
       <div
         className={`flex h-12 w-12 items-center justify-center rounded-xl ${accent}`}
       >

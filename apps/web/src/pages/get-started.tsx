@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
 import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import {
   HiOutlineArchiveBox,
   HiOutlineArrowLeft,
@@ -405,45 +406,81 @@ export default function GetStartedPage() {
         </Link>
 
         <div className="w-full">
-          <section className="mx-auto grid max-w-[980px] items-center gap-12 px-4 py-20 lg:grid-cols-[0.82fr_1.18fr] lg:py-28">
-            <div>
-              <p className="text-brand-600 dark:text-brand-500 text-xs font-semibold uppercase tracking-[0.18em]">
-                {t`Getting started with shortlistOS`}
-              </p>
-              <h1 className="mt-5 text-4xl font-bold tracking-tight text-light-1000 dark:text-dark-1000 sm:text-5xl lg:text-6xl">
-                {t`Let's get your job search organised`}
-              </h1>
-              <p className="mt-6 max-w-xl text-lg leading-8 text-light-900 dark:text-dark-900">
-                {t`This guide explains the basics, shows you what you can keep on each job, and introduces the optional tools that can save you time.`}
-              </p>
-            </div>
-            <BoardMockup />
+          <section className="mx-auto max-w-[760px] px-4 pb-20 pt-20 text-center lg:pt-28">
+            <p className="text-brand-600 dark:text-brand-500 text-xs font-semibold uppercase tracking-[0.18em]">
+              {t`Getting started with shortlistOS`}
+            </p>
+            <h1 className="mt-5 text-4xl font-bold tracking-tight text-light-1000 dark:text-dark-1000 sm:text-5xl lg:text-6xl">
+              {t`Let's get your job search organised`}
+            </h1>
+            <p className="mx-auto mt-6 max-w-xl text-lg leading-8 text-light-900 dark:text-dark-900">
+              {t`This guide explains the basics, shows you how to organise each job opportunity, and introduces the optional tools that can save you time.`}
+            </p>
           </section>
+
+          <div
+            aria-hidden="true"
+            className="mx-auto mb-6 max-w-[980px] border-t border-light-300 dark:border-dark-300"
+          />
 
           <Section
             id="foundations"
             eyebrow={t`01 · Foundations`}
-            title={t`First, a workspace. Inside it, your shortlists.`}
-            description={t`It sounds more complicated than it is. A workspace is simply the main home for your account, and a shortlist is where you track one job search.`}
+            title={t`First, your workspace.`}
+            description={t`shortlistOS has three simple levels. Your workspace contains shortlists, and each shortlist contains the job opportunities you are tracking.`}
           >
-            <div className="grid gap-5 md:grid-cols-2">
+            <div className="grid items-stretch gap-4 lg:grid-cols-[1fr_auto_1fr_auto_1fr]">
               <FeatureCard
                 icon={HiOutlineRectangleStack}
-                title={t`What is a workspace?`}
-                description={t`Think of a workspace as your shortlistOS account area. It holds your shortlists, settings, and any people you invite. If you are using shortlistOS for yourself, one workspace is probably all you need.`}
+                title={t`Workspace`}
+                description={
+                  <Trans>
+                    Your workspace is the{" "}
+                    <strong>home for your shortlists</strong>, account settings,
+                    and members. You can create as many workspaces as you need.
+                    One workspace is enough for most individual job searches.
+                  </Trans>
+                }
+                liftOnHover={false}
               />
+              <div
+                className="flex items-center justify-center"
+                aria-hidden="true"
+              >
+                <HiOutlineChevronRight className="h-6 w-6 rotate-90 text-light-600 dark:text-dark-600 lg:rotate-0" />
+              </div>
+              <FeatureCard
+                icon={HiOutlineListBullet}
+                title={t`Shortlist`}
+                description={
+                  <Trans>
+                    A shortlist is a <strong>board for one job search</strong>.
+                    Its columns follow the natural stages, from saving and
+                    applying through interviews, offers, and negotiation. Move
+                    an opportunity from left to right as you progress.
+                  </Trans>
+                }
+                liftOnHover={false}
+              />
+              <div
+                className="flex items-center justify-center"
+                aria-hidden="true"
+              >
+                <HiOutlineChevronRight className="h-6 w-6 rotate-90 text-light-600 dark:text-dark-600 lg:rotate-0" />
+              </div>
               <FeatureCard
                 icon={HiOutlineBriefcase}
-                title={t`What is a shortlist?`}
-                description={t`A shortlist is a board for one job search. It holds the jobs you are considering and shows whether each one is saved, applied for, interviewing, offered, or finished. You can make as many shortlists as you need.`}
+                title={t`Job opportunity`}
+                description={
+                  <Trans>
+                    <strong>Each card represents one role</strong>. Open the
+                    card to keep the job and company details, salary, contacts,
+                    notes, dates, checklists, comments, attachments, and
+                    activity history together.
+                  </Trans>
+                }
+                liftOnHover={false}
               />
-            </div>
-            <div className="mt-6 flex flex-wrap items-center justify-center gap-3 rounded-xl border border-light-300 bg-light-50 px-5 py-6 text-sm font-medium text-light-900 dark:border-dark-300 dark:bg-dark-100 dark:text-dark-900">
-              <span className="rounded-lg bg-light-200 px-4 py-2 dark:bg-dark-200">{t`Workspace`}</span>
-              <HiOutlineChevronRight className="h-4 w-4 text-light-600 dark:text-dark-600" />
-              <span className="rounded-lg bg-light-200 px-4 py-2 dark:bg-dark-200">{t`Shortlist`}</span>
-              <HiOutlineChevronRight className="h-4 w-4 text-light-600 dark:text-dark-600" />
-              <span className="bg-brand-100 text-brand-700 dark:bg-brand-900/30 dark:text-brand-300 rounded-lg px-4 py-2">{t`Job opportunity`}</span>
             </div>
           </Section>
 
