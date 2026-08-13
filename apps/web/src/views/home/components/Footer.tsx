@@ -95,6 +95,11 @@ const Footer = () => {
       title: t`Resources`,
       links: [
         {
+          label: t`Self-hosting`,
+          href: githubUrl,
+          external: true,
+        },
+        {
           label: t`GitHub`,
           href: githubUrl,
           external: true,

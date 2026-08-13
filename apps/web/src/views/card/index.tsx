@@ -1634,6 +1634,23 @@ export function CardRightPanel({ isTemplate }: { isTemplate?: boolean }) {
         </div>
       </section>
 
+      <section className="mt-8">
+        <div className="mb-4 flex items-center gap-2">
+          <HiOutlineTag className="h-5 w-5 text-light-900 dark:text-dark-900" />
+          <h3 className="text-sm font-semibold text-light-1000 dark:text-dark-1000">
+            {t`Labels`}
+          </h3>
+        </div>
+        <div className={detailGroupClass}>
+          <LabelSelector
+            cardPublicId={cardId ?? ""}
+            labels={formattedLabels}
+            isLoading={!card}
+            disabled={!canEdit}
+          />
+        </div>
+      </section>
+
       <ContactsSection
         cardPublicId={cardId ?? ""}
         contactsJson={card?.contactsJson}
@@ -2028,23 +2045,6 @@ export function CardRightPanel({ isTemplate }: { isTemplate?: boolean }) {
               </div>
             )}
           </div>
-        </div>
-      </section>
-
-      <section className="mt-8">
-        <div className="mb-4 flex items-center gap-2">
-          <HiOutlineTag className="h-5 w-5 text-light-900 dark:text-dark-900" />
-          <h3 className="text-sm font-semibold text-light-1000 dark:text-dark-1000">
-            {t`Labels`}
-          </h3>
-        </div>
-        <div className={detailGroupClass}>
-          <LabelSelector
-            cardPublicId={cardId ?? ""}
-            labels={formattedLabels}
-            isLoading={!card}
-            disabled={!canEdit}
-          />
         </div>
       </section>
 
