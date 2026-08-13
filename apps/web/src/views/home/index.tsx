@@ -31,6 +31,7 @@ import {
   getPricingPlans,
   PricingCards,
 } from "../pricing/components/PricingCards";
+import BoardPreview from "./components/BoardPreview";
 import FinalCta from "./components/FinalCta";
 import { FeatureCard, Section } from "./components/LandingSection";
 import Layout from "./components/Layout";
@@ -266,121 +267,20 @@ function TrustStrip() {
 }
 
 function ProductPreview() {
-  const columns = [
-    {
-      name: t`Wishlist`,
-      count: 7,
-      cards: [t`Senior Product Manager`, t`Staff Engineer`, t`Design Lead`],
-    },
-    {
-      name: t`Applied`,
-      count: 5,
-      cards: [t`Backend Engineer`, t`Product Designer`, t`Founding Engineer`],
-    },
-    {
-      name: t`Interview`,
-      count: 3,
-      cards: [
-        t`Senior Software Engineer`,
-        t`Engineering Manager`,
-        t`Staff Engineer`,
-      ],
-    },
-    {
-      name: t`Offer`,
-      count: 1,
-      cards: [t`Software Engineer`],
-    },
-    {
-      name: t`Closed`,
-      count: 2,
-      cards: [t`Product Manager`, t`Senior Engineer`],
-    },
-  ];
-
   return (
     <section id="product" className="scroll-mt-20 px-4 py-10 lg:py-14">
-      <div className="mx-auto overflow-hidden rounded-2xl border border-light-300 bg-light-50 shadow-[0_20px_80px_rgba(15,23,42,0.10)] dark:border-dark-300 dark:bg-dark-100 dark:shadow-[0_20px_80px_rgba(0,0,0,0.25)]">
-        <div className="flex items-center justify-between border-b border-light-300 px-5 py-4 dark:border-dark-300">
-          <div>
-            <p className="text-sm font-bold text-light-1000 dark:text-dark-1000">
-              shortlistOS
-            </p>
-            <p className="text-xs text-light-900 dark:text-dark-800">
-              {t`Pipeline`}
-            </p>
+      <div className="mx-auto overflow-hidden rounded-2xl border border-light-300 bg-light-50 shadow-xl shadow-light-1000/5 dark:border-dark-300 dark:bg-dark-100 dark:shadow-black/20">
+        <div className="flex items-center justify-between border-b border-light-300 bg-light-100 px-4 py-3 dark:border-dark-300 dark:bg-dark-200">
+          <div className="flex gap-1.5" aria-hidden="true">
+            <span className="h-2.5 w-2.5 rounded-full bg-red-400" />
+            <span className="h-2.5 w-2.5 rounded-full bg-amber-400" />
+            <span className="h-2.5 w-2.5 rounded-full bg-emerald-400" />
           </div>
-          <div className="hidden items-center gap-2 text-xs text-light-900 dark:text-dark-800 sm:flex">
-            <span className="bg-brand-100 text-brand-700 dark:bg-brand-500/15 dark:text-brand-300 rounded-md px-2 py-1 font-medium">
-              {t`Board`}
-            </span>
-            <span>{t`List`}</span>
-            <span>{t`Timeline`}</span>
-          </div>
-          <button className="rounded-md bg-light-1000 px-3 py-2 text-xs font-semibold text-light-50 dark:bg-dark-1000 dark:text-dark-50">
-            {t`Add opportunity`}
-          </button>
+          <span className="text-[10px] font-semibold uppercase tracking-[0.15em] text-light-700 dark:text-dark-700">
+            {t`Actual in-app look`}
+          </span>
         </div>
-        <div className="grid min-h-[430px] grid-cols-1 bg-light-100 dark:bg-dark-50 lg:grid-cols-[190px_1fr]">
-          <aside className="hidden border-r border-light-300 bg-light-50/80 p-5 text-sm dark:border-dark-300 dark:bg-dark-100/80 lg:block">
-            <div className="space-y-2 text-light-900 dark:text-dark-800">
-              {[t`Search`, t`Inbox`, t`Pipeline`, t`Calendar`, t`Tasks`].map(
-                (item, index) => (
-                  <div
-                    key={item}
-                    className={`rounded-md px-3 py-2 ${
-                      index === 2
-                        ? "bg-brand-100 text-brand-700 dark:bg-brand-500/15 dark:text-brand-300 font-semibold"
-                        : ""
-                    }`}
-                  >
-                    {item}
-                  </div>
-                ),
-              )}
-            </div>
-          </aside>
-          <div className="overflow-x-auto p-4">
-            <div className="grid min-w-[850px] grid-cols-5 gap-4">
-              {columns.map((column) => (
-                <div
-                  key={column.name}
-                  className="rounded-xl bg-light-200 p-3 dark:bg-dark-200"
-                >
-                  <div className="mb-3 flex items-center justify-between">
-                    <h3 className="text-sm font-semibold text-light-1000 dark:text-dark-1000">
-                      {column.name}
-                    </h3>
-                    <span className="text-xs text-light-900 dark:text-dark-800">
-                      {column.count}
-                    </span>
-                  </div>
-                  <div className="space-y-3">
-                    {column.cards.map((card, index) => (
-                      <div
-                        key={card}
-                        className="rounded-lg border border-light-300 bg-light-50 p-3 shadow-sm dark:border-dark-300 dark:bg-dark-100"
-                      >
-                        <p className="text-sm font-semibold text-light-1000 dark:text-dark-1000">
-                          {card}
-                        </p>
-                        <p className="mt-2 text-xs text-light-900 dark:text-dark-800">
-                          {index % 2 === 0 ? t`Remote` : t`Hybrid`}
-                        </p>
-                        <p className="mt-3 text-xs text-light-900 dark:text-dark-800">
-                          {index === 0 ? t`Added 5d ago` : t`Interview in 1w`}
-                        </p>
-                      </div>
-                    ))}
-                    <button className="w-full rounded-lg border border-dashed border-light-400 py-3 text-xs font-medium text-light-900 dark:border-dark-400 dark:text-dark-800">
-                      {t`Add opportunity`}
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
+        <BoardPreview />
       </div>
     </section>
   );

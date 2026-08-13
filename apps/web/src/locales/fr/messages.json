@@ -18,7 +18,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        504
+        404
       ]
     ],
     "translation": "— Petr, créateur de shortlistOS"
@@ -376,7 +376,6 @@
     "translation": ""
   },
   "4qKqa7": {
-    "translation": "",
     "message": "<0>Each card represents one role</0>. Open the card to keep the job and company details, salary, contacts, notes, dates, checklists, comments, attachments, and activity history together.",
     "placeholders": {},
     "comments": [],
@@ -385,7 +384,8 @@
         "src/pages/get-started.tsx",
         475
       ]
-    ]
+    ],
+    "translation": ""
   },
   "be30i9": {
     "message": "$0",
@@ -566,6 +566,30 @@
     "translation": "Téléchargements de fichiers de 10 Mo",
     "obsolete": true
   },
+  "b3RviZ": {
+    "message": "11th Aug",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        210
+      ]
+    ],
+    "translation": ""
+  },
+  "+Pr4qo": {
+    "message": "12th Aug",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        132
+      ]
+    ],
+    "translation": ""
+  },
   "gkxGkF": {
     "message": "14 day free trial · Switch plans or cancel anytime",
     "placeholders": {},
@@ -587,6 +611,42 @@
     "translation": "Essai gratuit de 14 jours · Changez de forfait ou annulez à tout moment",
     "obsolete": true
   },
+  "9gUVmY": {
+    "translation": "",
+    "message": "14th Aug",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        179
+      ]
+    ]
+  },
+  "BAWAzs": {
+    "translation": "",
+    "message": "18th Aug",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        220
+      ]
+    ]
+  },
+  "3jG79i": {
+    "message": "19th Aug",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        239
+      ]
+    ],
+    "translation": ""
+  },
   "HCLj1r": {
     "message": "2 months",
     "placeholders": {},
@@ -598,6 +658,30 @@
       ]
     ],
     "translation": "2 mois"
+  },
+  "BO5+Am": {
+    "message": "22nd Aug",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        262
+      ]
+    ],
+    "translation": ""
+  },
+  "S2qNRJ": {
+    "translation": "",
+    "message": "25th Aug",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        147
+      ]
+    ]
   },
   "tX9HsP": {
     "message": "3 months for {POWERPACK_PRICE}",
@@ -626,7 +710,7 @@
       ],
       [
         "src/views/home/index.tsx",
-        226
+        227
       ]
     ],
     "translation": ""
@@ -660,6 +744,18 @@
     ],
     "translation": "3 semaines"
   },
+  "weGWbN": {
+    "message": "31st Aug",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        157
+      ]
+    ],
+    "translation": ""
+  },
   "4obmDr": {
     "message": "404 - Page Not Found | kan.bn",
     "placeholders": {},
@@ -692,7 +788,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        67
+        68
       ]
     ],
     "translation": "Un historique complet de ce qui s’est passé"
@@ -729,7 +825,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        46
+        47
       ]
     ],
     "translation": "Un pipeline conçu spécialement pour la recherche d’emploi"
@@ -849,6 +945,19 @@
     ],
     "translation": "Une shortlist regroupe vos opportunités d’emploi. Commencez par en créer une pour votre recherche actuelle. Vous pourrez en créer d’autres plus tard pour d’autres recherches ou domaines."
   },
+  "gD01Fy": {
+    "translation": "",
+    "message": "A shortlistOS board showing job opportunities moving through a job-search pipeline",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/home/index.tsx",
+        285
+      ]
+    ],
+    "obsolete": true
+  },
   "Lrv22V": {
     "message": "A workspace is the home for your account. It contains your shortlists, members, permissions, and workspace-level settings. Most people need only one workspace; create another when you need a genuinely separate team or context.",
     "placeholders": {},
@@ -870,6 +979,30 @@
       [
         "src/views/boards/components/TemplateBoards.tsx",
         30
+      ],
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        116
+      ],
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        130
+      ],
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        171
+      ],
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        208
+      ],
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        268
+      ],
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        286
       ]
     ],
     "translation": "Salaire supérieur au marché"
@@ -894,6 +1027,10 @@
       [
         "src/views/boards/components/TemplateBoards.tsx",
         23
+      ],
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        275
       ]
     ],
     "translation": "Acceptée"
@@ -917,7 +1054,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        415
+        315
       ]
     ],
     "translation": "Données du compte hébergées dans l’UE"
@@ -929,7 +1066,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        143
+        144
       ]
     ],
     "translation": "Les données du compte sont hébergées en Allemagne. Les fichiers et pièces jointes importés sont stockés sur AWS à Stockholm. Certaines fonctionnalités de Powerpack envoient le contenu pertinent à Mistral pour traitement, par exemple le contenu d’une offre d’emploi enregistrée avec Web Clipper ou d’un e-mail transféré à Magic Inbox."
@@ -1123,6 +1260,18 @@
       ]
     ],
     "translation": "Chronologie d’activité par opportunité"
+  },
+  "0E041Z": {
+    "message": "Actual in-app look",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/home/index.tsx",
+        280
+      ]
+    ],
+    "translation": ""
   },
   "UGCIzB": {
     "message": "Add / edit label",
@@ -1375,7 +1524,8 @@
         376
       ]
     ],
-    "translation": "Ajouter une opportunité"
+    "translation": "Ajouter une opportunité",
+    "obsolete": true
   },
   "pVpLbt": {
     "message": "Add person",
@@ -1494,7 +1644,8 @@
         371
       ]
     ],
-    "translation": "Ajoutée il y a 5 j"
+    "translation": "Ajoutée il y a 5 j",
+    "obsolete": true
   },
   "h4VV67": {
     "message": "added a checklist",
@@ -2008,6 +2159,30 @@
     ],
     "translation": "API"
   },
+  "3SZFVe": {
+    "message": "API Developer at Crafted Systems",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        314
+      ]
+    ],
+    "translation": ""
+  },
+  "LmAW8D": {
+    "translation": "",
+    "message": "API Developer at PixelHarbor",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        145
+      ]
+    ]
+  },
   "ECJKc4": {
     "message": "API key created",
     "placeholders": {},
@@ -2102,6 +2277,10 @@
       [
         "src/views/boards/components/TemplateBoards.tsx",
         29
+      ],
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        177
       ]
     ],
     "translation": "Candidature confirmée"
@@ -2120,8 +2299,8 @@
         19
       ],
       [
-        "src/views/home/index.tsx",
-        276
+        "src/views/home/components/BoardPreview.tsx",
+        152
       ]
     ],
     "translation": "Candidature envoyée"
@@ -2368,7 +2547,7 @@
     "origin": [
       [
         "src/views/card/index.tsx",
-        1883
+        1900
       ]
     ],
     "translation": "Sous forme de plage"
@@ -2808,7 +2987,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        421
+        321
       ]
     ],
     "translation": "Éviter la dépendance à un fournisseur"
@@ -2874,6 +3053,54 @@
     ],
     "translation": "Retour à la shortlist"
   },
+  "nYRsbz": {
+    "message": "Backend Architect at CopperFox",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        168
+      ]
+    ],
+    "translation": ""
+  },
+  "YKWbof": {
+    "message": "Backend Architect at Vertex Works",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        213
+      ]
+    ],
+    "translation": ""
+  },
+  "MaRjuT": {
+    "translation": "",
+    "message": "Backend Developer at Kiteworks",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        188
+      ]
+    ]
+  },
+  "ZCDm4p": {
+    "message": "Backend Developer at OrbitStack",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        295
+      ]
+    ],
+    "translation": ""
+  },
   "ABHAFB": {
     "message": "Backend Engineer",
     "placeholders": {},
@@ -2884,7 +3111,20 @@
         278
       ]
     ],
-    "translation": "Ingénieur backend"
+    "translation": "Ingénieur backend",
+    "obsolete": true
+  },
+  "R5AyQj": {
+    "translation": "",
+    "message": "Backend PHP Engineer at Bohemian Logic",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        140
+      ]
+    ]
   },
   "KNKCTb": {
     "message": "Backlog",
@@ -3098,10 +3338,6 @@
       [
         "src/views/card/index.tsx",
         2270
-      ],
-      [
-        "src/views/home/index.tsx",
-        315
       ],
       [
         "src/views/public/board/index.tsx",
@@ -3360,7 +3596,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        495
+        395
       ]
     ],
     "translation": "Conçu indépendamment, pour les personnes qui accomplissent déjà une tâche difficile."
@@ -3387,7 +3623,8 @@
         327
       ]
     ],
-    "translation": "Calendrier"
+    "translation": "Calendrier",
+    "obsolete": true
   },
   "0wVlqq": {
     "message": "Calendar feed",
@@ -3676,7 +3913,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        130
+        131
       ]
     ],
     "translation": "Puis-je exporter mes données ?"
@@ -3688,7 +3925,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        150
+        151
       ]
     ],
     "translation": ""
@@ -3700,7 +3937,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        134
+        135
       ]
     ],
     "translation": "Puis-je auto-héberger shortlistOS ?"
@@ -3712,7 +3949,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        138
+        139
       ]
     ],
     "translation": "Puis-je utiliser Powerpack avec une installation auto-hébergée ?"
@@ -3772,7 +4009,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        146
+        147
       ]
     ],
     "translation": ""
@@ -4418,7 +4655,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        395
+        295
       ],
       [
         "src/views/pricing/index.tsx",
@@ -4582,7 +4819,8 @@
         295
       ]
     ],
-    "translation": "Fermée"
+    "translation": "Fermée",
+    "obsolete": true
   },
   "rivrCX": {
     "message": "Closing soon",
@@ -4703,7 +4941,7 @@
       ],
       [
         "src/views/card/index.tsx",
-        1655
+        1672
       ],
       [
         "src/views/home/components/Footer.tsx",
@@ -4731,7 +4969,7 @@
     "origin": [
       [
         "src/views/card/index.tsx",
-        1815
+        1832
       ]
     ],
     "translation": "Siège de l’entreprise"
@@ -4743,7 +4981,7 @@
     "origin": [
       [
         "src/views/card/index.tsx",
-        1809
+        1826
       ]
     ],
     "translation": "Informations sur l’entreprise"
@@ -4767,7 +5005,7 @@
     "origin": [
       [
         "src/views/card/index.tsx",
-        1879
+        1896
       ]
     ],
     "translation": "Offre de l’entreprise"
@@ -4815,7 +5053,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        403
+        303
       ],
       [
         "src/views/pricing/index.tsx",
@@ -5153,7 +5391,7 @@
       ],
       [
         "src/views/card/index.tsx",
-        1682
+        1699
       ]
     ],
     "translation": "Contrat"
@@ -5418,7 +5656,7 @@
       ],
       [
         "src/views/home/index.tsx",
-        39
+        40
       ],
       [
         "src/views/pricing/components/PricingCards.tsx",
@@ -5792,7 +6030,7 @@
     "origin": [
       [
         "src/views/card/index.tsx",
-        1964
+        1981
       ]
     ],
     "translation": "Devise"
@@ -6397,7 +6635,8 @@
         273
       ]
     ],
-    "translation": "Responsable design"
+    "translation": "Responsable design",
+    "obsolete": true
   },
   "eSCED9": {
     "message": "Design Lead · Acme",
@@ -6526,7 +6765,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        122
+        123
       ]
     ],
     "translation": ""
@@ -6673,6 +6912,30 @@
       [
         "src/pages/get-started.tsx",
         566
+      ]
+    ],
+    "translation": ""
+  },
+  "i6LXln": {
+    "message": "Dream job",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        189
+      ],
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        235
+      ],
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        249
+      ],
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        279
       ]
     ],
     "translation": ""
@@ -6952,11 +7215,11 @@
     "origin": [
       [
         "src/views/card/index.tsx",
-        1788
+        1805
       ],
       [
         "src/views/card/index.tsx",
-        1793
+        1810
       ]
     ],
     "translation": "Modifier l’URL de l’offre"
@@ -7247,7 +7510,8 @@
         285
       ]
     ],
-    "translation": "Responsable ingénierie"
+    "translation": "Responsable ingénierie",
+    "obsolete": true
   },
   "0+ewPp": {
     "message": "Enhancement",
@@ -7403,6 +7667,22 @@
       [
         "src/views/boards/components/TemplateBoards.tsx",
         32
+      ],
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        146
+      ],
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        236
+      ],
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        244
+      ],
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        260
       ]
     ],
     "translation": "Capital"
@@ -7695,7 +7975,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        47
+        48
       ]
     ],
     "translation": "Chaque opportunité suit un parcours clair, de la boîte de réception à la candidature, puis à l’entretien, l’offre et l’issue finale."
@@ -7783,7 +8063,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        475
+        375
       ]
     ],
     "translation": "Explorer le code source"
@@ -7856,7 +8136,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        414
+        314
       ]
     ],
     "translation": "Exportez votre compte complet à tout moment"
@@ -8046,7 +8326,7 @@
       ],
       [
         "src/views/home/index.tsx",
-        521
+        421
       ]
     ],
     "translation": "FAQ"
@@ -8193,7 +8473,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        527
+        427
       ]
     ],
     "translation": "Trouvez les réponses aux questions courantes sur shortlistOS avant de lui confier votre recherche d’emploi."
@@ -8344,7 +8624,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        85
+        86
       ]
     ],
     "translation": "Transférez les alertes emploi et les e-mails de recruteurs à Magic Inbox. shortlistOS peut créer de nouvelles opportunités ou mettre automatiquement à jour celles qui existent déjà."
@@ -8383,7 +8663,8 @@
         278
       ]
     ],
-    "translation": "Ingénieur fondateur"
+    "translation": "Ingénieur fondateur",
+    "obsolete": true
   },
   "2POOFK": {
     "message": "Free",
@@ -8483,6 +8764,18 @@
     ],
     "translation": "de"
   },
+  "xb6R4u": {
+    "message": "Frontend roles",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        339
+      ]
+    ],
+    "translation": ""
+  },
   "6uBU1F": {
     "message": "Full API access",
     "placeholders": {},
@@ -8564,6 +8857,54 @@
       [
         "src/views/card/index.tsx",
         295
+      ]
+    ],
+    "translation": ""
+  },
+  "L/cl/V": {
+    "translation": "",
+    "message": "Full-Stack Developer at Blue Oak Systems",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        135
+      ]
+    ]
+  },
+  "W0E9Wg": {
+    "message": "Full-Stack Developer at Creative Heroes",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        163
+      ]
+    ],
+    "translation": ""
+  },
+  "jUmzYf": {
+    "translation": "",
+    "message": "Full-Stack Engineer at Nimbus Commerce",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        218
+      ]
+    ]
+  },
+  "tkC8tr": {
+    "message": "Full-Stack Engineer at NovaGrid",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        278
       ]
     ],
     "translation": ""
@@ -8699,7 +9040,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        92
+        93
       ]
     ],
     "translation": "Recevez des rappels pour les entretiens à venir, les candidatures sans réponse, les relances en retard et les opportunités devenues silencieuses."
@@ -8851,7 +9192,7 @@
       ],
       [
         "src/views/home/index.tsx",
-        38
+        39
       ],
       [
         "src/views/pricing/components/PricingCards.tsx",
@@ -9210,6 +9551,42 @@
     ],
     "translation": "Aide"
   },
+  "+5nGUx": {
+    "message": "High priority",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        129
+      ],
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        170
+      ],
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        184
+      ],
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        200
+      ],
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        219
+      ],
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        237
+      ],
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        259
+      ]
+    ],
+    "translation": ""
+  },
   "CB/NpV": {
     "message": "High Priority",
     "placeholders": {},
@@ -9428,8 +9805,12 @@
         305
       ],
       [
-        "src/views/home/index.tsx",
-        368
+        "src/views/home/components/BoardPreview.tsx",
+        136
+      ],
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        156
       ]
     ],
     "translation": "Hybride"
@@ -9648,6 +10029,10 @@
       [
         "src/views/boards/components/TemplateBoards.tsx",
         20
+      ],
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        195
       ]
     ],
     "translation": "En contact"
@@ -9716,7 +10101,8 @@
         327
       ]
     ],
-    "translation": "Boîte de réception"
+    "translation": "Boîte de réception",
+    "obsolete": true
   },
   "6mbe4b": {
     "message": "Individuals",
@@ -9738,7 +10124,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        418
+        318
       ]
     ],
     "translation": "Inspecter exactement le fonctionnement du produit"
@@ -9796,10 +10182,6 @@
       [
         "src/views/card/index.tsx",
         1607
-      ],
-      [
-        "src/views/home/index.tsx",
-        281
       ]
     ],
     "translation": "Entretien"
@@ -9839,7 +10221,8 @@
         371
       ]
     ],
-    "translation": "Entretien dans 1 sem."
+    "translation": "Entretien dans 1 sem.",
+    "obsolete": true
   },
   "o2gHA/": {
     "message": "Interview preparation",
@@ -9881,6 +10264,10 @@
       [
         "src/views/boards/components/TemplateBoards.tsx",
         21
+      ],
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        230
       ]
     ],
     "translation": "Entretien"
@@ -10034,7 +10421,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        118
+        119
       ]
     ],
     "translation": "Powerpack est-il un abonnement ?"
@@ -10046,7 +10433,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        110
+        111
       ]
     ],
     "translation": "shortlistOS est-il vraiment gratuit ?"
@@ -10080,6 +10467,22 @@
     ],
     "translation": "Recherche d’emploi"
   },
+  "DeB03v": {
+    "message": "Job hunt 2026",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        338
+      ],
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        350
+      ]
+    ],
+    "translation": ""
+  },
   "vWp/vR": {
     "message": "Job hunting is hard. Tracking it shouldn't be.",
     "placeholders": {},
@@ -10087,7 +10490,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        201
+        202
       ]
     ],
     "translation": "Chercher un emploi est difficile. Le suivre ne devrait pas l’être."
@@ -10127,7 +10530,7 @@
     "origin": [
       [
         "src/views/card/index.tsx",
-        1727
+        1744
       ]
     ],
     "translation": "Lieu du poste"
@@ -10212,7 +10615,7 @@
     "origin": [
       [
         "src/views/card/index.tsx",
-        1757
+        1774
       ]
     ],
     "translation": "URL du poste"
@@ -10353,7 +10756,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        165
+        166
       ]
     ],
     "translation": "Regroupez chaque opportunité, e-mail, note et fichier. Suivez un pipeline pensé pour la recherche d’emploi et voyez exactement où vous en êtes."
@@ -10430,7 +10833,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        54
+        55
       ]
     ],
     "translation": "Regroupez la description du poste, les informations sur l’entreprise, le salaire, les contacts, les notes, les fichiers et les dates d’entretien."
@@ -10478,7 +10881,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        91
+        92
       ]
     ],
     "translation": "Sachez ce qui exige votre attention"
@@ -10490,7 +10893,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        98
+        99
       ]
     ],
     "translation": "Connaissez la valeur du poste"
@@ -10514,7 +10917,7 @@
       ],
       [
         "src/views/card/index.tsx",
-        2038
+        1641
       ]
     ],
     "translation": "Étiquettes"
@@ -10569,6 +10972,18 @@
     "translation": "Langue",
     "obsolete": true
   },
+  "aDzBIa": {
+    "message": "Laravel Developer at Cloudsmith Europe",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        243
+      ]
+    ],
+    "translation": ""
+  },
   "k7rCa/": {
     "message": "Large",
     "placeholders": {},
@@ -10618,6 +11033,30 @@
     ],
     "translation": "Offre de lancement : places illimitées pour seulement 29 $/mois avec Pro",
     "obsolete": true
+  },
+  "iSBwHA": {
+    "message": "Lead Platform Engineer at Mosaic Systems",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        155
+      ]
+    ],
+    "translation": ""
+  },
+  "DzDzc9": {
+    "message": "Lead Software Engineer at Riverbyte",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        198
+      ]
+    ],
+    "translation": ""
   },
   "SnV18C": {
     "message": "Learn how workspaces, shortlists, and opportunities fit together—then add automation when you want shortlistOS to do more of the routine work for you.",
@@ -10714,7 +11153,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        177
+        178
       ]
     ],
     "translation": "Laissez Powerpack gérer les tâches répétitives."
@@ -10918,10 +11357,6 @@
       [
         "src/views/board/components/CardContextDuplicateModal.tsx",
         117
-      ],
-      [
-        "src/views/home/index.tsx",
-        317
       ]
     ],
     "translation": "Liste"
@@ -11098,7 +11533,7 @@
     "origin": [
       [
         "src/views/card/index.tsx",
-        1702
+        1719
       ]
     ],
     "translation": "Type de lieu"
@@ -11213,7 +11648,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        246
+        247
       ]
     ],
     "translation": "Conçu et hébergé dans l’UE"
@@ -11474,7 +11909,7 @@
     "origin": [
       [
         "src/views/card/index.tsx",
-        1943
+        1960
       ]
     ],
     "translation": "Max."
@@ -11624,7 +12059,7 @@
     "origin": [
       [
         "src/views/card/index.tsx",
-        1915
+        1932
       ]
     ],
     "translation": "Min."
@@ -11672,7 +12107,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        420
+        320
       ]
     ],
     "translation": "Modifiez-le selon vos besoins"
@@ -11890,6 +12325,18 @@
     ],
     "translation": "Mon webhook"
   },
+  "OIYzx/": {
+    "message": "My workspace",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        331
+      ]
+    ],
+    "translation": ""
+  },
   "6YtxFj": {
     "message": "Name",
     "placeholders": {},
@@ -11966,6 +12413,10 @@
       [
         "src/views/boards/components/TemplateBoards.tsx",
         22
+      ],
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        254
       ]
     ],
     "translation": "Négociation"
@@ -12281,7 +12732,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        412
+        312
       ]
     ],
     "translation": "Aucune publicité ni suivi personnel"
@@ -12491,7 +12942,7 @@
     "origin": [
       [
         "src/views/card/index.tsx",
-        1862
+        1879
       ]
     ],
     "translation": "Aucun résumé de réputation pour le moment."
@@ -12531,7 +12982,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        119
+        120
       ]
     ],
     "translation": "Non. Powerpack coûte 29 $ et reste actif pendant trois mois. Il n’y a ni renouvellement automatique ni paiement récurrent."
@@ -12569,7 +13020,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        147
+        148
       ]
     ],
     "translation": ""
@@ -12581,7 +13032,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        123
+        124
       ]
     ],
     "translation": ""
@@ -12662,10 +13113,6 @@
       [
         "src/pages/get-started.tsx",
         196
-      ],
-      [
-        "src/views/home/index.tsx",
-        290
       ]
     ],
     "translation": "Offre"
@@ -12724,6 +13171,26 @@
     "translation": "Option de déploiement sur site",
     "obsolete": true
   },
+  "YHeQAf": {
+    "message": "On-site",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        121
+      ],
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        164
+      ],
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        300
+      ]
+    ],
+    "translation": ""
+  },
   "gukxZ5": {
     "message": "Onboarding",
     "placeholders": {},
@@ -12780,7 +13247,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        53
+        54
       ]
     ],
     "translation": "Une source unique de vérité pour chaque opportunité"
@@ -12923,7 +13390,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        458
+        358
       ],
       [
         "src/views/pricing/components/PricingCards.tsx",
@@ -12939,7 +13406,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        245
+        246
       ]
     ],
     "translation": "Cœur open source"
@@ -13173,7 +13640,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        248
+        249
       ]
     ],
     "translation": "Vos données vous appartiennent"
@@ -13594,6 +14061,42 @@
     ],
     "translation": ""
   },
+  "Hu7vCt": {
+    "message": "PHP Developer at Pinecone Digital",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        309
+      ]
+    ],
+    "translation": ""
+  },
+  "Qu4q4i": {
+    "translation": "",
+    "message": "PHP Software Engineer at Amber Cloud",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        183
+      ]
+    ]
+  },
+  "t/Ccnr": {
+    "message": "PHP Software Engineer at OpenField",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        206
+      ]
+    ],
+    "translation": ""
+  },
   "Oi+J+N": {
     "message": "Pick a plan to get started. All paid plans include a 14-day free trial.",
     "placeholders": {},
@@ -13632,7 +14135,8 @@
         327
       ]
     ],
-    "translation": "Pipeline"
+    "translation": "Pipeline",
+    "obsolete": true
   },
   "GdgCoi": {
     "message": "Plan",
@@ -13688,6 +14192,30 @@
     ],
     "translation": "Plateforme",
     "obsolete": true
+  },
+  "eIHybc": {
+    "message": "Platform Engineer at Danube Software",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        266
+      ]
+    ],
+    "translation": ""
+  },
+  "Q+veYq": {
+    "message": "Platform Engineer at Northstar Labs",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        248
+      ]
+    ],
+    "translation": ""
   },
   "58AiWX": {
     "message": "Please confirm your new password",
@@ -14116,7 +14644,7 @@
       ],
       [
         "src/views/home/index.tsx",
-        176
+        177
       ],
       [
         "src/views/pricing/components/PricingCards.tsx",
@@ -14144,7 +14672,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        178
+        179
       ]
     ],
     "translation": "Powerpack ajoute l’automatisation et l’IA à votre espace shortlistOS, afin que vous passiez moins de temps à copier des informations et davantage à faire avancer votre recherche."
@@ -14169,7 +14697,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        115
+        116
       ]
     ],
     "translation": ""
@@ -14260,7 +14788,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        236
+        237
       ]
     ],
     "translation": "Vous préférez le gérer vous-même ? Auto-hébergez la version open source."
@@ -14292,7 +14820,7 @@
       ],
       [
         "src/views/home/index.tsx",
-        393
+        293
       ],
       [
         "src/views/pricing/index.tsx",
@@ -14352,7 +14880,7 @@
       ],
       [
         "src/views/home/index.tsx",
-        441
+        341
       ]
     ],
     "translation": "Confidentialité"
@@ -14364,7 +14892,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        429
+        329
       ]
     ],
     "translation": "Confidentialité et open source"
@@ -14392,7 +14920,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        247
+        248
       ]
     ],
     "translation": "Respectueux de la vie privée"
@@ -14404,7 +14932,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        483
+        383
       ]
     ],
     "translation": "Politique de confidentialité"
@@ -14428,7 +14956,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        432
+        332
       ]
     ],
     "translation": "Privé par conception. Ouvert par défaut."
@@ -14511,7 +15039,8 @@
         278
       ]
     ],
-    "translation": "Designer produit"
+    "translation": "Designer produit",
+    "obsolete": true
   },
   "jc85KE": {
     "message": "Product Designer · Northstar",
@@ -14535,7 +15064,8 @@
         297
       ]
     ],
-    "translation": "Chef de produit"
+    "translation": "Chef de produit",
+    "obsolete": true
   },
   "0rPv1T": {
     "message": "Profile image updated",
@@ -14586,6 +15116,18 @@
     "translation": "Publication",
     "obsolete": true
   },
+  "daaJS3": {
+    "message": "Python Engineer at BrightRail",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        120
+      ]
+    ],
+    "translation": ""
+  },
   "bfgr/e": {
     "message": "Question",
     "placeholders": {},
@@ -14610,7 +15152,7 @@
       ],
       [
         "src/views/home/index.tsx",
-        524
+        424
       ]
     ],
     "translation": "Des questions ?"
@@ -14635,7 +15177,7 @@
     "origin": [
       [
         "src/views/card/index.tsx",
-        1844
+        1861
       ]
     ],
     "translation": "Note"
@@ -14766,6 +15308,22 @@
     "translation": "Recrutement",
     "obsolete": true
   },
+  "UBWkH2": {
+    "message": "Red flag",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        214
+      ],
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        310
+      ]
+    ],
+    "translation": ""
+  },
   "RVvaD1": {
     "message": "Red flag 🚩",
     "placeholders": {},
@@ -14786,6 +15344,18 @@
       [
         "src/views/boards/components/TemplateBoards.tsx",
         28
+      ],
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        141
+      ],
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        201
+      ],
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        224
       ]
     ],
     "translation": "Recommandation"
@@ -14798,6 +15368,10 @@
       [
         "src/views/boards/components/TemplateBoards.tsx",
         24
+      ],
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        292
       ]
     ],
     "translation": "Rejeté"
@@ -14842,10 +15416,6 @@
       [
         "src/views/card/index.tsx",
         306
-      ],
-      [
-        "src/views/home/index.tsx",
-        368
       ]
     ],
     "translation": "À distance"
@@ -14858,6 +15428,18 @@
       [
         "src/pages/get-started.tsx",
         277
+      ]
+    ],
+    "translation": ""
+  },
+  "tddf68": {
+    "message": "Remote opportunities",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        340
       ]
     ],
     "translation": ""
@@ -15185,7 +15767,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        68
+        69
       ]
     ],
     "translation": "Consultez les e-mails, commentaires, étapes clés et changements de statut par ordre chronologique sans perdre le contexte."
@@ -15221,7 +15803,7 @@
     "origin": [
       [
         "src/views/card/index.tsx",
-        1649
+        1666
       ],
       [
         "src/views/members/index.tsx",
@@ -15351,11 +15933,11 @@
       ],
       [
         "src/views/card/index.tsx",
-        1872
+        1889
       ],
       [
         "src/views/card/index.tsx",
-        1915
+        1932
       ]
     ],
     "translation": "Salaire"
@@ -15383,7 +15965,7 @@
     "origin": [
       [
         "src/views/card/index.tsx",
-        2012
+        2029
       ]
     ],
     "translation": ""
@@ -15561,7 +16143,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        77
+        78
       ]
     ],
     "translation": "Enregistrez des offres en quelques secondes"
@@ -15651,6 +16233,10 @@
       [
         "src/views/boards/components/TemplateBoards.tsx",
         18
+      ],
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        111
       ]
     ],
     "translation": "Enregistrée"
@@ -15690,7 +16276,8 @@
         327
       ]
     ],
-    "translation": "Rechercher"
+    "translation": "Rechercher",
+    "obsolete": true
   },
   "SkCNhl": {
     "message": "Search boards and cards...",
@@ -15813,7 +16400,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        61
+        62
       ]
     ],
     "translation": "Voyez chaque opportunité active, son état et celles qui demandent votre attention."
@@ -15825,7 +16412,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        99
+        100
       ]
     ],
     "translation": "Consultez des fourchettes salariales indicatives selon le poste et le lieu, avec des comparaisons régionales lorsque les données sont disponibles."
@@ -16014,7 +16601,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        419
+        319
       ]
     ],
     "translation": "Auto-héberger l’application principale"
@@ -16129,6 +16716,30 @@
     "translation": "Senior",
     "obsolete": true
   },
+  "yq/ohL": {
+    "message": "Senior Backend Engineer at Cobalt Labs",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        257
+      ]
+    ],
+    "translation": ""
+  },
+  "8uPIis": {
+    "message": "Senior Backend Engineer at Northstar Labs",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        127
+      ]
+    ],
+    "translation": ""
+  },
   "jWj3qv": {
     "message": "Senior Engineer",
     "placeholders": {},
@@ -16139,7 +16750,68 @@
         297
       ]
     ],
-    "translation": "Ingénieur senior"
+    "translation": "Ingénieur senior",
+    "obsolete": true
+  },
+  "1TUK0E": {
+    "translation": "",
+    "message": "Senior Full-Stack Engineer at BrightRail",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        175
+      ]
+    ]
+  },
+  "Ofblw2": {
+    "message": "Senior PHP Developer at Amber Cloud",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        114
+      ]
+    ],
+    "translation": ""
+  },
+  "M/89S6": {
+    "message": "Senior PHP Developer at Atlas Foundry",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        233
+      ]
+    ],
+    "translation": ""
+  },
+  "JpN25+": {
+    "message": "Senior PHP Developer at LimePeak",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        284
+      ]
+    ],
+    "translation": ""
+  },
+  "NAv7fo": {
+    "translation": "",
+    "message": "Senior PHP Developer at Morava Digital",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        223
+      ]
+    ]
   },
   "CrnwHr": {
     "message": "Senior Product Designer",
@@ -16175,7 +16847,8 @@
         273
       ]
     ],
-    "translation": "Chef de produit senior"
+    "translation": "Chef de produit senior",
+    "obsolete": true
   },
   "WjldFw": {
     "message": "Senior Software Engineer",
@@ -16187,7 +16860,8 @@
         284
       ]
     ],
-    "translation": "Ingénieur logiciel senior"
+    "translation": "Ingénieur logiciel senior",
+    "obsolete": true
   },
   "VTmyvi": {
     "message": "Sentiment",
@@ -16196,7 +16870,7 @@
     "origin": [
       [
         "src/views/card/index.tsx",
-        1858
+        1875
       ]
     ],
     "translation": "Réputation"
@@ -16569,7 +17243,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        435
+        335
       ]
     ],
     "translation": "shortlistOS ne vous suit pas, ne vend pas vos données et ne vous enferme pas. Exportez votre compte quand vous le souhaitez, inspectez le code source ou exécutez vous-même l'application principale."
@@ -16593,7 +17267,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        498
+        398
       ]
     ],
     "translation": "shortlistOS est un produit indépendant, pas une plateforme de recrutement, un réseau publicitaire ou une entreprise financée par du capital-risque."
@@ -16643,6 +17317,10 @@
       [
         "src/components/SideNavigation.tsx",
         117
+      ],
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        336
       ]
     ],
     "translation": "Shortlists"
@@ -16955,7 +17633,20 @@
         292
       ]
     ],
-    "translation": "Ingénieur logiciel"
+    "translation": "Ingénieur logiciel",
+    "obsolete": true
+  },
+  "oa3nbK": {
+    "message": "Software Engineer at Silverline Tech",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        299
+      ]
+    ],
+    "translation": ""
   },
   "6sKjjx": {
     "message": "Solo",
@@ -17044,7 +17735,8 @@
         286
       ]
     ],
-    "translation": "Ingénieur Staff"
+    "translation": "Ingénieur Staff",
+    "obsolete": true
   },
   "R6pB8R": {
     "message": "Star on Github",
@@ -17433,7 +18125,8 @@
         327
       ]
     ],
-    "translation": "Tâches"
+    "translation": "Tâches",
+    "obsolete": true
   },
   "KM6m8p": {
     "message": "Team",
@@ -17985,7 +18678,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        501
+        401
       ]
     ],
     "translation": "Il n'y a ni publicité, ni vente de données, ni intérêt à vous faire chercher un emploi plus longtemps que nécessaire. L'objectif est simple : faciliter votre recherche, respecter votre vie privée et rester discret."
@@ -18321,7 +19014,8 @@
         318
       ]
     ],
-    "translation": "Chronologie"
+    "translation": "Chronologie",
+    "obsolete": true
   },
   "MHrjPM": {
     "message": "Title",
@@ -18431,7 +19125,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        204
+        205
       ]
     ],
     "translation": "Suivez chaque opportunité, e-mail, entretien planifié et relance dans un espace privé. Obtenez Powerpack pour automatiser votre recherche."
@@ -18528,7 +19222,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        84
+        85
       ]
     ],
     "translation": "Transformez les e-mails d’emploi en opportunités organisées"
@@ -19272,7 +19966,7 @@
     "origin": [
       [
         "src/views/card/index.tsx",
-        1716
+        1733
       ]
     ],
     "translation": "inconnu"
@@ -19968,7 +20662,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        394
+        294
       ],
       [
         "src/views/pricing/index.tsx",
@@ -19996,7 +20690,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        78
+        79
       ]
     ],
     "translation": "Utilisez l'extension de navigateur sur une annonce. shortlistOS extrait les informations importantes et crée une opportunité complète pour vous."
@@ -20587,7 +21281,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        126
+        127
       ]
     ],
     "translation": "Que se passe-t-il à l'expiration de Powerpack ?"
@@ -20625,7 +21319,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        114
+        115
       ]
     ],
     "translation": ""
@@ -20735,7 +21429,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        142
+        143
       ]
     ],
     "translation": "Où mes données sont-elles hébergées ?"
@@ -20762,7 +21456,8 @@
         271
       ]
     ],
-    "translation": "Liste de souhaits"
+    "translation": "Liste de souhaits",
+    "obsolete": true
   },
   "UhtZPN": {
     "message": "With Powerpack, Magic Inbox and the Web Clipper can create opportunities for you. Those cards are visibly attributed to the shortlistOS robot.",
@@ -20785,6 +21480,10 @@
       [
         "src/views/boards/components/TemplateBoards.tsx",
         25
+      ],
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        306
       ]
     ],
     "translation": "Retirée"
@@ -20808,7 +21507,7 @@
       ],
       [
         "src/views/home/index.tsx",
-        163
+        164
       ],
       [
         "src/views/members/index.tsx",
@@ -21141,7 +21840,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        139
+        140
       ]
     ],
     "translation": ""
@@ -21153,7 +21852,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        111
+        112
       ]
     ],
     "translation": "Oui. La version de base est entièrement gratuite, avec des shortlists et opportunités illimitées, des notes, des pièces jointes, l'historique des activités et l'export des données. Powerpack est facultatif et ajoute l'automatisation et des fonctions d'IA."
@@ -21165,7 +21864,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        135
+        136
       ]
     ],
     "translation": "Oui. Le cœur open source peut être installé et exécuté sur votre propre infrastructure en suivant les instructions sur GitHub. Vous êtes responsable de l'hébergement, de la configuration, des mises à jour et des sauvegardes."
@@ -21177,7 +21876,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        151
+        152
       ]
     ],
     "translation": ""
@@ -21189,7 +21888,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        131
+        132
       ]
     ],
     "translation": "Oui. Vous pouvez exporter votre compte complet au format JSON à tout moment."
@@ -21202,6 +21901,18 @@
       [
         "src/pages/get-started.tsx",
         333
+      ]
+    ],
+    "translation": ""
+  },
+  "kWJmRL": {
+    "message": "You",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        344
       ]
     ],
     "translation": ""
@@ -21556,7 +22267,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        127
+        128
       ]
     ],
     "translation": "Votre compte, vos opportunités, vos notes et vos fichiers restent disponibles. Votre compte repasse à la version de base et les fonctionnalités Powerpack s'arrêtent jusqu'à leur réactivation."
@@ -21592,7 +22303,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        413
+        313
       ]
     ],
     "translation": "Vos données ne sont jamais vendues"
@@ -21616,7 +22327,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        164
+        165
       ]
     ],
     "translation": "Toute votre recherche d’emploi au même endroit."
@@ -21861,7 +22572,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        60
+        61
       ]
     ],
     "translation": "Toute votre recherche en un coup d'œil"
@@ -21915,7 +22626,6 @@
     "translation": "Votre espace de travail a été supprimé."
   },
   "ubDy+H": {
-    "translation": "",
     "message": "Your workspace is the <0>home for your shortlists</0>, account settings, and members. You can create as many workspaces as you need. One workspace is enough for most individual job searches.",
     "placeholders": {},
     "comments": [],
@@ -21924,7 +22634,8 @@
         "src/pages/get-started.tsx",
         437
       ]
-    ]
+    ],
+    "translation": ""
   },
   "Yc260j": {
     "translation": "",
