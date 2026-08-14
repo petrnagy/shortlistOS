@@ -22753,5 +22753,17 @@
       ]
     ],
     "translation": "YouTube URL"
+  },
+  "e0NrBM": {
+    "message": "Project",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/home/components/Footer.tsx",
+        107
+      ]
+    ],
+    "translation": "Project"
   }
 }

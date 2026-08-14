@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { t } from "@lingui/core/macro";
 import {
   HiOutlineBars3BottomLeft,
@@ -51,8 +52,9 @@ function PreviewLabelPill({ label }: { label: PreviewLabel }) {
 
 function PreviewCard({ card }: { card: PreviewCard }) {
   return (
-    <div
-      className={`rounded-md border border-light-200 px-3 py-2 text-xs text-light-1000 shadow-sm dark:border-dark-200 dark:text-dark-1000 ${
+    <Link
+      href="/signup"
+      className={`focus-visible:ring-brand-500 block cursor-pointer rounded-md border border-light-200 px-3 py-2 text-xs text-light-1000 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 dark:border-dark-200 dark:text-dark-1000 dark:focus-visible:ring-offset-dark-100 ${
         card.aged
           ? "bg-amber-50/70 dark:bg-amber-950/20"
           : "bg-light-50 dark:bg-dark-200"
@@ -83,7 +85,7 @@ function PreviewCard({ card }: { card: PreviewCard }) {
           ) : null}
         </div>
       </div>
-    </div>
+    </Link>
   );
 }
 

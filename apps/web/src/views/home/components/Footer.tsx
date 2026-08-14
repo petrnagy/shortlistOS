@@ -99,17 +99,12 @@ const Footer = () => {
           href: githubUrl,
           external: true,
         },
-        {
-          label: t`GitHub`,
-          href: githubUrl,
-          external: true,
-        },
         { label: t`FAQ`, href: "/#faq" },
         { label: t`Help`, href: "mailto:support@shortlistos.co" },
       ],
     },
     {
-      title: t`Company`,
+      title: t`Project`,
       links: [
         { label: t`Privacy`, href: "/privacy" },
         { label: t`Terms`, href: "/terms" },
