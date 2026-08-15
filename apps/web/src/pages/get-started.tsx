@@ -1,7 +1,15 @@
 import type { ReactNode } from "react";
+import Image from "next/image";
 import Link from "next/link";
+import {
+  Dialog,
+  DialogBackdrop,
+  DialogPanel,
+  DialogTitle,
+} from "@headlessui/react";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
+import { useState } from "react";
 import {
   HiOutlineArchiveBox,
   HiOutlineArrowLeft,
@@ -12,74 +20,77 @@ import {
   HiOutlineBriefcase,
   HiOutlineBuildingOffice2,
   HiOutlineCalendarDays,
-  HiOutlineChatBubbleLeftRight,
   HiOutlineCheckCircle,
   HiOutlineChevronRight,
   HiOutlineClipboardDocumentCheck,
   HiOutlineClock,
-  HiOutlineCloudArrowUp,
   HiOutlineCurrencyDollar,
   HiOutlineCursorArrowRays,
   HiOutlineDocumentText,
   HiOutlineEnvelope,
   HiOutlineGlobeAlt,
-  HiOutlineLink,
   HiOutlineListBullet,
   HiOutlinePaperClip,
+  HiOutlinePlus,
   HiOutlineRectangleStack,
   HiOutlineSparkles,
   HiOutlineStar,
   HiOutlineTag,
   HiOutlineUserGroup,
-  HiOutlineUserPlus,
+  HiXMark,
 } from "react-icons/hi2";
 
+import { Alert } from "~/components/Alert";
 import Button from "~/components/Button";
 import { PageHead } from "~/components/PageHead";
 import { FeatureCard, Section } from "~/views/home/components/LandingSection";
 import Layout from "~/views/home/components/Layout";
 
 const opportunityFields = [
-  { icon: HiOutlineBuildingOffice2, label: t`Company and role` },
-  { icon: HiOutlineGlobeAlt, label: t`Location and work model` },
-  { icon: HiOutlineCurrencyDollar, label: t`Salary range and currency` },
-  { icon: HiOutlineCalendarDays, label: t`Due dates and interviews` },
-  { icon: HiOutlineUserGroup, label: t`Recruiters and contacts` },
-  { icon: HiOutlineLink, label: t`Job posting and company links` },
-  { icon: HiOutlineTag, label: t`Labels and members` },
-  { icon: HiOutlineDocumentText, label: t`Description and notes` },
-] as const;
-
-const cardFeatures = [
+  {
+    icon: HiOutlineBuildingOffice2,
+    title: t`Role and company`,
+    description: t`Keep the employer, position, and contract type together.`,
+  },
+  {
+    icon: HiOutlineGlobeAlt,
+    title: t`Location and work model`,
+    description: t`Record the job location and whether it is remote, hybrid, or on-site.`,
+  },
+  {
+    icon: HiOutlineCurrencyDollar,
+    title: t`Salary`,
+    description: t`Save the advertised range, currency, and pay period for easy comparison.`,
+  },
+  {
+    icon: HiOutlineUserGroup,
+    title: t`Contacts`,
+    description: t`Keep recruiter and hiring-manager details close to the opportunity.`,
+  },
+  {
+    icon: HiOutlineDocumentText,
+    title: t`Description, links, attachments`,
+    description: t`Save the job description, useful links, notes, and related files.`,
+  },
+  {
+    icon: HiOutlineCalendarDays,
+    title: t`Status and dates`,
+    description: t`See where the opportunity stands and keep interviews, deadlines, and follow-ups visible.`,
+  },
   {
     icon: HiOutlineClipboardDocumentCheck,
     title: t`Checklists`,
-    description: t`Turn a big task into a short list of things you can tick off one by one.`,
+    description: t`Turn preparation and follow-ups into clear steps you can tick off.`,
   },
   {
-    icon: HiOutlineChatBubbleLeftRight,
-    title: t`Comments`,
-    description: t`Write down updates and decisions where you will find them again.`,
-  },
-  {
-    icon: HiOutlinePaperClip,
-    title: t`Attachments`,
-    description: t`Keep the job advert, CV, cover letter, offer, and other files together.`,
+    icon: HiOutlineTag,
+    title: t`Labels`,
+    description: t`Mark priorities, benefits, concerns, and anything else you want to spot quickly.`,
   },
   {
     icon: HiOutlineClock,
     title: t`Activity history`,
-    description: t`See what changed and when, including dates, comments, and moves between stages.`,
-  },
-  {
-    icon: HiOutlineUserPlus,
-    title: t`Members`,
-    description: t`Share an opportunity with someone you trust or show who is looking after it.`,
-  },
-  {
-    icon: HiOutlineSparkles,
-    title: t`Per-card automation`,
-    description: t`Let Powerpack update a card, or keep one opportunity completely manual.`,
+    description: t`See changes, comments, and milestone moves in one chronological record.`,
   },
 ] as const;
 
@@ -253,93 +264,323 @@ const BoardMockup = () => {
   );
 };
 
-const CardMockup = () => (
-  <VisualFrame label={t`Mockup · replace with opportunity screenshot`}>
-    <div className="grid gap-0 md:grid-cols-[1fr_240px]">
-      <div className="p-5 sm:p-7">
-        <div className="flex flex-wrap gap-2">
-          <span className="rounded bg-violet-100 px-2 py-1 text-[10px] font-semibold text-violet-700 dark:bg-violet-900/30 dark:text-violet-300">
-            {t`Interviewing`}
-          </span>
-          <span className="rounded bg-emerald-100 px-2 py-1 text-[10px] font-semibold text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300">
-            {t`Remote`}
-          </span>
+const CardMockup = () => {
+  const detailRows = [
+    [t`Status`, t`Interviewing`],
+    [t`Interview`, t`Jun 19, 2026`],
+    [t`Created`, t`Jun 12, 2026`],
+  ] as const;
+  const roleRows = [
+    [t`Company`, "Northstar Group"],
+    [t`Contract`, t`Full time`],
+    [t`Location`, t`New York, NY`],
+  ] as const;
+  const labels = [
+    [t`Application confirmed`, "bg-teal-500"],
+    [t`High priority`, "bg-amber-500"],
+    [t`Equity`, "bg-sky-600"],
+  ] as const;
+  const historyEvents = [
+    {
+      message: t`updated Salary maximum from $115,000 to $120,000`,
+      timestamp: t`today`,
+    },
+    {
+      message: t`updated Salary minimum from $100,000 to $105,000`,
+      timestamp: t`today`,
+    },
+    {
+      message: t`completed checklist item Review the company and role`,
+      timestamp: t`yesterday`,
+    },
+    {
+      message: t`added an attachment project-manager-resume.pdf`,
+      timestamp: t`yesterday`,
+    },
+    {
+      move: [t`In contact`, t`Interviewing`],
+      timestamp: t`2 days ago`,
+    },
+    {
+      message: t`added checklist Interview preparation`,
+      timestamp: t`4 days ago`,
+    },
+    {
+      message: t`updated Interview from empty to Jun 19, 2026`,
+      timestamp: t`5 days ago`,
+    },
+    {
+      move: [t`Applied`, t`In contact`],
+      timestamp: t`6 days ago`,
+    },
+    {
+      message: t`added label Application confirmed`,
+      timestamp: t`8 days ago`,
+    },
+    {
+      move: [t`Saved`, t`Applied`],
+      timestamp: t`9 days ago`,
+    },
+    {
+      message: t`updated Company from empty to Northstar Group`,
+      timestamp: t`10 days ago`,
+    },
+    { message: t`updated the description`, timestamp: t`13 days ago` },
+    { message: t`created the card`, timestamp: t`2 weeks ago` },
+  ] as const;
+
+  return (
+    <VisualFrame label={t`Job opportunity detail`}>
+      <div className="select-none bg-light-50 dark:bg-dark-50">
+        <div className="flex h-11 items-center justify-between border-b border-light-300 px-4 dark:border-dark-300">
+          <div className="flex min-w-0 items-center gap-1.5 text-[10px] font-semibold">
+            <span className="text-light-900 dark:text-dark-900">
+              {t`Full Stack Developer`}
+            </span>
+            <HiOutlineChevronRight className="h-3 w-3 text-light-600 dark:text-dark-600" />
+            <span className="truncate text-light-700 dark:text-dark-700">
+              {t`Project Manager`}
+            </span>
+          </div>
+          <div className="flex items-center gap-2 text-light-800 dark:text-dark-800">
+            <span className="text-sm leading-none">•••</span>
+            <HiXMark className="h-4 w-4" />
+          </div>
         </div>
-        <h3 className="mt-4 text-xl font-semibold text-light-1000 dark:text-dark-1000">
-          {t`Senior Product Designer`}
-        </h3>
-        <p className="mt-1 text-sm text-light-800 dark:text-dark-800">
-          Northstar Labs
-        </p>
-        <div className="mt-6 grid grid-cols-2 gap-3 text-xs sm:grid-cols-3">
-          {[
-            [t`Salary`, "€82k–€98k"],
-            [t`Location`, t`Remote · EU`],
-            [t`Next step`, t`Interview · Tue`],
-          ].map(([label, value]) => (
-            <div
-              key={label}
-              className="rounded-lg bg-light-100 p-3 dark:bg-dark-200"
-            >
-              <p className="text-[10px] uppercase tracking-wide text-light-700 dark:text-dark-700">
-                {label}
-              </p>
-              <p className="mt-1 font-medium text-light-1000 dark:text-dark-1000">
-                {value}
-              </p>
-            </div>
-          ))}
-        </div>
-        <div className="mt-6 border-t border-light-300 pt-5 dark:border-dark-300">
-          <p className="text-xs font-semibold text-light-1000 dark:text-dark-1000">{t`Interview preparation`}</p>
-          <div className="mt-3 space-y-2">
-            {[
-              t`Review product and competitors`,
-              t`Prepare portfolio walkthrough`,
-              t`Send thank-you note`,
-            ].map((item, index) => (
-              <div
-                key={item}
-                className="flex items-center gap-2 text-xs text-light-800 dark:text-dark-800"
-              >
-                <span
-                  className={`h-3.5 w-3.5 rounded border ${index < 2 ? "border-brand-500 bg-brand-500" : "border-light-400 dark:border-dark-400"}`}
-                />
-                <span className={index < 2 ? "line-through opacity-60" : ""}>
-                  {item}
+
+        <div className="h-[560px] overflow-y-auto overscroll-contain">
+          <div className="grid md:grid-cols-[1fr_220px]">
+            <div className="p-5 sm:p-6">
+              <h3 className="text-base font-bold text-light-1000 dark:text-dark-1000">
+                {t`Project Manager`}
+              </h3>
+              <div className="mt-4 space-y-2 text-[11px] leading-5 text-light-800 dark:text-dark-800">
+                <p>
+                  {t`Lead cross-functional projects from planning to delivery, keeping timelines, stakeholders, and risks aligned.`}
+                </p>
+                <p>
+                  {t`Work with teams across the business to turn goals into clear plans and measurable outcomes.`}
+                </p>
+              </div>
+
+              <div className="mt-6 border-t border-light-300 pt-5 dark:border-dark-300">
+                <div className="flex items-center justify-between">
+                  <p className="text-xs font-medium text-light-1000 dark:text-dark-1000">
+                    {t`Interview preparation`}
+                  </p>
+                  <span className="rounded-full border border-light-300 px-2 py-1 text-[9px] text-light-800 dark:border-dark-300 dark:text-dark-800">
+                    2/3
+                  </span>
+                </div>
+                <div className="mt-3 space-y-1.5">
+                  {[
+                    t`Review the company and role`,
+                    t`Prepare questions for the recruiter`,
+                    t`Confirm the interview time`,
+                  ].map((item, index) => (
+                    <div
+                      key={item}
+                      className="flex items-center gap-2 rounded-md py-1 text-[11px] text-light-800 dark:text-dark-800"
+                    >
+                      <span
+                        className={`flex h-3.5 w-3.5 items-center justify-center rounded border text-[9px] text-white ${
+                          index < 2
+                            ? "border-blue-600 bg-blue-600"
+                            : "border-light-400 dark:border-dark-400"
+                        }`}
+                      >
+                        {index < 2 ? "✓" : null}
+                      </span>
+                      <span
+                        className={index < 2 ? "line-through opacity-60" : ""}
+                      >
+                        {item}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="mt-5 flex items-center justify-between border-b border-light-300 pb-5 text-[11px] font-medium text-light-800 dark:border-dark-300 dark:text-dark-800">
+                <span className="flex items-center gap-1.5">
+                  <HiOutlinePlus className="h-3.5 w-3.5" />
+                  {t`New checklist`}
+                </span>
+                <span className="flex items-center gap-1.5">
+                  {t`Upload attachment`}
+                  <HiOutlinePaperClip className="h-3.5 w-3.5" />
                 </span>
               </div>
-            ))}
+
+              <div className="mt-5">
+                <div className="flex items-center justify-between">
+                  <p className="text-xs font-medium text-light-1000 dark:text-dark-1000">
+                    {t`History`}
+                  </p>
+                  <span className="text-[9px] text-light-700 dark:text-dark-700">
+                    {t`Show only comments`}
+                  </span>
+                </div>
+                <div className="mt-3 rounded-lg border border-light-300 bg-light-100 p-3 dark:border-dark-300 dark:bg-dark-100">
+                  <div className="flex items-center gap-2">
+                    <span className="flex h-5 w-5 items-center justify-center rounded-full bg-violet-100 text-[9px] font-bold text-violet-700 dark:bg-violet-900/40 dark:text-violet-300">
+                      S
+                    </span>
+                    <p className="text-[9px] text-light-800 dark:text-dark-800">
+                      <strong className="text-light-1000 dark:text-dark-1000">
+                        shortlistOS Robot
+                      </strong>{" "}
+                      · {t`23 days ago`}
+                    </p>
+                  </div>
+                  <p className="mt-2 text-[9px] leading-4 text-light-800 dark:text-dark-800">
+                    {t`Updated salary insights using market benchmarks for this role and location.`}
+                  </p>
+                </div>
+                <div className="mt-2 space-y-2">
+                  {historyEvents.map((event, index) => {
+                    const move = "move" in event ? event.move : null;
+
+                    return (
+                      <div
+                        key={`${event.timestamp}-${index}`}
+                        className={
+                          move
+                            ? "flex items-start gap-2 rounded-sm border-l-[3px] border-green-500 bg-green-50/80 px-2 py-2 dark:border-green-400 dark:bg-green-950/30"
+                            : "flex items-start gap-2 border-l-[3px] border-transparent px-2 py-1"
+                        }
+                      >
+                        <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-light-1000 text-[9px] font-bold text-white dark:bg-dark-1000 dark:text-dark-50">
+                          P
+                        </span>
+                        <div className="min-w-0 flex-1">
+                          <p className="text-[9px] leading-4 text-light-800 dark:text-dark-800">
+                            <strong className="text-light-1000 dark:text-dark-1000">
+                              Peter
+                            </strong>{" "}
+                            {move ? (
+                              <>
+                                {t`moved the card from`}{" "}
+                                <strong className="text-light-1000 dark:text-dark-1000">
+                                  {move[0]}
+                                </strong>{" "}
+                                {t`to`}{" "}
+                                <strong className="text-light-1000 dark:text-dark-1000">
+                                  {move[1]}
+                                </strong>
+                              </>
+                            ) : "message" in event ? (
+                              event.message
+                            ) : null}
+                          </p>
+                          <div className="mt-1 flex flex-wrap items-center gap-2">
+                            {move ? (
+                              <span className="inline-flex items-center gap-1 rounded-md border border-green-500/50 bg-green-50 px-1.5 py-0.5 text-[8px] font-medium text-green-700 dark:border-green-400/40 dark:bg-green-950/30 dark:text-green-300">
+                                <HiOutlineStar className="h-2.5 w-2.5" />
+                                {t`Milestone`}
+                              </span>
+                            ) : null}
+                            <span className="text-[8px] text-light-700 dark:text-dark-700">
+                              {event.timestamp}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+
+            <aside className="border-t border-light-300 bg-light-100 p-5 dark:border-dark-300 dark:bg-dark-100 md:border-l md:border-t-0">
+              <div className="flex items-center gap-2">
+                <span className="flex h-7 w-7 items-center justify-center rounded-md border border-light-300 bg-light-100 dark:border-dark-300 dark:bg-dark-100">
+                  <HiOutlineBriefcase className="h-4 w-4" />
+                </span>
+                <p className="text-xs font-semibold text-light-1000 dark:text-dark-1000">
+                  {t`Opportunity details`}
+                </p>
+              </div>
+
+              <div className="mt-5">
+                <p className="text-[10px] font-semibold text-light-1000 dark:text-dark-1000">
+                  {t`Details`}
+                </p>
+                <div className="mt-2 rounded-lg border border-light-300 p-2 dark:border-dark-300">
+                  {detailRows.map(([label, value]) => (
+                    <div
+                      key={label}
+                      className="grid grid-cols-[66px_1fr] items-center border-b border-light-200 px-1 py-2 text-[9px] last:border-0 dark:border-dark-200"
+                    >
+                      <span className="text-light-700 dark:text-dark-700">
+                        {label}
+                      </span>
+                      <span className="font-medium text-light-1000 dark:text-dark-1000">
+                        {value}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="mt-4">
+                <p className="text-[10px] font-semibold text-light-1000 dark:text-dark-1000">
+                  {t`Labels`}
+                </p>
+                <div className="mt-2 flex flex-wrap gap-1 rounded-lg border border-light-300 p-2 dark:border-dark-300">
+                  {labels.map(([label, colour]) => (
+                    <span
+                      key={label}
+                      className="inline-flex items-center gap-1 rounded-full px-1.5 py-1 text-[8px] text-light-800 ring-1 ring-inset ring-light-400 dark:text-dark-800 dark:ring-dark-400"
+                    >
+                      <span className={`h-1.5 w-1.5 rounded-full ${colour}`} />
+                      {label}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              <div className="mt-4">
+                <p className="text-[10px] font-semibold text-light-1000 dark:text-dark-1000">
+                  {t`Role`}
+                </p>
+                <div className="mt-2 rounded-lg border border-light-300 p-2 dark:border-dark-300">
+                  {roleRows.map(([label, value]) => (
+                    <div
+                      key={label}
+                      className="grid grid-cols-[58px_1fr] items-center px-1 py-2 text-[9px]"
+                    >
+                      <span className="text-light-700 dark:text-dark-700">
+                        {label}
+                      </span>
+                      <span className="rounded border border-light-300 px-1.5 py-1 text-light-1000 dark:border-dark-300 dark:text-dark-1000">
+                        {value}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="mt-4 rounded-lg border border-light-300 p-3 dark:border-dark-300">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] font-semibold text-light-1000 dark:text-dark-1000">
+                    {t`Salary`}
+                  </span>
+                  <span className="text-[9px] text-light-700 dark:text-dark-700">
+                    USD / year
+                  </span>
+                </div>
+                <p className="mt-2 text-[10px] font-medium text-light-1000 dark:text-dark-1000">
+                  $105,000–$120,000
+                </p>
+              </div>
+            </aside>
           </div>
         </div>
       </div>
-      <aside className="border-t border-light-300 bg-light-100 p-5 dark:border-dark-300 dark:bg-dark-200 md:border-l md:border-t-0">
-        <p className="text-xs font-semibold text-light-1000 dark:text-dark-1000">{t`Activity`}</p>
-        <div className="mt-4 space-y-4">
-          {[
-            t`Moved to Interviewing`,
-            t`Attached tailored-cv.pdf`,
-            t`Added a comment`,
-          ].map((item, index) => (
-            <div key={item} className="flex gap-3">
-              <span
-                className={`mt-1.5 h-2 w-2 shrink-0 rounded-full ${index === 0 ? "bg-brand-500" : "bg-light-400 dark:bg-dark-500"}`}
-              />
-              <div>
-                <p className="text-[11px] leading-4 text-light-900 dark:text-dark-900">
-                  {item}
-                </p>
-                <p className="mt-1 text-[9px] text-light-700 dark:text-dark-700">
-                  {index === 0 ? t`Today` : t`Yesterday`}
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </aside>
-    </div>
-  </VisualFrame>
-);
+    </VisualFrame>
+  );
+};
 
 const CaptureMockup = () => (
   <div className="grid gap-4 md:grid-cols-2">
@@ -393,6 +634,8 @@ const CaptureMockup = () => (
 );
 
 export default function GetStartedPage() {
+  const [isHierarchyOpen, setIsHierarchyOpen] = useState(false);
+
   return (
     <Layout>
       <PageHead title={t`Get started | shortlistOS`} />
@@ -455,9 +698,10 @@ export default function GetStartedPage() {
                 description={
                   <Trans>
                     A shortlist is a <strong>board for one job search</strong>.
-                    Its columns follow the natural stages, from saving and
-                    applying through interviews, offers, and negotiation. Move
-                    an opportunity from left to right as you progress.
+                    Its columns follow the natural stages of a job application.
+                    From saving and applying through interviews, offers, and
+                    finally, negotiation. Move an opportunity from left to right
+                    as you progress.
                   </Trans>
                 }
                 liftOnHover={false}
@@ -473,15 +717,58 @@ export default function GetStartedPage() {
                 title={t`Job opportunity`}
                 description={
                   <Trans>
-                    <strong>Each card represents one role</strong>. Open the
-                    card to keep the job and company details, salary, contacts,
-                    notes, dates, checklists, comments, attachments, and
-                    activity history together.
+                    <strong>Each card represents one available role</strong>.
+                    Open the card to keep the job and company details, salary,
+                    contacts, notes, dates, checklists, comments, attachments,
+                    and activity history together.
                   </Trans>
                 }
                 liftOnHover={false}
               />
             </div>
+
+            <p className="mt-7 text-center text-sm text-light-800 dark:text-dark-800">
+              {t`Want to see how these levels fit together?`}{" "}
+              <button
+                type="button"
+                onClick={() => setIsHierarchyOpen(true)}
+                className="focus-visible:ring-brand-500 font-medium text-light-1000 underline decoration-light-500 underline-offset-4 hover:decoration-light-1000 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 dark:text-dark-1000 dark:decoration-dark-500 dark:hover:decoration-dark-1000 dark:focus-visible:ring-offset-dark-50"
+              >
+                {t`See an annotated example`}
+              </button>
+            </p>
+
+            <Dialog
+              open={isHierarchyOpen}
+              onClose={setIsHierarchyOpen}
+              className="relative z-50"
+            >
+              <DialogBackdrop className="fixed inset-0 bg-black/70 backdrop-blur-sm" />
+              <div className="fixed inset-0 overflow-y-auto p-4 sm:p-8">
+                <div className="flex min-h-full items-center justify-center">
+                  <DialogPanel className="relative w-full max-w-[1440px] rounded-xl bg-light-50 p-2 shadow-2xl dark:bg-dark-100 sm:p-3">
+                    <DialogTitle className="sr-only">
+                      {t`Workspace, shortlists, and opportunities`}
+                    </DialogTitle>
+                    <button
+                      type="button"
+                      onClick={() => setIsHierarchyOpen(false)}
+                      className="absolute right-4 top-4 z-10 inline-flex h-9 w-9 items-center justify-center rounded-full bg-black/70 text-white transition hover:bg-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+                      aria-label={t`Close image`}
+                    >
+                      <HiXMark className="h-5 w-5" aria-hidden="true" />
+                    </button>
+                    <Image
+                      src="/images/hierarchy.png"
+                      alt={t`Annotated shortlistOS screen showing a workspace containing shortlists, with each shortlist containing job opportunities.`}
+                      width={1435}
+                      height={880}
+                      className="h-auto max-h-[88vh] w-full rounded-lg object-contain"
+                    />
+                  </DialogPanel>
+                </div>
+              </div>
+            </Dialog>
           </Section>
 
           <Section
@@ -490,7 +777,7 @@ export default function GetStartedPage() {
             title={t`Keep everything about a job in one place`}
             description={t`Each job opportunity is a card on your shortlist. Open the card to keep the useful details, your notes, files, tasks, and next step together.`}
           >
-            <div className="grid items-center gap-10 lg:grid-cols-[0.72fr_1.28fr]">
+            <div className="grid items-center gap-10 lg:relative lg:left-1/2 lg:w-[calc(100vw-2rem)] lg:max-w-[1200px] lg:-translate-x-1/2 lg:grid-cols-[0.72fr_1.28fr]">
               <div>
                 <h3 className="text-xl font-semibold text-light-1000 dark:text-dark-1000">{t`Add a job opportunity`}</h3>
                 <ol className="mt-6 space-y-5">
@@ -509,48 +796,53 @@ export default function GetStartedPage() {
                     </li>
                   ))}
                 </ol>
-                <p className="mt-6 rounded-lg border border-light-300 bg-light-50 p-4 text-sm leading-6 text-light-800 dark:border-dark-300 dark:bg-dark-100 dark:text-dark-800">
-                  {t`Powerpack can also add jobs from the Web Clipper or Magic Inbox. When it does, the card clearly shows that the shortlistOS robot created it.`}
-                </p>
+                <Alert
+                  variant="info"
+                  title={t`More ways to add opportunities`}
+                  className="mt-6"
+                >
+                  <Trans>
+                    Powerpack can also add jobs from the{" "}
+                    <Link
+                      href="#powerpack-web-clipper"
+                      className="decoration-current/50 font-medium underline underline-offset-4 hover:decoration-current"
+                    >
+                      Web Clipper
+                    </Link>{" "}
+                    or{" "}
+                    <Link
+                      href="#powerpack-magic-inbox"
+                      className="decoration-current/50 font-medium underline underline-offset-4 hover:decoration-current"
+                    >
+                      Magic Inbox
+                    </Link>
+                    .
+                  </Trans>
+                </Alert>
               </div>
               <CardMockup />
             </div>
 
             <div className="mt-16">
-              <h3 className="text-xl font-semibold text-light-1000 dark:text-dark-1000">{t`Add as much or as little detail as you need`}</h3>
-              <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-                {opportunityFields.map(({ icon: Icon, label }) => (
+              <h3 className="text-xl font-semibold text-light-1000 dark:text-dark-1000">{t`All the key information at a glance`}</h3>
+              <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {opportunityFields.map(({ icon: Icon, title, description }) => (
                   <div
-                    key={label}
-                    className="flex items-center gap-3 rounded-lg border border-light-300 bg-light-50 p-4 dark:border-dark-300 dark:bg-dark-100"
+                    key={title}
+                    className="flex min-h-[160px] flex-col rounded-xl border border-light-300 bg-light-50 p-5 dark:border-dark-300 dark:bg-dark-100"
                   >
                     <Icon className="text-brand-600 dark:text-brand-400 h-5 w-5 shrink-0" />
-                    <span className="text-sm font-medium text-light-900 dark:text-dark-900">
-                      {label}
-                    </span>
+                    <h4 className="mt-4 text-sm font-semibold text-light-1000 dark:text-dark-1000">
+                      {title}
+                    </h4>
+                    <p className="mt-2 text-xs leading-5 text-light-800 dark:text-dark-800">
+                      {description}
+                    </p>
                   </div>
                 ))}
               </div>
             </div>
 
-            <div className="mt-16 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {cardFeatures.map((feature) => (
-                <FeatureCard key={feature.title} {...feature} />
-              ))}
-            </div>
-
-            <div className="mt-16 grid gap-8 rounded-2xl border border-light-300 bg-light-50 p-6 dark:border-dark-300 dark:bg-dark-100 sm:p-8 lg:grid-cols-2">
-              <div>
-                <HiOutlineChatBubbleLeftRight className="text-brand-600 dark:text-brand-400 h-7 w-7" />
-                <h3 className="mt-5 text-xl font-semibold text-light-1000 dark:text-dark-1000">{t`Use comments as a simple running notebook`}</h3>
-                <p className="mt-3 text-sm leading-6 text-light-900 dark:text-dark-900">{t`Write down what happened after a recruiter call, save your interview thoughts, mention another workspace member, or leave a note for your future self. Every comment stays with the opportunity.`}</p>
-              </div>
-              <div>
-                <HiOutlineCloudArrowUp className="text-brand-600 dark:text-brand-400 h-7 w-7" />
-                <h3 className="mt-5 text-xl font-semibold text-light-1000 dark:text-dark-1000">{t`Keep important files with the job`}</h3>
-                <p className="mt-3 text-sm leading-6 text-light-900 dark:text-dark-900">{t`Attach your CV, cover letter, portfolio, job advert, interview task, or offer. You will not have to search through downloads and old email threads later.`}</p>
-              </div>
-            </div>
           </Section>
 
           <Section
@@ -617,8 +909,18 @@ export default function GetStartedPage() {
                 <CaptureMockup />
               </div>
               <div className="mt-6 grid gap-4 md:grid-cols-2">
-                {powerpackFeatures.slice(2, 4).map((feature) => (
-                  <FeatureCard key={feature.title} {...feature} />
+                {powerpackFeatures.slice(2, 4).map((feature, index) => (
+                  <div
+                    key={feature.title}
+                    id={
+                      index === 0
+                        ? "powerpack-magic-inbox"
+                        : "powerpack-web-clipper"
+                    }
+                    className="scroll-mt-24"
+                  >
+                    <FeatureCard {...feature} />
+                  </div>
                 ))}
               </div>
             </div>
