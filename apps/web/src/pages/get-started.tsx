@@ -16,10 +16,12 @@ import {
   HiOutlineArrowRight,
   HiOutlineArrowTrendingUp,
   HiOutlineAtSymbol,
+  HiOutlineBars3BottomLeft,
   HiOutlineBellAlert,
   HiOutlineBriefcase,
   HiOutlineBuildingOffice2,
   HiOutlineCalendarDays,
+  HiOutlineChatBubbleLeft,
   HiOutlineCheckCircle,
   HiOutlineChevronRight,
   HiOutlineClipboardDocumentCheck,
@@ -31,6 +33,7 @@ import {
   HiOutlineGlobeAlt,
   HiOutlineListBullet,
   HiOutlinePaperClip,
+  HiOutlinePencil,
   HiOutlinePlus,
   HiOutlineRectangleStack,
   HiOutlineSparkles,
@@ -190,68 +193,147 @@ const VisualFrame = ({
 );
 
 const BoardMockup = () => {
-  const columns = [
+  const columns: {
+    title: string;
+    cards: {
+      title: string;
+      labels: { name: string; colour: string }[];
+      description?: boolean;
+      comments?: boolean;
+      checklist?: string;
+      attachment?: boolean;
+      dueDate?: string;
+    }[];
+  }[] = [
     {
       title: t`Saved`,
-      cards: [t`Product Designer · Northstar`, t`Design Lead · Acme`],
+      cards: [
+        {
+          title: t`Product Designer · Northstar`,
+          labels: [{ name: t`High priority`, colour: "#ca8a04" }],
+          description: true,
+        },
+        {
+          title: t`Design Lead · Acme`,
+          labels: [{ name: t`Remote`, colour: "#0d9488" }],
+          dueDate: t`22 Aug`,
+        },
+      ],
     },
     {
       title: t`Applied`,
-      cards: [t`Senior Product Designer · Lumon`],
+      cards: [
+        {
+          title: t`Senior Product Designer · Lumon`,
+          labels: [{ name: t`Application confirmed`, colour: "#0d9488" }],
+          description: true,
+          comments: true,
+          attachment: true,
+        },
+      ],
     },
     {
       title: t`Interviewing`,
-      cards: [t`Staff Designer · Orbit`],
+      cards: [
+        {
+          title: t`Staff Designer · Orbit`,
+          labels: [
+            { name: t`Dream job`, colour: "#0d9488" },
+            { name: t`High priority`, colour: "#ca8a04" },
+          ],
+          description: true,
+          comments: true,
+          checklist: "3/3",
+          dueDate: t`Tomorrow`,
+        },
+      ],
     },
     {
       title: t`Offer`,
-      cards: [t`Principal Designer · Hooli`],
+      cards: [
+        {
+          title: t`Principal Designer · Hooli`,
+          labels: [
+            { name: t`Above market salary`, colour: "#0d9488" },
+            { name: t`Equity`, colour: "#0284c7" },
+          ],
+          attachment: true,
+          checklist: "2/3",
+          dueDate: t`25 Aug`,
+        },
+      ],
     },
   ];
 
   return (
-    <VisualFrame label={t`Mockup · replace with board screenshot`}>
-      <div className="overflow-x-auto p-4 sm:p-6">
-        <div className="grid min-w-[720px] grid-cols-4 gap-3">
-          {columns.map((column, columnIndex) => (
+    <VisualFrame label={t`Job search pipeline`}>
+      <div className="overflow-x-auto bg-light-100 p-4 dark:bg-dark-50 sm:p-5">
+        <div className="grid min-w-[840px] grid-cols-4 items-start gap-4">
+          {columns.map((column) => (
             <div
               key={column.title}
-              className="rounded-lg bg-light-100 p-3 dark:bg-dark-200"
+              className="rounded-md border border-light-400 bg-light-300 p-2 dark:border-dark-300 dark:bg-dark-100"
             >
-              <div className="mb-3 flex items-center justify-between">
+              <div className="mb-2 flex items-center justify-between px-3 pt-1">
                 <span className="text-xs font-semibold text-light-1000 dark:text-dark-1000">
                   {column.title}
                 </span>
-                <span className="text-[10px] text-light-700 dark:text-dark-700">
-                  {column.cards.length}
-                </span>
+                <HiOutlinePlus className="h-4 w-4 text-light-800 dark:text-dark-800" />
               </div>
               <div className="space-y-2">
-                {column.cards.map((card, cardIndex) => (
+                {column.cards.map((card) => (
                   <div
-                    key={card}
-                    className={`rounded-md border bg-light-50 p-3 shadow-sm dark:bg-dark-100 ${
-                      columnIndex === 2 && cardIndex === 0
-                        ? "border-brand-400 ring-brand-200 dark:ring-brand-800 ring-2"
-                        : "border-light-300 dark:border-dark-300"
-                    }`}
+                    key={card.title}
+                    className="rounded-md border border-light-200 bg-light-50 px-3 py-2 text-xs text-light-1000 shadow-sm dark:border-dark-200 dark:bg-dark-200 dark:text-dark-1000"
                   >
-                    <div className="mb-2 flex gap-1">
-                      <span className="bg-brand-500 h-1.5 w-8 rounded-full" />
-                      {columnIndex > 0 ? (
-                        <span className="h-1.5 w-5 rounded-full bg-emerald-400" />
-                      ) : null}
+                    <p className="min-h-8 leading-4">{card.title}</p>
+                    <div className="mt-2 flex flex-wrap gap-1">
+                      {card.labels.map((label) => (
+                        <span
+                          key={label.name}
+                          className="inline-flex items-center gap-1.5 rounded-full px-2 py-1 text-[9px] font-medium text-light-800 ring-1 ring-inset ring-light-400 dark:text-dark-900 dark:ring-dark-500"
+                        >
+                          <span
+                            className="h-1.5 w-1.5 rounded-full"
+                            style={{ backgroundColor: label.colour }}
+                          />
+                          {label.name}
+                        </span>
+                      ))}
                     </div>
-                    <p className="text-[11px] font-medium leading-4 text-light-1000 dark:text-dark-1000">
-                      {card}
-                    </p>
-                    <div className="mt-3 flex items-center justify-between text-[9px] text-light-700 dark:text-dark-700">
-                      <span>
-                        {columnIndex === 2
-                          ? t`Interview tomorrow`
-                          : t`Updated recently`}
-                      </span>
-                      <HiOutlinePaperClip className="h-3 w-3" />
+                    <div className="mt-2 flex min-h-4 items-center justify-between gap-2 text-light-700 dark:text-dark-700">
+                      <div className="flex items-center gap-2">
+                        {card.description ? (
+                          <HiOutlineBars3BottomLeft className="h-3.5 w-3.5" />
+                        ) : null}
+                        {card.dueDate ? (
+                          <span className="flex items-center gap-1 text-[9px] text-red-500 dark:text-red-400">
+                            <HiOutlineClock className="h-3.5 w-3.5" />
+                            {card.dueDate}
+                          </span>
+                        ) : null}
+                        {card.comments ? (
+                          <HiOutlineChatBubbleLeft className="h-3.5 w-3.5" />
+                        ) : null}
+                        {card.attachment ? (
+                          <HiOutlinePaperClip className="h-3.5 w-3.5" />
+                        ) : null}
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <HiOutlinePencil className="h-3.5 w-3.5" />
+                        {card.checklist ? (
+                          <span className="inline-flex items-center gap-1 rounded-full border border-light-300 px-1.5 py-0.5 text-[8px] dark:border-dark-400">
+                            <span
+                              className={`h-3 w-3 rounded-full border-2 ${
+                                card.checklist === "3/3"
+                                  ? "border-emerald-500"
+                                  : "rotate-45 border-blue-400 border-t-light-200 dark:border-t-dark-400"
+                              }`}
+                            />
+                            {card.checklist}
+                          </span>
+                        ) : null}
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -824,49 +906,46 @@ export default function GetStartedPage() {
             </div>
 
             <div className="mt-16">
-              <h3 className="text-xl font-semibold text-light-1000 dark:text-dark-1000">{t`All the key information at a glance`}</h3>
+              <h3 className="text-center text-xl font-semibold text-light-1000 dark:text-dark-1000">{t`All the important data in one place`}</h3>
               <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {opportunityFields.map(({ icon: Icon, title, description }) => (
-                  <div
+                  <FeatureCard
                     key={title}
-                    className="flex min-h-[160px] flex-col rounded-xl border border-light-300 bg-light-50 p-5 dark:border-dark-300 dark:bg-dark-100"
-                  >
-                    <Icon className="text-brand-600 dark:text-brand-400 h-5 w-5 shrink-0" />
-                    <h4 className="mt-4 text-sm font-semibold text-light-1000 dark:text-dark-1000">
-                      {title}
-                    </h4>
-                    <p className="mt-2 text-xs leading-5 text-light-800 dark:text-dark-800">
-                      {description}
-                    </p>
-                  </div>
+                    icon={Icon}
+                    title={title}
+                    description={description}
+                    liftOnHover={false}
+                  />
                 ))}
               </div>
             </div>
-
           </Section>
 
           <Section
             id="pipeline"
             eyebrow={t`03 · Pipeline`}
-            title={t`Move a job as things change`}
+            title={t`Move the card as things change`}
             description={t`Each column shows a stage of your job search. When you apply, start interviewing, receive an offer, or decide not to continue, move the card to the matching column.`}
           >
             <BoardMockup />
             <div className="mt-8 grid gap-4 md:grid-cols-3">
               <FeatureCard
-                icon={HiOutlineCursorArrowRays}
-                title={t`Drag and drop`}
-                description={t`Pick up a card and drop it into another column. shortlistOS records the move for you.`}
+                icon={HiOutlineCheckCircle}
+                title={t`At a glance`}
+                description={t`See exactly where every opportunity in your job search stands.`}
+                liftOnHover={false}
               />
               <FeatureCard
-                icon={HiOutlineCheckCircle}
-                title={t`Keep the state truthful`}
-                description={t`Let the column show where the job stands now. Use a date or checklist for what you need to do next.`}
+                icon={HiOutlineCursorArrowRays}
+                title={t`Drag and drop`}
+                description={t`Move cards between stages to keep your shortlist up to date.`}
+                liftOnHover={false}
               />
               <FeatureCard
                 icon={HiOutlineStar}
-                title={t`Make the pipeline yours`}
-                description={t`You can rename, add, remove, and reorder columns if the default stages do not suit your search.`}
+                title={t`Ready-made pipeline`}
+                description={t`Every new shortlist comes with a complete job-search pipeline, ready to use.`}
+                liftOnHover={false}
               />
             </div>
           </Section>
