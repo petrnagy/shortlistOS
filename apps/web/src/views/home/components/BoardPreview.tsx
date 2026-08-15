@@ -9,6 +9,7 @@ import {
   HiOutlinePlus,
   HiOutlineSquares2X2,
 } from "react-icons/hi2";
+import { TbTent } from "react-icons/tb";
 
 interface PreviewLabel {
   colour: string;
@@ -327,9 +328,11 @@ export default function BoardPreview() {
           shortlistOS
         </p>
         <div className="mt-8 flex items-center gap-2 text-xs font-semibold text-light-1000 dark:text-dark-1000">
-          <span className="bg-brand-600 flex h-6 w-6 items-center justify-center rounded-md text-white">
-            P
-          </span>
+          <TbTent
+            className="h-4 w-4"
+            strokeWidth={2.25}
+            aria-hidden="true"
+          />
           {t`My workspace`}
         </div>
         <nav className="mt-7 space-y-2 text-xs text-light-900 dark:text-dark-900">

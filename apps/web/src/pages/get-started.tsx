@@ -436,9 +436,9 @@ export default function GetStartedPage() {
                 description={
                   <Trans>
                     Your workspace is the{" "}
-                    <strong>home for your shortlists</strong>, account settings,
-                    and members. You can create as many workspaces as you need.
-                    One workspace is enough for most individual job searches.
+                    <strong>base for everything you do</strong> in shortlistOS,
+                    from managing your account to organizing your shortlists.
+                    Every account has one workspace.
                   </Trans>
                 }
                 liftOnHover={false}

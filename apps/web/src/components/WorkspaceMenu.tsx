@@ -4,6 +4,7 @@ import { t } from "@lingui/core/macro";
 import { env } from "next-runtime-env";
 import { Fragment, useState } from "react";
 import { HiCheck, HiMagnifyingGlass } from "react-icons/hi2";
+import { TbTent } from "react-icons/tb";
 import { twMerge } from "tailwind-merge";
 
 import { useKeyboardShortcut } from "~/providers/keyboard-shortcuts";
@@ -70,14 +71,14 @@ export default function WorkspaceMenu({
                 )}
                 title={isCollapsed ? workspace.name : undefined}
               >
-                <span className="bg-brand inline-flex h-6 w-6 items-center justify-center rounded-md">
-                  <span className="text-xs font-bold leading-none text-white">
-                    {workspace.name.charAt(0).toUpperCase()}
-                  </span>
-                </span>
+                <TbTent
+                  className="h-[18px] w-[18px] shrink-0"
+                  strokeWidth={2.25}
+                  aria-hidden="true"
+                />
                 <span
                   className={twMerge(
-                    "ml-2 min-w-0 flex-1 truncate text-left text-sm font-bold text-neutral-900 dark:text-dark-1000",
+                    "ml-3 min-w-0 flex-1 truncate text-left text-sm font-bold text-neutral-900 dark:text-dark-1000",
                     isCollapsed && "md:hidden",
                   )}
                 >

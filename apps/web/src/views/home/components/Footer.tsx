@@ -94,13 +94,13 @@ const Footer = () => {
     {
       title: t`Resources`,
       links: [
+        { label: t`Get started`, href: "/get-started" },
+        { label: t`FAQ`, href: "/#faq" },
         {
           label: t`Self-hosting`,
           href: githubUrl,
           external: true,
         },
-        { label: t`FAQ`, href: "/#faq" },
-        { label: t`Help`, href: "mailto:support@shortlistos.co" },
       ],
     },
     {
