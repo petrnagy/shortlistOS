@@ -105,8 +105,8 @@ const powerpackFeatures = [
   },
   {
     icon: HiOutlineBuildingOffice2,
-    title: t`Company ratings and employer insights`,
-    description: t`See company ratings and employer information next to the job. This can help you decide whether the company deserves more of your time.`,
+    title: t`Company rating snapshot`,
+    description: t`When a confident company match is found, see its third-party employer rating and a short summary of available review data, such as work-life balance, culture, and recommendation score.`,
   },
   {
     icon: HiOutlineEnvelope,
@@ -121,7 +121,7 @@ const powerpackFeatures = [
   {
     icon: HiOutlineCalendarDays,
     title: t`Calendar feed`,
-    description: t`Add a private shortlistOS calendar feed to Google Calendar, Apple Calendar, Outlook, or another calendar app. Your opportunity dates will appear in the calendar you already use.`,
+    description: t`Add a private shortlistOS calendar feed to Google Calendar, Apple Calendar, Outlook, or another calendar app. Your scheduled interview dates will appear in the calendar you already use.`,
   },
   {
     icon: HiOutlineBellAlert,
@@ -780,8 +780,8 @@ const CaptureJourney = ({ kind }: { kind: "email" | "web" }) => {
             </p>
             <p className="mt-2 text-[10px] leading-4 text-light-800 dark:text-dark-800">
               {isEmail
-                ? t`Receives the email, turns it into a card, adds salary and company insights, and uses AI to assign labels and summarise the role and requirements.`
-                : t`Processes the job page, turns it into a card, adds salary and company insights, and uses AI to assign labels and summarise the role and requirements.`}
+                ? t`Receives the email, turns it into a card, adds salary insights and company rating data, and uses AI to assign labels and summarise the role and requirements.`
+                : t`Processes the job page, turns it into a card, adds salary insights and company rating data, and uses AI to assign labels and summarise the role and requirements.`}
             </p>
           </div>
           <JourneyConnector step={1} label={t`Send to shortlist`} />
@@ -1112,7 +1112,7 @@ export default function GetStartedPage() {
             id="powerpack"
             eyebrow={t`04 · Powerpack`}
             title={t`Let Powerpack take care of repetitive work`}
-            description={t`Powerpack adds automation and AI to shortlistOS. Save jobs with Magic Inbox or the Web Clipper, get salary and company insights, receive reminders, and automate routine housekeeping.`}
+            description={t`Powerpack adds automation and AI to shortlistOS. Save jobs with Magic Inbox or the Web Clipper, get salary insights and company rating data, receive reminders, and automate routine housekeeping.`}
           >
             <div className="rounded-2xl bg-light-1000 p-7 text-white dark:bg-dark-100 sm:p-10">
               <div className="grid items-center gap-8 lg:grid-cols-[1fr_auto]">
@@ -1158,7 +1158,7 @@ export default function GetStartedPage() {
             </div>
 
             <div className="mt-12">
-              <h3 className="text-center text-2xl font-semibold text-light-1000 dark:text-dark-1000">{t`Remember the next step without keeping it all in your head`}</h3>
+              <h3 className="text-center text-2xl font-semibold text-light-1000 dark:text-dark-1000">{t`More Powerpack features`}</h3>
               <div className="mt-6 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                 {[
                   ...powerpackFeatures.slice(0, 2),

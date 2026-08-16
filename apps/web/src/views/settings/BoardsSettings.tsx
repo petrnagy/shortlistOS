@@ -330,7 +330,7 @@ const BoardsSettings = ({
         <AutomationCard
           icon={<HiOutlineSparkles className="h-4 w-4" />}
           title={t`Company sentiment`}
-          description={t`Automatically retrieves Glassdoor employer data for the company behind each opportunity, including ratings, company details, and workplace insights.`}
+          description={t`When a confident company match is found, retrieves its third-party employer rating and available review metrics.`}
           isChecked={displayPowerpackToggle(isCompanySentimentEnabled)}
           onToggle={() =>
             updatePowerpackSetting({
