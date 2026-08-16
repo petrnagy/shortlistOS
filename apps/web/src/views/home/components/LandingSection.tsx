@@ -41,7 +41,7 @@ export function FeatureCard({
   liftOnHover = true,
 }: {
   title: string;
-  description: string;
+  description: ReactNode;
   accent?: string;
   icon: ComponentType<{ className?: string }>;
   liftOnHover?: boolean;
@@ -60,9 +60,9 @@ export function FeatureCard({
       <h3 className="mt-5 text-base font-bold leading-[1.45] text-light-1000 dark:text-dark-1000">
         {title}
       </h3>
-      <p className="mt-3 text-sm leading-[1.65rem] text-light-950 dark:text-dark-900">
+      <div className="mt-3 text-sm leading-[1.65rem] text-light-950 dark:text-dark-900">
         {description}
-      </p>
+      </div>
     </div>
   );
 }

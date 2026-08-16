@@ -124,11 +124,6 @@ const powerpackFeatures = [
     description: t`Add a private shortlistOS calendar feed to Google Calendar, Apple Calendar, Outlook, or another calendar app. Your scheduled interview dates will appear in the calendar you already use.`,
   },
   {
-    icon: HiOutlineBellAlert,
-    title: t`Email reminders`,
-    description: t`Choose how long an opportunity can sit still before shortlistOS emails you. You can set different reminders for saved jobs, applications, interviews, and negotiations.`,
-  },
-  {
     icon: HiOutlineListBullet,
     title: t`Weekly digest`,
     description: t`Start Monday with a simple email showing how many opportunities are in each stage and where your search may need attention.`,
@@ -137,16 +132,6 @@ const powerpackFeatures = [
     icon: HiOutlineArrowTrendingUp,
     title: t`Card aging`,
     description: t`Cards that have not changed for a while slowly gain a warmer colour. Old opportunities become easy to spot when you look at the board.`,
-  },
-  {
-    icon: HiOutlineBellAlert,
-    title: t`Saved opportunity reminders`,
-    description: t`Ask shortlistOS to email you when a saved job has been sitting untouched for too long.`,
-  },
-  {
-    icon: HiOutlineAtSymbol,
-    title: t`Applied follow-up reminders`,
-    description: t`Get an email when it may be time to follow up on an application that has gone quiet.`,
   },
   {
     icon: HiOutlineAtSymbol,
@@ -158,17 +143,23 @@ const powerpackFeatures = [
     title: t`Automatic archive`,
     description: t`Let shortlistOS archive old saved jobs automatically, so your board stays focused on jobs you may still pursue.`,
   },
-  {
-    icon: HiOutlineBriefcase,
-    title: t`Interviewing nudges`,
-    description: t`Get an email when an interview process has not moved for the number of days you choose.`,
-  },
-  {
-    icon: HiOutlineCurrencyDollar,
-    title: t`Negotiation nudges`,
-    description: t`Get an email when a negotiation goes quiet, so an offer, counteroffer, or unanswered question is not forgotten.`,
-  },
 ] as const;
+
+const reminderFeature = {
+  icon: HiOutlineBellAlert,
+  title: t`Email reminders and nudges`,
+  description: (
+    <>
+      <p>{t`Choose when shortlistOS should email you about opportunities that have stopped moving.`}</p>
+      <ul className="mt-3 grid list-disc gap-x-6 gap-y-1.5 pl-5 sm:grid-cols-2">
+        <li>{t`Saved opportunities left untouched`}</li>
+        <li>{t`Applications awaiting a follow-up`}</li>
+        <li>{t`Interview processes that have gone quiet`}</li>
+        <li>{t`Negotiations that need attention`}</li>
+      </ul>
+    </>
+  ),
+};
 
 const VisualFrame = ({
   children,
@@ -1170,27 +1161,30 @@ export default function GetStartedPage() {
                     liftOnHover={false}
                   />
                 ))}
+                <div className="md:col-span-2 lg:col-span-2">
+                  <FeatureCard {...reminderFeature} liftOnHover={false} />
+                </div>
               </div>
             </div>
           </Section>
 
           <section className="pb-24 pt-8 text-center">
-            <div className="rounded-2xl border border-light-300 bg-light-50 px-6 py-14 dark:border-dark-300 dark:bg-dark-100 sm:px-10">
-              <h2 className="text-3xl font-bold tracking-tight text-light-1000 dark:text-dark-1000">{t`Your next opportunity deserves a clear next step`}</h2>
-              <p className="mx-auto mt-4 max-w-2xl text-base leading-7 text-light-900 dark:text-dark-900">{t`Create a shortlist, add the roles you care about, and let the board show you where to focus.`}</p>
-              <div className="mt-8 flex flex-wrap justify-center gap-3">
+            <div className="mx-auto max-w-[980px] rounded-2xl border border-light-300 bg-light-50 px-6 py-14 dark:border-dark-300 dark:bg-dark-100 sm:px-10">
+              <h2 className="text-3xl font-bold tracking-tight text-light-1000 dark:text-dark-1000">{t`Ready to start your job search?`}</h2>
+              <p className="mx-auto mt-4 max-w-2xl text-base leading-7 text-light-900 dark:text-dark-900">
+                {t`You have everything you need. Create your free account and build your first shortlist.`}
+              </p>
+              <div className="mt-8 flex justify-center">
                 <Button
-                  href="/boards"
+                  href="/signup"
                   size="lg"
                   iconRight={<HiOutlineArrowRight className="h-4 w-4" />}
-                >{t`Open your workspace`}</Button>
-                <Button
-                  href="/settings/powerpack"
-                  size="lg"
-                  variant="secondary"
-                >{t`View Powerpack`}</Button>
+                >{t`Create free account`}</Button>
               </div>
             </div>
+            <p className="mx-auto mt-4 max-w-2xl text-sm leading-6 text-light-800 dark:text-dark-800">
+              {t`Missed something? No worries! A short in-app tutorial will guide you through the first steps.`}
+            </p>
           </section>
         </div>
       </main>
