@@ -124,7 +124,7 @@ const Footer = () => {
             shortlist<span className="font-medium">OS</span>
           </Link>
           <p className="mt-3 max-w-[260px] text-sm leading-[1.65rem] text-light-900 dark:text-dark-800">
-            {t`Open-source job search CRM with optional automation for the repetitive parts.`}
+            {t`Open-source job search tracker with optional automation for the repetitive parts.`}
           </p>
           <div className="mt-4 flex items-center gap-2">
             {socialLinks.map((link) => {
