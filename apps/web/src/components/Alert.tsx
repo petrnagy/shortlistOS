@@ -13,7 +13,7 @@ interface AlertProps {
   actions?: React.ReactNode;
   children: React.ReactNode;
   className?: string;
-  title: string;
+  title?: string;
   variant?: AlertVariant;
 }
 
@@ -75,8 +75,10 @@ export function Alert({
           aria-hidden="true"
         />
         <div>
-          <p className="text-sm font-semibold">{title}</p>
-          <div className="mt-2 text-sm leading-6">{children}</div>
+          {title ? <p className="text-sm font-semibold">{title}</p> : null}
+          <div className={twMerge("text-sm leading-6", title && "mt-2")}>
+            {children}
+          </div>
           {actions ? <div className="mt-4 flex gap-4">{actions}</div> : null}
         </div>
       </div>

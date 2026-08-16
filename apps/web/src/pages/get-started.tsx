@@ -664,56 +664,200 @@ const CardMockup = () => {
   );
 };
 
-const CaptureMockup = () => (
-  <div className="grid gap-4 md:grid-cols-2">
-    <VisualFrame label={t`Magic Inbox mockup`}>
-      <div className="p-6">
-        <div className="flex items-start gap-4">
-          <div className="bg-brand-100 text-brand-700 dark:bg-brand-900/30 dark:text-brand-400 rounded-lg p-3">
-            <HiOutlineEnvelope className="h-6 w-6" />
-          </div>
-          <div className="min-w-0">
-            <p className="text-xs text-light-700 dark:text-dark-700">{t`Forward to`}</p>
-            <p className="mt-1 truncate text-sm font-semibold text-light-1000 dark:text-dark-1000">
-              product-search.you@inbox.shortlistos.co
-            </p>
-          </div>
-        </div>
-        <div className="mt-6 rounded-lg border border-light-300 p-4 dark:border-dark-300">
-          <p className="text-xs font-semibold text-light-1000 dark:text-dark-1000">{t`Re: Interview invitation`}</p>
-          <p className="mt-2 text-[11px] leading-5 text-light-800 dark:text-dark-800">
-            {t`shortlistOS reads the forwarded message, finds the matching opportunity, and records the update.`}
-          </p>
-        </div>
-      </div>
-    </VisualFrame>
-    <VisualFrame label={t`Web Clipper mockup`}>
-      <div className="p-6">
-        <div className="flex items-center gap-3">
-          <div className="bg-brand-100 text-brand-700 dark:bg-brand-900/30 dark:text-brand-400 rounded-lg p-3">
-            <HiOutlineCursorArrowRays className="h-6 w-6" />
-          </div>
-          <div>
-            <p className="text-sm font-semibold text-light-1000 dark:text-dark-1000">
-              shortlistOS
-            </p>
-            <p className="text-[11px] text-light-700 dark:text-dark-700">{t`Save this opportunity`}</p>
-          </div>
-        </div>
-        <label className="mt-6 block text-[10px] font-semibold uppercase tracking-wide text-light-700 dark:text-dark-700">
-          {t`Shortlist`}
-        </label>
-        <div className="mt-2 flex items-center justify-between rounded-lg border border-light-300 px-3 py-2.5 text-xs text-light-1000 dark:border-dark-300 dark:text-dark-1000">
-          <span>{t`Product design search`}</span>
-          <HiOutlineChevronRight className="h-4 w-4 rotate-90" />
-        </div>
-        <div className="bg-brand-600 mt-4 rounded-lg px-4 py-2.5 text-center text-xs font-semibold text-white">
-          {t`Save opportunity`}
-        </div>
-      </div>
-    </VisualFrame>
+const JourneyConnector = ({
+  label,
+  step,
+}: {
+  label: string;
+  step: 0 | 1 | 2;
+}) => (
+  <div
+    className={`absolute -bottom-16 left-1/2 z-10 flex h-14 w-28 -translate-x-1/2 flex-col items-center justify-center gap-2 text-center xl:-right-20 xl:bottom-auto xl:left-auto xl:top-1/2 xl:w-20 xl:-translate-y-1/2 xl:translate-x-0 ${
+      step === 0
+        ? "md:-right-28 md:bottom-auto md:left-auto md:top-1/2 md:w-28 md:-translate-y-1/2 md:translate-x-0"
+        : step === 2
+          ? "md:-left-28 md:bottom-auto md:top-1/2 md:w-28 md:-translate-y-1/2 md:translate-x-0 xl:-right-20 xl:left-auto xl:w-20"
+          : ""
+    }`}
+  >
+    <span className="px-2 text-[9px] font-medium leading-3 text-light-700 dark:text-dark-700">
+      {label}
+    </span>
+    <HiOutlineArrowRight
+      className={`h-5 w-5 rotate-90 text-light-600 dark:text-dark-600 xl:rotate-0 ${
+        step === 0 ? "md:rotate-0" : step === 2 ? "md:rotate-180" : ""
+      }`}
+      aria-hidden="true"
+    />
   </div>
 );
+
+const JourneyStepNumber = ({ number }: { number: 1 | 2 | 3 | 4 }) => (
+  <span className="bg-brand-600 absolute -left-3 -top-3 z-20 flex h-7 w-7 items-center justify-center rounded-full border-2 border-light-100 text-xs font-semibold text-white shadow-sm dark:border-dark-100">
+    {number}
+  </span>
+);
+
+const CaptureJourney = ({ kind }: { kind: "email" | "web" }) => {
+  const isEmail = kind === "email";
+  const roleTitle = isEmail ? t`Product Designer` : t`Frontend Developer`;
+  const companyName = isEmail ? "Northstar" : "Brightside";
+
+  return (
+    <div className="rounded-2xl border border-light-300 bg-light-100 p-5 dark:border-dark-300 dark:bg-dark-100 sm:p-7">
+      <div className="grid items-stretch gap-y-20 md:grid-cols-2 md:gap-x-28 xl:grid-cols-4 xl:gap-x-20 xl:gap-y-0">
+        <div className="relative">
+          <JourneyStepNumber number={1} />
+          <div className="h-full overflow-hidden rounded-xl border border-light-300 bg-light-50 shadow-sm dark:border-dark-300 dark:bg-dark-200">
+            {isEmail ? (
+              <>
+                <div className="flex items-center gap-2 border-b border-light-300 px-4 py-3 dark:border-dark-300">
+                  <HiOutlineEnvelope className="text-brand-600 dark:text-brand-400 h-4 w-4" />
+                  <span className="text-[10px] font-semibold text-light-1000 dark:text-dark-1000">
+                    {t`Recruiter email`}
+                  </span>
+                </div>
+                <div className="p-4">
+                  <p className="text-[9px] text-light-700 dark:text-dark-700">
+                    Maya Chen · {companyName}
+                  </p>
+                  <p className="mt-2 text-xs font-semibold text-light-1000 dark:text-dark-1000">
+                    {t`Interview invitation`}
+                  </p>
+                  <div className="mt-4 space-y-2" aria-hidden="true">
+                    <span className="block h-1.5 w-full rounded bg-light-300 dark:bg-dark-400" />
+                    <span className="block h-1.5 w-5/6 rounded bg-light-300 dark:bg-dark-400" />
+                    <span className="block h-1.5 w-2/3 rounded bg-light-300 dark:bg-dark-400" />
+                  </div>
+                  <div className="mt-5 rounded-md bg-light-200 px-3 py-2 text-center text-[9px] font-semibold text-light-900 dark:bg-dark-300 dark:text-dark-900">
+                    {t`Forward`}
+                  </div>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="flex items-center gap-2 border-b border-light-300 px-3 py-2.5 dark:border-dark-300">
+                  <div className="flex gap-1" aria-hidden="true">
+                    <span className="h-1.5 w-1.5 rounded-full bg-red-400" />
+                    <span className="h-1.5 w-1.5 rounded-full bg-amber-400" />
+                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                  </div>
+                  <span className="truncate rounded bg-light-200 px-2 py-1 text-[8px] text-light-700 dark:bg-dark-300 dark:text-dark-700">
+                    careers.brightside.example
+                  </span>
+                </div>
+                <div className="p-4">
+                  <p className="text-[9px] font-medium text-light-700 dark:text-dark-700">
+                    {companyName}
+                  </p>
+                  <p className="mt-2 text-xs font-semibold text-light-1000 dark:text-dark-1000">
+                    {roleTitle}
+                  </p>
+                  <p className="mt-2 text-[9px] text-light-700 dark:text-dark-700">
+                    {t`Remote · $105k–$120k`}
+                  </p>
+                  <div className="bg-brand-600 mt-5 rounded-md px-3 py-2 text-center text-[9px] font-semibold text-white">
+                    {t`Save with shortlistOS`}
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
+          <JourneyConnector
+            step={0}
+            label={isEmail ? t`Forward to shortlistOS` : t`Use the Web Clipper`}
+          />
+        </div>
+
+        <div className="relative">
+          <JourneyStepNumber number={2} />
+          <div className="border-brand-200 bg-brand-50 dark:border-brand-800 dark:bg-brand-900/20 flex h-full flex-col items-center justify-center rounded-xl border p-4 text-center">
+            <div className="bg-brand-100 text-brand-700 dark:bg-brand-900/40 dark:text-brand-400 flex h-11 w-11 items-center justify-center rounded-full">
+              <HiOutlineSparkles className="h-5 w-5" />
+            </div>
+            <p className="mt-4 text-sm font-semibold text-light-1000 dark:text-dark-1000">
+              {isEmail ? t`Magic Inbox` : t`shortlistOS automation`}
+            </p>
+            <p className="mt-2 text-[10px] leading-4 text-light-800 dark:text-dark-800">
+              {isEmail
+                ? t`Receives the email, turns it into a card, adds salary and company insights, and uses AI to assign labels and summarise the role and requirements.`
+                : t`Processes the job page, turns it into a card, adds salary and company insights, and uses AI to assign labels and summarise the role and requirements.`}
+            </p>
+          </div>
+          <JourneyConnector step={1} label={t`Send to shortlist`} />
+        </div>
+
+        <div className="relative md:col-start-2 md:row-start-2 xl:col-start-3 xl:row-start-1">
+          <JourneyStepNumber number={3} />
+          <div className="h-full rounded-xl border border-light-300 bg-light-300 p-2 dark:border-dark-300 dark:bg-dark-50">
+            <div className="flex items-center justify-between px-2 py-1.5">
+              <p className="text-[10px] font-semibold text-light-1000 dark:text-dark-1000">
+                {t`Job hunt 2026`}
+              </p>
+              <HiOutlinePlus className="h-3.5 w-3.5 text-light-700 dark:text-dark-700" />
+            </div>
+            <div className="grid grid-cols-2 gap-2">
+              <div className="rounded-md bg-light-200 p-1.5 dark:bg-dark-200">
+                <p className="px-1 text-[8px] text-light-700 dark:text-dark-700">
+                  {t`Saved`}
+                </p>
+                <div className="mt-1.5 rounded bg-light-50 p-2 shadow-sm dark:bg-dark-300">
+                  <p className="text-[8px] leading-3 text-light-1000 dark:text-dark-1000">
+                    {roleTitle} · {companyName}
+                  </p>
+                  <span className="mt-2 block h-1 w-8 rounded bg-emerald-400" />
+                </div>
+              </div>
+              <div className="rounded-md bg-light-200 p-1.5 dark:bg-dark-200">
+                <p className="px-1 text-[8px] text-light-700 dark:text-dark-700">
+                  {t`Applied`}
+                </p>
+                <div className="mt-1.5 h-12 rounded border border-dashed border-light-400 dark:border-dark-400" />
+              </div>
+            </div>
+          </div>
+          <JourneyConnector
+            step={2}
+            label={isEmail ? t`Create or update card` : t`Create card`}
+          />
+        </div>
+
+        <div className="relative md:col-start-1 md:row-start-2 xl:col-start-4 xl:row-start-1">
+          <JourneyStepNumber number={4} />
+          <div className="h-full overflow-hidden rounded-xl border border-light-300 bg-light-50 shadow-sm dark:border-dark-300 dark:bg-dark-200">
+            <div className="border-b border-light-300 px-4 py-3 dark:border-dark-300">
+              <p className="text-[9px] font-semibold uppercase tracking-wide text-light-700 dark:text-dark-700">
+                {t`Opportunity detail`}
+              </p>
+            </div>
+            <div className="p-4">
+              <p className="text-sm font-semibold text-light-1000 dark:text-dark-1000">
+                {roleTitle}
+              </p>
+              <p className="mt-1 text-[10px] text-light-700 dark:text-dark-700">
+                {companyName}
+              </p>
+              <div className="mt-4 space-y-2 text-[9px] text-light-800 dark:text-dark-800">
+                <div className="flex justify-between border-t border-light-300 pt-2 dark:border-dark-300">
+                  <span>{t`Location`}</span>
+                  <span>{t`Remote`}</span>
+                </div>
+                <div className="flex justify-between border-t border-light-300 pt-2 dark:border-dark-300">
+                  <span>{t`Salary`}</span>
+                  <span>$105k–$120k</span>
+                </div>
+                <div className="flex justify-between border-t border-light-300 pt-2 dark:border-dark-300">
+                  <span>{t`Status`}</span>
+                  <span>{isEmail ? t`Interviewing` : t`Saved`}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 export default function GetStartedPage() {
   const [isHierarchyOpen, setIsHierarchyOpen] = useState(false);
@@ -950,11 +1094,25 @@ export default function GetStartedPage() {
             </div>
           </Section>
 
+          <Alert variant="success" className="mx-auto my-16 max-w-3xl">
+            <Trans>
+              Right now, you are{" "}
+              <Link
+                href="/signup"
+                className="decoration-current/50 font-medium underline underline-offset-4 hover:decoration-current"
+              >
+                ready to go
+              </Link>
+              . The second part of this guide covers the paid Powerpack
+              features, which are not necessary for using shortlistOS.
+            </Trans>
+          </Alert>
+
           <Section
             id="powerpack"
             eyebrow={t`04 · Powerpack`}
             title={t`Let Powerpack take care of repetitive work`}
-            description={t`Powerpack is an optional paid add-on. You do not need it to organise your job search. It adds easier ways to save jobs, useful salary and company information, reminders, and automatic housekeeping.`}
+            description={t`Powerpack adds automation and AI to shortlistOS. Save jobs with Magic Inbox or the Web Clipper, get salary and company insights, receive reminders, and automate routine housekeeping.`}
           >
             <div className="rounded-2xl bg-light-1000 p-7 text-white dark:bg-dark-100 sm:p-10">
               <div className="grid items-center gap-8 lg:grid-cols-[1fr_auto]">
@@ -975,40 +1133,42 @@ export default function GetStartedPage() {
               </div>
             </div>
 
-            <div className="mt-8 grid gap-4 md:grid-cols-2">
-              {powerpackFeatures.slice(0, 2).map((feature) => (
-                <FeatureCard key={feature.title} {...feature} />
-              ))}
+            <div id="powerpack-magic-inbox" className="mt-12 scroll-mt-24">
+              <h3 className="text-center text-2xl font-semibold text-light-1000 dark:text-dark-1000">
+                {powerpackFeatures[2].title}
+              </h3>
+              <p className="mx-auto mt-3 max-w-3xl text-center text-sm leading-6 text-light-900 dark:text-dark-900">
+                {powerpackFeatures[2].description}
+              </p>
+              <div className="mt-6 lg:relative lg:left-1/2 lg:w-[calc(100vw-2rem)] lg:max-w-[1200px] lg:-translate-x-1/2">
+                <CaptureJourney kind="email" />
+              </div>
             </div>
 
-            <div className="mt-12">
-              <h3 className="text-2xl font-semibold text-light-1000 dark:text-dark-1000">{t`Save jobs without copying and pasting`}</h3>
-              <p className="mt-3 max-w-3xl text-sm leading-6 text-light-900 dark:text-dark-900">{t`Magic Inbox works with emails. The Web Clipper works with job pages. Both can turn what you send into an organised opportunity.`}</p>
-              <div className="mt-6">
-                <CaptureMockup />
-              </div>
-              <div className="mt-6 grid gap-4 md:grid-cols-2">
-                {powerpackFeatures.slice(2, 4).map((feature, index) => (
-                  <div
-                    key={feature.title}
-                    id={
-                      index === 0
-                        ? "powerpack-magic-inbox"
-                        : "powerpack-web-clipper"
-                    }
-                    className="scroll-mt-24"
-                  >
-                    <FeatureCard {...feature} />
-                  </div>
-                ))}
+            <div id="powerpack-web-clipper" className="mt-16 scroll-mt-24">
+              <h3 className="text-center text-2xl font-semibold text-light-1000 dark:text-dark-1000">
+                {powerpackFeatures[3].title}
+              </h3>
+              <p className="mx-auto mt-3 max-w-3xl text-center text-sm leading-6 text-light-900 dark:text-dark-900">
+                {powerpackFeatures[3].description}
+              </p>
+              <div className="mt-6 lg:relative lg:left-1/2 lg:w-[calc(100vw-2rem)] lg:max-w-[1200px] lg:-translate-x-1/2">
+                <CaptureJourney kind="web" />
               </div>
             </div>
 
             <div className="mt-12">
-              <h3 className="text-2xl font-semibold text-light-1000 dark:text-dark-1000">{t`Remember the next step without keeping it all in your head`}</h3>
+              <h3 className="text-center text-2xl font-semibold text-light-1000 dark:text-dark-1000">{t`Remember the next step without keeping it all in your head`}</h3>
               <div className="mt-6 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                {powerpackFeatures.slice(4).map((feature) => (
-                  <FeatureCard key={feature.title} {...feature} />
+                {[
+                  ...powerpackFeatures.slice(0, 2),
+                  ...powerpackFeatures.slice(4),
+                ].map((feature) => (
+                  <FeatureCard
+                    key={feature.title}
+                    {...feature}
+                    liftOnHover={false}
+                  />
                 ))}
               </div>
             </div>
