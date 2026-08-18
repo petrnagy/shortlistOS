@@ -8,6 +8,7 @@ import {
   HiOutlinePaperClip,
   HiOutlinePlus,
   HiOutlineSquares2X2,
+  HiOutlineUser,
 } from "react-icons/hi2";
 import { TbTent } from "react-icons/tb";
 
@@ -114,20 +115,20 @@ export default function BoardPreview() {
       title: t`Saved`,
       cards: [
         {
-          title: t`Senior PHP Developer at Amber Cloud`,
+          title: t`Marketing Coordinator at Amber Cloud`,
           labels: [
             { colour: labelColours.green, name: t`Above market salary` },
           ],
         },
         {
-          title: t`Python Engineer at BrightRail`,
+          title: t`Customer Support Specialist at BrightRail`,
           labels: [{ colour: labelColours.red, name: t`On-site` }],
           comments: true,
           attachment: true,
           aged: true,
         },
         {
-          title: t`Senior Backend Engineer at Northstar Labs`,
+          title: t`Office Manager at Northstar Labs`,
           labels: [
             { colour: labelColours.yellow, name: t`High priority` },
             { colour: labelColours.green, name: t`Above market salary` },
@@ -135,17 +136,17 @@ export default function BoardPreview() {
           date: t`12th Aug`,
         },
         {
-          title: t`Full-Stack Developer at Blue Oak Systems`,
+          title: t`Graphic Designer at Blue Oak Systems`,
           labels: [{ colour: labelColours.yellow, name: t`Hybrid` }],
           attachment: true,
         },
         {
-          title: t`Backend PHP Engineer at Bohemian Logic`,
+          title: t`Sales Representative at Bohemian Logic`,
           labels: [{ colour: labelColours.red, name: t`Referral` }],
           comments: true,
         },
         {
-          title: t`API Developer at PixelHarbor`,
+          title: t`Project Coordinator at PixelHarbor`,
           labels: [{ colour: labelColours.blue, name: t`Equity` }],
           date: t`25th Aug`,
         },
@@ -155,7 +156,7 @@ export default function BoardPreview() {
       title: t`Applied`,
       cards: [
         {
-          title: t`Lead Platform Engineer at Mosaic Systems`,
+          title: t`Operations Manager at Mosaic Systems`,
           labels: [{ colour: labelColours.yellow, name: t`Hybrid` }],
           date: t`31st Aug`,
           comments: true,
@@ -163,19 +164,19 @@ export default function BoardPreview() {
           aged: true,
         },
         {
-          title: t`Full-Stack Developer at Creative Heroes`,
+          title: t`Content Writer at Creative Heroes`,
           labels: [{ colour: labelColours.red, name: t`On-site` }],
           comments: true,
         },
         {
-          title: t`Backend Architect at CopperFox`,
+          title: t`Account Manager at CopperFox`,
           labels: [
             { colour: labelColours.yellow, name: t`High priority` },
             { colour: labelColours.green, name: t`Above market salary` },
           ],
         },
         {
-          title: t`Senior Full-Stack Engineer at BrightRail`,
+          title: t`Product Designer at BrightRail`,
           labels: [
             { colour: labelColours.green, name: t`Application confirmed` },
           ],
@@ -183,12 +184,12 @@ export default function BoardPreview() {
           comments: true,
         },
         {
-          title: t`PHP Software Engineer at Amber Cloud`,
+          title: t`HR Assistant at Amber Cloud`,
           labels: [{ colour: labelColours.yellow, name: t`High priority` }],
           attachment: true,
         },
         {
-          title: t`Backend Developer at Kiteworks`,
+          title: t`Data Analyst at Kiteworks`,
           labels: [{ colour: labelColours.green, name: t`Dream job` }],
           comments: true,
         },
@@ -198,7 +199,7 @@ export default function BoardPreview() {
       title: t`In contact`,
       cards: [
         {
-          title: t`Lead Software Engineer at Riverbyte`,
+          title: t`Customer Success Manager at Riverbyte`,
           labels: [
             { colour: labelColours.yellow, name: t`High priority` },
             { colour: labelColours.red, name: t`Referral` },
@@ -206,24 +207,24 @@ export default function BoardPreview() {
           comments: true,
         },
         {
-          title: t`PHP Software Engineer at OpenField`,
+          title: t`Social Media Manager at OpenField`,
           labels: [
             { colour: labelColours.green, name: t`Above market salary` },
           ],
           date: t`11th Aug`,
         },
         {
-          title: t`Backend Architect at Vertex Works`,
+          title: t`Recruitment Consultant at Vertex Works`,
           labels: [{ colour: labelColours.pink, name: t`Red flag` }],
           comments: true,
         },
         {
-          title: t`Full-Stack Engineer at Nimbus Commerce`,
+          title: t`E-commerce Manager at Nimbus Commerce`,
           labels: [{ colour: labelColours.yellow, name: t`High priority` }],
           date: t`18th Aug`,
         },
         {
-          title: t`Senior PHP Developer at Morava Digital`,
+          title: t`Finance Assistant at Morava Digital`,
           labels: [{ colour: labelColours.red, name: t`Referral` }],
           comments: true,
         },
@@ -233,7 +234,7 @@ export default function BoardPreview() {
       title: t`Interviewing`,
       cards: [
         {
-          title: t`Senior PHP Developer at Atlas Foundry`,
+          title: t`Brand Manager at Atlas Foundry`,
           labels: [
             { colour: labelColours.green, name: t`Dream job` },
             { colour: labelColours.blue, name: t`Equity` },
@@ -243,12 +244,12 @@ export default function BoardPreview() {
           comments: true,
         },
         {
-          title: t`Laravel Developer at Cloudsmith Europe`,
+          title: t`UX Designer at Cloudsmith Europe`,
           labels: [{ colour: labelColours.blue, name: t`Equity` }],
           comments: true,
         },
         {
-          title: t`Platform Engineer at Northstar Labs`,
+          title: t`Business Analyst at Northstar Labs`,
           labels: [{ colour: labelColours.green, name: t`Dream job` }],
         },
       ],
@@ -257,7 +258,7 @@ export default function BoardPreview() {
       title: t`Negotiating`,
       cards: [
         {
-          title: t`Senior Backend Engineer at Cobalt Labs`,
+          title: t`Communications Manager at Cobalt Labs`,
           labels: [
             { colour: labelColours.yellow, name: t`High priority` },
             { colour: labelColours.blue, name: t`Equity` },
@@ -266,7 +267,7 @@ export default function BoardPreview() {
           comments: true,
         },
         {
-          title: t`Platform Engineer at Danube Software`,
+          title: t`Executive Assistant at Danube Software`,
           labels: [
             { colour: labelColours.green, name: t`Above market salary` },
           ],
@@ -278,13 +279,13 @@ export default function BoardPreview() {
       title: t`Accepted`,
       cards: [
         {
-          title: t`Full-Stack Engineer at NovaGrid`,
+          title: t`Product Manager at NovaGrid`,
           labels: [{ colour: labelColours.green, name: t`Dream job` }],
           comments: true,
           attachment: true,
         },
         {
-          title: t`Senior PHP Developer at LimePeak`,
+          title: t`Digital Marketing Manager at LimePeak`,
           labels: [
             { colour: labelColours.green, name: t`Above market salary` },
           ],
@@ -295,11 +296,11 @@ export default function BoardPreview() {
       title: t`Rejected`,
       cards: [
         {
-          title: t`Backend Developer at OrbitStack`,
+          title: t`Store Manager at OrbitStack`,
           comments: true,
         },
         {
-          title: t`Software Engineer at Silverline Tech`,
+          title: t`Administrative Assistant at Silverline Tech`,
           labels: [{ colour: labelColours.red, name: t`On-site` }],
           aged: true,
         },
@@ -309,12 +310,12 @@ export default function BoardPreview() {
       title: t`Withdrawn`,
       cards: [
         {
-          title: t`PHP Developer at Pinecone Digital`,
+          title: t`Copywriter at Pinecone Digital`,
           labels: [{ colour: labelColours.pink, name: t`Red flag` }],
           comments: true,
         },
         {
-          title: t`API Developer at Crafted Systems`,
+          title: t`Payroll Specialist at Crafted Systems`,
           attachment: true,
         },
       ],
@@ -341,11 +342,16 @@ export default function BoardPreview() {
             {t`Shortlists`}
           </div>
           <p className="px-8 py-1 font-medium text-light-1000 dark:text-dark-1000">{t`Job hunt 2026`}</p>
-          <p className="px-8 py-1">{t`Frontend roles`}</p>
-          <p className="px-8 py-1">{t`Remote opportunities`}</p>
+          <p className="px-8 py-1">{t`Local opportunities`}</p>
+          <p className="px-8 py-1">{t`Part-time roles`}</p>
         </nav>
         <div className="absolute bottom-4 left-4 flex items-center gap-2 text-xs text-light-900 dark:text-dark-900">
-          <span className="h-6 w-6 rounded-full bg-emerald-700" />
+          <span className="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-700">
+            <HiOutlineUser
+              className="h-4 w-4 text-white"
+              aria-hidden="true"
+            />
+          </span>
           {t`You`}
         </div>
       </div>
