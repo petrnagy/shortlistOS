@@ -7,7 +7,7 @@
     "build": "tsc",
     "dev": "node -e \"console.log('Enrichment worker is idle in dev. Run pnpm start explicitly.')\"",
     "start": "dotenv -e ../../.env -- tsx src/index.ts",
-    "prepare": "dotenv -e ../../.env -- tsx src/prepare.ts",
+    "prepare-enrichment": "dotenv -e ../../.env -- tsx src/prepare.ts",
     "process": "dotenv -e ../../.env -- tsx src/process.ts",
     "cleanup-cache": "dotenv -e ../../.env -- tsx src/cleanup-cache.ts",
     "lint": "eslint",

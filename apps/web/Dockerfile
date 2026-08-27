@@ -34,7 +34,15 @@ RUN git fetch --tags --unshallow 2>/dev/null || git fetch --tags 2>/dev/null || 
     echo "unknown") && \
     echo "$AUTO_VERSION" > /app/AUTO_VERSION
 
-RUN turbo prune --scope=@kan/web --scope=@kan/db --docker
+RUN turbo prune \
+    --scope=@kan/web \
+    --scope=@kan/web-clipper-api \
+    --scope=@kan/shortlist-queue-worker \
+    --scope=@kan/shortlist-enrichment-worker \
+    --scope=@kan/shortlist-automation-card-worker \
+    --scope=@kan/shortlist-automation-email-worker \
+    --scope=@kan/db \
+    --docker
 
 # ============================================
 # Stage 3: Install dependencies
@@ -47,7 +55,7 @@ COPY --from=pruner /app/out/pnpm-workspace.yaml ./pnpm-workspace.yaml
 COPY --from=pruner /app/out/json/ .
 
 ENV CI=true
-RUN --mount=type=cache,id=pnpm,target=~/.pnpm-store pnpm install --frozen-lockfile
+RUN pnpm install --frozen-lockfile
 
 # ============================================
 # Stage 4: Build the web application
@@ -122,3 +130,29 @@ USER 1000:1000
 
 EXPOSE 3000
 CMD ["bootstrap.cjs"]
+
+# ============================================
+# Stage 7: Shared production runtime
+# ============================================
+# The web app, Web Clipper API, and workers use one immutable release image.
+# Docker Compose selects the process through SHORTLISTOS_SERVICE.
+FROM builder AS application
+WORKDIR /app
+
+ENV NODE_ENV=production
+ENV PORT=3000
+ENV HOSTNAME=0.0.0.0
+
+COPY --from=builder /app/apps/web/.next/standalone/ ./
+COPY --from=builder /app/apps/web/.next/static/ ./apps/web/.next/static/
+COPY --from=builder /app/apps/web/public/ ./apps/web/public/
+COPY apps/web/bootstrap.cjs ./bootstrap.cjs
+COPY deployment/runtime-entrypoint.sh ./runtime-entrypoint.sh
+COPY deployment/healthcheck.mjs ./healthcheck.mjs
+
+RUN chmod 755 /app/runtime-entrypoint.sh && chown -R node:node /app
+
+USER node
+
+EXPOSE 3000 3010
+ENTRYPOINT ["/app/runtime-entrypoint.sh"]

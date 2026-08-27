@@ -18,13 +18,16 @@ import * as listRepo from "@kan/db/repository/list.repo";
 import * as memberRepo from "@kan/db/repository/member.repo";
 import * as userRepo from "@kan/db/repository/user.repo";
 import * as workspaceRepo from "@kan/db/repository/workspace.repo";
+import { createLogger } from "@kan/logger";
+import { createS3Client } from "@kan/shared/utils";
 
 import {
   adminProtectedProcedure,
   createTRPCRouter,
   publicProcedure,
 } from "../trpc";
-import { createS3Client } from "@kan/shared/utils";
+
+const logger = createLogger("health-router");
 
 const checkDatabaseConnection = async (db: dbClient) => {
   try {
@@ -35,29 +38,34 @@ const checkDatabaseConnection = async (db: dbClient) => {
   }
 };
 
-const checkS3Connection = async () => {
+const getStorageBuckets = () => ({
+  attachments: env("NEXT_PUBLIC_ATTACHMENTS_BUCKET_NAME"),
+  avatars: env("NEXT_PUBLIC_AVATAR_BUCKET_NAME"),
+  sources: process.env.SHORTLIST_SOURCE_BUCKET_NAME,
+});
+
+const checkS3Connection = async (
+  buckets: ReturnType<typeof getStorageBuckets>,
+) => {
+  if (!buckets.avatars || !buckets.attachments || !buckets.sources) {
+    return false;
+  }
+
+  const client = createS3Client();
+
   try {
-    // Check if S3 is configured
-    if (
-      !process.env.S3_ENDPOINT ||
-      !process.env.S3_ACCESS_KEY_ID ||
-      !process.env.S3_SECRET_ACCESS_KEY
-    ) {
-      // S3 is optional, so return true if not configured
-      return true;
-    }
-
-    const client = createS3Client();
-    const avatarBucketName = env("NEXT_PUBLIC_AVATAR_BUCKET_NAME");
-    const attachmentsBucketName = env("NEXT_PUBLIC_ATTACHMENTS_BUCKET_NAME");
-
-    await client.send(new HeadBucketCommand({ Bucket: avatarBucketName }));
-    await client.send(new HeadBucketCommand({ Bucket: attachmentsBucketName }));
+    await Promise.all(
+      Object.values(buckets).map((bucket) =>
+        client.send(new HeadBucketCommand({ Bucket: bucket })),
+      ),
+    );
 
     return true;
   } catch (error) {
-    console.error(error);
+    logger.error({ error }, "Storage health check failed");
     return false;
+  } finally {
+    client.destroy();
   }
 };
 
@@ -83,13 +91,11 @@ export const healthRouter = createTRPCRouter({
       }),
     )
     .query(async ({ ctx }) => {
+      const storageBuckets = getStorageBuckets();
+      const s3Configured = Object.values(storageBuckets).some(Boolean);
       const dbHealthy = await checkDatabaseConnection(ctx.db);
-      const s3Healthy = await checkS3Connection();
-      const s3Configured = !!(
-        process.env.S3_ENDPOINT &&
-        process.env.S3_ACCESS_KEY_ID &&
-        process.env.S3_SECRET_ACCESS_KEY
-      );
+      const s3Healthy =
+        !s3Configured || (await checkS3Connection(storageBuckets));
 
       const database = dbHealthy ? "ok" : "error";
       const storage = !s3Configured

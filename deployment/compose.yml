@@ -1,0 +1,142 @@
+name: shortlistos
+
+x-application: &application
+  image: ${IMAGE_REPOSITORY:?Set IMAGE_REPOSITORY}:${APP_VERSION:?Set APP_VERSION}
+  env_file:
+    - ${APP_ENV_FILE:-.env}
+  restart: unless-stopped
+  init: true
+  networks:
+    - shortlistos
+  depends_on:
+    postgres:
+      condition: service_healthy
+    redis:
+      condition: service_healthy
+
+x-worker: &worker
+  <<: *application
+  stop_grace_period: 2m
+  healthcheck:
+    test:
+      [
+        "CMD",
+        "pnpm",
+        "--filter",
+        "@kan/shortlist-queue-worker",
+        "exec",
+        "tsx",
+        "src/healthcheck.ts",
+      ]
+    interval: 30s
+    timeout: 5s
+    retries: 3
+    start_period: 30s
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-shortlistos}
+      POSTGRES_USER: ${POSTGRES_USER:-shortlistos}
+      POSTGRES_PASSWORD:
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    restart: unless-stopped
+    networks:
+      - shortlistos
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis-data:/data
+    restart: unless-stopped
+    networks:
+      - shortlistos
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  migrate:
+    image: ${IMAGE_REPOSITORY:?Set IMAGE_REPOSITORY}-migrate:${APP_VERSION:?Set APP_VERSION}
+    env_file:
+      - ${APP_ENV_FILE:-.env}
+    restart: "no"
+    networks:
+      - shortlistos
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  web:
+    <<: *application
+    environment:
+      SHORTLISTOS_SERVICE: web
+      REDIS_URL: redis://redis:6379
+      WEB_CLIPPER_API_URL: https://api.shortlistos.co
+      HEALTHCHECK_URL: http://127.0.0.1:3000/api/v1/health
+    ports:
+      - "127.0.0.1:${WEB_HOST_PORT:-3000}:3000"
+    healthcheck:
+      test: ["CMD", "node", "/app/healthcheck.mjs"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 45s
+
+  web-clipper-api:
+    <<: *application
+    environment:
+      SHORTLISTOS_SERVICE: web-clipper-api
+      REDIS_URL: redis://redis:6379
+      WEB_CLIPPER_API_PORT: 3010
+      HEALTHCHECK_URL: http://127.0.0.1:3010/healthz
+    ports:
+      - "127.0.0.1:${CLIPPER_HOST_PORT:-3010}:3010"
+    healthcheck:
+      test: ["CMD", "node", "/app/healthcheck.mjs"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+
+  queue-worker:
+    <<: *worker
+    environment:
+      SHORTLISTOS_SERVICE: queue-worker
+      REDIS_URL: redis://redis:6379
+
+  enrichment-worker:
+    <<: *worker
+    environment:
+      SHORTLISTOS_SERVICE: enrichment-worker
+      REDIS_URL: redis://redis:6379
+
+  card-worker:
+    <<: *worker
+    environment:
+      SHORTLISTOS_SERVICE: card-worker
+      REDIS_URL: redis://redis:6379
+
+  email-worker:
+    <<: *worker
+    environment:
+      SHORTLISTOS_SERVICE: email-worker
+      REDIS_URL: redis://redis:6379
+
+networks:
+  shortlistos:
+    name: shortlistos
+
+volumes:
+  postgres-data:
+  redis-data:

@@ -1,6 +1,6 @@
 services:
   migrate:
-    image: ghcr.io/kanbn/kan-migrate:latest
+    image: ghcr.io/petrnagy/shortlistos-migrate:latest
     container_name: ${CONTAINER_NAME:-kan-migrate}
     networks:
       - shortlistos-network
@@ -16,7 +16,7 @@ services:
     restart: "no"
 
   web:
-    image: ghcr.io/kanbn/kan:latest
+    image: ghcr.io/petrnagy/shortlistos:latest
     container_name: ${CONTAINER_NAME:-shortlistos-web}
     ports:
       - "${WEB_PORT:-3000}:3000"
