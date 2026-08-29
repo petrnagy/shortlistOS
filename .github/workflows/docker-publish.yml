@@ -67,7 +67,7 @@ jobs:
 
       - name: Log in to GHCR
         if: github.event_name == 'workflow_dispatch' || github.event_name == 'workflow_run'
-        uses: docker/login-action@343f7c4344506bcbf9b4de18042ae17996df046
+        uses: docker/login-action@343f7c4344506bcbf9b4de18042ae17996df046d
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
