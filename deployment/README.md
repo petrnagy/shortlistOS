@@ -34,6 +34,22 @@ the web and clipper services bind to loopback for the host nginx proxy.
    reload nginx. Configure the three DNS records as proxied and use Cloudflare
    SSL mode **Full (strict)**.
 
+   The main domain is protected with HTTP Basic Authentication. Create its
+   root-owned password file interactively so the password is not stored in the
+   repository or shell history:
+
+   ```bash
+   sudo apt-get install apache2-utils
+   sudo htpasswd -c /etc/nginx/.htpasswd-shortlistos shortlistos
+   sudo chown root:www-data /etc/nginx/.htpasswd-shortlistos
+   sudo chmod 640 /etc/nginx/.htpasswd-shortlistos
+   sudo nginx -t
+   sudo systemctl reload nginx
+   ```
+
+   This authentication applies only to `shortlistos.co`; the Web Clipper API
+   and whitelisted Magic Inbox hook remain available on their own subdomains.
+
 ## GitHub configuration
 
 Create a public-repository environment named `production`, restricted to the
