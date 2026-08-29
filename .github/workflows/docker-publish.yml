@@ -29,7 +29,7 @@ jobs:
        github.event.workflow_run.pull_requests[0].base.ref == 'main' &&
        (startsWith(github.event.workflow_run.pull_requests[0].head.ref, 'release/') ||
         startsWith(github.event.workflow_run.pull_requests[0].head.ref, 'hotfix/')))
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04-arm
     permissions:
       contents: read
       packages: write
