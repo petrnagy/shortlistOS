@@ -29,7 +29,7 @@ jobs:
        github.event.workflow_run.pull_requests[0].base.ref == 'main' &&
        (startsWith(github.event.workflow_run.pull_requests[0].head.ref, 'release/') ||
         startsWith(github.event.workflow_run.pull_requests[0].head.ref, 'hotfix/')))
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04-arm
     permissions:
       contents: read
       packages: write
@@ -80,7 +80,7 @@ jobs:
           context: .
           file: apps/web/Dockerfile
           target: application
-          platforms: linux/amd64
+          platforms: linux/arm64
           push: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'workflow_run' }}
           tags: ${{ env.IMAGE_REPOSITORY }}:${{ steps.release.outputs.tag }}
           build-args: APP_VERSION=${{ steps.release.outputs.sha }}
@@ -94,7 +94,7 @@ jobs:
           context: .
           file: apps/web/Dockerfile
           target: migrate
-          platforms: linux/amd64
+          platforms: linux/arm64
           push: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'workflow_run' }}
           tags: ${{ env.IMAGE_REPOSITORY }}-migrate:${{ steps.release.outputs.tag }}
           cache-from: type=gha
