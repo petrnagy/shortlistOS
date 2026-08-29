@@ -94,17 +94,17 @@ const Footer = () => {
     {
       title: t`Resources`,
       links: [
+        { label: t`Get started`, href: "/get-started" },
+        { label: t`FAQ`, href: "/#faq" },
         {
-          label: t`GitHub`,
+          label: t`Self-hosting`,
           href: githubUrl,
           external: true,
         },
-        { label: t`FAQ`, href: "/#faq" },
-        { label: t`Help`, href: "mailto:support@shortlistos.co" },
       ],
     },
     {
-      title: t`Company`,
+      title: t`Project`,
       links: [
         { label: t`Privacy`, href: "/privacy" },
         { label: t`Terms`, href: "/terms" },
@@ -124,7 +124,7 @@ const Footer = () => {
             shortlist<span className="font-medium">OS</span>
           </Link>
           <p className="mt-3 max-w-[260px] text-sm leading-[1.65rem] text-light-900 dark:text-dark-800">
-            {t`Open-source job search CRM with optional automation for the repetitive parts.`}
+            {t`Open-source job search tracker with optional automation for the repetitive parts.`}
           </p>
           <div className="mt-4 flex items-center gap-2">
             {socialLinks.map((link) => {

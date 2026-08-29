@@ -15,6 +15,7 @@ export interface PricingPlan {
   href: string;
   featured: boolean;
   compactPrice?: boolean;
+  dynamicBackground?: boolean;
   badge?: string;
   note?: string;
   items: {
@@ -29,12 +30,30 @@ const githubUrl = env.NEXT_PUBLIC_GITHUB_URL ?? "#";
 export function getPricingPlans(): PricingPlan[] {
   return [
     {
+      title: t`Free`,
+      price: t`$0`,
+      detail: t`forever`,
+      description: t`The hosted base version, without Powerpack.`,
+      cta: t`Create free account`,
+      href: "/signup",
+      featured: false,
+      items: [
+        { label: t`Unlimited shortlists` },
+        { label: t`Unlimited opportunities` },
+        { label: t`Job-search pipeline` },
+        { label: t`Notes and attachments` },
+        { label: t`Activity history` },
+        { label: t`Full data export` },
+      ],
+    },
+    {
       title: t`Powerpack`,
       price: POWERPACK_PRICE,
       detail: t`One-time payment`,
       cta: t`Get the Powerpack`,
       href: powerpackSignupHref,
       featured: true,
+      dynamicBackground: true,
       badge: t`Recommended`,
       items: [
         {
@@ -45,31 +64,14 @@ export function getPricingPlans(): PricingPlan[] {
           label: t`Job posting Web Clipper`,
           info: t`Grab any interesting job opening on the internet, and send it to your shortlist without manually copy-pasting anything.`,
         },
-        { label: t`Company online sentiment` },
+        { label: t`Company rating snapshot` },
         { label: t`Salary insights for each job` },
         { label: t`Automatic reminders and nudges` },
         {
           label: t`Google calendar`,
-          info: t`Automatic feed you can import into your Google or Outlook calendar to keep track of upcoming interviews or follow-ups.`,
+          info: t`A private calendar feed for scheduled interviews, compatible with Google Calendar, Outlook, and other calendar apps.`,
         },
         { label: t`Weekly digest` },
-      ],
-    },
-    {
-      title: t`Free`,
-      price: t`$0`,
-      detail: t`forever`,
-      description: t`The hosted base version, without Powerpack.`,
-      cta: t`Start for free`,
-      href: "/signup",
-      featured: false,
-      items: [
-        { label: t`Unlimited shortlists` },
-        { label: t`Unlimited opportunities` },
-        { label: t`Job-search pipeline` },
-        { label: t`Notes and attachments` },
-        { label: t`Activity history` },
-        { label: t`Full data export` },
       ],
     },
     {
@@ -162,6 +164,7 @@ export function PricingCards({ plans }: { plans: PricingPlan[] }) {
             variant={plan.featured ? "primary" : "secondary"}
             className="mt-auto w-full"
             external={plan.href.startsWith("http")}
+            dynamicBackground={plan.dynamicBackground}
           >
             {plan.cta}
           </PricingButton>
@@ -182,26 +185,63 @@ function PricingButton({
   children,
   className = "",
   external = false,
+  dynamicBackground = false,
 }: {
   href: string;
   variant: "primary" | "secondary";
   children: React.ReactNode;
   className?: string;
   external?: boolean;
+  dynamicBackground?: boolean;
 }) {
   const classes =
     variant === "primary"
-      ? "rounded-lg bg-brand-600 px-5 py-3 text-sm font-bold text-white shadow-lg shadow-black/20 transition hover:bg-brand-500"
+      ? `rounded-lg px-5 py-3 text-sm font-bold text-white shadow-lg shadow-black/20 transition ${
+          dynamicBackground
+            ? "landing-powerpack-cta hover:brightness-110"
+            : "bg-brand-600 hover:bg-brand-500"
+        }`
       : "rounded-lg border border-light-400 bg-light-50 px-5 py-3 text-sm font-bold text-light-1000 shadow-sm transition hover:bg-light-100 dark:border-dark-400 dark:bg-dark-100 dark:text-dark-1000 dark:hover:bg-dark-200";
 
   return (
-    <Link
-      href={href}
-      target={external ? "_blank" : undefined}
-      rel={external ? "noopener noreferrer" : undefined}
-      className={`inline-flex items-center justify-center text-center ${classes} ${className}`}
-    >
-      {children}
-    </Link>
+    <>
+      <Link
+        href={href}
+        target={external ? "_blank" : undefined}
+        rel={external ? "noopener noreferrer" : undefined}
+        className={`inline-flex items-center justify-center text-center ${classes} ${className}`}
+      >
+        {children}
+      </Link>
+      {dynamicBackground && (
+        <style jsx global>{`
+          .landing-powerpack-cta {
+            background: linear-gradient(
+              -45deg,
+              #06b6d4,
+              #e73c7e,
+              #ee7752,
+              #10b981
+            );
+            background-size: 400% 400%;
+            animation: landing-powerpack-gradient 6s ease infinite;
+          }
+
+          @keyframes landing-powerpack-gradient {
+            0% {
+              background-position: 0% 50%;
+            }
+
+            50% {
+              background-position: 100% 50%;
+            }
+
+            100% {
+              background-position: 0% 50%;
+            }
+          }
+        `}</style>
+      )}
+    </>
   );
 }

@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { FaDesktop, FaMoon, FaSun } from "react-icons/fa";
 import { twMerge } from "tailwind-merge";
 
-const navigation = [
+const navigation: { label: string; href: string; external?: boolean }[] = [
   { label: t`Product`, href: "/#product" },
   { label: t`Powerpack`, href: "/#powerpack" },
   { label: t`Pricing`, href: "/#pricing" },

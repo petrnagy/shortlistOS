@@ -334,7 +334,7 @@ All bucket and connection variables in this section are required for a standard 
 | --- | --- |
 | `NEXT_PUBLIC_MAGIC_INBOX_DOMAIN` | Domain used to build Magic Inbox forwarding addresses |
 | `BREVO_API_KEY` | Downloads attachments delivered through Brevo |
-| `BREVO_MAGIC_INBOX_WEBHOOK_SECRET` | Bearer secret for `/api/magic_inbox/incoming_webhook` |
+| `BREVO_MAGIC_INBOX_WEBHOOK_SECRET` | Bearer secret for `/api/shortlist_magic_inbox/incoming_webhook` |
 | `SHORTLIST_MAGIC_CLIP_WEBHOOK_SECRET` | Bearer secret for `/api/shortlist_magic_clip` |
 | `LLM_CONNECTOR_API_KEY`, `LLM_CONNECTOR_MODEL` | LLM provider credential and model |
 | `INBOX_CLIP_RETRY_LIMIT` | Maximum Magic Inbox/Clip processing attempts; example `3` |
@@ -472,7 +472,7 @@ The Powerpack checkout and Magic Inbox integrations expose the following REST en
 | ------ | ----------------------------------------------- | ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `POST` | `/api/shortlist_stripe/create_checkout_session` | Signed-in shortlistOS session                              | Creates a one-time Stripe Checkout session for Powerpack and returns `{ "sessionId": "..." }`. The optional JSON body `{ "withPowerpack": "yes" }` preserves the Powerpack purchase flow through the success, cancel, and login redirects. |
 | `POST` | `/api/shortlist_stripe/webhook`                 | Stripe signature in the `Stripe-Signature` header          | Handles `checkout.session.completed`. A paid checkout grants or extends Powerpack for the user identified by the Checkout metadata or client reference ID.                                                                                 |
-| `POST` | `/api/shortlist_magic_inbox/incoming_webhook`   | `Authorization: Bearer <BREVO_MAGIC_INBOX_WEBHOOK_SECRET>` | Receives Brevo inbound-email batches, stores supported message bodies and attachments, and enqueues Magic Inbox processing. `/api/magic_inbox/incoming_webhook` is retained as a compatibility alias.                                      |
+| `POST` | `/api/shortlist_magic_inbox/incoming_webhook`   | `Authorization: Bearer <BREVO_MAGIC_INBOX_WEBHOOK_SECRET>` | Receives Brevo inbound-email batches, stores supported message bodies and attachments, and enqueues Magic Inbox processing.                                                |
 
 #### Stripe configuration
 
@@ -510,7 +510,7 @@ Available one-shot or dedicated jobs include:
 pnpm --filter @kan/shortlist-queue-worker process-sources
 pnpm --filter @kan/shortlist-queue-worker process-clip
 pnpm --filter @kan/shortlist-queue-worker process-inbox
-pnpm --filter @kan/shortlist-enrichment-worker prepare
+pnpm --filter @kan/shortlist-enrichment-worker prepare-enrichment
 pnpm --filter @kan/shortlist-enrichment-worker process
 pnpm --filter @kan/shortlist-enrichment-worker cleanup-cache
 ```

@@ -77,7 +77,7 @@ const featureGroups: { title: string; items: FeatureRow[] }[] = [
         inPowerpack: true,
       },
       {
-        label: t`Automatic company sentiment from Glassdoor and social channels`,
+        label: t`Third-party employer ratings and review summary`,
         inFree: false,
         inPowerpack: true,
       },
@@ -92,7 +92,7 @@ const featureGroups: { title: string; items: FeatureRow[] }[] = [
         inPowerpack: true,
       },
       {
-        label: t`Google Calendar sync for interviews and follow-ups`,
+        label: t`Calendar feed for scheduled interviews`,
         inFree: false,
         inPowerpack: true,
       },
@@ -107,7 +107,7 @@ const featureGroups: { title: string; items: FeatureRow[] }[] = [
         inPowerpack: true,
       },
       {
-        label: t`Follow-up nudge when a company goes quiet`,
+        label: t`Follow-up reminder for inactive applications`,
         inFree: false,
         inPowerpack: true,
       },

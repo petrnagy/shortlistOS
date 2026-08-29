@@ -138,7 +138,7 @@ const featureGroups: { title: string; items: FeatureRow[] }[] = [
         inPowerpack: true,
       },
       {
-        label: t`Automatic company ratings and employer insights from Glassdoor`,
+        label: t`Third-party employer ratings and review summary`,
         inFree: false,
         inPowerpack: true,
       },
@@ -153,7 +153,7 @@ const featureGroups: { title: string; items: FeatureRow[] }[] = [
         inPowerpack: true,
       },
       {
-        label: t`Calendar feed for opportunity due dates`,
+        label: t`Calendar feed for scheduled interviews`,
         inFree: false,
         inPowerpack: true,
       },
@@ -168,7 +168,7 @@ const featureGroups: { title: string; items: FeatureRow[] }[] = [
         inPowerpack: true,
       },
       {
-        label: t`Follow-up nudge when a company goes quiet`,
+        label: t`Follow-up reminder for inactive applications`,
         inFree: false,
         inPowerpack: true,
       },

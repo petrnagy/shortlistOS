@@ -516,6 +516,14 @@ export const createWebClipperServer = (database?: dbClient) => {
     const requestUrl = new URL(request.url ?? "/", config.NEXT_PUBLIC_BASE_URL);
 
     try {
+      if (requestUrl.pathname === "/healthz") {
+        if (request.method !== "GET") {
+          response.setHeader("Allow", "GET");
+          return sendError(response, 405, "method_not_allowed");
+        }
+        return sendJson(response, 200, { status: "ok" });
+      }
+
       if (
         config.NODE_ENV === "production" &&
         request.headers["x-forwarded-proto"] !== "https"
