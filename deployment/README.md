@@ -51,15 +51,20 @@ exactly `true`; manual `workflow_dispatch` deployments remain available while
 the gate is disabled. Set it to `true` only after the first manual production
 deployment has passed its smoke tests.
 
-Protect `main` against direct pushes. Production is built and deployed only
-when a merged pull request targets `main` and its source branch starts with
-`release/` or `hotfix/`. The manual workflow accepts only a full commit SHA
-already contained in `main`.
+Protect `main` against direct pushes and require both jobs from the `CI`
+workflow. CI runs linting, type checking, unit tests, translation verification,
+and both production image builds for every pull request targeting `dev` or
+`main`.
 
-For the initial promotion from `dev`, run the Translate workflow manually if
-the merged pull request does not trigger it. Then run this workflow manually
-with the resulting translated `main` SHA. This bootstrap path is expected
-while automatic deployment remains gated off.
+Production images are published only after a pull request targeting `main` is
+closed as merged and its source branch starts with `release/` or `hotfix/`.
+Open or updated pull requests cannot publish or deploy images. The manual
+workflow accepts only a full commit SHA already contained in `main`.
+
+While automatic deployment remains gated off, deploy a verified release by
+running `Build and deploy production` manually with the full resulting `main`
+SHA. Set the repository variable to `true` only after production smoke,
+recovery, and rollback checks pass.
 
 The GitHub packages `petrnagy/shortlistos` and
 `petrnagy/shortlistos-migrate` must be public so the VPS can pull without a
