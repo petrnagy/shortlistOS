@@ -54,7 +54,9 @@ deployment has passed its smoke tests.
 Protect `main` against direct pushes and require both jobs from the `CI`
 workflow. CI runs linting, type checking, unit tests, translation verification,
 and both production image builds for every pull request targeting `dev` or
-`main`.
+`main`. Lint is temporarily advisory while the existing lint baseline is
+cleaned up; type checking, tests, translations, and image builds remain
+blocking.
 
 Production images are published only after a pull request targeting `main` is
 closed as merged and its source branch starts with `release/` or `hotfix/`.
