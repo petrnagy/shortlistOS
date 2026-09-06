@@ -1,7 +1,7 @@
 ALTER TABLE "shortlist_provider_request"
-DROP CONSTRAINT "shortlist_provider_request_sourceJobId_shortlist_job_queue_id_fk";
+DROP CONSTRAINT "shortlist_provider_request_sourceJobId_shortlist_job_queue_id_fk";--> statement-breakpoint
 
 ALTER TABLE "shortlist_provider_request"
 ADD CONSTRAINT "shortlist_provider_request_sourceJobId_shortlist_job_queue_id_fk"
 FOREIGN KEY ("sourceJobId") REFERENCES "public"."shortlist_job_queue"("id")
-ON DELETE set null ON UPDATE no action;
+ON DELETE set null ON UPDATE no action;--> statement-breakpoint

@@ -18,41 +18,41 @@ CREATE TABLE "shortlist_provider_request" (
   "fetchedAt" timestamp,
   "createdAt" timestamp DEFAULT now() NOT NULL,
   "updatedAt" timestamp
-);
+);--> statement-breakpoint
 
 ALTER TABLE "shortlist_provider_request"
 ADD CONSTRAINT "shortlist_provider_request_cardId_card_id_fk"
 FOREIGN KEY ("cardId") REFERENCES "public"."card"("id")
-ON DELETE cascade ON UPDATE no action;
+ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 
 ALTER TABLE "shortlist_provider_request"
 ADD CONSTRAINT "shortlist_provider_request_sourceJobId_shortlist_job_queue_id_fk"
 FOREIGN KEY ("sourceJobId") REFERENCES "public"."shortlist_job_queue"("id")
-ON DELETE set null ON UPDATE no action;
+ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 
 ALTER TABLE "shortlist_provider_request"
 ADD CONSTRAINT "shortlist_provider_request_enrichmentJobId_shortlist_enrichment_job_id_fk"
 FOREIGN KEY ("enrichmentJobId") REFERENCES "public"."shortlist_enrichment_job"("id")
-ON DELETE set null ON UPDATE no action;
+ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 
 CREATE INDEX "shortlist_provider_request_card_provider_idx"
-ON "shortlist_provider_request" USING btree ("cardId", "provider");
+ON "shortlist_provider_request" USING btree ("cardId", "provider");--> statement-breakpoint
 
 CREATE INDEX "shortlist_provider_request_salary_cache_idx"
 ON "shortlist_provider_request" USING btree (
   "provider", "endpoint", "location", "fetchedAt"
-);
+);--> statement-breakpoint
 
 CREATE INDEX "shortlist_provider_request_title_idx"
-ON "shortlist_provider_request" USING btree ("jobTitleNormalized");
+ON "shortlist_provider_request" USING btree ("jobTitleNormalized");--> statement-breakpoint
 
 CREATE INDEX "shortlist_provider_request_request_key_idx"
-ON "shortlist_provider_request" USING btree ("requestKey");
+ON "shortlist_provider_request" USING btree ("requestKey");--> statement-breakpoint
 
 CREATE INDEX "shortlist_provider_request_source_job_idx"
-ON "shortlist_provider_request" USING btree ("sourceJobId");
+ON "shortlist_provider_request" USING btree ("sourceJobId");--> statement-breakpoint
 
 CREATE INDEX "shortlist_provider_request_enrichment_job_idx"
-ON "shortlist_provider_request" USING btree ("enrichmentJobId");
+ON "shortlist_provider_request" USING btree ("enrichmentJobId");--> statement-breakpoint
 
-ALTER TABLE "shortlist_provider_request" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "shortlist_provider_request" ENABLE ROW LEVEL SECURITY;--> statement-breakpoint
