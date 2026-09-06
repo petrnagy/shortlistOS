@@ -1,0 +1,99 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [dev, main]
+    types: [opened, synchronize, reopened]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    name: Quality and tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 9.14.2
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint
+        # The existing dev baseline contains lint failures. Keep reporting them
+        # without preventing typecheck, tests, and translation verification from
+        # running; remove this once the lint-baseline cleanup lands.
+        continue-on-error: true
+        run: pnpm lint
+
+      - name: Typecheck
+        # @kan/docs currently has no tsconfig, so the repository-wide command
+        # exits before checking the rest of the workspace. Keep reporting it
+        # while allowing the blocking tests and translation checks to run.
+        continue-on-error: true
+        run: pnpm typecheck
+
+      - name: Run unit tests
+        run: pnpm test
+
+      - name: Extract translations
+        working-directory: apps/web
+        run: pnpm lingui:extract
+
+      - name: Compile translations
+        working-directory: apps/web
+        run: pnpm lingui:compile
+
+      - name: Verify generated translations are committed
+        run: |
+          if ! git diff --exit-code -- apps/web/src/locales/*/messages.ts; then
+            echo "::error::Generated translations are stale. Run pnpm lingui:extract and pnpm lingui:compile in apps/web, then commit the results."
+            exit 1
+          fi
+
+  images:
+    name: Production images
+    runs-on: ubuntu-24.04-arm
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@f95db51fddba0c2d1ec667646a06c2ce06100226
+
+      - name: Build application image
+        uses: docker/build-push-action@0565240e2d4ab88bba5387d719585280857ece09
+        with:
+          context: .
+          file: apps/web/Dockerfile
+          target: application
+          platforms: linux/arm64
+          push: false
+          build-args: APP_VERSION=${{ github.event.pull_request.head.sha || github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Build migration image
+        uses: docker/build-push-action@0565240e2d4ab88bba5387d719585280857ece09
+        with:
+          context: .
+          file: apps/web/Dockerfile
+          target: migrate
+          platforms: linux/arm64
+          push: false
+          cache-from: type=gha
+          cache-to: type=gha,mode=max

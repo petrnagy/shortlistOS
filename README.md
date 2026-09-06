@@ -180,6 +180,10 @@ The current Compose file runs the web tier, migrations, and PostgreSQL. It does 
 
 shortlistOS can run on any platform that supports containers and PostgreSQL. The production image is built from `apps/web/Dockerfile`:
 
+The repository's VPS-specific Compose stack, nginx configuration, restricted
+SSH deployment command, GitHub environment requirements, and release procedure
+are documented in [`deployment/README.md`](./deployment/README.md).
+
 ```bash
 docker build --target migrate -t shortlistos-migrate -f apps/web/Dockerfile .
 docker build --target web -t shortlistos-web -f apps/web/Dockerfile .
@@ -207,6 +211,16 @@ pnpm lint
 pnpm typecheck
 pnpm build
 ```
+
+Pull requests targeting `dev` or `main` run the `CI` workflow, which performs
+linting, type checking, unit tests, translation verification, and ARM64 builds
+of the application and migration images. The checks are required before
+merging to `main`, except that lint and type checking are temporarily advisory
+while their existing baselines are cleaned up. Production publishing runs only
+after a merged `release/*` or `hotfix/*` pull request, or through a manual
+invocation with a full commit SHA already present on `main`. Automatic
+deployments remain disabled unless the `PRODUCTION_DEPLOYMENTS_ENABLED`
+repository variable is exactly `true`.
 
 Run the migration image once before replacing the web workload. Back up the database before upgrades and retain the exact image tag used for rollback.
 
