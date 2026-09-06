@@ -215,12 +215,12 @@ pnpm build
 Pull requests targeting `dev` or `main` run the `CI` workflow, which performs
 linting, type checking, unit tests, translation verification, and ARM64 builds
 of the application and migration images. The checks are required before
-merging to `main`, except that lint is temporarily advisory while the existing
-lint baseline is cleaned up. Production publishing runs only after a merged
-`release/*` or `hotfix/*` pull request, or through a manual invocation with a
-full commit SHA already present on `main`. Automatic deployments remain
-disabled unless the `PRODUCTION_DEPLOYMENTS_ENABLED` repository variable is
-exactly `true`.
+merging to `main`, except that lint and type checking are temporarily advisory
+while their existing baselines are cleaned up. Production publishing runs only
+after a merged `release/*` or `hotfix/*` pull request, or through a manual
+invocation with a full commit SHA already present on `main`. Automatic
+deployments remain disabled unless the `PRODUCTION_DEPLOYMENTS_ENABLED`
+repository variable is exactly `true`.
 
 Run the migration image once before replacing the web workload. Back up the database before upgrades and retain the exact image tag used for rollback.
 
