@@ -375,6 +375,18 @@
     ],
     "translation": ""
   },
+  "X6Dg0J": {
+    "translation": "",
+    "message": "<0>Each card represents one available role</0>. Open the card to keep the job and company details, salary, contacts, notes, dates, checklists, comments, attachments, and activity history together.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        936
+      ]
+    ]
+  },
   "4qKqa7": {
     "message": "<0>Each card represents one role</0>. Open the card to keep the job and company details, salary, contacts, notes, dates, checklists, comments, attachments, and activity history together.",
     "placeholders": {},
@@ -385,7 +397,8 @@
         475
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "be30i9": {
     "message": "$0",
@@ -447,7 +460,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        428
+        888
       ]
     ],
     "translation": ""
@@ -459,7 +472,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        489
+        993
       ]
     ],
     "translation": ""
@@ -471,7 +484,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        558
+        1061
       ]
     ],
     "translation": ""
@@ -483,7 +496,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        584
+        1104
       ]
     ],
     "translation": ""
@@ -553,6 +566,18 @@
     "translation": "1 uživatel",
     "obsolete": true
   },
+  "6UDHp0": {
+    "translation": "",
+    "message": "10 days ago",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        399
+      ]
+    ]
+  },
   "o8adVG": {
     "message": "10mb file uploads",
     "placeholders": {},
@@ -573,7 +598,7 @@
     "origin": [
       [
         "src/views/home/components/BoardPreview.tsx",
-        210
+        214
       ]
     ],
     "translation": ""
@@ -585,10 +610,22 @@
     "origin": [
       [
         "src/views/home/components/BoardPreview.tsx",
-        132
+        136
       ]
     ],
     "translation": ""
+  },
+  "bCOxYJ": {
+    "translation": "",
+    "message": "13 days ago",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        401
+      ]
+    ]
   },
   "gkxGkF": {
     "message": "14 day free trial · Switch plans or cancel anytime",
@@ -612,28 +649,28 @@
     "obsolete": true
   },
   "9gUVmY": {
-    "translation": "",
     "message": "14th Aug",
     "placeholders": {},
     "comments": [],
     "origin": [
       [
         "src/views/home/components/BoardPreview.tsx",
-        179
+        183
       ]
-    ]
+    ],
+    "translation": ""
   },
   "BAWAzs": {
-    "translation": "",
     "message": "18th Aug",
     "placeholders": {},
     "comments": [],
     "origin": [
       [
         "src/views/home/components/BoardPreview.tsx",
-        220
+        224
       ]
-    ]
+    ],
+    "translation": ""
   },
   "3jG79i": {
     "message": "19th Aug",
@@ -642,10 +679,22 @@
     "origin": [
       [
         "src/views/home/components/BoardPreview.tsx",
-        239
+        243
       ]
     ],
     "translation": ""
+  },
+  "eQ7Fxc": {
+    "translation": "",
+    "message": "2 days ago",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        375
+      ]
+    ]
   },
   "HCLj1r": {
     "message": "2 months",
@@ -659,6 +708,30 @@
     ],
     "translation": "2 měsíce"
   },
+  "mLb7Oi": {
+    "translation": "",
+    "message": "2 weeks ago",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        402
+      ]
+    ]
+  },
+  "vhxjfD": {
+    "translation": "",
+    "message": "22 Aug",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        210
+      ]
+    ]
+  },
   "BO5+Am": {
     "message": "22nd Aug",
     "placeholders": {},
@@ -666,22 +739,46 @@
     "origin": [
       [
         "src/views/home/components/BoardPreview.tsx",
-        262
+        266
       ]
     ],
     "translation": ""
   },
-  "S2qNRJ": {
+  "hgZcvW": {
     "translation": "",
+    "message": "23 days ago",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        506
+      ]
+    ]
+  },
+  "t17+Yj": {
+    "translation": "",
+    "message": "25 Aug",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        253
+      ]
+    ]
+  },
+  "S2qNRJ": {
     "message": "25th Aug",
     "placeholders": {},
     "comments": [],
     "origin": [
       [
         "src/views/home/components/BoardPreview.tsx",
-        147
+        151
       ]
-    ]
+    ],
+    "translation": ""
   },
   "tX9HsP": {
     "message": "3 months for {POWERPACK_PRICE}",
@@ -751,10 +848,22 @@
     "origin": [
       [
         "src/views/home/components/BoardPreview.tsx",
-        157
+        161
       ]
     ],
     "translation": ""
+  },
+  "CCh1fD": {
+    "translation": "",
+    "message": "4 days ago",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        379
+      ]
+    ]
   },
   "4obmDr": {
     "message": "404 - Page Not Found | kan.bn",
@@ -780,6 +889,54 @@
       ]
     ],
     "translation": "404 – Stránka nenalezena | shortlistOS"
+  },
+  "VEFf6j": {
+    "translation": "",
+    "message": "5 days ago",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        383
+      ]
+    ]
+  },
+  "wsJfp+": {
+    "translation": "",
+    "message": "6 days ago",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        387
+      ]
+    ]
+  },
+  "mRpY0m": {
+    "translation": "",
+    "message": "8 days ago",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        391
+      ]
+    ]
+  },
+  "ORH8kd": {
+    "translation": "",
+    "message": "9 days ago",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        395
+      ]
+    ]
   },
   "W10crv": {
     "message": "A complete history of what happened",
@@ -843,6 +1000,30 @@
     "translation": "Výkonná a flexibilní kanbanová aplikace, která vám pomůže organizovat práci, sledovat průběh a dosahovat výsledků – vše na jednom místě.",
     "obsolete": true
   },
+  "ta8ulW": {
+    "translation": "",
+    "message": "A private calendar feed for scheduled interviews, compatible with Google Calendar, Outlook, and other calendar apps.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/pricing/components/PricingCards.tsx",
+        72
+      ]
+    ]
+  },
+  "eGJxZW": {
+    "translation": "",
+    "message": "A shortlist is a <0>board for one job search</0>. Its columns follow the natural stages of a job application. From saving and applying through interviews, offers, and finally, negotiation. Move an opportunity from left to right as you progress.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        916
+      ]
+    ]
+  },
   "81XFAP": {
     "message": "A shortlist is a <0>board for one job search</0>. Its columns follow the natural stages, from saving and applying through interviews, offers, and negotiation. Move an opportunity from left to right as you progress.",
     "placeholders": {},
@@ -853,7 +1034,8 @@
         456
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "2lFWmq": {
     "message": "A shortlist is a board for one job search. It holds the jobs you are considering and shows whether each one is saved, applied for, interviewing, offered, or finished. You can make as many shortlists as you need.",
@@ -977,32 +1159,36 @@
     "comments": [],
     "origin": [
       [
+        "src/pages/get-started.tsx",
+        248
+      ],
+      [
         "src/views/boards/components/TemplateBoards.tsx",
         30
       ],
       [
         "src/views/home/components/BoardPreview.tsx",
-        116
+        120
       ],
       [
         "src/views/home/components/BoardPreview.tsx",
-        130
+        134
       ],
       [
         "src/views/home/components/BoardPreview.tsx",
-        171
+        175
       ],
       [
         "src/views/home/components/BoardPreview.tsx",
-        208
+        212
       ],
       [
         "src/views/home/components/BoardPreview.tsx",
-        268
+        272
       ],
       [
         "src/views/home/components/BoardPreview.tsx",
-        286
+        290
       ]
     ],
     "translation": "Nadprůměrná mzda"
@@ -1030,7 +1216,7 @@
       ],
       [
         "src/views/home/components/BoardPreview.tsx",
-        275
+        279
       ]
     ],
     "translation": "Přijato"
@@ -1095,6 +1281,18 @@
     ],
     "translation": "Správce účtu",
     "obsolete": true
+  },
+  "51tJbN": {
+    "translation": "",
+    "message": "Account Manager at CopperFox",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        172
+      ]
+    ]
   },
   "7L01XJ": {
     "message": "Actions",
@@ -1187,10 +1385,6 @@
     "comments": [],
     "origin": [
       [
-        "src/pages/get-started.tsx",
-        317
-      ],
-      [
         "src/views/public/board/CardModal.tsx",
         209
       ]
@@ -1204,7 +1398,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        71
+        95
       ],
       [
         "src/views/pricing/components/PricingCards.tsx",
@@ -1305,7 +1499,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        495
+        999
       ]
     ],
     "translation": ""
@@ -1320,7 +1514,20 @@
         110
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
+  },
+  "dV9EFD": {
+    "translation": "",
+    "message": "Add a private shortlistOS calendar feed to Google Calendar, Apple Calendar, Outlook, or another calendar app. Your scheduled interview dates will appear in the calendar you already use.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        124
+      ]
+    ]
   },
   "Fn2Jhv": {
     "message": "Add an interview reflection, record a recruiter call, mention a workspace member, or explain why you made a decision. Comments are timestamped and stay in the activity timeline.",
@@ -1370,7 +1577,8 @@
         520
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "Gxxi5J": {
     "message": "Add checklist",
@@ -1693,7 +1901,8 @@
         322
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "T21jY/": {
     "message": "added a label to the card",
@@ -1747,6 +1956,18 @@
     ],
     "translation": "přidal(a) přílohu <0>{0}</0>"
   },
+  "LKM5t8": {
+    "translation": "",
+    "message": "added an attachment project-manager-resume.pdf",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        370
+      ]
+    ]
+  },
   "wakO3W": {
     "message": "added checklist <0>{0}</0>",
     "placeholders": {
@@ -1762,6 +1983,18 @@
       ]
     ],
     "translation": "přidal(a) kontrolní seznam <0>{0}</0>"
+  },
+  "2q/XKB": {
+    "translation": "",
+    "message": "added checklist Interview preparation",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        378
+      ]
+    ]
   },
   "E0t3jO": {
     "message": "added checklist item <0>{0}</0>",
@@ -1794,6 +2027,18 @@
       ]
     ],
     "translation": "přidal(a) štítek <0>{0}</0>"
+  },
+  "Sltiho": {
+    "translation": "",
+    "message": "added label Application confirmed",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        390
+      ]
+    ]
   },
   "pL78ec": {
     "message": "Added to favorites",
@@ -1882,6 +2127,18 @@
     ],
     "translation": "Role administrátorů",
     "obsolete": true
+  },
+  "C7vNwV": {
+    "translation": "",
+    "message": "Administrative Assistant at Silverline Tech",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        303
+      ]
+    ]
   },
   "Kec+/t": {
     "message": "Advanced admin controls",
@@ -2023,6 +2280,18 @@
     ],
     "translation": ""
   },
+  "Hk3dPb": {
+    "translation": "",
+    "message": "All the important data in one place",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        1044
+      ]
+    ]
+  },
   "Z3krJD": {
     "message": "Allow workspace members to see each other's email addresses",
     "placeholders": {},
@@ -2111,6 +2380,18 @@
     ],
     "translation": "Došlo k neočekávané chybě. Zkuste to prosím později."
   },
+  "2wUA8I": {
+    "translation": "",
+    "message": "Annotated shortlistOS screen showing a workspace containing shortlists, with each shortlist containing job opportunities.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        980
+      ]
+    ]
+  },
   "YkfDoz": {
     "message": "Annual",
     "placeholders": {},
@@ -2169,7 +2450,8 @@
         314
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "LmAW8D": {
     "translation": "",
@@ -2181,7 +2463,8 @@
         "src/views/home/components/BoardPreview.tsx",
         145
       ]
-    ]
+    ],
+    "obsolete": true
   },
   "ECJKc4": {
     "message": "API key created",
@@ -2275,15 +2558,35 @@
     "comments": [],
     "origin": [
       [
+        "src/pages/get-started.tsx",
+        219
+      ],
+      [
+        "src/pages/get-started.tsx",
+        352
+      ],
+      [
         "src/views/boards/components/TemplateBoards.tsx",
         29
       ],
       [
         "src/views/home/components/BoardPreview.tsx",
-        177
+        181
       ]
     ],
     "translation": "Žádost potvrzena"
+  },
+  "7yENKS": {
+    "translation": "",
+    "message": "Applications awaiting a follow-up",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        156
+      ]
+    ]
   },
   "wTOwz+": {
     "message": "Applied",
@@ -2292,7 +2595,19 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        188
+        215
+      ],
+      [
+        "src/pages/get-started.tsx",
+        386
+      ],
+      [
+        "src/pages/get-started.tsx",
+        394
+      ],
+      [
+        "src/pages/get-started.tsx",
+        804
       ],
       [
         "src/views/boards/components/TemplateBoards.tsx",
@@ -2300,7 +2615,7 @@
       ],
       [
         "src/views/home/components/BoardPreview.tsx",
-        152
+        156
       ]
     ],
     "translation": "Přihlášeno"
@@ -2315,7 +2630,8 @@
         134
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "yb/fjw": {
     "message": "Approval",
@@ -2562,7 +2878,8 @@
         130
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "HWcYcj": {
     "message": "Assign an opportunity or invite someone you trust to help with your search.",
@@ -2618,6 +2935,18 @@
     ],
     "translation": "ve společnosti"
   },
+  "ooA+hm": {
+    "translation": "",
+    "message": "At a glance",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        1069
+      ]
+    ]
+  },
   "QOwlKb": {
     "message": "Attach your CV, cover letter, portfolio, job advert, interview task, or offer. You will not have to search through downloads and old email threads later.",
     "placeholders": {},
@@ -2628,7 +2957,8 @@
         551
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "erzpfO": {
     "message": "Attach your tailored CV, cover letter, portfolio, job advert, interview exercise, or offer. Files remain connected to the opportunity instead of disappearing into downloads and email threads.",
@@ -2653,7 +2983,8 @@
         321
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "iVIGZb": {
     "message": "Attachment uploaded",
@@ -2677,7 +3008,8 @@
         66
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "sqy+pP": {
     "message": "Attachments keep the evidence close",
@@ -2767,7 +3099,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        144
+        143
       ]
     ],
     "translation": ""
@@ -2782,7 +3114,8 @@
         141
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "V2ICFL": {
     "message": "Automatic company sentiment from Glassdoor and social channels",
@@ -2794,7 +3127,8 @@
         80
       ]
     ],
-    "translation": "Automatická analýza pověsti společnosti z Glassdooru a sociálních sítí"
+    "translation": "Automatická analýza pověsti společnosti z Glassdooru a sociálních sítí",
+    "obsolete": true
   },
   "+VITYp": {
     "message": "Automatic feed you can import into your Google or Outlook calendar to keep track of upcoming interviews or follow-ups.",
@@ -2806,7 +3140,8 @@
         72
       ]
     ],
-    "translation": "Automatický kalendářový kanál, který můžete importovat do Google Calendar nebo Outlooku a sledovat v něm nadcházející pohovory a další kroky."
+    "translation": "Automatický kalendářový kanál, který můžete importovat do Google Calendar nebo Outlooku a sledovat v něm nadcházející pohovory a další kroky.",
+    "obsolete": true
   },
   "BgSJNE": {
     "translation": "",
@@ -2946,7 +3281,8 @@
         333
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "FFv0Vh": {
     "message": "Automation",
@@ -3036,7 +3372,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        405
+        865
       ]
     ],
     "translation": ""
@@ -3063,7 +3399,8 @@
         168
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "YKWbof": {
     "message": "Backend Architect at Vertex Works",
@@ -3075,7 +3412,8 @@
         213
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "MaRjuT": {
     "translation": "",
@@ -3087,7 +3425,8 @@
         "src/views/home/components/BoardPreview.tsx",
         188
       ]
-    ]
+    ],
+    "obsolete": true
   },
   "ZCDm4p": {
     "message": "Backend Developer at OrbitStack",
@@ -3099,7 +3438,8 @@
         295
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "ABHAFB": {
     "message": "Backend Engineer",
@@ -3124,7 +3464,8 @@
         "src/views/home/components/BoardPreview.tsx",
         140
       ]
-    ]
+    ],
+    "obsolete": true
   },
   "KNKCTb": {
     "message": "Backlog",
@@ -3550,6 +3891,18 @@
     "translation": "Brainstorming",
     "obsolete": true
   },
+  "ilV1UT": {
+    "translation": "",
+    "message": "Brand Manager at Atlas Foundry",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        237
+      ]
+    ]
+  },
   "wkB3Ee": {
     "message": "Break preparation, applications, and interview loops into small, visible steps.",
     "placeholders": {},
@@ -3601,6 +3954,18 @@
     ],
     "translation": "Vytvořeno nezávisle pro lidi, kteří už tak dělají náročnou věc."
   },
+  "zsL+Ne": {
+    "translation": "",
+    "message": "Business Analyst at Northstar Labs",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        252
+      ]
+    ]
+  },
   "0M7ynb": {
     "message": "By creating an account, you agree to our <0><1>Privacy Policy</1></0> and <2><3>Terms of Use</3></2>.",
     "placeholders": {},
@@ -3633,7 +3998,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        109
+        123
       ],
       [
         "src/views/settings/BoardsSettings.tsx",
@@ -3664,7 +4029,24 @@
         156
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
+  },
+  "lSeEEO": {
+    "translation": "",
+    "message": "Calendar feed for scheduled interviews",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/pricing/components/FeatureComparisonTable.tsx",
+        95
+      ],
+      [
+        "src/views/settings/PowerpackSettings.tsx",
+        156
+      ]
+    ]
   },
   "t6FvJH": {
     "message": "Can add comments",
@@ -4250,7 +4632,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        124
+        133
       ],
       [
         "src/views/settings/BoardsSettings.tsx",
@@ -4368,7 +4750,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        125
+        134
       ]
     ],
     "translation": ""
@@ -4553,7 +4935,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        56
+        85
       ]
     ],
     "translation": "Kontrolní seznamy"
@@ -4604,7 +4986,8 @@
         115
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "IRZVkN": {
     "message": "Choose how long an opportunity may sit in a stage before you are reminded. Get useful nudges for saved roles, applications, interviews, and negotiations instead of relying on memory.",
@@ -4663,6 +5046,18 @@
       ]
     ],
     "translation": "Zvolte Powerpack pro automatizaci, používejte celý pracovní prostor zdarma, nebo si otevřené jádro hostujte sami."
+  },
+  "4jD9cK": {
+    "translation": "",
+    "message": "Choose when shortlistOS should email you about opportunities that have stopped moving.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        153
+      ]
+    ]
   },
   "sdhDui": {
     "translation": "",
@@ -4809,6 +5204,18 @@
     ],
     "translation": "Zavřít"
   },
+  "47L1V1": {
+    "translation": "",
+    "message": "Close image",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        974
+      ]
+    ]
+  },
   "D87pha": {
     "message": "Closed",
     "placeholders": {},
@@ -4907,10 +5314,6 @@
     "comments": [],
     "origin": [
       [
-        "src/pages/get-started.tsx",
-        61
-      ],
-      [
         "src/views/home/components/Features.tsx",
         105
       ]
@@ -4930,11 +5333,27 @@
     "translation": "",
     "obsolete": true
   },
+  "KkwQZB": {
+    "translation": "",
+    "message": "Communications Manager at Cobalt Labs",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        261
+      ]
+    ]
+  },
   "7i8j3G": {
     "message": "Company",
     "placeholders": {},
     "comments": [],
     "origin": [
+      [
+        "src/pages/get-started.tsx",
+        347
+      ],
       [
         "src/views/board/components/NewCardForm.tsx",
         391
@@ -4942,10 +5361,6 @@
       [
         "src/views/card/index.tsx",
         1672
-      ],
-      [
-        "src/views/home/components/Footer.tsx",
-        112
       ]
     ],
     "translation": "Společnost"
@@ -4960,7 +5375,8 @@
         43
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "GK8ItP": {
     "message": "Company HQ",
@@ -5020,7 +5436,24 @@
         67
       ]
     ],
-    "translation": "Online pověst společnosti"
+    "translation": "Online pověst společnosti",
+    "obsolete": true
+  },
+  "mj+7iW": {
+    "translation": "",
+    "message": "Company rating snapshot",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        108
+      ],
+      [
+        "src/views/pricing/components/PricingCards.tsx",
+        67
+      ]
+    ]
   },
   "I/RAD2": {
     "message": "Company ratings and employer insights",
@@ -5032,7 +5465,8 @@
         94
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "eAuGzG": {
     "message": "Company sentiment",
@@ -5129,6 +5563,18 @@
     ],
     "translation": "dokončil(a) položku kontrolního seznamu <0>{0}</0>"
   },
+  "86+Pks": {
+    "translation": "",
+    "message": "completed checklist item Review the company and role",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        366
+      ]
+    ]
+  },
   "tOZp9v": {
     "message": "Configurable user roles and permissions",
     "placeholders": {},
@@ -5165,6 +5611,18 @@
       ]
     ],
     "translation": "Nastavte, které akce jsou povoleny pro jednotlivé role pracovního prostoru. Tato oprávnění platí pro všechny členy s danou rolí."
+  },
+  "nwBkks": {
+    "translation": "",
+    "message": "Confirm the interview time",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        452
+      ]
+    ]
   },
   "86XI28": {
     "message": "Confirm your email preferences:",
@@ -5269,7 +5727,7 @@
     "origin": [
       [
         "src/views/home/components/Footer.tsx",
-        116
+        111
       ]
     ],
     "translation": "Kontakt"
@@ -5305,6 +5763,10 @@
     "comments": [],
     "origin": [
       [
+        "src/pages/get-started.tsx",
+        70
+      ],
+      [
         "src/views/card/index.tsx",
         1110
       ]
@@ -5323,6 +5785,18 @@
     ],
     "translation": "Tvorba obsahu",
     "obsolete": true
+  },
+  "KrqMGO": {
+    "translation": "",
+    "message": "Content Writer at Creative Heroes",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        167
+      ]
+    ]
   },
   "xGVfLh": {
     "message": "Continue",
@@ -5385,6 +5859,10 @@
     "placeholders": {},
     "comments": [],
     "origin": [
+      [
+        "src/pages/get-started.tsx",
+        348
+      ],
       [
         "src/views/card/index.tsx",
         297
@@ -5535,6 +6013,18 @@
     "translation": "Kopírovat ID požadavku",
     "obsolete": true
   },
+  "FxmcEj": {
+    "translation": "",
+    "message": "Copywriter at Pinecone Digital",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        313
+      ]
+    ]
+  },
   "9PaIxv": {
     "message": "Core features",
     "placeholders": {},
@@ -5586,7 +6076,8 @@
         639
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "vgdzLf": {
     "message": "Create another",
@@ -5626,12 +6117,11 @@
     "comments": [],
     "origin": [
       [
-        "src/views/board/components/NewCardForm.tsx",
-        537
+        "src/pages/get-started.tsx",
+        812
       ]
     ],
-    "translation": "Vytvořit kartu",
-    "obsolete": true
+    "translation": "Vytvořit kartu"
   },
   "d33Usy": {
     "message": "Create checklist",
@@ -5650,6 +6140,10 @@
     "placeholders": {},
     "comments": [],
     "origin": [
+      [
+        "src/pages/get-started.tsx",
+        1182
+      ],
       [
         "src/views/home/components/FinalCta.tsx",
         5
@@ -5778,6 +6272,18 @@
     "translation": "",
     "obsolete": true
   },
+  "UzegkH": {
+    "translation": "",
+    "message": "Create or update card",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        812
+      ]
+    ]
+  },
   "A5hiCy": {
     "message": "Create template",
     "placeholders": {},
@@ -5868,6 +6374,10 @@
     "comments": [],
     "origin": [
       [
+        "src/pages/get-started.tsx",
+        344
+      ],
+      [
         "src/views/card/index.tsx",
         1618
       ],
@@ -5919,6 +6429,10 @@
     "placeholders": {},
     "comments": [],
     "origin": [
+      [
+        "src/pages/get-started.tsx",
+        402
+      ],
       [
         "src/views/card/components/ActivityList.tsx",
         171
@@ -6182,6 +6696,18 @@
     "translation": "Vlastní uživatelské jméno pracovního prostoru",
     "obsolete": true
   },
+  "nVU6aT": {
+    "translation": "",
+    "message": "Customer Success Manager at Riverbyte",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        202
+      ]
+    ]
+  },
   "n+xLOH": {
     "message": "Customer Support",
     "placeholders": {},
@@ -6194,6 +6720,18 @@
     ],
     "translation": "Zákaznická podpora",
     "obsolete": true
+  },
+  "MqPd21": {
+    "translation": "",
+    "message": "Customer Support Specialist at BrightRail",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        124
+      ]
+    ]
   },
   "2SQ/G3": {
     "message": "Czechia",
@@ -6242,6 +6780,18 @@
       ]
     ],
     "translation": "Tmavý"
+  },
+  "TcSJny": {
+    "translation": "",
+    "message": "Data Analyst at Kiteworks",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        192
+      ]
+    ]
   },
   "cp1rsD": {
     "message": "Deactivate invite link",
@@ -6598,7 +7148,8 @@
         50
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "7VxSHI": {
     "message": "Description is optional. Use it for requirements, recruiter notes, salary hints, or anything you do not want to lose.",
@@ -6611,6 +7162,18 @@
       ]
     ],
     "translation": "Popis je volitelný. Použijte ho pro požadavky, poznámky od náboráře, informace o platu nebo cokoli, co nechcete ztratit."
+  },
+  "jM2QBM": {
+    "translation": "",
+    "message": "Description, links, attachments",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        75
+      ]
+    ]
   },
   "f8fH8W": {
     "message": "Design",
@@ -6645,7 +7208,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        185
+        208
       ]
     ],
     "translation": ""
@@ -6656,11 +7219,27 @@
     "comments": [],
     "origin": [
       [
+        "src/pages/get-started.tsx",
+        580
+      ],
+      [
         "src/views/card/index.tsx",
         1590
       ]
     ],
     "translation": "Podrobnosti"
+  },
+  "6b0YfE": {
+    "translation": "",
+    "message": "Digital Marketing Manager at LimePeak",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        288
+      ]
+    ]
   },
   "E/QGRL": {
     "message": "Disabled",
@@ -6911,7 +7490,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        566
+        1075
       ]
     ],
     "translation": ""
@@ -6922,20 +7501,24 @@
     "comments": [],
     "origin": [
       [
-        "src/views/home/components/BoardPreview.tsx",
-        189
+        "src/pages/get-started.tsx",
+        232
       ],
       [
         "src/views/home/components/BoardPreview.tsx",
-        235
+        193
       ],
       [
         "src/views/home/components/BoardPreview.tsx",
-        249
+        239
       ],
       [
         "src/views/home/components/BoardPreview.tsx",
-        279
+        253
+      ],
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        283
       ]
     ],
     "translation": ""
@@ -6974,7 +7557,8 @@
         46
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "ri1hHe": {
     "message": "Due next month",
@@ -7076,6 +7660,18 @@
     ],
     "translation": "Duplikuje se…"
   },
+  "1nuZcC": {
+    "translation": "",
+    "message": "E-commerce Manager at Nimbus Commerce",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        222
+      ]
+    ]
+  },
   "/meuIs": {
     "message": "e.g. \"Pete's Workspace\", \"Job hunt\", etc.",
     "placeholders": {},
@@ -7147,7 +7743,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        560
+        1063
       ]
     ],
     "translation": ""
@@ -7159,7 +7755,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        491
+        995
       ]
     ],
     "translation": ""
@@ -7381,15 +7977,23 @@
     "comments": [],
     "origin": [
       [
-        "src/pages/get-started.tsx",
-        114
-      ],
-      [
         "src/views/settings/BoardsSettings.tsx",
         440
       ]
     ],
     "translation": "E-mailové připomínky"
+  },
+  "6zjlJE": {
+    "translation": "",
+    "message": "Email reminders and nudges",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        150
+      ]
+    ]
   },
   "EknAYx": {
     "message": "Email reminders for upcoming interviews and next actions",
@@ -7665,24 +8269,32 @@
     "comments": [],
     "origin": [
       [
+        "src/pages/get-started.tsx",
+        249
+      ],
+      [
+        "src/pages/get-started.tsx",
+        354
+      ],
+      [
         "src/views/boards/components/TemplateBoards.tsx",
         32
       ],
       [
         "src/views/home/components/BoardPreview.tsx",
-        146
+        150
       ],
       [
         "src/views/home/components/BoardPreview.tsx",
-        236
+        240
       ],
       [
         "src/views/home/components/BoardPreview.tsx",
-        244
+        248
       ],
       [
         "src/views/home/components/BoardPreview.tsx",
-        260
+        264
       ]
     ],
     "translation": "Podíl ve společnosti"
@@ -7968,6 +8580,18 @@
     ],
     "translation": "Události"
   },
+  "Cb2QpJ": {
+    "translation": "",
+    "message": "Every new shortlist comes with a complete job-search pipeline, ready to use.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        1082
+      ]
+    ]
+  },
   "rhyhek": {
     "message": "Every opportunity follows a clear path from inbox to application, interview, offer, and final outcome.",
     "placeholders": {},
@@ -8000,7 +8624,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        100
+        114
       ]
     ],
     "translation": ""
@@ -8044,6 +8668,18 @@
     "translation": "Realizace",
     "obsolete": true
   },
+  "IpxUYt": {
+    "translation": "",
+    "message": "Executive Assistant at Danube Software",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        270
+      ]
+    ]
+  },
   "eBnYPE": {
     "message": "Explore Powerpack",
     "placeholders": {},
@@ -8051,7 +8687,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        603
+        1123
       ]
     ],
     "translation": ""
@@ -8306,7 +8942,7 @@
     "origin": [
       [
         "src/views/home/components/Footer.tsx",
-        107
+        98
       ],
       [
         "src/views/home/components/Header.tsx",
@@ -8453,6 +9089,18 @@
     ],
     "translation": "Filtrovat"
   },
+  "/Lw8+O": {
+    "translation": "",
+    "message": "Finance Assistant at Morava Digital",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        227
+      ]
+    ]
+  },
   "l31EoQ": {
     "message": "Find answers to common questions about Kan. Can't find what you're looking for? Feel free to <0>contact us</0>.",
     "placeholders": {},
@@ -8535,7 +9183,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        429
+        889
       ]
     ],
     "translation": ""
@@ -8554,7 +9202,8 @@
         171
       ]
     ],
-    "translation": "Upozornění na další kontakt, když společnost přestane odpovídat"
+    "translation": "Upozornění na další kontakt, když společnost přestane odpovídat",
+    "obsolete": true
   },
   "Bp1atT": {
     "message": "Follow-up reminder",
@@ -8567,6 +9216,22 @@
       ]
     ],
     "translation": "Připomínka dalšího kontaktu"
+  },
+  "8zkREM": {
+    "translation": "",
+    "message": "Follow-up reminder for inactive applications",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/pricing/components/FeatureComparisonTable.tsx",
+        110
+      ],
+      [
+        "src/views/settings/PowerpackSettings.tsx",
+        171
+      ]
+    ]
   },
   "PxgCqS": {
     "translation": "",
@@ -8617,6 +9282,18 @@
     ],
     "translation": "navždy"
   },
+  "rxWGWX": {
+    "translation": "",
+    "message": "Forward",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        724
+      ]
+    ]
+  },
   "P7Z0So": {
     "message": "Forward job alerts and recruiter emails to your Magic Inbox. shortlistOS can create new opportunities or update existing ones automatically.",
     "placeholders": {},
@@ -8651,7 +9328,20 @@
         353
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
+  },
+  "0yRKBS": {
+    "translation": "",
+    "message": "Forward to shortlistOS",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        759
+      ]
+    ]
   },
   "4wqHjT": {
     "message": "Founding Engineer",
@@ -8764,6 +9454,18 @@
     ],
     "translation": "od"
   },
+  "ke51VK": {
+    "translation": "",
+    "message": "Frontend Developer",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        694
+      ]
+    ]
+  },
   "xb6R4u": {
     "message": "Frontend roles",
     "placeholders": {},
@@ -8774,7 +9476,8 @@
         339
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "6uBU1F": {
     "message": "Full API access",
@@ -8849,11 +9552,27 @@
     ],
     "translation": "Kompletní zdrojový kód"
   },
+  "gKdQXS": {
+    "translation": "",
+    "message": "Full Stack Developer",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        411
+      ]
+    ]
+  },
   "XS6v74": {
     "message": "Full time",
     "placeholders": {},
     "comments": [],
     "origin": [
+      [
+        "src/pages/get-started.tsx",
+        348
+      ],
       [
         "src/views/card/index.tsx",
         295
@@ -8871,7 +9590,8 @@
         "src/views/home/components/BoardPreview.tsx",
         135
       ]
-    ]
+    ],
+    "obsolete": true
   },
   "W0E9Wg": {
     "message": "Full-Stack Developer at Creative Heroes",
@@ -8883,7 +9603,8 @@
         163
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "jUmzYf": {
     "translation": "",
@@ -8895,7 +9616,8 @@
         "src/views/home/components/BoardPreview.tsx",
         218
       ]
-    ]
+    ],
+    "obsolete": true
   },
   "tkC8tr": {
     "message": "Full-Stack Engineer at NovaGrid",
@@ -8907,7 +9629,8 @@
         278
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "KiVc+q": {
     "message": "Full-time",
@@ -9007,7 +9730,8 @@
         155
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "8clAsm": {
     "message": "Get an email when an interview process has not moved for the number of days you choose.",
@@ -9019,7 +9743,8 @@
         150
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "7V7GWq": {
     "message": "Get an email when it may be time to follow up on an application that has gone quiet.",
@@ -9031,7 +9756,8 @@
         135
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "aNpYYp": {
     "message": "Get reminders for upcoming interviews, unanswered applications, overdue follow-ups, and opportunities that have gone quiet.",
@@ -9057,6 +9783,10 @@
       [
         "src/views/home/components/Cta.tsx",
         61
+      ],
+      [
+        "src/views/home/components/Footer.tsx",
+        97
       ]
     ],
     "translation": "Začít"
@@ -9085,7 +9815,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        398
+        858
       ]
     ],
     "translation": ""
@@ -9233,7 +9963,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        411
+        871
       ]
     ],
     "translation": ""
@@ -9245,7 +9975,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        139
+        138
       ]
     ],
     "translation": ""
@@ -9258,10 +9988,6 @@
       [
         "src/views/home/components/Footer.tsx",
         79
-      ],
-      [
-        "src/views/home/components/Footer.tsx",
-        103
       ],
       [
         "src/views/settings/IntegrationsSettings.tsx",
@@ -9479,7 +10205,8 @@
         95
       ]
     ],
-    "translation": "Synchronizace pohovorů a dalších kroků s Google Calendar"
+    "translation": "Synchronizace pohovorů a dalších kroků s Google Calendar",
+    "obsolete": true
   },
   "cdyS7J": {
     "message": "Google SSO",
@@ -9527,6 +10254,18 @@
     ],
     "translation": "Uložte si jakoukoli zajímavou pracovní nabídku z internetu do seznamu bez ručního kopírování."
   },
+  "hgA5Q9": {
+    "translation": "",
+    "message": "Graphic Designer at Blue Oak Systems",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        139
+      ]
+    ]
+  },
   "O1wAlQ": {
     "message": "Guest",
     "placeholders": {},
@@ -9549,7 +10288,8 @@
         108
       ]
     ],
-    "translation": "Nápověda"
+    "translation": "Nápověda",
+    "obsolete": true
   },
   "+5nGUx": {
     "message": "High priority",
@@ -9557,32 +10297,44 @@
     "comments": [],
     "origin": [
       [
-        "src/views/home/components/BoardPreview.tsx",
-        129
+        "src/pages/get-started.tsx",
+        204
+      ],
+      [
+        "src/pages/get-started.tsx",
+        233
+      ],
+      [
+        "src/pages/get-started.tsx",
+        353
       ],
       [
         "src/views/home/components/BoardPreview.tsx",
-        170
+        133
       ],
       [
         "src/views/home/components/BoardPreview.tsx",
-        184
+        174
       ],
       [
         "src/views/home/components/BoardPreview.tsx",
-        200
+        188
       ],
       [
         "src/views/home/components/BoardPreview.tsx",
-        219
+        204
       ],
       [
         "src/views/home/components/BoardPreview.tsx",
-        237
+        223
       ],
       [
         "src/views/home/components/BoardPreview.tsx",
-        259
+        241
+      ],
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        263
       ]
     ],
     "translation": ""
@@ -9643,6 +10395,10 @@
     "comments": [],
     "origin": [
       [
+        "src/pages/get-started.tsx",
+        491
+      ],
+      [
         "src/views/card/index.tsx",
         2415
       ]
@@ -9694,7 +10450,7 @@
     "origin": [
       [
         "src/views/home/components/Footer.tsx",
-        195
+        190
       ]
     ],
     "translation": "Hostováno v"
@@ -9783,6 +10539,18 @@
     ],
     "translation": ""
   },
+  "XuuCzV": {
+    "translation": "",
+    "message": "HR Assistant at Amber Cloud",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        187
+      ]
+    ]
+  },
   "6S8zjx": {
     "message": "https://www.youtube.com/watch?v=...",
     "placeholders": {},
@@ -9806,11 +10574,11 @@
       ],
       [
         "src/views/home/components/BoardPreview.tsx",
-        136
+        140
       ],
       [
         "src/views/home/components/BoardPreview.tsx",
-        156
+        160
       ]
     ],
     "translation": "Hybridně"
@@ -9884,7 +10652,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        140
+        139
       ]
     ],
     "translation": ""
@@ -10027,12 +10795,20 @@
     "comments": [],
     "origin": [
       [
+        "src/pages/get-started.tsx",
+        374
+      ],
+      [
+        "src/pages/get-started.tsx",
+        386
+      ],
+      [
         "src/views/boards/components/TemplateBoards.tsx",
         20
       ],
       [
         "src/views/home/components/BoardPreview.tsx",
-        195
+        199
       ]
     ],
     "translation": "V kontaktu"
@@ -10176,6 +10952,10 @@
     "comments": [],
     "origin": [
       [
+        "src/pages/get-started.tsx",
+        343
+      ],
+      [
         "src/views/board/components/NewCardForm.tsx",
         545
       ],
@@ -10196,7 +10976,8 @@
         278
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "gzSc9t": {
     "translation": "",
@@ -10224,6 +11005,18 @@
     "translation": "Pohovor za 1 týd.",
     "obsolete": true
   },
+  "xLDGDN": {
+    "translation": "",
+    "message": "Interview invitation",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        716
+      ]
+    ]
+  },
   "o2gHA/": {
     "message": "Interview preparation",
     "placeholders": {},
@@ -10231,10 +11024,22 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        294
+        442
       ]
     ],
     "translation": ""
+  },
+  "p9+g+q": {
+    "translation": "",
+    "message": "Interview processes that have gone quiet",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        157
+      ]
+    ]
   },
   "t34cJl": {
     "message": "Interview tomorrow",
@@ -10246,7 +11051,8 @@
         240
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "goklcJ": {
     "message": "Interviewing",
@@ -10255,11 +11061,19 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        192
+        227
       ],
       [
         "src/pages/get-started.tsx",
-        262
+        342
+      ],
+      [
+        "src/pages/get-started.tsx",
+        374
+      ],
+      [
+        "src/pages/get-started.tsx",
+        842
       ],
       [
         "src/views/boards/components/TemplateBoards.tsx",
@@ -10267,7 +11081,7 @@
       ],
       [
         "src/views/home/components/BoardPreview.tsx",
-        230
+        234
       ]
     ],
     "translation": "Pohovor"
@@ -10282,7 +11096,8 @@
         149
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "XILg0L": {
     "message": "Invalid email address",
@@ -10473,12 +11288,16 @@
     "comments": [],
     "origin": [
       [
-        "src/views/home/components/BoardPreview.tsx",
-        338
+        "src/pages/get-started.tsx",
+        786
       ],
       [
         "src/views/home/components/BoardPreview.tsx",
-        350
+        344
+      ],
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        361
       ]
     ],
     "translation": ""
@@ -10555,10 +11374,22 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        473
+        934
       ]
     ],
     "translation": ""
+  },
+  "Dmx+Y0": {
+    "translation": "",
+    "message": "Job opportunity detail",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        406
+      ]
+    ]
   },
   "5dyv3L": {
     "message": "Job posting and company links",
@@ -10570,7 +11401,8 @@
         48
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "qyAYt3": {
     "message": "Job posting URL",
@@ -10595,6 +11427,18 @@
       ]
     ],
     "translation": "Web Clipper pro pracovní nabídky"
+  },
+  "z4VNns": {
+    "translation": "",
+    "message": "Job search pipeline",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        260
+      ]
+    ]
   },
   "qMgKul": {
     "message": "Job title",
@@ -10672,6 +11516,30 @@
       ]
     ],
     "translation": "Připojit se k pracovnímu prostoru | shortlistOS"
+  },
+  "8J0t8H": {
+    "translation": "",
+    "message": "Jun 12, 2026",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        344
+      ]
+    ]
+  },
+  "r6BXdC": {
+    "translation": "",
+    "message": "Jun 19, 2026",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        343
+      ]
+    ]
   },
   "wM8xd8": {
     "message": "Junior",
@@ -10768,7 +11636,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        490
+        994
       ]
     ],
     "translation": ""
@@ -10783,7 +11651,8 @@
         550
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "JbXXUW": {
     "message": "Keep in mind that this action is irreversible.",
@@ -10814,6 +11683,30 @@
     "translation": "",
     "obsolete": true
   },
+  "M8JVB+": {
+    "translation": "",
+    "message": "Keep recruiter and hiring-manager details close to the opportunity.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        71
+      ]
+    ]
+  },
+  "yupfDK": {
+    "translation": "",
+    "message": "Keep the employer, position, and contract type together.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        56
+      ]
+    ]
+  },
   "BNiXbX": {
     "message": "Keep the job advert, CV, cover letter, offer, and other files together.",
     "placeholders": {},
@@ -10824,7 +11717,8 @@
         67
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "7NWwrd": {
     "message": "Keep the job description, company details, salary, contacts, notes, files, and interview dates together.",
@@ -10848,7 +11742,8 @@
         571
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "gzTBW/": {
     "message": "Keep this address private",
@@ -10904,6 +11799,14 @@
     "comments": [],
     "origin": [
       [
+        "src/pages/get-started.tsx",
+        90
+      ],
+      [
+        "src/pages/get-started.tsx",
+        601
+      ],
+      [
         "src/views/board/components/CardContextLabelsModal.tsx",
         32
       ],
@@ -10957,7 +11860,8 @@
         49
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "vXIe7J": {
     "message": "Language",
@@ -10982,7 +11886,8 @@
         243
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "k7rCa/": {
     "message": "Large",
@@ -11034,6 +11939,18 @@
     "translation": "Zaváděcí nabídka: neomezený počet míst s tarifem Pro jen za 29 $ měsíčně",
     "obsolete": true
   },
+  "/j5iyW": {
+    "translation": "",
+    "message": "Lead cross-functional projects from planning to delivery, keeping timelines, stakeholders, and risks aligned.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        432
+      ]
+    ]
+  },
   "iSBwHA": {
     "message": "Lead Platform Engineer at Mosaic Systems",
     "placeholders": {},
@@ -11044,7 +11961,8 @@
         155
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "DzDzc9": {
     "message": "Lead Software Engineer at Riverbyte",
@@ -11056,7 +11974,8 @@
         198
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "SnV18C": {
     "message": "Learn how workspaces, shortlists, and opportunities fit together—then add automation when you want shortlistOS to do more of the routine work for you.",
@@ -11165,7 +12084,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        585
+        1105
       ]
     ],
     "translation": ""
@@ -11180,7 +12099,8 @@
         82
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "hy8p2U": {
     "message": "Let shortlistOS archive old saved jobs automatically, so your board stays focused on jobs you may still pursue.",
@@ -11189,7 +12109,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        145
+        144
       ]
     ],
     "translation": ""
@@ -11217,7 +12137,8 @@
         572
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "sA86eU": {
     "message": "Let's get your job search organised",
@@ -11226,7 +12147,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        414
+        874
       ]
     ],
     "translation": ""
@@ -11502,6 +12423,18 @@
     ],
     "translation": ""
   },
+  "I7W3b0": {
+    "translation": "",
+    "message": "Local opportunities",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        345
+      ]
+    ]
+  },
   "wJijgU": {
     "message": "Location",
     "placeholders": {},
@@ -11509,7 +12442,11 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        277
+        349
+      ],
+      [
+        "src/pages/get-started.tsx",
+        833
       ]
     ],
     "translation": ""
@@ -11521,7 +12458,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        44
+        60
       ]
     ],
     "translation": ""
@@ -11676,7 +12613,7 @@
     "origin": [
       [
         "src/views/home/components/Footer.tsx",
-        192
+        187
       ]
     ],
     "translation": "Vytvořeno v"
@@ -11688,7 +12625,11 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        99
+        113
+      ],
+      [
+        "src/pages/get-started.tsx",
+        770
       ],
       [
         "src/views/card/components/ActivityList.tsx",
@@ -11736,7 +12677,8 @@
         346
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "zSvxkl": {
     "message": "Magic Inbox works with emails. The Web Clipper works with job pages. Both can turn what you send into an organised opportunity.",
@@ -11748,7 +12690,8 @@
         615
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "0h3fWE": {
     "message": "Magic Inbox: forward any job email and auto-create or update cards",
@@ -11800,7 +12743,8 @@
         576
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "hB02vO": {
     "message": "Manage members",
@@ -11837,6 +12781,18 @@
       ]
     ],
     "translation": "Ručně"
+  },
+  "1QNBJb": {
+    "translation": "",
+    "message": "Mark priorities, benefits, concerns, and anything else you want to spot quickly.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        91
+      ]
+    ]
   },
   "NtPpgG": {
     "message": "Mark the opportunity as ghosted",
@@ -11901,6 +12857,18 @@
       ]
     ],
     "translation": "Marketing"
+  },
+  "lGYpwy": {
+    "translation": "",
+    "message": "Marketing Coordinator at Amber Cloud",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        118
+      ]
+    ]
   },
   "CK1KXz": {
     "message": "Max",
@@ -11989,10 +12957,6 @@
     "comments": [],
     "origin": [
       [
-        "src/pages/get-started.tsx",
-        76
-      ],
-      [
         "src/views/board/components/Filters.tsx",
         147
       ],
@@ -12046,6 +13010,10 @@
     "comments": [],
     "origin": [
       [
+        "src/pages/get-started.tsx",
+        553
+      ],
+      [
         "src/views/card/components/ActivityList.tsx",
         438
       ]
@@ -12063,6 +13031,18 @@
       ]
     ],
     "translation": "Min."
+  },
+  "pFggWU": {
+    "translation": "",
+    "message": "Missed something? No worries! A short in-app tutorial will guide you through the first steps.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        1186
+      ]
+    ]
   },
   "7AZQfM": {
     "message": "Missing NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY environment variable.",
@@ -12086,7 +13066,8 @@
         202
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "oD+rCR": {
     "message": "Mockup · replace with opportunity screenshot",
@@ -12098,7 +13079,8 @@
         257
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "kSwc8N": {
     "message": "Modify it for your own needs",
@@ -12148,6 +13130,30 @@
     ],
     "translation": "měsíční fakturace"
   },
+  "iFBGvk": {
+    "translation": "",
+    "message": "More Powerpack features",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        1152
+      ]
+    ]
+  },
+  "Yk+/Ik": {
+    "translation": "",
+    "message": "More ways to add opportunities",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        1018
+      ]
+    ]
+  },
   "Wa7S25": {
     "message": "Move a card directly between stages. Its position and activity history update with the change.",
     "placeholders": {},
@@ -12171,7 +13177,8 @@
         559
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "AJOVr9": {
     "translation": "",
@@ -12198,6 +13205,18 @@
     ],
     "translation": "Přesouvejte karty mezi fázemi Uložené, Přihlášeno, Pohovor a dalšími podle toho, jak hledání postupuje. Podrobnosti karty obsahují další pole a každá aktivita i milník se zaznamenají."
   },
+  "xaw3S7": {
+    "translation": "",
+    "message": "Move cards between stages to keep your shortlist up to date.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        1076
+      ]
+    ]
+  },
   "8bxbpj": {
     "message": "Move opportunities through each stage and always know what needs your attention next.",
     "placeholders": {},
@@ -12210,6 +13229,18 @@
     ],
     "translation": "",
     "obsolete": true
+  },
+  "hIIGmt": {
+    "translation": "",
+    "message": "Move the card as things change",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        1062
+      ]
+    ]
   },
   "uV5KLx": {
     "message": "Move the opportunity when its state changes",
@@ -12249,6 +13280,18 @@
     ],
     "translation": "Přesunout do seznamu",
     "obsolete": true
+  },
+  "rKo3hY": {
+    "translation": "",
+    "message": "moved the card from",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        536
+      ]
+    ]
   },
   "C0524U": {
     "message": "moved the card from <0>{0}</0> to <1>{1}</1>",
@@ -12311,7 +13354,8 @@
         320
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "uEGGDs": {
     "message": "My webhook",
@@ -12332,7 +13376,7 @@
     "origin": [
       [
         "src/views/home/components/BoardPreview.tsx",
-        331
+        337
       ]
     ],
     "translation": ""
@@ -12416,7 +13460,7 @@
       ],
       [
         "src/views/home/components/BoardPreview.tsx",
-        254
+        258
       ]
     ],
     "translation": "Vyjednávání"
@@ -12431,7 +13475,20 @@
         154
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
+  },
+  "OMGfG+": {
+    "translation": "",
+    "message": "Negotiations that need attention",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        158
+      ]
+    ]
   },
   "isRobC": {
     "message": "New",
@@ -12495,6 +13552,10 @@
     "placeholders": {},
     "comments": [],
     "origin": [
+      [
+        "src/pages/get-started.tsx",
+        480
+      ],
       [
         "src/views/card/components/AttachmentUpload.tsx",
         129
@@ -12631,6 +13692,18 @@
     ],
     "translation": "Nový pracovní prostor"
   },
+  "Ml2VqK": {
+    "translation": "",
+    "message": "New York, NY",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        349
+      ]
+    ]
+  },
   "5ACX4z": {
     "message": "Newsletter",
     "placeholders": {},
@@ -12670,7 +13743,8 @@
         278
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "HeFWjW": {
     "message": "Next Steps",
@@ -12720,7 +13794,7 @@
     "origin": [
       [
         "src/views/home/components/Footer.tsx",
-        198
+        193
       ]
     ],
     "translation": "Bez reklam, bez osobního sledování, v souladu s GDPR."
@@ -13112,7 +14186,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        196
+        243
       ]
     ],
     "translation": "Nabídka"
@@ -13132,6 +14206,18 @@
       ]
     ],
     "translation": ""
+  },
+  "RnoqbV": {
+    "translation": "",
+    "message": "Office Manager at Northstar Labs",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        131
+      ]
+    ]
   },
   "Fdp03t": {
     "message": "on",
@@ -13178,15 +14264,15 @@
     "origin": [
       [
         "src/views/home/components/BoardPreview.tsx",
-        121
+        125
       ],
       [
         "src/views/home/components/BoardPreview.tsx",
-        164
+        168
       ],
       [
         "src/views/home/components/BoardPreview.tsx",
-        300
+        304
       ]
     ],
     "translation": ""
@@ -13325,7 +14411,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        498
+        1002
       ]
     ],
     "translation": ""
@@ -13337,7 +14423,7 @@
     "origin": [
       [
         "src/components/WorkspaceMenu.tsx",
-        34
+        35
       ]
     ],
     "translation": "Otevřít nabídku příkazů"
@@ -13443,7 +14529,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        500
+        1004
       ]
     ],
     "translation": ""
@@ -13471,7 +14557,8 @@
         645
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "wKBCKv": {
     "message": "Open-source job search CRM with optional automation for the repetitive parts.",
@@ -13483,13 +14570,54 @@
         132
       ]
     ],
-    "translation": "Open-source CRM pro hledání práce s volitelnou automatizací opakujících se úkolů."
+    "translation": "Open-source CRM pro hledání práce s volitelnou automatizací opakujících se úkolů.",
+    "obsolete": true
+  },
+  "ob0+Xd": {
+    "translation": "",
+    "message": "Open-source job search tracker with optional automation for the repetitive parts.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/home/components/Footer.tsx",
+        127
+      ]
+    ]
+  },
+  "+/wS0Z": {
+    "translation": "",
+    "message": "Operations Manager at Mosaic Systems",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        159
+      ]
+    ]
+  },
+  "aqLLHC": {
+    "translation": "",
+    "message": "Opportunity detail",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        821
+      ]
+    ]
   },
   "fNtbOa": {
     "message": "Opportunity details",
     "placeholders": {},
     "comments": [],
     "origin": [
+      [
+        "src/pages/get-started.tsx",
+        574
+      ],
       [
         "src/views/card/index.tsx",
         1581
@@ -13682,6 +14810,18 @@
     "translation": "Částečný úvazek",
     "obsolete": true
   },
+  "aG4Z84": {
+    "translation": "",
+    "message": "Part-time roles",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        346
+      ]
+    ]
+  },
   "nG7mus": {
     "message": "Password already set",
     "placeholders": {},
@@ -13821,6 +14961,18 @@
     "translation": "Frekvence plateb",
     "obsolete": true
   },
+  "H27t8c": {
+    "translation": "",
+    "message": "Payroll Specialist at Crafted Systems",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        318
+      ]
+    ]
+  },
   "UbRKMZ": {
     "message": "Pending",
     "placeholders": {},
@@ -13932,7 +15084,8 @@
         81
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "E6wBCJ": {
     "message": "Per-seat pricing",
@@ -14032,7 +15185,7 @@
     "origin": [
       [
         "src/views/home/components/Footer.tsx",
-        189
+        184
       ]
     ],
     "translation": "Petr Nagy"
@@ -14071,7 +15224,8 @@
         309
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "Qu4q4i": {
     "translation": "",
@@ -14083,7 +15237,8 @@
         "src/views/home/components/BoardPreview.tsx",
         183
       ]
-    ]
+    ],
+    "obsolete": true
   },
   "t/Ccnr": {
     "message": "PHP Software Engineer at OpenField",
@@ -14095,7 +15250,8 @@
         206
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "Oi+J+N": {
     "message": "Pick a plan to get started. All paid plans include a 14-day free trial.",
@@ -14119,7 +15275,8 @@
         567
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "67RoFa": {
     "message": "Pipeline",
@@ -14203,7 +15360,8 @@
         266
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "Q+veYq": {
     "message": "Platform Engineer at Northstar Labs",
@@ -14215,7 +15373,8 @@
         248
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "58AiWX": {
     "message": "Please confirm your new password",
@@ -14628,7 +15787,7 @@
       ],
       [
         "src/pages/get-started.tsx",
-        593
+        1113
       ],
       [
         "src/views/board/components/BoardOpportunityTutorial.tsx",
@@ -14664,6 +15823,18 @@
       ]
     ],
     "translation": "Powerpack je aktivní"
+  },
+  "i9/9F7": {
+    "translation": "",
+    "message": "Powerpack adds automation and AI to shortlistOS. Save jobs with Magic Inbox or the Web Clipper, get salary insights and company rating data, receive reminders, and automate routine housekeeping.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        1106
+      ]
+    ]
   },
   "+f3k4t": {
     "message": "Powerpack adds automation and AI to your shortlistOS workspace, so you spend less time copying information and more time moving your search forward.",
@@ -14702,6 +15873,18 @@
     ],
     "translation": ""
   },
+  "AIBvve": {
+    "translation": "",
+    "message": "Powerpack can also add jobs from the <0>Web Clipper</0> or <1>Magic Inbox</1>.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        1021
+      ]
+    ]
+  },
   "fPrDcI": {
     "message": "Powerpack can also add jobs from the Web Clipper or Magic Inbox. When it does, the card clearly shows that the shortlistOS robot created it.",
     "placeholders": {},
@@ -14712,7 +15895,8 @@
         513
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "Y63KbP": {
     "message": "Powerpack is an optional paid add-on. You do not need it to organise your job search. It adds easier ways to save jobs, useful salary and company information, reminders, and automatic housekeeping.",
@@ -14724,7 +15908,8 @@
         586
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "TvN3Q4": {
     "message": "Powerpack is the optional paid layer for shortlistOS. The core workspace and pipeline remain useful on their own; Powerpack adds job capture, market intelligence, reminders, and background automation.",
@@ -14803,7 +15988,20 @@
         298
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
+  },
+  "MOkA4P": {
+    "translation": "",
+    "message": "Prepare questions for the recruiter",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        451
+      ]
+    ]
   },
   "aHCEmh": {
     "message": "Pricing",
@@ -14848,7 +16046,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        197
+        246
       ]
     ],
     "translation": ""
@@ -14872,7 +16070,7 @@
     "origin": [
       [
         "src/views/home/components/Footer.tsx",
-        114
+        109
       ],
       [
         "src/views/home/components/Header.tsx",
@@ -15001,6 +16199,18 @@
     ],
     "translation": "Tarif Pro ∞"
   },
+  "O6Y2dC": {
+    "translation": "",
+    "message": "Processes the job page, turns it into a card, adds salary insights and company rating data, and uses AI to assign labels and summarise the role and requirements.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        775
+      ]
+    ]
+  },
   "K47k8R": {
     "message": "Product",
     "placeholders": {},
@@ -15027,7 +16237,8 @@
         384
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "ypR8IZ": {
     "message": "Product Designer",
@@ -15035,12 +16246,11 @@
     "comments": [],
     "origin": [
       [
-        "src/views/home/index.tsx",
-        278
+        "src/pages/get-started.tsx",
+        694
       ]
     ],
-    "translation": "Produktový designér",
-    "obsolete": true
+    "translation": "Produktový designér"
   },
   "jc85KE": {
     "message": "Product Designer · Northstar",
@@ -15049,10 +16259,22 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        185
+        203
       ]
     ],
     "translation": ""
+  },
+  "F0hprJ": {
+    "translation": "",
+    "message": "Product Designer at BrightRail",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        179
+      ]
+    ]
   },
   "dtI+sk": {
     "message": "Product Manager",
@@ -15066,6 +16288,18 @@
     ],
     "translation": "Produktový manažer",
     "obsolete": true
+  },
+  "QVECGi": {
+    "translation": "",
+    "message": "Product Manager at NovaGrid",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        282
+      ]
+    ]
   },
   "0rPv1T": {
     "message": "Profile image updated",
@@ -15090,6 +16324,46 @@
       ]
     ],
     "translation": "Profilový obrázek"
+  },
+  "e0NrBM": {
+    "message": "Project",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/home/components/Footer.tsx",
+        107
+      ]
+    ],
+    "translation": ""
+  },
+  "RTppO8": {
+    "translation": "",
+    "message": "Project Coordinator at PixelHarbor",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        149
+      ]
+    ]
+  },
+  "mYy6lf": {
+    "translation": "",
+    "message": "Project Manager",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        415
+      ],
+      [
+        "src/pages/get-started.tsx",
+        428
+      ]
+    ]
   },
   "7d1a0d": {
     "message": "Public",
@@ -15126,7 +16400,8 @@
         120
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "bfgr/e": {
     "message": "Question",
@@ -15192,7 +16467,8 @@
         360
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "4X88Wc": {
     "message": "Read the guide",
@@ -15206,6 +16482,30 @@
     ],
     "translation": "",
     "obsolete": true
+  },
+  "LBrq1s": {
+    "translation": "",
+    "message": "Ready to start your job search?",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        1173
+      ]
+    ]
+  },
+  "1TMfRF": {
+    "translation": "",
+    "message": "Ready-made pipeline",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        1081
+      ]
+    ]
   },
   "at3kdS": {
     "message": "Receive a Monday overview of your pipeline, including opportunity counts by stage, so you can plan the week and spot where momentum has slowed.",
@@ -15246,6 +16546,18 @@
     ],
     "obsolete": true
   },
+  "uJDO+u": {
+    "translation": "",
+    "message": "Receives the email, turns it into a card, adds salary insights and company rating data, and uses AI to assign labels and summarise the role and requirements.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        774
+      ]
+    ]
+  },
   "WEYdDv": {
     "message": "Recommended",
     "placeholders": {},
@@ -15271,6 +16583,18 @@
     "translation": "",
     "obsolete": true
   },
+  "ZX9byb": {
+    "translation": "",
+    "message": "Record the job location and whether it is remote, hybrid, or on-site.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        61
+      ]
+    ]
+  },
   "oVEIRb": {
     "message": "Recruiter",
     "placeholders": {},
@@ -15283,6 +16607,18 @@
     ],
     "translation": ""
   },
+  "waWRUN": {
+    "translation": "",
+    "message": "Recruiter email",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        708
+      ]
+    ]
+  },
   "X1bxjn": {
     "message": "Recruiters and contacts",
     "placeholders": {},
@@ -15293,7 +16629,8 @@
         47
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "6EWT6T": {
     "message": "Recruitment",
@@ -15308,6 +16645,18 @@
     "translation": "Nábor",
     "obsolete": true
   },
+  "josDEh": {
+    "translation": "",
+    "message": "Recruitment Consultant at Vertex Works",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        217
+      ]
+    ]
+  },
   "UBWkH2": {
     "message": "Red flag",
     "placeholders": {},
@@ -15315,11 +16664,11 @@
     "origin": [
       [
         "src/views/home/components/BoardPreview.tsx",
-        214
+        218
       ],
       [
         "src/views/home/components/BoardPreview.tsx",
-        310
+        314
       ]
     ],
     "translation": ""
@@ -15347,15 +16696,15 @@
       ],
       [
         "src/views/home/components/BoardPreview.tsx",
-        141
+        145
       ],
       [
         "src/views/home/components/BoardPreview.tsx",
-        201
+        205
       ],
       [
         "src/views/home/components/BoardPreview.tsx",
-        224
+        228
       ]
     ],
     "translation": "Doporučení"
@@ -15371,7 +16720,7 @@
       ],
       [
         "src/views/home/components/BoardPreview.tsx",
-        292
+        296
       ]
     ],
     "translation": "Zamítnuto"
@@ -15386,7 +16735,8 @@
         627
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "TjpVjX": {
     "message": "Reminder when a saved opportunity sits untouched too long",
@@ -15411,7 +16761,11 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        265
+        209
+      ],
+      [
+        "src/pages/get-started.tsx",
+        834
       ],
       [
         "src/views/card/index.tsx",
@@ -15419,6 +16773,18 @@
       ]
     ],
     "translation": "Na dálku"
+  },
+  "iAQMaS": {
+    "translation": "",
+    "message": "Remote · $105k–$120k",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        748
+      ]
+    ]
   },
   "fDhVFI": {
     "message": "Remote · EU",
@@ -15430,7 +16796,8 @@
         277
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "tddf68": {
     "message": "Remote opportunities",
@@ -15442,7 +16809,8 @@
         340
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "t/YqKh": {
     "message": "Remove",
@@ -15782,7 +17150,32 @@
         297
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
+  },
+  "RWV4zW": {
+    "translation": "",
+    "message": "Review the company and role",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        450
+      ]
+    ]
+  },
+  "sj9d1r": {
+    "translation": "",
+    "message": "Right now, you are <0>ready to go</0>. The second part of this guide covers the paid Powerpack features, which are not necessary for using shortlistOS.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        1089
+      ]
+    ]
   },
   "/gaSVU": {
     "message": "Roadmap",
@@ -15802,6 +17195,10 @@
     "comments": [],
     "origin": [
       [
+        "src/pages/get-started.tsx",
+        618
+      ],
+      [
         "src/views/card/index.tsx",
         1666
       ],
@@ -15811,6 +17208,18 @@
       ]
     ],
     "translation": "Role"
+  },
+  "wqOyqg": {
+    "translation": "",
+    "message": "Role and company",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        55
+      ]
+    ]
   },
   "jQ6I8X": {
     "message": "Role updated",
@@ -15929,7 +17338,15 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        276
+        65
+      ],
+      [
+        "src/pages/get-started.tsx",
+        640
+      ],
+      [
+        "src/pages/get-started.tsx",
+        837
       ],
       [
         "src/views/card/index.tsx",
@@ -15977,7 +17394,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        89
+        103
       ]
     ],
     "translation": ""
@@ -16028,7 +17445,20 @@
         45
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
+  },
+  "bti8XC": {
+    "translation": "",
+    "message": "Sales Representative at Bohemian Logic",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        144
+      ]
+    ]
   },
   "YEOVrT": {
     "message": "SAML SSO",
@@ -16103,7 +17533,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        105
+        119
       ]
     ],
     "translation": ""
@@ -16158,7 +17588,8 @@
         614
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "wWgJCb": {
     "message": "Save opportunity",
@@ -16170,7 +17601,32 @@
         388
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
+  },
+  "OapDXo": {
+    "translation": "",
+    "message": "Save the advertised range, currency, and pay period for easy comparison.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        66
+      ]
+    ]
+  },
+  "r7r0C/": {
+    "translation": "",
+    "message": "Save the job description, useful links, notes, and related files.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        76
+      ]
+    ]
   },
   "ANMJkM": {
     "message": "Save the posting URL",
@@ -16207,7 +17663,8 @@
         377
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "MdwUGG": {
     "message": "Save time with reusable board templates.",
@@ -16221,6 +17678,18 @@
     ],
     "translation": "Ušetřete čas pomocí opakovaně použitelných šablon nástěnek."
   },
+  "tVWQsx": {
+    "translation": "",
+    "message": "Save with shortlistOS",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        751
+      ]
+    ]
+  },
   "idD8Ev": {
     "message": "Saved",
     "placeholders": {},
@@ -16228,7 +17697,19 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        184
+        200
+      ],
+      [
+        "src/pages/get-started.tsx",
+        394
+      ],
+      [
+        "src/pages/get-started.tsx",
+        793
+      ],
+      [
+        "src/pages/get-started.tsx",
+        842
       ],
       [
         "src/views/boards/components/TemplateBoards.tsx",
@@ -16236,10 +17717,22 @@
       ],
       [
         "src/views/home/components/BoardPreview.tsx",
-        111
+        115
       ]
     ],
     "translation": "Uložené"
+  },
+  "POKlz1": {
+    "translation": "",
+    "message": "Saved opportunities left untouched",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        155
+      ]
+    ]
   },
   "HbCv5s": {
     "message": "Saved opportunity reminders",
@@ -16251,7 +17744,8 @@
         129
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "cOh+MI": {
     "message": "Screening",
@@ -16356,6 +17850,18 @@
     "translation": "Zabezpečení",
     "obsolete": true
   },
+  "vhgmv6": {
+    "translation": "",
+    "message": "See an annotated example",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        954
+      ]
+    ]
+  },
   "lqWvKw": {
     "message": "See an estimated salary range for the role, with local, EU, US, and global comparisons when data is available. It gives you a useful starting point for judging an advert and preparing to negotiate.",
     "placeholders": {},
@@ -16363,10 +17869,22 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        90
+        104
       ]
     ],
     "translation": ""
+  },
+  "AwpQHs": {
+    "translation": "",
+    "message": "See changes, comments, and milestone moves in one chronological record.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        96
+      ]
+    ]
   },
   "MA7lzS": {
     "message": "See company ratings and employer information alongside the opportunity, so you can assess the organisation before investing time in an application or interview process.",
@@ -16391,7 +17909,8 @@
         95
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "CK+/RV": {
     "message": "See every active opportunity, where it stands, and what needs attention.",
@@ -16404,6 +17923,18 @@
       ]
     ],
     "translation": "Podívejte se na všechny aktivní příležitosti, jejich stav a na to, co vyžaduje pozornost."
+  },
+  "0jXxHR": {
+    "translation": "",
+    "message": "See exactly where every opportunity in your job search stands.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        1070
+      ]
+    ]
   },
   "3LnYaV": {
     "message": "See indicative salary ranges based on the role and location, with regional comparisons when data is available.",
@@ -16440,7 +17971,8 @@
         72
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "FQosq5": {
     "message": "See what is included in the free base version and what Powerpack adds for automation, reminders, salary insight, and company research.",
@@ -16479,6 +18011,18 @@
     ],
     "translation": "Podívejte se, co uživatelé říkají o shortlistOS"
   },
+  "RyoY1f": {
+    "translation": "",
+    "message": "See where the opportunity stands and keep interviews, deadlines, and follow-ups visible.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        81
+      ]
+    ]
+  },
   "zYRVNp": {
     "message": "Select a list",
     "placeholders": {},
@@ -16498,7 +18042,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        499
+        1003
       ]
     ],
     "translation": ""
@@ -16625,7 +18169,7 @@
     "origin": [
       [
         "src/views/home/components/Footer.tsx",
-        98
+        100
       ]
     ],
     "translation": ""
@@ -16701,7 +18245,20 @@
         299
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
+  },
+  "enjFJC": {
+    "translation": "",
+    "message": "Send to shortlist",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        778
+      ]
+    ]
   },
   "v3YoMA": {
     "message": "Senior",
@@ -16726,7 +18283,8 @@
         257
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "8uPIis": {
     "message": "Senior Backend Engineer at Northstar Labs",
@@ -16738,7 +18296,8 @@
         127
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "jWj3qv": {
     "message": "Senior Engineer",
@@ -16763,7 +18322,8 @@
         "src/views/home/components/BoardPreview.tsx",
         175
       ]
-    ]
+    ],
+    "obsolete": true
   },
   "Ofblw2": {
     "message": "Senior PHP Developer at Amber Cloud",
@@ -16775,7 +18335,8 @@
         114
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "M/89S6": {
     "message": "Senior PHP Developer at Atlas Foundry",
@@ -16787,7 +18348,8 @@
         233
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "JpN25+": {
     "message": "Senior PHP Developer at LimePeak",
@@ -16799,7 +18361,8 @@
         284
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "NAv7fo": {
     "translation": "",
@@ -16811,7 +18374,8 @@
         "src/views/home/components/BoardPreview.tsx",
         223
       ]
-    ]
+    ],
+    "obsolete": true
   },
   "CrnwHr": {
     "message": "Senior Product Designer",
@@ -16823,7 +18387,8 @@
         269
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "/TymCF": {
     "message": "Senior Product Designer · Lumon",
@@ -16832,7 +18397,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        189
+        218
       ]
     ],
     "translation": ""
@@ -17114,7 +18679,8 @@
         77
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "CTqTgr": {
     "message": "Shortcuts",
@@ -17139,11 +18705,7 @@
       ],
       [
         "src/pages/get-started.tsx",
-        381
-      ],
-      [
-        "src/pages/get-started.tsx",
-        454
+        914
       ],
       [
         "src/views/board/index.tsx",
@@ -17236,6 +18798,18 @@
     ],
     "translation": "shortlistOS + Powerpack ⚡"
   },
+  "WmK8D/": {
+    "translation": "",
+    "message": "shortlistOS automation",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        770
+      ]
+    ]
+  },
   "F1bosI": {
     "message": "shortlistOS does not track you, sell your data, or lock it away. Export your account whenever you want, inspect the source code, or run the core application yourself.",
     "placeholders": {},
@@ -17255,7 +18829,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        430
+        890
       ]
     ],
     "translation": ""
@@ -17295,7 +18869,8 @@
         362
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "NDyHVE": {
     "message": "shortlistOS tracks your job search.",
@@ -17320,7 +18895,7 @@
       ],
       [
         "src/views/home/components/BoardPreview.tsx",
-        336
+        342
       ]
     ],
     "translation": "Seznamy"
@@ -17330,6 +18905,10 @@
     "placeholders": {},
     "comments": [],
     "origin": [
+      [
+        "src/pages/get-started.tsx",
+        494
+      ],
       [
         "src/views/card/index.tsx",
         2418
@@ -17610,6 +19189,18 @@
     "translation": "Sociální sítě",
     "obsolete": true
   },
+  "UoKMOk": {
+    "translation": "",
+    "message": "Social Media Manager at OpenField",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        210
+      ]
+    ]
+  },
   "wIb7Ng": {
     "message": "Software Development",
     "placeholders": {},
@@ -17646,7 +19237,8 @@
         299
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "6sKjjx": {
     "message": "Solo",
@@ -17691,7 +19283,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        595
+        1115
       ]
     ],
     "translation": ""
@@ -17716,7 +19308,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        193
+        230
       ]
     ],
     "translation": ""
@@ -17845,7 +19437,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        120
+        129
       ]
     ],
     "translation": ""
@@ -17881,6 +19473,14 @@
     "comments": [],
     "origin": [
       [
+        "src/pages/get-started.tsx",
+        342
+      ],
+      [
+        "src/pages/get-started.tsx",
+        841
+      ],
+      [
         "src/views/card/index.tsx",
         1596
       ],
@@ -17890,6 +19490,18 @@
       ]
     ],
     "translation": "Stav"
+  },
+  "+qo5gA": {
+    "translation": "",
+    "message": "Status and dates",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        80
+      ]
+    ]
   },
   "GtAwE3": {
     "message": "Stay ahead of the next step",
@@ -17927,6 +19539,18 @@
       ]
     ],
     "translation": "Přestaňte spravovat hledání práce z paměti."
+  },
+  "GUaUXx": {
+    "translation": "",
+    "message": "Store Manager at OrbitStack",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        299
+      ]
+    ]
   },
   "ViqTLt": {
     "message": "Store the job advert, tailored CV, cover letter, offer, and supporting files together.",
@@ -18288,7 +19912,7 @@
     "origin": [
       [
         "src/views/home/components/Footer.tsx",
-        115
+        110
       ]
     ],
     "translation": "Podmínky"
@@ -18721,6 +20345,22 @@
     "translation": "",
     "obsolete": true
   },
+  "uFiAyF": {
+    "translation": "",
+    "message": "Third-party employer ratings and review summary",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/pricing/components/FeatureComparisonTable.tsx",
+        80
+      ],
+      [
+        "src/views/settings/PowerpackSettings.tsx",
+        141
+      ]
+    ]
+  },
   "3LDCpD": {
     "message": "This action can't be undone.",
     "placeholders": {},
@@ -18792,7 +20432,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        417
+        877
       ]
     ],
     "translation": ""
@@ -19047,6 +20687,10 @@
     "comments": [],
     "origin": [
       [
+        "src/pages/get-started.tsx",
+        540
+      ],
+      [
         "src/views/activity-log/index.tsx",
         32
       ]
@@ -19070,6 +20714,22 @@
     "translation": "K vyřízení",
     "obsolete": true
   },
+  "X0OwOB": {
+    "translation": "",
+    "message": "today",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        359
+      ],
+      [
+        "src/pages/get-started.tsx",
+        363
+      ]
+    ]
+  },
   "ecUA8p": {
     "message": "Today",
     "placeholders": {},
@@ -19080,7 +20740,8 @@
         333
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "4gAX8s": {
     "message": "Toggle menu",
@@ -19105,6 +20766,18 @@
       ]
     ],
     "translation": "Token je povinný"
+  },
+  "BRMXj0": {
+    "translation": "",
+    "message": "Tomorrow",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        238
+      ]
+    ]
   },
   "eEQyz+": {
     "message": "Track all card changes with detailed activity history.",
@@ -19213,7 +20886,8 @@
         57
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "iES1Cc": {
     "message": "Turn job emails into organized opportunities",
@@ -19226,6 +20900,18 @@
       ]
     ],
     "translation": "Proměňte pracovní e-maily v uspořádané příležitosti"
+  },
+  "8FtsDD": {
+    "translation": "",
+    "message": "Turn preparation and follow-ups into clear steps you can tick off.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        86
+      ]
+    ]
   },
   "2pRjWf": {
     "message": "Turn your job search into a clear next step",
@@ -20320,6 +22006,30 @@
     ],
     "translation": "aktualizoval(a) vlastní pole"
   },
+  "b8w9E8": {
+    "translation": "",
+    "message": "updated Company from empty to Northstar Group",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        398
+      ]
+    ]
+  },
+  "4EvnUD": {
+    "translation": "",
+    "message": "updated Interview from empty to Jun 19, 2026",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        382
+      ]
+    ]
+  },
   "25eTgy": {
     "message": "Updated recently",
     "placeholders": {},
@@ -20330,13 +22040,54 @@
         241
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
+  },
+  "SlT8im": {
+    "translation": "",
+    "message": "Updated salary insights using market benchmarks for this role and location.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        510
+      ]
+    ]
+  },
+  "1dqGwQ": {
+    "translation": "",
+    "message": "updated Salary maximum from $115,000 to $120,000",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        358
+      ]
+    ]
+  },
+  "yEv3xN": {
+    "translation": "",
+    "message": "updated Salary minimum from $100,000 to $105,000",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        362
+      ]
+    ]
   },
   "tGwwnq": {
     "message": "updated the description",
     "placeholders": {},
     "comments": [],
     "origin": [
+      [
+        "src/pages/get-started.tsx",
+        401
+      ],
       [
         "src/views/card/components/ActivityList.tsx",
         173
@@ -20465,6 +22216,10 @@
     "placeholders": {},
     "comments": [],
     "origin": [
+      [
+        "src/pages/get-started.tsx",
+        483
+      ],
       [
         "src/views/card/components/AttachmentUpload.tsx",
         139
@@ -20632,7 +22387,8 @@
         545
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "TuoYBb": {
     "translation": "",
@@ -20721,6 +22477,18 @@
     "translation": "",
     "obsolete": true
   },
+  "RMSmhj": {
+    "translation": "",
+    "message": "Use the Web Clipper",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        759
+      ]
+    ]
+  },
   "yCzs4j": {
     "message": "Use this button whenever you find a job worth tracking, even before you apply.",
     "placeholders": {},
@@ -20768,6 +22536,18 @@
       ]
     ],
     "translation": "Uživatel již je členem tohoto pracovního prostoru"
+  },
+  "y5Xrmg": {
+    "translation": "",
+    "message": "UX Designer at Cloudsmith Europe",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/home/components/BoardPreview.tsx",
+        247
+      ]
+    ]
   },
   "vSJd18": {
     "message": "Video",
@@ -20865,7 +22645,8 @@
         650
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "Kw+LP3": {
     "message": "View the repository on GitHub",
@@ -20903,6 +22684,18 @@
       ]
     ],
     "translation": "Viditelnost"
+  },
+  "z316yO": {
+    "translation": "",
+    "message": "Want to see how these levels fit together?",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        948
+      ]
+    ]
   },
   "BJbLe4": {
     "message": "We are using the <0>AGPL-3.0 license</0>.",
@@ -21011,7 +22804,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        104
+        118
       ]
     ],
     "translation": ""
@@ -21026,7 +22819,8 @@
         367
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "an6ayw": {
     "message": "Webhook created",
@@ -21199,7 +22993,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        119
+        128
       ],
       [
         "src/views/pricing/components/PricingCards.tsx",
@@ -21373,6 +23167,30 @@
     ],
     "translation": ""
   },
+  "YM18Ds": {
+    "translation": "",
+    "message": "When a confident company match is found, retrieves its third-party employer rating and available review metrics.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/settings/BoardsSettings.tsx",
+        333
+      ]
+    ]
+  },
+  "TA+J5N": {
+    "translation": "",
+    "message": "When a confident company match is found, see its third-party employer rating and a short summary of available review data, such as work-life balance, culture, and recommendation score.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        109
+      ]
+    ]
+  },
   "nNq+/l": {
     "message": "When off, AI and background automations are paused for this shortlist.",
     "placeholders": {},
@@ -21483,10 +23301,22 @@
       ],
       [
         "src/views/home/components/BoardPreview.tsx",
-        306
+        310
       ]
     ],
     "translation": "Staženo"
+  },
+  "siMO+9": {
+    "translation": "",
+    "message": "Work with teams across the business to turn goals into clear plans and measurable outcomes.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        435
+      ]
+    ]
   },
   "pmUArF": {
     "message": "Workspace",
@@ -21499,7 +23329,7 @@
       ],
       [
         "src/pages/get-started.tsx",
-        435
+        895
       ],
       [
         "src/views/board/index.tsx",
@@ -21755,6 +23585,18 @@
     ],
     "translation": "url-pracovniho-prostoru"
   },
+  "qXo1nH": {
+    "translation": "",
+    "message": "Workspace, shortlists, and opportunities",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        968
+      ]
+    ]
+  },
   "3MkXrD": {
     "message": "Write down updates and decisions where you will find them again.",
     "placeholders": {},
@@ -21765,7 +23607,8 @@
         62
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "ScXMqW": {
     "message": "Write down what happened after a recruiter call, save your interview thoughts, mention another workspace member, or leave a note for your future self. Every comment stays with the opportunity.",
@@ -21777,7 +23620,8 @@
         546
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "4kJRen": {
     "message": "Writing",
@@ -21893,6 +23737,22 @@
     ],
     "translation": "Ano. Celý účet můžete kdykoli exportovat jako soubor JSON."
   },
+  "rQRrkB": {
+    "translation": "",
+    "message": "yesterday",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        367
+      ],
+      [
+        "src/pages/get-started.tsx",
+        371
+      ]
+    ]
+  },
   "y/0uwd": {
     "message": "Yesterday",
     "placeholders": {},
@@ -21903,7 +23763,8 @@
         333
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "kWJmRL": {
     "message": "You",
@@ -21912,7 +23773,7 @@
     "origin": [
       [
         "src/views/home/components/BoardPreview.tsx",
-        344
+        355
       ]
     ],
     "translation": ""
@@ -22016,7 +23877,8 @@
         577
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "vAj6xG": {
     "message": "You can self-host by following the instructions in our <0>repo</0>.",
@@ -22037,7 +23899,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        596
+        1116
       ]
     ],
     "translation": ""
@@ -22121,6 +23983,18 @@
       ]
     ],
     "translation": "Odběr byl zrušen!"
+  },
+  "qv/WfJ": {
+    "translation": "",
+    "message": "You have everything you need. Create your free account and build your first shortlist.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        1175
+      ]
+    ]
   },
   "R275Pz": {
     "message": "You have unlimited seats with your Pro Plan. There is no additional charge for new members!",
@@ -22430,7 +24304,8 @@
         638
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "tofsra": {
     "message": "Your offer",
@@ -22625,6 +24500,18 @@
     ],
     "translation": "Váš pracovní prostor byl smazán."
   },
+  "N7DilA": {
+    "translation": "",
+    "message": "Your workspace is the <0>base for everything you do</0> in shortlistOS, from managing your account to organizing your shortlists. Every account has one workspace.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        897
+      ]
+    ]
+  },
   "ubDy+H": {
     "message": "Your workspace is the <0>home for your shortlists</0>, account settings, and members. You can create as many workspaces as you need. One workspace is enough for most individual job searches.",
     "placeholders": {},
@@ -22635,7 +24522,8 @@
         437
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "Yc260j": {
     "translation": "",
@@ -22753,17 +24641,5 @@
       ]
     ],
     "translation": "URL YouTube"
-  },
-  "e0NrBM": {
-    "message": "Project",
-    "placeholders": {},
-    "comments": [],
-    "origin": [
-      [
-        "src/views/home/components/Footer.tsx",
-        107
-      ]
-    ],
-    "translation": ""
   }
 }
