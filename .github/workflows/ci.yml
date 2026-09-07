@@ -65,6 +65,7 @@ jobs:
 
   images:
     name: Production images
+    if: github.event_name == 'workflow_dispatch' || github.base_ref == 'main'
     runs-on: ubuntu-24.04-arm
     steps:
       - name: Check out source
