@@ -19,6 +19,12 @@ import { triggerWorkflow } from "./utils";
 
 const log = createLogger("auth");
 
+const requiredEnv = (name: string): string => {
+  const value = process.env[name];
+  if (!value) throw new Error(`${name} is required`);
+  return value;
+};
+
 async function cancelWorkspaceAccess(
   db: dbClient,
   workspacePublicId: string,
@@ -62,16 +68,17 @@ export function createPlugins(db: dbClient) {
       ? [
           stripe({
             stripeClient: createStripeClient(),
-            stripeWebhookSecret: process.env.STRIPE_WEBHOOK_SECRET!,
+            stripeWebhookSecret: requiredEnv("STRIPE_WEBHOOK_SECRET"),
             createCustomerOnSignUp: true,
             subscription: {
               enabled: true,
               plans: [
                 {
                   name: "team",
-                  priceId: process.env.STRIPE_TEAM_PLAN_MONTHLY_PRICE_ID!,
-                  annualDiscountPriceId:
-                    process.env.STRIPE_TEAM_PLAN_YEARLY_PRICE_ID!,
+                  priceId: requiredEnv("STRIPE_TEAM_PLAN_MONTHLY_PRICE_ID"),
+                  annualDiscountPriceId: requiredEnv(
+                    "STRIPE_TEAM_PLAN_YEARLY_PRICE_ID",
+                  ),
                   freeTrial: {
                     days: 14,
                     onTrialStart: async (subscription) => {
@@ -87,9 +94,10 @@ export function createPlugins(db: dbClient) {
                 },
                 {
                   name: "pro",
-                  priceId: process.env.STRIPE_PRO_PLAN_MONTHLY_PRICE_ID!,
-                  annualDiscountPriceId:
-                    process.env.STRIPE_PRO_PLAN_YEARLY_PRICE_ID!,
+                  priceId: requiredEnv("STRIPE_PRO_PLAN_MONTHLY_PRICE_ID"),
+                  annualDiscountPriceId: requiredEnv(
+                    "STRIPE_PRO_PLAN_YEARLY_PRICE_ID",
+                  ),
                   freeTrial: {
                     days: 14,
                     onTrialStart: async (subscription) => {

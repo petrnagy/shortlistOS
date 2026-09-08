@@ -1,0 +1,599 @@
+{
+  "src/components/Avatar.tsx": {
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 1
+    }
+  },
+  "src/components/CheckboxDropdown.tsx": {
+    "@typescript-eslint/prefer-nullish-coalescing": {
+      "count": 1
+    }
+  },
+  "src/components/CommandPallette.tsx": {
+    "@typescript-eslint/no-unused-vars": {
+      "count": 1
+    }
+  },
+  "src/components/Editor.tsx": {
+    "@typescript-eslint/no-explicit-any": {
+      "count": 6
+    },
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 5
+    },
+    "@typescript-eslint/no-unsafe-argument": {
+      "count": 4
+    },
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 4
+    },
+    "@typescript-eslint/no-unsafe-call": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unsafe-member-access": {
+      "count": 7
+    },
+    "@typescript-eslint/prefer-nullish-coalescing": {
+      "count": 1
+    }
+  },
+  "src/components/FeedbackModal.tsx": {
+    "@typescript-eslint/no-unused-vars": {
+      "count": 1
+    },
+    "@typescript-eslint/require-await": {
+      "count": 2
+    }
+  },
+  "src/components/FontSizeSelector.tsx": {
+    "import/consistent-type-specifier-style": {
+      "count": 1
+    }
+  },
+  "src/components/LabelForm.tsx": {
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 1
+    }
+  },
+  "src/components/LanguageSelector.tsx": {
+    "@typescript-eslint/no-explicit-any": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unsafe-argument": {
+      "count": 1
+    }
+  },
+  "src/components/NewWorkspaceForm.tsx": {
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 2
+    }
+  },
+  "src/components/StrictModeDroppable.tsx": {
+    "@typescript-eslint/unbound-method": {
+      "count": 1
+    }
+  },
+  "src/components/WorkspaceMenu.tsx": {
+    "@typescript-eslint/no-unused-vars": {
+      "count": 8
+    }
+  },
+  "src/hooks/useClipboard.tsx": {
+    "@typescript-eslint/no-unsafe-argument": {
+      "count": 1
+    }
+  },
+  "src/hooks/useDragToScroll.ts": {
+    "@typescript-eslint/prefer-nullish-coalescing": {
+      "count": 8
+    }
+  },
+  "src/hooks/useEventListener.ts": {
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 2
+    }
+  },
+  "src/hooks/useLocalisation.ts": {
+    "@typescript-eslint/unbound-method": {
+      "count": 1
+    }
+  },
+  "src/hooks/useModalFormState.ts": {
+    "@typescript-eslint/no-explicit-any": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 2
+    },
+    "@typescript-eslint/prefer-nullish-coalescing": {
+      "count": 2
+    }
+  },
+  "src/pages/404.tsx": {
+    "@typescript-eslint/prefer-nullish-coalescing": {
+      "count": 1
+    }
+  },
+  "src/pages/_app.tsx": {
+    "@next/next/no-sync-scripts": {
+      "count": 1
+    },
+    "@typescript-eslint/no-empty-object-type": {
+      "count": 1
+    },
+    "no-restricted-properties": {
+      "count": 1
+    }
+  },
+  "src/pages/api/auth/[...all].ts": {
+    "@typescript-eslint/dot-notation": {
+      "count": 1
+    }
+  },
+  "src/pages/api/download/attatchment.ts": {
+    "@typescript-eslint/no-unused-vars": {
+      "count": 1
+    }
+  },
+  "src/pages/api/oss-friends.ts": {
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unused-vars": {
+      "count": 1
+    }
+  },
+  "src/pages/api/partner/callback.ts": {
+    "no-restricted-properties": {
+      "count": 8
+    },
+    "turbo/no-undeclared-env-vars": {
+      "count": 8
+    }
+  },
+  "src/pages/api/partner/link.ts": {
+    "@typescript-eslint/no-non-null-assertion": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 2
+    }
+  },
+  "src/pages/api/partner/webhook.ts": {
+    "@typescript-eslint/no-unsafe-argument": {
+      "count": 1
+    },
+    "no-restricted-properties": {
+      "count": 3
+    },
+    "turbo/no-undeclared-env-vars": {
+      "count": 3
+    }
+  },
+  "src/pages/api/shortlist_magic_inbox/incoming_webhook.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 2
+    }
+  },
+  "src/pages/api/stripe/create_billing_session.ts": {
+    "@typescript-eslint/no-unused-vars": {
+      "count": 1
+    }
+  },
+  "src/pages/api/stripe/create_checkout_session.ts": {
+    "@typescript-eslint/no-non-null-assertion": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 2
+    },
+    "no-restricted-properties": {
+      "count": 6
+    }
+  },
+  "src/pages/api/stripe/webhook.ts": {
+    "@typescript-eslint/no-non-null-assertion": {
+      "count": 1
+    },
+    "no-restricted-properties": {
+      "count": 1
+    }
+  },
+  "src/pages/api/trello/authenticate.ts": {
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 3
+    },
+    "@typescript-eslint/no-unsafe-member-access": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unused-vars": {
+      "count": 1
+    },
+    "no-restricted-properties": {
+      "count": 1
+    }
+  },
+  "src/pages/api/unsubscribe.ts": {
+    "@typescript-eslint/no-unused-vars": {
+      "count": 1
+    },
+    "no-restricted-properties": {
+      "count": 1
+    }
+  },
+  "src/pages/api/upload/attachment.ts": {
+    "@typescript-eslint/no-unused-vars": {
+      "count": 1
+    }
+  },
+  "src/pages/api/upload/avatar.ts": {
+    "@typescript-eslint/no-unused-vars": {
+      "count": 1
+    },
+    "@typescript-eslint/prefer-nullish-coalescing": {
+      "count": 1
+    },
+    "no-restricted-properties": {
+      "count": 1
+    }
+  },
+  "src/pages/settings/trello/authorize.tsx": {
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
+    }
+  },
+  "src/pages/unsubscribe/index.tsx": {
+    "@typescript-eslint/no-unused-vars": {
+      "count": 1
+    }
+  },
+  "src/providers/font-size.tsx": {
+    "import/consistent-type-specifier-style": {
+      "count": 1
+    }
+  },
+  "src/providers/keyboard-shortcuts.tsx": {
+    "@typescript-eslint/prefer-nullish-coalescing": {
+      "count": 1
+    }
+  },
+  "src/providers/modal.tsx": {
+    "@typescript-eslint/no-explicit-any": {
+      "count": 5
+    },
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unsafe-return": {
+      "count": 1
+    },
+    "@typescript-eslint/prefer-nullish-coalescing": {
+      "count": 3
+    }
+  },
+  "src/providers/theme.tsx": {
+    "import/consistent-type-specifier-style": {
+      "count": 1
+    }
+  },
+  "src/types/contenteditable.d.ts": {
+    "@typescript-eslint/no-unused-vars": {
+      "count": 1
+    }
+  },
+  "src/utils/api.ts": {
+    "@typescript-eslint/ban-ts-comment": {
+      "count": 1
+    },
+    "no-restricted-properties": {
+      "count": 4
+    }
+  },
+  "src/utils/helpers.ts": {
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 1
+    }
+  },
+  "src/utils/i18n.ts": {
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unused-vars": {
+      "count": 1
+    },
+    "@typescript-eslint/require-await": {
+      "count": 1
+    }
+  },
+  "src/utils/legal-content.ts": {
+    "@typescript-eslint/consistent-type-definitions": {
+      "count": 1
+    },
+    "@typescript-eslint/prefer-regexp-exec": {
+      "count": 2
+    }
+  },
+  "src/views/board/components/CardContextDueDateModal.tsx": {
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 1
+    }
+  },
+  "src/views/board/components/CardContextDuplicateModal.tsx": {
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 5
+    }
+  },
+  "src/views/board/components/CardContextLabelsModal.tsx": {
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 3
+    }
+  },
+  "src/views/board/components/CardContextMembersModal.tsx": {
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 3
+    }
+  },
+  "src/views/board/components/CardContextMoveListModal.tsx": {
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 6
+    }
+  },
+  "src/views/board/components/NewCardForm.tsx": {
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 3
+    },
+    "@typescript-eslint/no-unsafe-argument": {
+      "count": 3
+    },
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 2
+    }
+  },
+  "src/views/board/components/NewTemplateForm.tsx": {
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 1
+    }
+  },
+  "src/views/board/components/UpdateBoardSlugForm.tsx": {
+    "@typescript-eslint/prefer-nullish-coalescing": {
+      "count": 2
+    }
+  },
+  "src/views/board/index.tsx": {
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 5
+    }
+  },
+  "src/views/card/components/ActivityList.tsx": {
+    "@typescript-eslint/no-unused-vars": {
+      "count": 1
+    }
+  },
+  "src/views/card/components/ChecklistItemRow.tsx": {
+    "@typescript-eslint/no-explicit-any": {
+      "count": 2
+    },
+    "@typescript-eslint/no-unsafe-return": {
+      "count": 2
+    }
+  },
+  "src/views/card/components/ChecklistNameInput.tsx": {
+    "@typescript-eslint/no-explicit-any": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unsafe-return": {
+      "count": 1
+    }
+  },
+  "src/views/card/components/Comment.tsx": {
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 2
+    }
+  },
+  "src/views/card/components/DeleteChecklistConfirmation.tsx": {
+    "@typescript-eslint/no-explicit-any": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unsafe-return": {
+      "count": 1
+    }
+  },
+  "src/views/card/components/DueDateSelector.tsx": {
+    "@typescript-eslint/no-unnecessary-type-assertion": {
+      "count": 1
+    }
+  },
+  "src/views/card/components/ListSelector.tsx": {
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 2
+    }
+  },
+  "src/views/card/components/NewChecklistForm.tsx": {
+    "@typescript-eslint/no-explicit-any": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unsafe-return": {
+      "count": 1
+    }
+  },
+  "src/views/card/components/NewChecklistItemForm.tsx": {
+    "@typescript-eslint/no-explicit-any": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 2
+    },
+    "@typescript-eslint/no-unsafe-return": {
+      "count": 1
+    },
+    "@typescript-eslint/require-await": {
+      "count": 1
+    }
+  },
+  "src/views/card/index.tsx": {
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 8
+    },
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 4
+    },
+    "@typescript-eslint/no-unsafe-member-access": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unused-vars": {
+      "count": 1
+    }
+  },
+  "src/views/home/components/Faqs.tsx": {
+    "@typescript-eslint/prefer-nullish-coalescing": {
+      "count": 1
+    }
+  },
+  "src/views/members/components/EditMemberPermissionsModal.tsx": {
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 2
+    }
+  },
+  "src/views/members/index.tsx": {
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 1
+    }
+  },
+  "src/views/onboarding/workspace-details/index.tsx": {
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 3
+    },
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unused-vars": {
+      "count": 1
+    },
+    "@typescript-eslint/require-await": {
+      "count": 1
+    }
+  },
+  "src/views/privacy/index.tsx": {
+    "@typescript-eslint/consistent-type-definitions": {
+      "count": 1
+    }
+  },
+  "src/views/public/board/CardModal.tsx": {
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 3
+    }
+  },
+  "src/views/public/board/index.tsx": {
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 6
+    }
+  },
+  "src/views/public/boards/index.tsx": {
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 1
+    }
+  },
+  "src/views/settings/WebhookSettings.tsx": {
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 1
+    }
+  },
+  "src/views/settings/components/ChangePasswordConfirmation.tsx": {
+    "@typescript-eslint/no-explicit-any": {
+      "count": 1
+    },
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 2
+    },
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unsafe-call": {
+      "count": 2
+    },
+    "@typescript-eslint/no-unsafe-member-access": {
+      "count": 2
+    },
+    "@typescript-eslint/prefer-nullish-coalescing": {
+      "count": 1
+    },
+    "@typescript-eslint/require-await": {
+      "count": 2
+    }
+  },
+  "src/views/settings/components/DeleteAccountConfirmation.tsx": {
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
+    },
+    "@typescript-eslint/require-await": {
+      "count": 1
+    }
+  },
+  "src/views/settings/components/NewApiKeyForm.tsx": {
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
+    }
+  },
+  "src/views/settings/components/NewApiKeyModal.tsx": {
+    "@typescript-eslint/prefer-optional-chain": {
+      "count": 1
+    }
+  },
+  "src/views/settings/components/NewWebhookModal.tsx": {
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 5
+    },
+    "@typescript-eslint/no-unsafe-member-access": {
+      "count": 4
+    },
+    "@typescript-eslint/prefer-nullish-coalescing": {
+      "count": 3
+    }
+  },
+  "src/views/settings/components/RevokeApiKeyConfirmation.tsx": {
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
+    },
+    "@typescript-eslint/require-await": {
+      "count": 1
+    }
+  },
+  "src/views/settings/components/RolePermissions.tsx": {
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 1
+    }
+  },
+  "src/views/settings/components/UpdateWorkspaceUrlForm.tsx": {
+    "@typescript-eslint/prefer-nullish-coalescing": {
+      "count": 1
+    }
+  },
+  "src/views/settings/components/WebhookList.tsx": {
+    "@typescript-eslint/no-unused-vars": {
+      "count": 1
+    },
+    "@typescript-eslint/prefer-nullish-coalescing": {
+      "count": 1
+    }
+  },
+  "src/views/terms/index.tsx": {
+    "@typescript-eslint/consistent-type-definitions": {
+      "count": 1
+    }
+  }
+}

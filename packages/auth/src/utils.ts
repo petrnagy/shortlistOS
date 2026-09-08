@@ -31,7 +31,7 @@ export async function triggerWorkflow(
       subscription.stripeCustomerId,
     );
 
-    if (!user || !notificationClient) return;
+    if (!user) return;
 
     const unsubscribeUrl = await createEmailUnsubscribeLink(user.id);
 
