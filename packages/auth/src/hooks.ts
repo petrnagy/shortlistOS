@@ -34,12 +34,14 @@ const getStringValue = (value: unknown) =>
   typeof value === "string" ? value.trim() : "";
 
 export const getWorkspaceNameForNewUser = (user: BetterAuthUser) => {
-  const explicitFirstName =
-    getStringValue(user.firstName) ||
-    getStringValue(user.givenName) ||
-    getStringValue(user.given_name);
-  const fullName = explicitFirstName || getStringValue(user.name);
-  const firstName = fullName.split(/\s+/).filter(Boolean)[0];
+  const explicitFirstName = [
+    getStringValue(user.firstName),
+    getStringValue(user.givenName),
+    getStringValue(user.given_name),
+  ].find(Boolean);
+  const fullName =
+    [explicitFirstName, getStringValue(user.name)].find(Boolean) ?? "";
+  const firstName = fullName.split(/\s+/).find(Boolean);
 
   return firstName ? `${firstName}'s` : "My workspace";
 };
@@ -102,7 +104,7 @@ export function createDatabaseHooks(db: dbClient) {
           if (env("NEXT_PUBLIC_DISABLE_EMAIL")?.toLowerCase() !== "true") {
             try {
               await sendEmail(user.email, "Welcome to shortlistOS", "WELCOME", {
-                name: user.name ?? "",
+                name: user.name,
               });
             } catch (error) {
               log.error(

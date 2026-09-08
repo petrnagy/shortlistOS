@@ -59,7 +59,10 @@ const formatPowerpackRemainingTime = (expiresAt: Date) => {
   }
 
   if (parts.length === 1) return parts[0] ?? t`less than 1 hour`;
-  if (parts.length === 2) return t`${parts[0]} and ${parts[1]}`;
+  if (parts.length === 2) {
+    const twoParts = parts as [string, string];
+    return t`${twoParts[0]} and ${twoParts[1]}`;
+  }
 
   const lastPart = parts[parts.length - 1];
 
