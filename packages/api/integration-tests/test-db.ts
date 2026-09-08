@@ -1,10 +1,10 @@
-import { PGlite } from "@electric-sql/pglite";
-import { uuid_ossp } from "@electric-sql/pglite/contrib/uuid_ossp";
-import { pg_trgm } from "@electric-sql/pglite/contrib/pg_trgm";
-import { drizzle } from "drizzle-orm/pglite";
-import { migrate } from "drizzle-orm/pglite/migrator";
 import type { NodePgDatabase } from "drizzle-orm/node-postgres";
 import type { Pool } from "pg";
+import { PGlite } from "@electric-sql/pglite";
+import { pg_trgm } from "@electric-sql/pglite/contrib/pg_trgm";
+import { uuid_ossp } from "@electric-sql/pglite/contrib/uuid_ossp";
+import { drizzle } from "drizzle-orm/pglite";
+import { migrate } from "drizzle-orm/pglite/migrator";
 
 import * as schema from "@kan/db/schema";
 
@@ -54,7 +54,7 @@ export async function seedTestData(db: TestDbClient) {
       publicId: "wstest123456",
       name: "Test Workspace",
       slug: "test-workspace",
-      ownerId: user!.id,
+      createdBy: user!.id,
       createdAt: new Date(),
     })
     .returning();

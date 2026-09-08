@@ -15,15 +15,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out source
-        uses: actions/checkout@v4
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v2
+        uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
         with:
           version: 9.14.2
 
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: 20
           cache: pnpm
@@ -32,17 +32,9 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Lint
-        # The existing dev baseline contains lint failures. Keep reporting them
-        # without preventing typecheck, tests, and translation verification from
-        # running; remove this once the lint-baseline cleanup lands.
-        continue-on-error: true
         run: pnpm lint
 
       - name: Typecheck
-        # @kan/docs currently has no tsconfig, so the repository-wide command
-        # exits before checking the rest of the workspace. Keep reporting it
-        # while allowing the blocking tests and translation checks to run.
-        continue-on-error: true
         run: pnpm typecheck
 
       - name: Run unit tests
@@ -69,15 +61,15 @@ jobs:
     runs-on: ubuntu-24.04-arm
     steps:
       - name: Check out source
-        uses: actions/checkout@v4
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@f95db51fddba0c2d1ec667646a06c2ce06100226
+        uses: docker/setup-buildx-action@37fe631027851001ddb9b187196cc803df7f5f0e # v4.3.0
 
       - name: Build application image
-        uses: docker/build-push-action@0565240e2d4ab88bba5387d719585280857ece09
+        uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a # v7.3.0
         with:
           context: .
           file: apps/web/Dockerfile
@@ -89,7 +81,7 @@ jobs:
           cache-to: type=gha,mode=max
 
       - name: Build migration image
-        uses: docker/build-push-action@0565240e2d4ab88bba5387d719585280857ece09
+        uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a # v7.3.0
         with:
           context: .
           file: apps/web/Dockerfile

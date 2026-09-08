@@ -28,7 +28,14 @@ export const createDrizzleClient = (): dbClient => {
     });
     const db = drizzlePgLite(client, { schema });
 
-    migrate(db, { migrationsFolder: "../../packages/db/migrations" });
+    void migrate(db, {
+      migrationsFolder: "../../packages/db/migrations",
+    }).catch((error: unknown) => {
+      log.error(
+        { err: error },
+        "Unable to migrate the PGlite fallback database",
+      );
+    });
 
     return db as unknown as dbClient;
   }

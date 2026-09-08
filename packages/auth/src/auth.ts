@@ -11,7 +11,9 @@ import { createPlugins } from "./plugins";
 import { configuredProviders } from "./providers";
 
 export const initAuth = (db: dbClient) => {
-  const baseURL = env("NEXT_PUBLIC_BASE_URL") || env("BETTER_AUTH_URL");
+  const baseURL =
+    [env("NEXT_PUBLIC_BASE_URL"), env("BETTER_AUTH_URL")].find(Boolean) ??
+    undefined;
   const trustedOrigins =
     env("BETTER_AUTH_TRUSTED_ORIGINS")?.split(",").filter(Boolean) ?? [];
 
