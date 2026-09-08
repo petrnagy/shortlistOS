@@ -80,7 +80,7 @@ jobs:
           tags: ${{ env.IMAGE_REPOSITORY }}:${{ steps.release.outputs.tag }}
           build-args: APP_VERSION=${{ steps.release.outputs.sha }}
           cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-to: type=gha,mode=max,ignore-error=true
 
       - name: Build migration image
         id: migration
@@ -93,7 +93,7 @@ jobs:
           push: true
           tags: ${{ env.IMAGE_REPOSITORY }}-migrate:${{ steps.release.outputs.tag }}
           cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-to: type=gha,mode=max,ignore-error=true
 
       - name: Install cosign
         uses: sigstore/cosign-installer@59acb6260d9c0ba8f4a2f9d9b48431a222b68e20
