@@ -1,44 +1,44 @@
-ALTER TABLE "shortlist_clip" RENAME TO "shortlist_webpage_source";
-ALTER TABLE "shortlist_inbox" RENAME TO "shortlist_email_source";
+ALTER TABLE "shortlist_clip" RENAME TO "shortlist_webpage_source";--> statement-breakpoint
+ALTER TABLE "shortlist_inbox" RENAME TO "shortlist_email_source";--> statement-breakpoint
 
-DROP INDEX IF EXISTS "shortlist_clip_created_by_idx";
-DROP INDEX IF EXISTS "shortlist_clip_board_idx";
-DROP INDEX IF EXISTS "shortlist_clip_created_at_idx";
-DROP INDEX IF EXISTS "shortlist_clip_processed_at_idx";
-DROP INDEX IF EXISTS "shortlist_clip_processing_result_idx";
-DROP INDEX IF EXISTS "shortlist_inbox_user_idx";
-DROP INDEX IF EXISTS "shortlist_inbox_board_idx";
-DROP INDEX IF EXISTS "shortlist_inbox_created_at_idx";
-DROP INDEX IF EXISTS "shortlist_inbox_processed_at_idx";
-DROP INDEX IF EXISTS "shortlist_inbox_processing_result_idx";
-DROP INDEX IF EXISTS "shortlist_inbox_extern_id_idx";
+DROP INDEX IF EXISTS "shortlist_clip_created_by_idx";--> statement-breakpoint
+DROP INDEX IF EXISTS "shortlist_clip_board_idx";--> statement-breakpoint
+DROP INDEX IF EXISTS "shortlist_clip_created_at_idx";--> statement-breakpoint
+DROP INDEX IF EXISTS "shortlist_clip_processed_at_idx";--> statement-breakpoint
+DROP INDEX IF EXISTS "shortlist_clip_processing_result_idx";--> statement-breakpoint
+DROP INDEX IF EXISTS "shortlist_inbox_user_idx";--> statement-breakpoint
+DROP INDEX IF EXISTS "shortlist_inbox_board_idx";--> statement-breakpoint
+DROP INDEX IF EXISTS "shortlist_inbox_created_at_idx";--> statement-breakpoint
+DROP INDEX IF EXISTS "shortlist_inbox_processed_at_idx";--> statement-breakpoint
+DROP INDEX IF EXISTS "shortlist_inbox_processing_result_idx";--> statement-breakpoint
+DROP INDEX IF EXISTS "shortlist_inbox_extern_id_idx";--> statement-breakpoint
 
-ALTER TABLE "shortlist_webpage_source" DROP COLUMN IF EXISTS "sourceType";
-ALTER TABLE "shortlist_webpage_source" DROP COLUMN IF EXISTS "rawHtml";
-ALTER TABLE "shortlist_webpage_source" DROP COLUMN IF EXISTS "fileS3Key";
-ALTER TABLE "shortlist_webpage_source" DROP COLUMN IF EXISTS "fileOriginalFilename";
-ALTER TABLE "shortlist_webpage_source" DROP COLUMN IF EXISTS "fileContentType";
-ALTER TABLE "shortlist_webpage_source" DROP COLUMN IF EXISTS "fileSize";
-ALTER TABLE "shortlist_webpage_source" DROP COLUMN IF EXISTS "processedAt";
-ALTER TABLE "shortlist_webpage_source" DROP COLUMN IF EXISTS "processingTries";
-ALTER TABLE "shortlist_webpage_source" DROP COLUMN IF EXISTS "processingLog";
-ALTER TABLE "shortlist_webpage_source" DROP COLUMN IF EXISTS "processingResult";
-ALTER TABLE "shortlist_webpage_source" ADD COLUMN "metadataJson" jsonb;
+ALTER TABLE "shortlist_webpage_source" DROP COLUMN IF EXISTS "sourceType";--> statement-breakpoint
+ALTER TABLE "shortlist_webpage_source" DROP COLUMN IF EXISTS "rawHtml";--> statement-breakpoint
+ALTER TABLE "shortlist_webpage_source" DROP COLUMN IF EXISTS "fileS3Key";--> statement-breakpoint
+ALTER TABLE "shortlist_webpage_source" DROP COLUMN IF EXISTS "fileOriginalFilename";--> statement-breakpoint
+ALTER TABLE "shortlist_webpage_source" DROP COLUMN IF EXISTS "fileContentType";--> statement-breakpoint
+ALTER TABLE "shortlist_webpage_source" DROP COLUMN IF EXISTS "fileSize";--> statement-breakpoint
+ALTER TABLE "shortlist_webpage_source" DROP COLUMN IF EXISTS "processedAt";--> statement-breakpoint
+ALTER TABLE "shortlist_webpage_source" DROP COLUMN IF EXISTS "processingTries";--> statement-breakpoint
+ALTER TABLE "shortlist_webpage_source" DROP COLUMN IF EXISTS "processingLog";--> statement-breakpoint
+ALTER TABLE "shortlist_webpage_source" DROP COLUMN IF EXISTS "processingResult";--> statement-breakpoint
+ALTER TABLE "shortlist_webpage_source" ADD COLUMN "metadataJson" jsonb;--> statement-breakpoint
 
-ALTER TABLE "shortlist_email_source" DROP COLUMN IF EXISTS "userId";
-ALTER TABLE "shortlist_email_source" DROP COLUMN IF EXISTS "processedAt";
-ALTER TABLE "shortlist_email_source" DROP COLUMN IF EXISTS "processingTries";
-ALTER TABLE "shortlist_email_source" DROP COLUMN IF EXISTS "rawContent";
-ALTER TABLE "shortlist_email_source" DROP COLUMN IF EXISTS "contentType";
-ALTER TABLE "shortlist_email_source" DROP COLUMN IF EXISTS "source";
-ALTER TABLE "shortlist_email_source" DROP COLUMN IF EXISTS "processingLog";
-ALTER TABLE "shortlist_email_source" DROP COLUMN IF EXISTS "processingResult";
-ALTER TABLE "shortlist_email_source" ADD COLUMN "fromEmail" text;
-ALTER TABLE "shortlist_email_source" ADD COLUMN "fromName" text;
-ALTER TABLE "shortlist_email_source" ADD COLUMN "subject" text;
-ALTER TABLE "shortlist_email_source" ADD COLUMN "sentAt" timestamp;
-ALTER TABLE "shortlist_email_source" ADD COLUMN "hasSupportedAttachment" boolean DEFAULT false NOT NULL;
-ALTER TABLE "shortlist_email_source" ADD COLUMN "metadataJson" jsonb;
+ALTER TABLE "shortlist_email_source" DROP COLUMN IF EXISTS "userId";--> statement-breakpoint
+ALTER TABLE "shortlist_email_source" DROP COLUMN IF EXISTS "processedAt";--> statement-breakpoint
+ALTER TABLE "shortlist_email_source" DROP COLUMN IF EXISTS "processingTries";--> statement-breakpoint
+ALTER TABLE "shortlist_email_source" DROP COLUMN IF EXISTS "rawContent";--> statement-breakpoint
+ALTER TABLE "shortlist_email_source" DROP COLUMN IF EXISTS "contentType";--> statement-breakpoint
+ALTER TABLE "shortlist_email_source" DROP COLUMN IF EXISTS "source";--> statement-breakpoint
+ALTER TABLE "shortlist_email_source" DROP COLUMN IF EXISTS "processingLog";--> statement-breakpoint
+ALTER TABLE "shortlist_email_source" DROP COLUMN IF EXISTS "processingResult";--> statement-breakpoint
+ALTER TABLE "shortlist_email_source" ADD COLUMN "fromEmail" text;--> statement-breakpoint
+ALTER TABLE "shortlist_email_source" ADD COLUMN "fromName" text;--> statement-breakpoint
+ALTER TABLE "shortlist_email_source" ADD COLUMN "subject" text;--> statement-breakpoint
+ALTER TABLE "shortlist_email_source" ADD COLUMN "sentAt" timestamp;--> statement-breakpoint
+ALTER TABLE "shortlist_email_source" ADD COLUMN "hasSupportedAttachment" boolean DEFAULT false NOT NULL;--> statement-breakpoint
+ALTER TABLE "shortlist_email_source" ADD COLUMN "metadataJson" jsonb;--> statement-breakpoint
 
 CREATE TABLE "shortlist_attachment_source" (
   "id" uuid PRIMARY KEY DEFAULT uuid_generate_v4() NOT NULL,
@@ -50,7 +50,7 @@ CREATE TABLE "shortlist_attachment_source" (
   "metadataJson" jsonb,
   "createdAt" timestamp DEFAULT now() NOT NULL,
   "updatedAt" timestamp
-);
+);--> statement-breakpoint
 
 CREATE TABLE "shortlist_source_object" (
   "id" uuid PRIMARY KEY DEFAULT uuid_generate_v4() NOT NULL,
@@ -66,7 +66,7 @@ CREATE TABLE "shortlist_source_object" (
   "fileSize" bigint NOT NULL,
   "metadataJson" jsonb,
   "createdAt" timestamp DEFAULT now() NOT NULL
-);
+);--> statement-breakpoint
 
 CREATE TABLE "shortlist_job_queue" (
   "id" uuid PRIMARY KEY DEFAULT uuid_generate_v4() NOT NULL,
@@ -87,25 +87,25 @@ CREATE TABLE "shortlist_job_queue" (
   "processingLog" text,
   "createdAt" timestamp DEFAULT now() NOT NULL,
   "updatedAt" timestamp
-);
+);--> statement-breakpoint
 
-CREATE INDEX "shortlist_attachment_source_created_by_idx" ON "shortlist_attachment_source" ("createdBy");
-CREATE INDEX "shortlist_attachment_source_board_idx" ON "shortlist_attachment_source" ("boardId");
-CREATE INDEX "shortlist_attachment_source_created_at_idx" ON "shortlist_attachment_source" ("createdAt");
-CREATE INDEX "shortlist_email_source_created_by_idx" ON "shortlist_email_source" ("createdBy");
-CREATE INDEX "shortlist_email_source_board_idx" ON "shortlist_email_source" ("boardId");
-CREATE INDEX "shortlist_email_source_created_at_idx" ON "shortlist_email_source" ("createdAt");
-CREATE UNIQUE INDEX "shortlist_email_source_extern_id_idx" ON "shortlist_email_source" ("externId");
-CREATE INDEX "shortlist_webpage_source_created_by_idx" ON "shortlist_webpage_source" ("createdBy");
-CREATE INDEX "shortlist_webpage_source_board_idx" ON "shortlist_webpage_source" ("boardId");
-CREATE INDEX "shortlist_webpage_source_created_at_idx" ON "shortlist_webpage_source" ("createdAt");
-CREATE INDEX "shortlist_source_object_created_by_idx" ON "shortlist_source_object" ("createdBy");
-CREATE INDEX "shortlist_source_object_board_idx" ON "shortlist_source_object" ("boardId");
-CREATE INDEX "shortlist_source_object_source_idx" ON "shortlist_source_object" ("sourceType", "sourceId");
-CREATE INDEX "shortlist_source_object_type_idx" ON "shortlist_source_object" ("objectType");
-CREATE UNIQUE INDEX "shortlist_source_object_s3_key_idx" ON "shortlist_source_object" ("bucket", "s3Key");
-CREATE INDEX "shortlist_job_queue_status_idx" ON "shortlist_job_queue" ("status");
-CREATE INDEX "shortlist_job_queue_run_after_idx" ON "shortlist_job_queue" ("runAfter");
-CREATE INDEX "shortlist_job_queue_source_idx" ON "shortlist_job_queue" ("sourceType", "sourceId");
-CREATE INDEX "shortlist_job_queue_board_idx" ON "shortlist_job_queue" ("boardId");
-CREATE INDEX "shortlist_job_queue_created_by_idx" ON "shortlist_job_queue" ("createdBy");
+CREATE INDEX "shortlist_attachment_source_created_by_idx" ON "shortlist_attachment_source" ("createdBy");--> statement-breakpoint
+CREATE INDEX "shortlist_attachment_source_board_idx" ON "shortlist_attachment_source" ("boardId");--> statement-breakpoint
+CREATE INDEX "shortlist_attachment_source_created_at_idx" ON "shortlist_attachment_source" ("createdAt");--> statement-breakpoint
+CREATE INDEX "shortlist_email_source_created_by_idx" ON "shortlist_email_source" ("createdBy");--> statement-breakpoint
+CREATE INDEX "shortlist_email_source_board_idx" ON "shortlist_email_source" ("boardId");--> statement-breakpoint
+CREATE INDEX "shortlist_email_source_created_at_idx" ON "shortlist_email_source" ("createdAt");--> statement-breakpoint
+CREATE UNIQUE INDEX "shortlist_email_source_extern_id_idx" ON "shortlist_email_source" ("externId");--> statement-breakpoint
+CREATE INDEX "shortlist_webpage_source_created_by_idx" ON "shortlist_webpage_source" ("createdBy");--> statement-breakpoint
+CREATE INDEX "shortlist_webpage_source_board_idx" ON "shortlist_webpage_source" ("boardId");--> statement-breakpoint
+CREATE INDEX "shortlist_webpage_source_created_at_idx" ON "shortlist_webpage_source" ("createdAt");--> statement-breakpoint
+CREATE INDEX "shortlist_source_object_created_by_idx" ON "shortlist_source_object" ("createdBy");--> statement-breakpoint
+CREATE INDEX "shortlist_source_object_board_idx" ON "shortlist_source_object" ("boardId");--> statement-breakpoint
+CREATE INDEX "shortlist_source_object_source_idx" ON "shortlist_source_object" ("sourceType", "sourceId");--> statement-breakpoint
+CREATE INDEX "shortlist_source_object_type_idx" ON "shortlist_source_object" ("objectType");--> statement-breakpoint
+CREATE UNIQUE INDEX "shortlist_source_object_s3_key_idx" ON "shortlist_source_object" ("bucket", "s3Key");--> statement-breakpoint
+CREATE INDEX "shortlist_job_queue_status_idx" ON "shortlist_job_queue" ("status");--> statement-breakpoint
+CREATE INDEX "shortlist_job_queue_run_after_idx" ON "shortlist_job_queue" ("runAfter");--> statement-breakpoint
+CREATE INDEX "shortlist_job_queue_source_idx" ON "shortlist_job_queue" ("sourceType", "sourceId");--> statement-breakpoint
+CREATE INDEX "shortlist_job_queue_board_idx" ON "shortlist_job_queue" ("boardId");--> statement-breakpoint
+CREATE INDEX "shortlist_job_queue_created_by_idx" ON "shortlist_job_queue" ("createdBy");--> statement-breakpoint

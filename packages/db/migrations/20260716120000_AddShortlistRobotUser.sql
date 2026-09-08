@@ -1,7 +1,7 @@
 ALTER TABLE
   "card_comments"
 ADD
-  COLUMN IF NOT EXISTS "shortlist_isSystem" boolean DEFAULT false NOT NULL;
+  COLUMN IF NOT EXISTS "shortlist_isSystem" boolean DEFAULT false NOT NULL;--> statement-breakpoint
 
 INSERT INTO
   "user" (
@@ -29,4 +29,4 @@ SET
   "email" = EXCLUDED."email",
   "emailVerified" = EXCLUDED."emailVerified",
   "image" = EXCLUDED."image",
-  "updatedAt" = NOW();
+  "updatedAt" = NOW();--> statement-breakpoint

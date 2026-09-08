@@ -1,8 +1,8 @@
-ALTER TABLE "shortlist_email_source" ADD COLUMN "inReplyTo" text;
-ALTER TABLE "shortlist_email_source" ADD COLUMN "referencesJson" jsonb;
-DROP INDEX IF EXISTS "shortlist_email_source_extern_id_idx";
+ALTER TABLE "shortlist_email_source" ADD COLUMN "inReplyTo" text;--> statement-breakpoint
+ALTER TABLE "shortlist_email_source" ADD COLUMN "referencesJson" jsonb;--> statement-breakpoint
+DROP INDEX IF EXISTS "shortlist_email_source_extern_id_idx";--> statement-breakpoint
 CREATE UNIQUE INDEX "shortlist_email_source_extern_board_idx"
-  ON "shortlist_email_source" ("externId", "boardId");
+  ON "shortlist_email_source" ("externId", "boardId");--> statement-breakpoint
 WITH ranked_jobs AS (
   SELECT "id", ROW_NUMBER() OVER (
     PARTITION BY "sourceType", "sourceId", "jobType"
@@ -13,9 +13,9 @@ WITH ranked_jobs AS (
 DELETE FROM "shortlist_job_queue"
 WHERE "id" IN (
   SELECT "id" FROM ranked_jobs WHERE row_number > 1
-);
+);--> statement-breakpoint
 CREATE UNIQUE INDEX "shortlist_job_queue_source_job_idx"
-  ON "shortlist_job_queue" ("sourceType", "sourceId", "jobType");
+  ON "shortlist_job_queue" ("sourceType", "sourceId", "jobType");--> statement-breakpoint
 
 CREATE TABLE "shortlist_source_card" (
   "id" uuid PRIMARY KEY DEFAULT uuid_generate_v4() NOT NULL,
@@ -28,16 +28,16 @@ CREATE TABLE "shortlist_source_card" (
   "fieldProvenanceJson" jsonb,
   "createdAt" timestamp DEFAULT now() NOT NULL,
   "updatedAt" timestamp
-);
+);--> statement-breakpoint
 
 CREATE UNIQUE INDEX "shortlist_source_card_source_idx"
-  ON "shortlist_source_card" ("sourceType", "sourceId");
+  ON "shortlist_source_card" ("sourceType", "sourceId");--> statement-breakpoint
 CREATE INDEX "shortlist_source_card_card_idx"
-  ON "shortlist_source_card" ("cardId");
+  ON "shortlist_source_card" ("cardId");--> statement-breakpoint
 CREATE INDEX "shortlist_source_card_hash_idx"
-  ON "shortlist_source_card" ("contentHash");
+  ON "shortlist_source_card" ("contentHash");--> statement-breakpoint
 
-ALTER TABLE "shortlist_attachment_source" ENABLE ROW LEVEL SECURITY;
-ALTER TABLE "shortlist_source_object" ENABLE ROW LEVEL SECURITY;
-ALTER TABLE "shortlist_job_queue" ENABLE ROW LEVEL SECURITY;
-ALTER TABLE "shortlist_source_card" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "shortlist_attachment_source" ENABLE ROW LEVEL SECURITY;--> statement-breakpoint
+ALTER TABLE "shortlist_source_object" ENABLE ROW LEVEL SECURITY;--> statement-breakpoint
+ALTER TABLE "shortlist_job_queue" ENABLE ROW LEVEL SECURITY;--> statement-breakpoint
+ALTER TABLE "shortlist_source_card" ENABLE ROW LEVEL SECURITY;--> statement-breakpoint
