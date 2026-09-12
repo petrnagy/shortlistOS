@@ -30,6 +30,7 @@ export const env = createEnv({
     TRELLO_APP_SECRET: z.string().optional(),
     // Optional shortlistOS Powerpack and Magic Inbox functionality.
     STRIPE_SECRET_KEY: z.string().optional(),
+    STRIPE_POWERPACK_PRODUCT_ID: z.string().optional(),
     STRIPE_SHORTLIST_WEBHOOK_SECRET: z.string().optional(),
     BREVO_API_KEY: z.string().optional(),
     BREVO_MAGIC_INBOX_WEBHOOK_SECRET: z.string().optional(),

@@ -381,6 +381,7 @@ All bucket and connection variables in this section are required for a standard 
 | --- | --- |
 | `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | Browser-side Stripe key |
 | `STRIPE_SECRET_KEY` | Server-side Stripe key |
+| `STRIPE_POWERPACK_PRODUCT_ID` | Stripe Product ID used for Powerpack Checkout |
 | `STRIPE_SHORTLIST_WEBHOOK_SECRET` | Powerpack webhook signing secret |
 | `STRIPE_WEBHOOK_SECRET`, `STRIPE_WEBHOOK_SECRET_LEGACY` | Workspace subscription webhook secrets |
 | `STRIPE_TEAM_PLAN_MONTHLY_PRICE_ID`, `STRIPE_TEAM_PLAN_YEARLY_PRICE_ID` | Team price IDs |
@@ -490,7 +491,7 @@ The Powerpack checkout and Magic Inbox integrations expose the following REST en
 
 #### Stripe configuration
 
-Set `STRIPE_SECRET_KEY`, `STRIPE_SHORTLIST_WEBHOOK_SECRET`, and `NEXT_PUBLIC_BASE_URL`. In Stripe, create a webhook destination pointing to:
+Set `STRIPE_SECRET_KEY`, `STRIPE_POWERPACK_PRODUCT_ID`, `STRIPE_SHORTLIST_WEBHOOK_SECRET`, and `NEXT_PUBLIC_BASE_URL`. Use the test Powerpack Product ID with Stripe test keys and the live Product ID with live keys. In Stripe, create a webhook destination pointing to:
 
 ```text
 https://your-shortlistos-domain.example/api/shortlist_stripe/webhook
