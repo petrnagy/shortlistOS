@@ -36,6 +36,9 @@ yarn-error.log*
 .env.prod
 .env*.local
 
+# local Codex task memory
+.codex/*.local.json
+
 
 # vercel
 .vercel

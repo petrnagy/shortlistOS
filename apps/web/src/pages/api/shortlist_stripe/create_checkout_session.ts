@@ -20,7 +20,6 @@ import {
   POWERPACK_MEMBERSHIP_DURATION_DAYS,
   POWERPACK_PRICE_AMOUNT_CENTS,
   POWERPACK_PRICE_CURRENCY,
-  POWERPACK_STRIPE_PRODUCT_ID,
 } from "~/config/pricing";
 import { env as serverEnv } from "~/env";
 
@@ -39,6 +38,14 @@ export default withRateLimit(
 
     if (!serverEnv.STRIPE_SECRET_KEY) {
       return res.status(500).json({ error: "Stripe is not configured" });
+    }
+
+    const productId = serverEnv.STRIPE_POWERPACK_PRODUCT_ID;
+
+    if (!productId) {
+      return res
+        .status(500)
+        .json({ error: "Stripe Powerpack product is not configured" });
     }
 
     const body =
@@ -78,7 +85,7 @@ export default withRateLimit(
           price_data: {
             currency: POWERPACK_PRICE_CURRENCY,
             unit_amount: POWERPACK_PRICE_AMOUNT_CENTS,
-            product: POWERPACK_STRIPE_PRODUCT_ID,
+            product: productId,
           },
         },
       ],
@@ -90,7 +97,7 @@ export default withRateLimit(
         userId: user.id,
         userEmail: user.email,
         membershipDurationDays: String(POWERPACK_MEMBERSHIP_DURATION_DAYS),
-        productId: POWERPACK_STRIPE_PRODUCT_ID,
+        productId,
       },
     });
 
