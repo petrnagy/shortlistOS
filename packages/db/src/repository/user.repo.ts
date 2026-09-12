@@ -2,7 +2,12 @@ import { and, count, desc, eq, isNotNull } from "drizzle-orm";
 import { v4 as uuidv4 } from "uuid";
 
 import type { dbClient } from "@kan/db/client";
-import { account, apikey, users } from "@kan/db/schema";
+import {
+  account,
+  apikey,
+  shortlistPowerpackPurchases,
+  users,
+} from "@kan/db/schema";
 
 const PROVIDER_CREDENTIAL = "credential";
 const PROVIDER_MAGIC_LINK = "magic-link";
@@ -184,4 +189,48 @@ export const grantShortlistPowerpack = async (
     });
 
   return result;
+};
+
+export const grantShortlistPowerpackForCheckout = async (
+  db: dbClient,
+  input: {
+    amountTotal: number;
+    currency: string | null;
+    membershipDurationDays: number;
+    productId: string;
+    stripeCheckoutSessionId: string;
+    stripeEventId: string;
+    userId: string;
+  },
+) => {
+  return db.transaction(async (tx) => {
+    const [purchase] = await tx
+      .insert(shortlistPowerpackPurchases)
+      .values({
+        amountTotal: input.amountTotal,
+        currency: input.currency,
+        productId: input.productId,
+        stripeCheckoutSessionId: input.stripeCheckoutSessionId,
+        stripeEventId: input.stripeEventId,
+        userId: input.userId,
+      })
+      .onConflictDoNothing()
+      .returning({ id: shortlistPowerpackPurchases.id });
+
+    if (!purchase) {
+      return { processed: false as const };
+    }
+
+    const membership = await grantShortlistPowerpack(
+      tx as unknown as dbClient,
+      input.userId,
+      input.membershipDurationDays,
+    );
+
+    if (!membership) {
+      throw new Error("Unable to grant Powerpack to unknown user");
+    }
+
+    return { membership, processed: true as const };
+  });
 };
