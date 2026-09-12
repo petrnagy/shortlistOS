@@ -3,6 +3,7 @@ import { t } from "@lingui/core/macro";
 import { FaEnvelope, FaGithub, FaLinkedin } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 
+import { APP_VERSION } from "~/config/app-version";
 import { env } from "~/env";
 
 const githubUrl = env.NEXT_PUBLIC_GITHUB_URL ?? "#";
@@ -180,8 +181,12 @@ const Footer = () => {
       </div>
       <div className="border-t border-light-300 dark:border-dark-300">
         <div className="mx-auto grid max-w-[1120px] gap-4 px-4 py-5 text-xs text-light-900 dark:text-dark-800 md:grid-cols-[1.2fr_2fr]">
-          <p>
-            © {currentYear} {t`Petr Nagy`}
+          <p className="flex flex-wrap items-center gap-x-1.5">
+            <span>
+              © {currentYear} {t`Petr Nagy`}
+            </span>
+            <span aria-hidden="true">·</span>
+            <span>v{APP_VERSION}</span>
           </p>
           <p className="flex flex-wrap items-center gap-x-1.5 gap-y-2 md:justify-end">
             <span>{t`Made in`}</span>
