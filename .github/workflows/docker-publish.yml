@@ -78,7 +78,6 @@ jobs:
           platforms: linux/arm64
           push: true
           tags: ${{ env.IMAGE_REPOSITORY }}:${{ steps.release.outputs.tag }}
-          build-args: APP_VERSION=${{ steps.release.outputs.sha }}
           cache-from: type=gha
           cache-to: type=gha,mode=max,ignore-error=true
 

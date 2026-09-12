@@ -1,18 +1,45 @@
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
+import * as boardRepo from "@kan/db/repository/board.repo";
 import * as cardActivityRepo from "@kan/db/repository/cardActivity.repo";
 import { generateAvatarUrl } from "@kan/shared/utils";
 
 import { activityItemSchema } from "../schemas";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
-const activityLogItemSchema = activityItemSchema.extend({
+const cardActivityLogItemSchema = activityItemSchema.extend({
+  entityType: z.literal("card"),
   card: z.object({
     publicId: z.string(),
     title: z.string(),
   }),
 });
+
+const boardActivityLogItemSchema = z.object({
+  entityType: z.literal("board"),
+  publicId: z.string(),
+  type: z.literal("board.created"),
+  createdAt: z.date(),
+  board: z.object({
+    publicId: z.string(),
+    name: z.string(),
+    type: z.enum(["regular", "template"]),
+  }),
+  user: z
+    .object({
+      id: z.string(),
+      name: z.string().nullable(),
+      email: z.string(),
+      image: z.string().nullable(),
+    })
+    .nullable(),
+});
+
+const activityLogItemSchema = z.discriminatedUnion("entityType", [
+  cardActivityLogItemSchema,
+  boardActivityLogItemSchema,
+]);
 
 export const activityLogRouter = createTRPCRouter({
   list: protectedProcedure
@@ -22,7 +49,7 @@ export const activityLogRouter = createTRPCRouter({
         method: "GET",
         path: "/activity-log",
         description:
-          "Retrieves paginated activity across all cards the user can access",
+          "Retrieves paginated activity across all cards and boards the user can access",
         tags: ["Activity Log"],
         protect: true,
       },
@@ -51,33 +78,60 @@ export const activityLogRouter = createTRPCRouter({
       }
 
       const cursor = input.cursor ? new Date(input.cursor) : undefined;
-      const result = await cardActivityRepo.getPaginatedUserActivities(
-        ctx.db,
-        userId,
-        {
+      const [cardResult, boardResult] = await Promise.all([
+        cardActivityRepo.getPaginatedUserActivities(ctx.db, userId, {
           limit: input.limit,
           cursor,
-        },
-      );
+        }),
+        boardRepo.getPaginatedUserBoardCreations(ctx.db, userId, {
+          limit: input.limit,
+          cursor,
+        }),
+      ]);
+
+      const combinedActivities = [
+        ...cardResult.activities.map((activity) => {
+          const { id: _id, ...activityWithoutId } = activity;
+
+          return {
+            ...activityWithoutId,
+            entityType: "card" as const,
+          };
+        }),
+        ...boardResult.activities.map((activity) => ({
+          ...activity,
+          entityType: "board" as const,
+        })),
+      ].sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+
+      const activities = combinedActivities.slice(0, input.limit);
+      const hasMore =
+        combinedActivities.length > input.limit ||
+        cardResult.hasMore ||
+        boardResult.hasMore;
 
       const activitiesWithAvatarUrls = await Promise.all(
-        result.activities.map(async (activity) => {
-          const { id: _id, ...activityWithoutId } = activity;
-          const updatedActivity = { ...activityWithoutId };
+        activities.map(async (activity) => {
+          const user = activity.user?.image
+            ? {
+                ...activity.user,
+                image: await generateAvatarUrl(activity.user.image),
+              }
+            : activity.user;
 
-          if (activity.user?.image) {
-            const userAvatarUrl = await generateAvatarUrl(activity.user.image);
-            updatedActivity.user = {
-              ...activity.user,
-              image: userAvatarUrl,
+          if (activity.entityType === "board") {
+            return {
+              ...activity,
+              user,
             };
           }
 
+          let member = activity.member;
           if (activity.member?.user?.image) {
             const memberAvatarUrl = await generateAvatarUrl(
               activity.member.user.image,
             );
-            updatedActivity.member = {
+            member = {
               ...activity.member,
               user: {
                 ...activity.member.user,
@@ -86,14 +140,22 @@ export const activityLogRouter = createTRPCRouter({
             };
           }
 
-          return updatedActivity;
+          return {
+            ...activity,
+            user,
+            member,
+          };
         }),
       );
 
+      const nextCursor = hasMore
+        ? activities[activities.length - 1]?.createdAt
+        : undefined;
+
       return {
         activities: activitiesWithAvatarUrls,
-        hasMore: result.hasMore,
-        nextCursor: result.nextCursor?.toISOString() ?? null,
+        hasMore,
+        nextCursor: nextCursor?.toISOString() ?? null,
       };
     }),
 });

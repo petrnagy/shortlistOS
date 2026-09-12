@@ -222,6 +222,11 @@ invocation with a full commit SHA already present on `main`. Automatic
 deployments remain disabled unless the `PRODUCTION_DEPLOYMENTS_ENABLED`
 repository variable is exactly `true`.
 
+The human-facing application version comes from the root `package.json`
+`version` field and must use `major.minor.patch` format. CI checks that the
+field exists and is valid, but deliberately does not require an increment on
+every pull request or release.
+
 Run the migration image once before replacing the web workload. Back up the database before upgrades and retain the exact image tag used for rollback.
 
 ## Object storage and AWS S3
@@ -289,7 +294,7 @@ Copy [`.env.example`](./.env.example) as the starting point. Empty optional valu
 | `POSTGRES_PASSWORD` | Compose | Password used by the bundled PostgreSQL container |
 | `WEB_PORT` | No | Host port for Compose; default `3000` |
 | `CONTAINER_NAME`, `MIGRATOR_CONTAINER_NAME` | No | Container-name overrides |
-| `APP_VERSION`, `NEXT_PUBLIC_APP_VERSION` | No | Build/runtime version display |
+| `APP_VERSION` | Deployment | Immutable container-image tag supplied by the deployment tooling |
 | `NODE_ENV` | No | `development`, `production`, or `test` |
 | `NEXT_PUBLIC_KAN_ENV` | No | Deployment/environment identifier retained for upstream compatibility |
 | `KAN_ADMIN_API_KEY` | No | Administrative API credential |
