@@ -78,6 +78,7 @@ export default withRateLimit(
       : "";
 
     const session = await stripe.checkout.sessions.create({
+      allow_promotion_codes: true,
       mode: "payment",
       line_items: [
         {

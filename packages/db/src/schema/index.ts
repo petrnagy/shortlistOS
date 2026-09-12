@@ -14,6 +14,7 @@ export * from "./subscriptions";
 export * from "./workspaceInviteLinks";
 export * from "./permissions";
 export * from "./notifications";
+export * from "./payments";
 export * from "./shortlist";
 export * from "./shortlistAutomation";
 export * from "./webhooks";
