@@ -27,6 +27,7 @@ import {
   labels,
   lists,
   userBoardFavorites,
+  users,
   workspaceMembers,
 } from "@kan/db/schema";
 import { generateUID } from "@kan/shared/utils";
@@ -98,6 +99,74 @@ export const getAllByWorkspaceId = async (
       // Then alphabetically by name
       return a.name.localeCompare(b.name);
     });
+};
+
+export const getPaginatedUserBoardCreations = async (
+  db: dbClient,
+  userId: string,
+  options?: {
+    limit?: number;
+    cursor?: Date;
+  },
+) => {
+  const limit = options?.limit ?? 20;
+  const cursor = options?.cursor;
+
+  const rows = await db
+    .select({
+      publicId: boards.publicId,
+      name: boards.name,
+      type: boards.type,
+      createdAt: boards.createdAt,
+      userId: users.id,
+      userName: users.name,
+      userEmail: users.email,
+      userImage: users.image,
+    })
+    .from(boards)
+    .innerJoin(
+      workspaceMembers,
+      eq(boards.workspaceId, workspaceMembers.workspaceId),
+    )
+    .leftJoin(users, eq(boards.createdBy, users.id))
+    .where(
+      and(
+        eq(workspaceMembers.userId, userId),
+        eq(workspaceMembers.status, "active"),
+        isNull(workspaceMembers.deletedAt),
+        isNull(boards.deletedAt),
+        cursor ? lt(boards.createdAt, cursor) : undefined,
+      ),
+    )
+    .orderBy(desc(boards.createdAt))
+    .limit(limit + 1);
+
+  const hasMore = rows.length > limit;
+  const items = rows.slice(0, limit).map((row) => ({
+    publicId: row.publicId,
+    type: "board.created" as const,
+    createdAt: row.createdAt,
+    board: {
+      publicId: row.publicId,
+      name: row.name,
+      type: row.type,
+    },
+    user: row.userId
+      ? {
+          id: row.userId,
+          name: row.userName,
+          email: row.userEmail ?? "",
+          image: row.userImage,
+        }
+      : null,
+  }));
+  const nextCursor = hasMore ? items[items.length - 1]?.createdAt : undefined;
+
+  return {
+    activities: items,
+    hasMore,
+    nextCursor,
+  };
 };
 
 export const getIdByPublicId = async (db: dbClient, boardPublicId: string) => {

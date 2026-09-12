@@ -16,8 +16,8 @@ export default function WelcomeTemplate({ name }: { name?: string }) {
       footer="You received this email because you created a shortlistOS account."
     >
       <Text style={{ fontSize: "15px", lineHeight: "24px" }}>
-        shortlistOS gives you one private place to organize opportunities and
-        keep your job search moving.
+        shortlistOS gives you unlimited private shortlists to organize
+        opportunities and keep your job search moving.
       </Text>
       <Text style={{ fontSize: "15px", lineHeight: "24px" }}>
         Start with the short guide, then create your first shortlist when
