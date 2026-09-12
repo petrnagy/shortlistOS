@@ -2,6 +2,7 @@ import Link from "next/link";
 import { t } from "@lingui/core/macro";
 import { formatDistanceToNow } from "date-fns";
 import { useEffect, useState } from "react";
+import { HiOutlinePlus } from "react-icons/hi2";
 
 import type { GetActivityLogOutput } from "@kan/api/types";
 import { authClient } from "@kan/auth/client";
@@ -118,31 +119,40 @@ export default function ActivityLog() {
               ) : (
                 <div className="flex flex-col space-y-4">
                   {activities.map((activity, index) => {
-                    const activityText = getActivityText({
-                      type: activity.type,
-                      toTitle: activity.toTitle,
-                      fromList: activity.fromList?.name ?? null,
-                      toList: activity.toList?.name ?? null,
-                      memberName: activity.member?.user?.name ?? null,
-                      memberEmail: activity.member?.user?.email ?? null,
-                      isSelf:
-                        activity.member?.user?.id === sessionData?.user.id,
-                      label: activity.label?.name ?? null,
-                      fromTitle: activity.fromTitle ?? null,
-                      fromDescription: activity.fromDescription ?? null,
-                      toDescription: activity.toDescription ?? null,
-                      fromDueDate: activity.fromDueDate ?? null,
-                      toDueDate: activity.toDueDate ?? null,
-                      dateLocale,
-                      attachmentName:
-                        activity.attachment?.originalFilename ?? null,
-                    });
+                    const isBoardActivity = activity.entityType === "board";
+                    const activityText = isBoardActivity
+                      ? t`created`
+                      : getActivityText({
+                          type: activity.type,
+                          toTitle: activity.toTitle,
+                          fromList: activity.fromList?.name ?? null,
+                          toList: activity.toList?.name ?? null,
+                          memberName: activity.member?.user?.name ?? null,
+                          memberEmail: activity.member?.user?.email ?? null,
+                          isSelf:
+                            activity.member?.user?.id === sessionData?.user.id,
+                          label: activity.label?.name ?? null,
+                          fromTitle: activity.fromTitle ?? null,
+                          fromDescription: activity.fromDescription ?? null,
+                          toDescription: activity.toDescription ?? null,
+                          fromDueDate: activity.fromDueDate ?? null,
+                          toDueDate: activity.toDueDate ?? null,
+                          dateLocale,
+                          attachmentName:
+                            activity.attachment?.originalFilename ?? null,
+                        });
 
                     if (!activityText) return null;
 
-                    const cardLinkConnector = getCardLinkConnector(
-                      activity.type,
-                    );
+                    const subjectHref = isBoardActivity
+                      ? `/${activity.board.type === "template" ? "templates" : "boards"}/${activity.board.publicId}`
+                      : `/cards/${activity.card.publicId}`;
+                    const subjectTitle = isBoardActivity
+                      ? activity.board.name
+                      : activity.card.title;
+                    const cardLinkConnector = isBoardActivity
+                      ? ""
+                      : getCardLinkConnector(activity.type);
                     const isMilestone = milestoneActivityIds.has(
                       activity.publicId,
                     );
@@ -172,11 +182,17 @@ export default function ActivityLog() {
                               getAvatarUrl(activity.user?.image ?? null) ||
                               undefined
                             }
-                            icon={getActivityIcon(
-                              activity.type,
-                              activity.fromList?.index,
-                              activity.toList?.index,
-                            )}
+                            icon={
+                              isBoardActivity ? (
+                                <HiOutlinePlus />
+                              ) : (
+                                getActivityIcon(
+                                  activity.type,
+                                  activity.fromList?.index,
+                                  activity.toList?.index,
+                                )
+                              )
+                            }
                             isLoading={isFetching || isLoadingMore}
                           />
                           {index !== activities.length - 1 && (
@@ -195,10 +211,10 @@ export default function ActivityLog() {
                               </span>
                             )}
                             <Link
-                              href={`/cards/${activity.card.publicId}`}
+                              href={subjectHref}
                               className="font-medium text-light-1000 underline underline-offset-2 hover:text-light-900 dark:text-dark-1000 dark:hover:text-dark-900"
                             >
-                              {activity.card.title}
+                              {subjectTitle}
                             </Link>
                           </p>
                           {isMilestone && (
