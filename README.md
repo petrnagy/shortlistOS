@@ -486,7 +486,7 @@ The Powerpack checkout and Magic Inbox integrations expose the following REST en
 | Method | Endpoint                                        | Authentication                                             | Purpose                                                                                                                                                                                                                                    |
 | ------ | ----------------------------------------------- | ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `POST` | `/api/shortlist_stripe/create_checkout_session` | Signed-in shortlistOS session                              | Creates a one-time Stripe Checkout session for Powerpack and returns `{ "sessionId": "..." }`. The optional JSON body `{ "withPowerpack": "yes" }` preserves the Powerpack purchase flow through the success, cancel, and login redirects. |
-| `POST` | `/api/shortlist_stripe/webhook`                 | Stripe signature in the `Stripe-Signature` header          | Handles `checkout.session.completed`. A paid checkout grants or extends Powerpack for the user identified by the Checkout metadata or client reference ID.                                                                                 |
+| `POST` | `/api/shortlist_stripe/webhook`                 | Stripe signature in the `Stripe-Signature` header          | Handles `checkout.session.completed`. A paid checkout or valid zero-total promotion grants or extends Powerpack once for the user identified by the Checkout metadata or client reference ID.                                              |
 | `POST` | `/api/shortlist_magic_inbox/incoming_webhook`   | `Authorization: Bearer <BREVO_MAGIC_INBOX_WEBHOOK_SECRET>` | Receives Brevo inbound-email batches, stores supported message bodies and attachments, and enqueues Magic Inbox processing.                                                |
 
 #### Stripe configuration
@@ -498,6 +498,8 @@ https://your-shortlistos-domain.example/api/shortlist_stripe/webhook
 ```
 
 Subscribe it to `checkout.session.completed` and copy that destination's signing secret into `STRIPE_SHORTLIST_WEBHOOK_SECRET`. Stripe must send the original request body; the endpoint disables Next.js body parsing so signature verification uses the raw payload.
+
+Powerpack Checkout accepts Stripe promotion codes. Completed sessions are fulfilled only when they use payment mode, reference the configured Powerpack Product ID, and are either paid or have a zero total with `no_payment_required` status. Processed Stripe event and Checkout Session IDs are recorded so retries cannot extend the same purchase more than once.
 
 The checkout-session endpoint is intended to be called by the signed-in web client. It returns `401` with a `loginUrl` when no valid shortlistOS session is present.
 

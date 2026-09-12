@@ -17,6 +17,7 @@ import { createLogger } from "@kan/logger";
 
 import { POWERPACK_MEMBERSHIP_DURATION_DAYS } from "~/config/pricing";
 import { env } from "~/env";
+import { getPowerpackFulfillment } from "~/utils/stripe-powerpack";
 
 const log = createLogger("api");
 const stripe = new Stripe(env.STRIPE_SECRET_KEY ?? "");
@@ -45,6 +46,14 @@ export default async function handler(
     return res.status(500).json({ message: "Stripe is not configured" });
   }
 
+  const productId = env.STRIPE_POWERPACK_PRODUCT_ID;
+
+  if (!productId) {
+    return res
+      .status(500)
+      .json({ message: "Stripe Powerpack product is not configured" });
+  }
+
   const webhookSecret = env.STRIPE_SHORTLIST_WEBHOOK_SECRET;
 
   if (!webhookSecret) {
@@ -70,22 +79,16 @@ export default async function handler(
     switch (event.type) {
       case "checkout.session.completed": {
         const checkoutSession = event.data.object;
-        const metadataUserId = checkoutSession.metadata?.userId;
-        const userId = metadataUserId ?? checkoutSession.client_reference_id;
+        const fulfillment = getPowerpackFulfillment(checkoutSession, productId);
 
-        if (!userId) {
-          break;
-        }
+        if (!fulfillment) break;
 
-        if (checkoutSession.payment_status !== "paid") {
-          break;
-        }
-
-        await userRepo.grantShortlistPowerpack(
-          db,
-          userId,
-          POWERPACK_MEMBERSHIP_DURATION_DAYS,
-        );
+        await userRepo.grantShortlistPowerpackForCheckout(db, {
+          ...fulfillment,
+          membershipDurationDays: POWERPACK_MEMBERSHIP_DURATION_DAYS,
+          stripeCheckoutSessionId: checkoutSession.id,
+          stripeEventId: event.id,
+        });
 
         break;
       }

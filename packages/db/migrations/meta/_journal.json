@@ -442,6 +442,13 @@
       "when": 1785878330347,
       "tag": "20260804211850_AddShortlistAutomationQueues",
       "breakpoints": true
+    },
+    {
+      "idx": 63,
+      "version": "7",
+      "when": 1789221600000,
+      "tag": "20260912160000_AddShortlistPowerpackPurchases",
+      "breakpoints": true
     }
   ]
 }
