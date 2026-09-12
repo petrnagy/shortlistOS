@@ -1,5 +1,6 @@
 {
   "name": "shortlistos",
+  "version": "0.1.0",
   "private": true,
   "license": "AGPL-3.0-or-later",
   "engines": {
@@ -9,6 +10,7 @@
   "packageManager": "pnpm@9.14.2",
   "scripts": {
     "build": "turbo run build",
+    "check:app-version": "node scripts/check-app-version.mjs",
     "clean": "git clean -xdf node_modules",
     "clean:workspaces": "turbo run clean",
     "db:migrate": "cd packages/db && pnpm migrate",

@@ -20,19 +20,8 @@ RUN apk update && \
 # ============================================
 FROM alpine AS pruner
 
-RUN apk add --no-cache git
-
 WORKDIR /app
 COPY . .
-
-# Generate version from git (fallback if APP_VERSION not provided)
-RUN git fetch --tags --unshallow 2>/dev/null || git fetch --tags 2>/dev/null || true && \
-    AUTO_VERSION=$(git describe --tags --always --long 2>/dev/null | \
-    sed -E 's/^v?([0-9]+\.[0-9]+\.[0-9]+)-[0-9]+-g([a-f0-9]{7}).*/\1+\2/' | \
-    sed 's/^v//' || \
-    git rev-parse --short HEAD 2>/dev/null | head -c 7 || \
-    echo "unknown") && \
-    echo "$AUTO_VERSION" > /app/AUTO_VERSION
 
 RUN turbo prune \
     --scope=@kan/web \
@@ -61,20 +50,17 @@ RUN pnpm install --frozen-lockfile
 # Stage 4: Build the web application
 # ============================================
 FROM alpine AS builder
-ARG APP_VERSION
 
 WORKDIR /app
 
 COPY --from=deps /app/ ./
 COPY --from=pruner /app/out/full/ .
-COPY --from=pruner /app/AUTO_VERSION /tmp/AUTO_VERSION
 
 # Force standalone output for production Docker image
 ENV NEXT_PUBLIC_USE_STANDALONE_OUTPUT=true
 ENV CI=true
 
-RUN VERSION="${APP_VERSION:-$(cat /tmp/AUTO_VERSION 2>/dev/null | tr -d '\n\r' || echo 'unknown')}" && \
-    NEXT_PUBLIC_APP_VERSION="$VERSION" pnpm build --filter=@kan/web
+RUN pnpm build --filter=@kan/web
 
 # ============================================
 # Stage 5: Migration image (run-once container)
