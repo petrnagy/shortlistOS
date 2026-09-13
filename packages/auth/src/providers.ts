@@ -10,6 +10,7 @@ export const configuredProviders = socialProviderList.reduce<
       appBundleIdentifier?: string;
       tenantId?: string;
       requireSelectAccount?: boolean;
+      disableProfilePhoto?: boolean;
       clientKey?: string;
       issuer?: string;
       // Google-specific optional hints
@@ -51,6 +52,7 @@ export const configuredProviders = socialProviderList.reduce<
   ) {
     acc[provider].tenantId = "common";
     acc[provider].requireSelectAccount = true;
+    acc[provider].disableProfilePhoto = true;
   }
   // Add Google domain hint if allowed domains is configured
   if (
