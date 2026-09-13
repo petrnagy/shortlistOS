@@ -1,8 +1,9 @@
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
-import * as boardRepo from "@kan/db/repository/board.repo";
+import * as boardActivityRepo from "@kan/db/repository/board-activity.repo";
 import * as cardActivityRepo from "@kan/db/repository/cardActivity.repo";
+import { boardActivityTypes } from "@kan/db/schema";
 import { generateAvatarUrl } from "@kan/shared/utils";
 
 import { activityItemSchema } from "../schemas";
@@ -19,10 +20,10 @@ const cardActivityLogItemSchema = activityItemSchema.extend({
 const boardActivityLogItemSchema = z.object({
   entityType: z.literal("board"),
   publicId: z.string(),
-  type: z.literal("board.created"),
+  type: z.enum(boardActivityTypes),
   createdAt: z.date(),
   board: z.object({
-    publicId: z.string(),
+    publicId: z.string().nullable(),
     name: z.string(),
     type: z.enum(["regular", "template"]),
   }),
@@ -83,7 +84,7 @@ export const activityLogRouter = createTRPCRouter({
           limit: input.limit,
           cursor,
         }),
-        boardRepo.getPaginatedUserBoardCreations(ctx.db, userId, {
+        boardActivityRepo.getPaginatedUserActivities(ctx.db, userId, {
           limit: input.limit,
           cursor,
         }),

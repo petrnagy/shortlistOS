@@ -17,15 +17,19 @@ import {
   generateUID,
 } from "@kan/shared/utils";
 
-import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 import {
-  boardListItemSchema,
-  boardDetailSchema,
   boardBySlugSchema,
   boardCreateResponseSchema,
+  boardDetailSchema,
+  boardListItemSchema,
   boardUpdateResponseSchema,
 } from "../schemas";
-import { assertCanDelete, assertCanEdit, assertPermission } from "../utils/permissions";
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
+import {
+  assertCanDelete,
+  assertCanEdit,
+  assertPermission,
+} from "../utils/permissions";
 
 const hasActivePowerpack = (
   user: {
@@ -93,7 +97,7 @@ export const boardRouter = createTRPCRouter({
         {
           type: input.type,
           archived: input.archived ?? false,
-        }
+        },
       );
 
       return result;
@@ -180,24 +184,24 @@ export const boardRouter = createTRPCRouter({
 
       // Generate presigned URLs for workspace member avatars
       const workspaceWithAvatarUrls = {
-          ...result.workspace,
-          members: await Promise.all(
-            result.workspace.members.map(async (member) => {
-              if (!member.user?.image) {
-                return member;
-              }
+        ...result.workspace,
+        members: await Promise.all(
+          result.workspace.members.map(async (member) => {
+            if (!member.user?.image) {
+              return member;
+            }
 
-              const avatarUrl = await generateAvatarUrl(member.user.image);
-              return {
-                ...member,
-                user: {
-                  ...member.user,
-                  image: avatarUrl,
-                },
-              };
-            }),
-          ),
-        };
+            const avatarUrl = await generateAvatarUrl(member.user.image);
+            return {
+              ...member,
+              user: {
+                ...member.user,
+                image: avatarUrl,
+              },
+            };
+          }),
+        ),
+      };
 
       // Generate presigned URLs for card member avatars
       const listsWithAvatarUrls = await Promise.all(
@@ -660,6 +664,7 @@ export const boardRouter = createTRPCRouter({
       }
 
       const result = await boardRepo.update(ctx.db, {
+        updatedBy: userId,
         name: input.name,
         slug: input.slug,
         boardPublicId: input.boardPublicId,
@@ -682,7 +687,8 @@ export const boardRouter = createTRPCRouter({
           input.shortlistAppliedFollowUpReminderAfterDays,
         shortlistIsAppliedGhostedEnabled:
           input.shortlistIsAppliedGhostedEnabled,
-        shortlistAppliedGhostedAfterDays: input.shortlistAppliedGhostedAfterDays,
+        shortlistAppliedGhostedAfterDays:
+          input.shortlistAppliedGhostedAfterDays,
         shortlistIsInterviewingNudgeEnabled:
           input.shortlistIsInterviewingNudgeEnabled,
         shortlistInterviewingNudgeAfterDays:

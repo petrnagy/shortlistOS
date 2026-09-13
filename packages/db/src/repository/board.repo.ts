@@ -15,6 +15,7 @@ import {
 import type { dbClient } from "@kan/db/client";
 import type { BoardVisibilityStatus } from "@kan/db/schema";
 import {
+  boardActivities,
   boards,
   cardActivities,
   cardAttachments,
@@ -27,7 +28,6 @@ import {
   labels,
   lists,
   userBoardFavorites,
-  users,
   workspaceMembers,
 } from "@kan/db/schema";
 import { generateUID } from "@kan/shared/utils";
@@ -99,74 +99,6 @@ export const getAllByWorkspaceId = async (
       // Then alphabetically by name
       return a.name.localeCompare(b.name);
     });
-};
-
-export const getPaginatedUserBoardCreations = async (
-  db: dbClient,
-  userId: string,
-  options?: {
-    limit?: number;
-    cursor?: Date;
-  },
-) => {
-  const limit = options?.limit ?? 20;
-  const cursor = options?.cursor;
-
-  const rows = await db
-    .select({
-      publicId: boards.publicId,
-      name: boards.name,
-      type: boards.type,
-      createdAt: boards.createdAt,
-      userId: users.id,
-      userName: users.name,
-      userEmail: users.email,
-      userImage: users.image,
-    })
-    .from(boards)
-    .innerJoin(
-      workspaceMembers,
-      eq(boards.workspaceId, workspaceMembers.workspaceId),
-    )
-    .leftJoin(users, eq(boards.createdBy, users.id))
-    .where(
-      and(
-        eq(workspaceMembers.userId, userId),
-        eq(workspaceMembers.status, "active"),
-        isNull(workspaceMembers.deletedAt),
-        isNull(boards.deletedAt),
-        cursor ? lt(boards.createdAt, cursor) : undefined,
-      ),
-    )
-    .orderBy(desc(boards.createdAt))
-    .limit(limit + 1);
-
-  const hasMore = rows.length > limit;
-  const items = rows.slice(0, limit).map((row) => ({
-    publicId: row.publicId,
-    type: "board.created" as const,
-    createdAt: row.createdAt,
-    board: {
-      publicId: row.publicId,
-      name: row.name,
-      type: row.type,
-    },
-    user: row.userId
-      ? {
-          id: row.userId,
-          name: row.userName,
-          email: row.userEmail ?? "",
-          image: row.userImage,
-        }
-      : null,
-  }));
-  const nextCursor = hasMore ? items[items.length - 1]?.createdAt : undefined;
-
-  return {
-    activities: items,
-    hasMore,
-    nextCursor,
-  };
 };
 
 export const getIdByPublicId = async (db: dbClient, boardPublicId: string) => {
@@ -719,25 +651,37 @@ export const create = async (
     sourceBoardId?: number;
   },
 ) => {
-  const [result] = await db
-    .insert(boards)
-    .values({
-      publicId: boardInput.publicId ?? generateUID(),
-      name: boardInput.name,
-      createdBy: boardInput.createdBy,
-      workspaceId: boardInput.workspaceId,
-      importId: boardInput.importId,
-      slug: boardInput.slug,
-      type: boardInput.type ?? "regular",
-      sourceBoardId: boardInput.sourceBoardId,
-    })
-    .returning({
-      id: boards.id,
-      publicId: boards.publicId,
-      name: boards.name,
-    });
+  return db.transaction(async (tx) => {
+    const [result] = await tx
+      .insert(boards)
+      .values({
+        publicId: boardInput.publicId ?? generateUID(),
+        name: boardInput.name,
+        createdBy: boardInput.createdBy,
+        workspaceId: boardInput.workspaceId,
+        importId: boardInput.importId,
+        slug: boardInput.slug,
+        type: boardInput.type ?? "regular",
+        sourceBoardId: boardInput.sourceBoardId,
+      })
+      .returning({
+        id: boards.id,
+        publicId: boards.publicId,
+        name: boards.name,
+      });
 
-  return result;
+    if (result)
+      await tx.insert(boardActivities).values({
+        publicId: generateUID(),
+        type: "board.created",
+        boardId: result.id,
+        boardName: result.name,
+        boardType: boardInput.type ?? "regular",
+        workspaceId: boardInput.workspaceId,
+        createdBy: boardInput.createdBy,
+      });
+    return result;
+  });
 };
 
 export const update = async (
@@ -747,6 +691,7 @@ export const update = async (
     slug: string | undefined;
     visibility: BoardVisibilityStatus | undefined;
     boardPublicId: string;
+    updatedBy: string;
     isArchived?: boolean;
     shortlistIsSalaryDataEnabled?: boolean;
     shortlistIsCompanySentimentEnabled?: boolean;
@@ -768,122 +713,152 @@ export const update = async (
     shortlistIsCardAgingEnabled?: boolean;
   },
 ) => {
-  const [result] = await db
-    .update(boards)
-    .set({
-      name: boardInput.name,
-      slug: boardInput.slug,
-      visibility: boardInput.visibility,
-      updatedAt: new Date(),
-      ...(boardInput.isArchived !== undefined && {
-        isArchived: boardInput.isArchived,
-      }),
-      ...(boardInput.shortlistIsSalaryDataEnabled !== undefined && {
-        shortlistIsSalaryDataEnabled: boardInput.shortlistIsSalaryDataEnabled,
-      }),
-      ...(boardInput.shortlistIsCompanySentimentEnabled !== undefined && {
+  return db.transaction(async (tx) => {
+    const [previous] = await tx
+      .select()
+      .from(boards)
+      .where(
+        and(
+          eq(boards.publicId, boardInput.boardPublicId),
+          isNull(boards.deletedAt),
+        ),
+      )
+      .for("update");
+    if (!previous) return undefined;
+    const [result] = await tx
+      .update(boards)
+      .set({
+        name: boardInput.name,
+        slug: boardInput.slug,
+        visibility: boardInput.visibility,
+        updatedAt: new Date(),
+        ...(boardInput.isArchived !== undefined && {
+          isArchived: boardInput.isArchived,
+        }),
+        ...(boardInput.shortlistIsSalaryDataEnabled !== undefined && {
+          shortlistIsSalaryDataEnabled: boardInput.shortlistIsSalaryDataEnabled,
+        }),
+        ...(boardInput.shortlistIsCompanySentimentEnabled !== undefined && {
+          shortlistIsCompanySentimentEnabled:
+            boardInput.shortlistIsCompanySentimentEnabled,
+        }),
+        ...(boardInput.shortlistIsMagicInboxEnabled !== undefined && {
+          shortlistIsMagicInboxEnabled: boardInput.shortlistIsMagicInboxEnabled,
+        }),
+        ...(boardInput.shortlistIsCalendarFeedEnabled !== undefined && {
+          shortlistIsCalendarFeedEnabled:
+            boardInput.shortlistIsCalendarFeedEnabled,
+        }),
+        ...(boardInput.shortlistIsSavedReminderEnabled !== undefined && {
+          shortlistIsSavedReminderEnabled:
+            boardInput.shortlistIsSavedReminderEnabled,
+        }),
+        ...(boardInput.shortlistSavedReminderAfterDays !== undefined && {
+          shortlistSavedReminderAfterDays:
+            boardInput.shortlistSavedReminderAfterDays,
+        }),
+        ...(boardInput.shortlistIsSavedAutoArchiveEnabled !== undefined && {
+          shortlistIsSavedAutoArchiveEnabled:
+            boardInput.shortlistIsSavedAutoArchiveEnabled,
+        }),
+        ...(boardInput.shortlistSavedAutoArchiveAfterDays !== undefined && {
+          shortlistSavedAutoArchiveAfterDays:
+            boardInput.shortlistSavedAutoArchiveAfterDays,
+        }),
+        ...(boardInput.shortlistIsAppliedFollowUpReminderEnabled !==
+          undefined && {
+          shortlistIsAppliedFollowUpReminderEnabled:
+            boardInput.shortlistIsAppliedFollowUpReminderEnabled,
+        }),
+        ...(boardInput.shortlistAppliedFollowUpReminderAfterDays !==
+          undefined && {
+          shortlistAppliedFollowUpReminderAfterDays:
+            boardInput.shortlistAppliedFollowUpReminderAfterDays,
+        }),
+        ...(boardInput.shortlistIsAppliedGhostedEnabled !== undefined && {
+          shortlistIsAppliedGhostedEnabled:
+            boardInput.shortlistIsAppliedGhostedEnabled,
+        }),
+        ...(boardInput.shortlistAppliedGhostedAfterDays !== undefined && {
+          shortlistAppliedGhostedAfterDays:
+            boardInput.shortlistAppliedGhostedAfterDays,
+        }),
+        ...(boardInput.shortlistIsInterviewingNudgeEnabled !== undefined && {
+          shortlistIsInterviewingNudgeEnabled:
+            boardInput.shortlistIsInterviewingNudgeEnabled,
+        }),
+        ...(boardInput.shortlistInterviewingNudgeAfterDays !== undefined && {
+          shortlistInterviewingNudgeAfterDays:
+            boardInput.shortlistInterviewingNudgeAfterDays,
+        }),
+        ...(boardInput.shortlistIsNegotiatingNudgeEnabled !== undefined && {
+          shortlistIsNegotiatingNudgeEnabled:
+            boardInput.shortlistIsNegotiatingNudgeEnabled,
+        }),
+        ...(boardInput.shortlistNegotiatingNudgeAfterDays !== undefined && {
+          shortlistNegotiatingNudgeAfterDays:
+            boardInput.shortlistNegotiatingNudgeAfterDays,
+        }),
+        ...(boardInput.shortlistIsWeeklyDigestEnabled !== undefined && {
+          shortlistIsWeeklyDigestEnabled:
+            boardInput.shortlistIsWeeklyDigestEnabled,
+        }),
+        ...(boardInput.shortlistIsCardAgingEnabled !== undefined && {
+          shortlistIsCardAgingEnabled: boardInput.shortlistIsCardAgingEnabled,
+        }),
+      })
+      .where(eq(boards.publicId, boardInput.boardPublicId))
+      .returning({
+        publicId: boards.publicId,
+        name: boards.name,
+        shortlistIsSalaryDataEnabled: boards.shortlistIsSalaryDataEnabled,
         shortlistIsCompanySentimentEnabled:
-          boardInput.shortlistIsCompanySentimentEnabled,
-      }),
-      ...(boardInput.shortlistIsMagicInboxEnabled !== undefined && {
-        shortlistIsMagicInboxEnabled: boardInput.shortlistIsMagicInboxEnabled,
-      }),
-      ...(boardInput.shortlistIsCalendarFeedEnabled !== undefined && {
-        shortlistIsCalendarFeedEnabled:
-          boardInput.shortlistIsCalendarFeedEnabled,
-      }),
-      ...(boardInput.shortlistIsSavedReminderEnabled !== undefined && {
-        shortlistIsSavedReminderEnabled:
-          boardInput.shortlistIsSavedReminderEnabled,
-      }),
-      ...(boardInput.shortlistSavedReminderAfterDays !== undefined && {
-        shortlistSavedReminderAfterDays:
-          boardInput.shortlistSavedReminderAfterDays,
-      }),
-      ...(boardInput.shortlistIsSavedAutoArchiveEnabled !== undefined && {
+          boards.shortlistIsCompanySentimentEnabled,
+        shortlistIsMagicInboxEnabled: boards.shortlistIsMagicInboxEnabled,
+        shortlistIsCalendarFeedEnabled: boards.shortlistIsCalendarFeedEnabled,
+        shortlistIsSavedReminderEnabled: boards.shortlistIsSavedReminderEnabled,
+        shortlistSavedReminderAfterDays: boards.shortlistSavedReminderAfterDays,
         shortlistIsSavedAutoArchiveEnabled:
-          boardInput.shortlistIsSavedAutoArchiveEnabled,
-      }),
-      ...(boardInput.shortlistSavedAutoArchiveAfterDays !== undefined && {
+          boards.shortlistIsSavedAutoArchiveEnabled,
         shortlistSavedAutoArchiveAfterDays:
-          boardInput.shortlistSavedAutoArchiveAfterDays,
-      }),
-      ...(boardInput.shortlistIsAppliedFollowUpReminderEnabled !==
-        undefined && {
+          boards.shortlistSavedAutoArchiveAfterDays,
         shortlistIsAppliedFollowUpReminderEnabled:
-          boardInput.shortlistIsAppliedFollowUpReminderEnabled,
-      }),
-      ...(boardInput.shortlistAppliedFollowUpReminderAfterDays !==
-        undefined && {
+          boards.shortlistIsAppliedFollowUpReminderEnabled,
         shortlistAppliedFollowUpReminderAfterDays:
-          boardInput.shortlistAppliedFollowUpReminderAfterDays,
-      }),
-      ...(boardInput.shortlistIsAppliedGhostedEnabled !== undefined && {
+          boards.shortlistAppliedFollowUpReminderAfterDays,
         shortlistIsAppliedGhostedEnabled:
-          boardInput.shortlistIsAppliedGhostedEnabled,
-      }),
-      ...(boardInput.shortlistAppliedGhostedAfterDays !== undefined && {
+          boards.shortlistIsAppliedGhostedEnabled,
         shortlistAppliedGhostedAfterDays:
-          boardInput.shortlistAppliedGhostedAfterDays,
-      }),
-      ...(boardInput.shortlistIsInterviewingNudgeEnabled !== undefined && {
+          boards.shortlistAppliedGhostedAfterDays,
         shortlistIsInterviewingNudgeEnabled:
-          boardInput.shortlistIsInterviewingNudgeEnabled,
-      }),
-      ...(boardInput.shortlistInterviewingNudgeAfterDays !== undefined && {
+          boards.shortlistIsInterviewingNudgeEnabled,
         shortlistInterviewingNudgeAfterDays:
-          boardInput.shortlistInterviewingNudgeAfterDays,
-      }),
-      ...(boardInput.shortlistIsNegotiatingNudgeEnabled !== undefined && {
+          boards.shortlistInterviewingNudgeAfterDays,
         shortlistIsNegotiatingNudgeEnabled:
-          boardInput.shortlistIsNegotiatingNudgeEnabled,
-      }),
-      ...(boardInput.shortlistNegotiatingNudgeAfterDays !== undefined && {
+          boards.shortlistIsNegotiatingNudgeEnabled,
         shortlistNegotiatingNudgeAfterDays:
-          boardInput.shortlistNegotiatingNudgeAfterDays,
-      }),
-      ...(boardInput.shortlistIsWeeklyDigestEnabled !== undefined && {
-        shortlistIsWeeklyDigestEnabled:
-          boardInput.shortlistIsWeeklyDigestEnabled,
-      }),
-      ...(boardInput.shortlistIsCardAgingEnabled !== undefined && {
-        shortlistIsCardAgingEnabled: boardInput.shortlistIsCardAgingEnabled,
-      }),
-    })
-    .where(eq(boards.publicId, boardInput.boardPublicId))
-    .returning({
-      publicId: boards.publicId,
-      name: boards.name,
-      shortlistIsSalaryDataEnabled: boards.shortlistIsSalaryDataEnabled,
-      shortlistIsCompanySentimentEnabled:
-        boards.shortlistIsCompanySentimentEnabled,
-      shortlistIsMagicInboxEnabled: boards.shortlistIsMagicInboxEnabled,
-      shortlistIsCalendarFeedEnabled: boards.shortlistIsCalendarFeedEnabled,
-      shortlistIsSavedReminderEnabled: boards.shortlistIsSavedReminderEnabled,
-      shortlistSavedReminderAfterDays: boards.shortlistSavedReminderAfterDays,
-      shortlistIsSavedAutoArchiveEnabled:
-        boards.shortlistIsSavedAutoArchiveEnabled,
-      shortlistSavedAutoArchiveAfterDays:
-        boards.shortlistSavedAutoArchiveAfterDays,
-      shortlistIsAppliedFollowUpReminderEnabled:
-        boards.shortlistIsAppliedFollowUpReminderEnabled,
-      shortlistAppliedFollowUpReminderAfterDays:
-        boards.shortlistAppliedFollowUpReminderAfterDays,
-      shortlistIsAppliedGhostedEnabled: boards.shortlistIsAppliedGhostedEnabled,
-      shortlistAppliedGhostedAfterDays: boards.shortlistAppliedGhostedAfterDays,
-      shortlistIsInterviewingNudgeEnabled:
-        boards.shortlistIsInterviewingNudgeEnabled,
-      shortlistInterviewingNudgeAfterDays:
-        boards.shortlistInterviewingNudgeAfterDays,
-      shortlistIsNegotiatingNudgeEnabled:
-        boards.shortlistIsNegotiatingNudgeEnabled,
-      shortlistNegotiatingNudgeAfterDays:
-        boards.shortlistNegotiatingNudgeAfterDays,
-      shortlistIsWeeklyDigestEnabled: boards.shortlistIsWeeklyDigestEnabled,
-      shortlistIsCardAgingEnabled: boards.shortlistIsCardAgingEnabled,
-    });
+          boards.shortlistNegotiatingNudgeAfterDays,
+        shortlistIsWeeklyDigestEnabled: boards.shortlistIsWeeklyDigestEnabled,
+        shortlistIsCardAgingEnabled: boards.shortlistIsCardAgingEnabled,
+      });
 
-  return result;
+    if (
+      result &&
+      boardInput.isArchived !== undefined &&
+      previous.isArchived !== boardInput.isArchived
+    ) {
+      await tx.insert(boardActivities).values({
+        publicId: generateUID(),
+        type: boardInput.isArchived ? "board.archived" : "board.unarchived",
+        boardId: previous.id,
+        boardName: result.name,
+        boardType: previous.type,
+        workspaceId: previous.workspaceId,
+        createdBy: boardInput.updatedBy,
+      });
+    }
+    return result;
+  });
 };
 
 export const softDelete = async (
@@ -894,16 +869,32 @@ export const softDelete = async (
     deletedBy: string;
   },
 ) => {
-  const [result] = await db
-    .update(boards)
-    .set({ deletedAt: args.deletedAt, deletedBy: args.deletedBy })
-    .where(and(eq(boards.id, args.boardId), isNull(boards.deletedAt)))
-    .returning({
-      publicId: boards.publicId,
-      name: boards.name,
-    });
+  return db.transaction(async (tx) => {
+    const [result] = await tx
+      .update(boards)
+      .set({ deletedAt: args.deletedAt, deletedBy: args.deletedBy })
+      .where(and(eq(boards.id, args.boardId), isNull(boards.deletedAt)))
+      .returning({
+        id: boards.id,
+        workspaceId: boards.workspaceId,
+        type: boards.type,
+        publicId: boards.publicId,
+        name: boards.name,
+      });
 
-  return result;
+    if (!result) return undefined;
+    await tx.insert(boardActivities).values({
+      publicId: generateUID(),
+      type: "board.deleted",
+      boardId: result.id,
+      boardName: result.name,
+      boardType: result.type,
+      workspaceId: result.workspaceId,
+      createdBy: args.deletedBy,
+      createdAt: args.deletedAt,
+    });
+    return { publicId: result.publicId, name: result.name };
+  });
 };
 
 export const hardDelete = async (db: dbClient, workspaceId: number) => {
@@ -1031,6 +1022,16 @@ export const createFromSnapshot = async (
       });
 
     if (!newBoard) throw new Error("Failed to create board");
+
+    await tx.insert(boardActivities).values({
+      publicId: generateUID(),
+      type: "board.created",
+      boardId: newBoard.id,
+      boardName: newBoard.name,
+      boardType: args.type,
+      workspaceId: args.workspaceId,
+      createdBy: args.createdBy,
+    });
 
     // Labels
     const srcLabels = args.source.labels;
