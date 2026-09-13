@@ -2,7 +2,12 @@ import Link from "next/link";
 import { t } from "@lingui/core/macro";
 import { formatDistanceToNow } from "date-fns";
 import { useEffect, useState } from "react";
-import { HiOutlinePlus } from "react-icons/hi2";
+import {
+  HiOutlineArchiveBox,
+  HiOutlineArrowUturnLeft,
+  HiOutlinePlus,
+  HiOutlineTrash,
+} from "react-icons/hi2";
 
 import type { GetActivityLogOutput } from "@kan/api/types";
 import { authClient } from "@kan/auth/client";
@@ -23,6 +28,32 @@ import {
 const ACTIVITY_LOG_PAGE_SIZE = 20;
 
 type ActivityLogItem = GetActivityLogOutput["activities"][number];
+
+const getBoardActivityText = (type: string) => {
+  switch (type) {
+    case "board.deleted":
+      return t`deleted`;
+    case "board.archived":
+      return t`archived`;
+    case "board.unarchived":
+      return t`unarchived`;
+    default:
+      return t`created`;
+  }
+};
+
+const getBoardActivityIcon = (type: string) => {
+  switch (type) {
+    case "board.deleted":
+      return <HiOutlineTrash />;
+    case "board.archived":
+      return <HiOutlineArchiveBox />;
+    case "board.unarchived":
+      return <HiOutlineArrowUturnLeft />;
+    default:
+      return <HiOutlinePlus />;
+  }
+};
 
 const getCardLinkConnector = (type: string) => {
   if (type === "card.created") return "";
@@ -121,7 +152,7 @@ export default function ActivityLog() {
                   {activities.map((activity, index) => {
                     const isBoardActivity = activity.entityType === "board";
                     const activityText = isBoardActivity
-                      ? t`created`
+                      ? getBoardActivityText(activity.type)
                       : getActivityText({
                           type: activity.type,
                           toTitle: activity.toTitle,
@@ -145,7 +176,9 @@ export default function ActivityLog() {
                     if (!activityText) return null;
 
                     const subjectHref = isBoardActivity
-                      ? `/${activity.board.type === "template" ? "templates" : "boards"}/${activity.board.publicId}`
+                      ? activity.board.publicId
+                        ? `/${activity.board.type === "template" ? "templates" : "boards"}/${activity.board.publicId}`
+                        : null
                       : `/cards/${activity.card.publicId}`;
                     const subjectTitle = isBoardActivity
                       ? activity.board.name
@@ -183,15 +216,13 @@ export default function ActivityLog() {
                               undefined
                             }
                             icon={
-                              isBoardActivity ? (
-                                <HiOutlinePlus />
-                              ) : (
-                                getActivityIcon(
-                                  activity.type,
-                                  activity.fromList?.index,
-                                  activity.toList?.index,
-                                )
-                              )
+                              isBoardActivity
+                                ? getBoardActivityIcon(activity.type)
+                                : getActivityIcon(
+                                    activity.type,
+                                    activity.fromList?.index,
+                                    activity.toList?.index,
+                                  )
                             }
                             isLoading={isFetching || isLoadingMore}
                           />
@@ -210,12 +241,18 @@ export default function ActivityLog() {
                                 {cardLinkConnector}{" "}
                               </span>
                             )}
-                            <Link
-                              href={subjectHref}
-                              className="font-medium text-light-1000 underline underline-offset-2 hover:text-light-900 dark:text-dark-1000 dark:hover:text-dark-900"
-                            >
-                              {subjectTitle}
-                            </Link>
+                            {subjectHref ? (
+                              <Link
+                                href={subjectHref}
+                                className="font-medium text-light-1000 underline underline-offset-2 hover:text-light-900 dark:text-dark-1000 dark:hover:text-dark-900"
+                              >
+                                {subjectTitle}
+                              </Link>
+                            ) : (
+                              <span className="font-medium text-light-1000 dark:text-dark-1000">
+                                {subjectTitle}
+                              </span>
+                            )}
                           </p>
                           {isMilestone && (
                             <div className="flex-shrink-0">
