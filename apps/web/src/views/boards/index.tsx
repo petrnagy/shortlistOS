@@ -53,7 +53,7 @@ export default function BoardsPage({ isTemplate }: { isTemplate?: boolean }) {
       <PageHead
         title={t`${isTemplate ? "Templates" : "Shortlists"} | ${workspace.name}`}
       />
-      <div className="m-auto h-full max-w-[1100px] p-8 px-5 md:px-28 md:py-12">
+      <div className="m-auto flex h-full min-h-0 max-w-[1100px] flex-col p-8 px-5 md:px-28 md:py-12">
         <BoardsTutorial isTemplate={isTemplate} />
         <div className="relative z-10 mb-8 flex w-full items-center justify-between">
           <h1 className="font-bold tracking-tight text-neutral-900 dark:text-dark-1000 sm:text-[1.2rem]">
@@ -140,8 +140,8 @@ export default function BoardsPage({ isTemplate }: { isTemplate?: boolean }) {
         </>
 
         {!isTemplate ? (
-          <div className="flex h-full w-full flex-col">
-            <div className="focus:outline-none">
+          <div className="flex min-h-0 w-full flex-1 flex-col">
+            <div className="shrink-0 focus:outline-none">
               <div className="sm:hidden">
                 <Listbox
                   value={activeTab}
@@ -200,7 +200,7 @@ export default function BoardsPage({ isTemplate }: { isTemplate?: boolean }) {
                 </div>
               </div>
             </div>
-            <div className="flex h-full flex-row focus:outline-none">
+            <div className="flex min-h-0 flex-1 flex-row focus:outline-none">
               {activeTab === "boards" && (
                 <BoardsList isTemplate={false} archived={false} />
               )}
@@ -210,7 +210,7 @@ export default function BoardsPage({ isTemplate }: { isTemplate?: boolean }) {
             </div>
           </div>
         ) : (
-          <div className="flex h-full flex-row">
+          <div className="flex min-h-0 flex-1 flex-row">
             <BoardsList isTemplate={!!isTemplate} />
           </div>
         )}
