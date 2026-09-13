@@ -449,6 +449,13 @@
       "when": 1789221600000,
       "tag": "20260912160000_AddShortlistPowerpackPurchases",
       "breakpoints": true
+    },
+    {
+      "idx": 64,
+      "version": "7",
+      "when": 1789314899628,
+      "tag": "20260913120000_AddBoardActivity",
+      "breakpoints": true
     }
   ]
 }
