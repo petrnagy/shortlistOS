@@ -50,6 +50,12 @@ export const initAuth = (db: dbClient) => {
         );
       },
     },
+    account: {
+      accountLinking: {
+        enabled: true,
+        allowDifferentEmails: true,
+      },
+    },
     socialProviders: configuredProviders,
     user: {
       deleteUser: {
