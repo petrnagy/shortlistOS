@@ -53,7 +53,7 @@ export const initAuth = (db: dbClient) => {
     account: {
       accountLinking: {
         enabled: true,
-        allowDifferentEmails: false,
+        allowDifferentEmails: true,
       },
     },
     socialProviders: configuredProviders,
