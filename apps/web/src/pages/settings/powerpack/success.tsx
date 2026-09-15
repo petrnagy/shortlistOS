@@ -49,6 +49,9 @@ const PowerpackSuccessPage: NextPageWithLayout = () => {
         <p className="mb-6 text-sm text-neutral-500 dark:text-dark-900">
           {t`You're all set! Your account now has Powerpack features enabled and ready to go.`}
         </p>
+        <p className="mb-6 text-sm text-neutral-500 dark:text-dark-900">
+          {t`We have enabled automation on all your active boards and tasks.`}
+        </p>
         <Button href="/boards" variant="primary" size="sm">
           {t`Continue job hunting with Powerpack`}
         </Button>
