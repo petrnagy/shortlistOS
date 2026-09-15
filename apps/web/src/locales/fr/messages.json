@@ -5833,7 +5833,7 @@
     "origin": [
       [
         "src/pages/settings/powerpack/success.tsx",
-        53
+        56
       ]
     ],
     "translation": "Poursuivre votre recherche avec Powerpack"
@@ -22792,6 +22792,18 @@
       ]
     ],
     "translation": ""
+  },
+  "IRZtPR": {
+    "message": "We have enabled automation on all your active boards and tasks.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/settings/powerpack/success.tsx",
+        53
+      ]
+    ],
+    "translation": "Nous avons activé les automatisations sur tous vos tableaux et tâches actifs."
   },
   "7sdSkl": {
     "message": "We sent a link to {magicLinkRecipient}",

@@ -67,6 +67,9 @@ export const boards = pgTable(
     type: boardTypeEnum("type").notNull().default("regular"),
     isArchived: boolean("isArchived").notNull().default(false),
     sourceBoardId: bigint("sourceBoardId", { mode: "number" }),
+    shortlistPowerpackSettingsInitializedAt: timestamp(
+      "shortlist_powerpackSettingsInitializedAt",
+    ),
     shortlistIsSalaryDataEnabled: boolean("shortlist_isSalaryDataEnabled")
       .notNull()
       .default(false),
@@ -81,9 +84,7 @@ export const boards = pgTable(
     shortlistIsCalendarFeedEnabled: boolean("shortlist_isCalendarFeedEnabled")
       .notNull()
       .default(false),
-    shortlistIsSavedReminderEnabled: boolean(
-      "shortlist_isSavedReminderEnabled",
-    )
+    shortlistIsSavedReminderEnabled: boolean("shortlist_isSavedReminderEnabled")
       .notNull()
       .default(false),
     shortlistSavedReminderAfterDays: smallint(
