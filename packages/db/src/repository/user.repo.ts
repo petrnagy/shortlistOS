@@ -1,13 +1,19 @@
-import { and, count, desc, eq, isNotNull } from "drizzle-orm";
+import { and, count, desc, eq, isNotNull, isNull } from "drizzle-orm";
 import { v4 as uuidv4 } from "uuid";
 
 import type { dbClient } from "@kan/db/client";
 import {
   account,
   apikey,
+  boards,
   shortlistPowerpackPurchases,
   users,
 } from "@kan/db/schema";
+
+import {
+  initializedPowerpackDefaults,
+  lockPowerpackOwner,
+} from "./powerpack-defaults";
 
 const PROVIDER_CREDENTIAL = "credential";
 const PROVIDER_MAGIC_LINK = "magic-link";
@@ -204,6 +210,15 @@ export const grantShortlistPowerpackForCheckout = async (
   },
 ) => {
   return db.transaction(async (tx) => {
+    const owner = await lockPowerpackOwner(tx, input.userId);
+    if (!owner) throw new Error("Unable to grant Powerpack to unknown user");
+
+    const previousPurchase =
+      await tx.query.shortlistPowerpackPurchases.findFirst({
+        columns: { id: true },
+        where: eq(shortlistPowerpackPurchases.userId, input.userId),
+      });
+
     const [purchase] = await tx
       .insert(shortlistPowerpackPurchases)
       .values({
@@ -229,6 +244,20 @@ export const grantShortlistPowerpackForCheckout = async (
 
     if (!membership) {
       throw new Error("Unable to grant Powerpack to unknown user");
+    }
+
+    if (!previousPurchase) {
+      await tx
+        .update(boards)
+        .set(initializedPowerpackDefaults())
+        .where(
+          and(
+            eq(boards.createdBy, input.userId),
+            eq(boards.type, "regular"),
+            eq(boards.isArchived, false),
+            isNull(boards.deletedAt),
+          ),
+        );
     }
 
     return { membership, processed: true as const };
