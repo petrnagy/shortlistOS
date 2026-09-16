@@ -32,6 +32,12 @@ import {
 } from "@kan/db/schema";
 import { generateUID } from "@kan/shared/utils";
 
+import {
+  hasActivePowerpack,
+  initializedPowerpackDefaults,
+  lockPowerpackOwner,
+} from "./powerpack-defaults";
+
 export const getCount = async (db: dbClient) => {
   const result = await db
     .select({ count: count() })
@@ -652,9 +658,14 @@ export const create = async (
   },
 ) => {
   return db.transaction(async (tx) => {
+    const owner = await lockPowerpackOwner(tx, boardInput.createdBy);
     const [result] = await tx
       .insert(boards)
       .values({
+        ...((boardInput.type ?? "regular") === "regular" &&
+        hasActivePowerpack(owner)
+          ? initializedPowerpackDefaults()
+          : {}),
         publicId: boardInput.publicId ?? generateUID(),
         name: boardInput.name,
         createdBy: boardInput.createdBy,
@@ -714,6 +725,16 @@ export const update = async (
   },
 ) => {
   return db.transaction(async (tx) => {
+    const boardOwner = await tx.query.boards.findFirst({
+      columns: { createdBy: true },
+      where: and(
+        eq(boards.publicId, boardInput.boardPublicId),
+        isNull(boards.deletedAt),
+      ),
+    });
+    const owner = boardOwner?.createdBy
+      ? await lockPowerpackOwner(tx, boardOwner.createdBy)
+      : undefined;
     const [previous] = await tx
       .select()
       .from(boards)
@@ -725,9 +746,24 @@ export const update = async (
       )
       .for("update");
     if (!previous) return undefined;
+    const hasSettingsUpdate = Object.entries(boardInput).some(
+      ([key, value]) => key.startsWith("shortlist") && value !== undefined,
+    );
+    const initializeOnUnarchive =
+      previous.isArchived &&
+      boardInput.isArchived === false &&
+      previous.type === "regular" &&
+      previous.shortlistPowerpackSettingsInitializedAt === null &&
+      hasActivePowerpack(owner) &&
+      !hasSettingsUpdate;
     const [result] = await tx
       .update(boards)
       .set({
+        ...(initializeOnUnarchive ? initializedPowerpackDefaults() : {}),
+        ...(hasSettingsUpdate && {
+          shortlistPowerpackSettingsInitializedAt:
+            previous.shortlistPowerpackSettingsInitializedAt ?? new Date(),
+        }),
         name: boardInput.name,
         slug: boardInput.slug,
         visibility: boardInput.visibility,
@@ -1004,9 +1040,13 @@ export const createFromSnapshot = async (
   },
 ) => {
   return db.transaction(async (tx) => {
+    const owner = await lockPowerpackOwner(tx, args.createdBy);
     const [newBoard] = await tx
       .insert(boards)
       .values({
+        ...(args.type === "regular" && hasActivePowerpack(owner)
+          ? initializedPowerpackDefaults()
+          : {}),
         publicId: generateUID(),
         name: args.name ?? args.source.name,
         slug: args.slug,
