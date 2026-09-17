@@ -68,6 +68,12 @@ running `Build and deploy production` manually with the full resulting `main`
 SHA. Set the repository variable to `true` only after production smoke,
 recovery, and rollback checks pass.
 
+After a release passes its Compose health checks, the deployment script removes
+older shortlistOS application and migration images. It retains the current
+release and the previously healthy release for rollback. Images outside the two
+shortlistOS repositories, non-release tags, containers, and persistent volumes
+are not pruned.
+
 The GitHub packages `petrnagy/shortlistos` and
 `petrnagy/shortlistos-migrate` must be public so the VPS can pull without a
 registry credential.
