@@ -190,6 +190,26 @@ const pairingCsrfCookie = (value: string, clear = false) =>
 
 const isAllowedExtensionOrigin = (origin: string) => {
   if (config.allowedOrigins.has(origin)) return true;
+  if (config.allowFirefoxExtensionOrigins) {
+    try {
+      const url = new URL(origin);
+      // Check the raw shape too: URL parsing normalizes whitespace and dot paths.
+      if (
+        /^moz-extension:\/\/[^\s/?#@:*]+\/?$/.test(origin) &&
+        url.protocol === "moz-extension:" &&
+        url.hostname.length > 0 &&
+        !url.port &&
+        !url.username &&
+        !url.password &&
+        !url.search &&
+        !url.hash &&
+        (url.pathname === "" || url.pathname === "/")
+      )
+        return true;
+    } catch {
+      return false;
+    }
+  }
   if (config.NODE_ENV !== "development") return false;
   try {
     const protocol = new URL(origin).protocol;
