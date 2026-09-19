@@ -37,11 +37,16 @@ const splitList = (value: string) =>
     .map((item) => item.trim())
     .filter(Boolean);
 
+const configuredOrigins = splitList(
+  parsedEnvironment.WEB_CLIPPER_ALLOWED_ORIGINS,
+);
+
 export const config = {
   ...parsedEnvironment,
   allowedOrigins: new Set(
-    splitList(parsedEnvironment.WEB_CLIPPER_ALLOWED_ORIGINS),
+    configuredOrigins.filter((origin) => !origin.includes("*")),
   ),
+  allowFirefoxExtensionOrigins: configuredOrigins.includes("moz-extension://*"),
   accessTokenSecret: new TextEncoder().encode(
     parsedEnvironment.WEB_CLIPPER_ACCESS_TOKEN_SECRET,
   ),
