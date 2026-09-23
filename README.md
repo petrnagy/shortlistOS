@@ -378,7 +378,7 @@ All bucket and connection variables in this section are required for a standard 
 | `WEB_CLIPPER_API_PORT` | API listen port; default `3010` |
 | `WEB_CLIPPER_ACCESS_TOKEN_SECRET` | Random token-signing secret, minimum 32 characters |
 | `WEB_CLIPPER_ENCRYPTION_KEY` | Random snapshot-encryption secret, minimum 32 characters |
-| `WEB_CLIPPER_ALLOWED_ORIGINS` | Exact comma-separated `chrome-extension://` and `moz-extension://` origins |
+| `WEB_CLIPPER_ALLOWED_ORIGINS` | Comma-separated exact extension origins; `moz-extension://*` explicitly permits Firefox runtime origins |
 
 ### Payments
 
@@ -549,7 +549,15 @@ pnpm --filter @kan/web-clipper-api build
 pnpm --filter @kan/web-clipper-api start
 ```
 
-Keep the service behind HTTPS in production. Set `WEB_CLIPPER_ALLOWED_ORIGINS` to the exact IDs of extension builds you control; do not use wildcard origins. `WEB_CLIPPER_API_URL` is an internal server-to-server URL and does not need to be browser-accessible.
+Keep the service behind HTTPS in production. Configure Chrome with its exact Chrome Web Store extension origin. Firefox assigns a different runtime UUID to each installation, so enable Firefox with the explicit `moz-extension://*` entry; do not put the Firefox AMO/Gecko add-on ID in this list. Exact Firefox origins remain supported for individual profiles.
+
+```env
+WEB_CLIPPER_ALLOWED_ORIGINS=chrome-extension://<chrome-web-store-id>,moz-extension://*
+```
+
+The wildcard applies only to valid Firefox extension origins. It does not allow arbitrary website origins, and wildcards for Chrome, HTTP, HTTPS, or other schemes are unsupported. An empty list rejects extension origins in production. Development continues accepting extension protocols. Allowed CORS responses echo the requesting origin and send `Vary: Origin`, never `Access-Control-Allow-Origin: *`.
+
+CORS is a browser transport restriction, not authentication. Authorization still requires authenticated pairing with explicit approval and CSRF protection, PKCE, and bearer tokens; polling tokens, short-lived access tokens, refresh-token rotation, scopes, and rate limits remain enforced. `WEB_CLIPPER_API_URL` is an internal server-to-server URL and does not need to be browser-accessible.
 
 ## Development commands
 
