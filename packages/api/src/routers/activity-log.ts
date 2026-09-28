@@ -3,6 +3,7 @@ import { z } from "zod";
 
 import * as boardActivityRepo from "@kan/db/repository/board-activity.repo";
 import * as cardActivityRepo from "@kan/db/repository/cardActivity.repo";
+import * as shortlistActivityLogRepo from "@kan/db/repository/shortlistActivityLog.repo";
 import { boardActivityTypes } from "@kan/db/schema";
 import { generateAvatarUrl } from "@kan/shared/utils";
 
@@ -40,6 +41,36 @@ const boardActivityLogItemSchema = z.object({
 const activityLogItemSchema = z.discriminatedUnion("entityType", [
   cardActivityLogItemSchema,
   boardActivityLogItemSchema,
+  z.object({
+    entityType: z.literal("source"),
+    publicId: z.string(),
+    type: z.string(),
+    result: z.enum(["SUCCESS", "FAILED"]),
+    createdAt: z.date(),
+    sourceKind: z.enum(["web", "email"]),
+    sourceTitle: z.string(),
+    sourceUrl: z.string().nullable(),
+    reason: z.string().nullable(),
+    card: z
+      .object({
+        publicId: z.string(),
+        title: z.string(),
+      })
+      .nullable(),
+    board: z.object({
+      publicId: z.string(),
+      name: z.string(),
+      type: z.enum(["regular", "template"]),
+    }),
+    user: z
+      .object({
+        id: z.string(),
+        name: z.string().nullable(),
+        email: z.string(),
+        image: z.string().nullable(),
+      })
+      .nullable(),
+  }),
 ]);
 
 export const activityLogRouter = createTRPCRouter({
@@ -79,12 +110,16 @@ export const activityLogRouter = createTRPCRouter({
       }
 
       const cursor = input.cursor ? new Date(input.cursor) : undefined;
-      const [cardResult, boardResult] = await Promise.all([
+      const [cardResult, boardResult, sourceResult] = await Promise.all([
         cardActivityRepo.getPaginatedUserActivities(ctx.db, userId, {
           limit: input.limit,
           cursor,
         }),
         boardActivityRepo.getPaginatedUserActivities(ctx.db, userId, {
+          limit: input.limit,
+          cursor,
+        }),
+        shortlistActivityLogRepo.getPaginatedUserActivities(ctx.db, userId, {
           limit: input.limit,
           cursor,
         }),
@@ -103,13 +138,20 @@ export const activityLogRouter = createTRPCRouter({
           ...activity,
           entityType: "board" as const,
         })),
+        ...sourceResult.activities.map((activity) => ({
+          ...activity,
+          result: activity.result,
+          reason: activity.reason ?? null,
+          entityType: "source" as const,
+        })),
       ].sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
 
       const activities = combinedActivities.slice(0, input.limit);
       const hasMore =
         combinedActivities.length > input.limit ||
         cardResult.hasMore ||
-        boardResult.hasMore;
+        boardResult.hasMore ||
+        sourceResult.hasMore;
 
       const activitiesWithAvatarUrls = await Promise.all(
         activities.map(async (activity) => {
@@ -120,7 +162,10 @@ export const activityLogRouter = createTRPCRouter({
               }
             : activity.user;
 
-          if (activity.entityType === "board") {
+          if (
+            activity.entityType === "board" ||
+            activity.entityType === "source"
+          ) {
             return {
               ...activity,
               user,

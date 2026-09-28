@@ -10,6 +10,10 @@ import type { NextApiRequest, NextApiResponse } from "next";
 
 import type { dbClient } from "@kan/db/client";
 import { createDrizzleClient } from "@kan/db/client";
+import {
+  createSourceActivity,
+  ensureShortlistRobotUser,
+} from "@kan/db/repository/shortlistActivityLog.repo";
 import { shortlistEmailSources } from "@kan/db/schema";
 import { createLogger } from "@kan/logger";
 import {
@@ -278,6 +282,28 @@ export default async function handler(
             sourceId: insertedRows[0]?.id,
             supportedAttachments,
           });
+          try {
+            await ensureShortlistRobotUser(db);
+            await createSourceActivity(db, {
+              activityType: "source.email.received",
+              activityResult: "SUCCESS",
+              boardId: access.boardId,
+              payload: {
+                sourceId: insertedRows[0]?.id ?? item.MessageId,
+                sourceKind: "email",
+                sourceTitle: item.Subject?.trim() ?? "Email opportunity",
+                sourceUrl: buildEmailSourceUrl(
+                  item.From?.Address ?? null,
+                  item.Subject ?? null,
+                ),
+              },
+            });
+          } catch (activityError) {
+            log.error(
+              { error: activityError, sourceId: insertedRows[0]?.id },
+              "Failed to record Magic Inbox activity",
+            );
+          }
         } else {
           duplicates += 1;
         }
@@ -305,6 +331,14 @@ export default async function handler(
 
     return res.status(500).json({ message: "Webhook handler failed" });
   }
+}
+
+function buildEmailSourceUrl(fromEmail: string | null, subject: string | null) {
+  if (!fromEmail) return null;
+  const params = subject
+    ? `?subject=${encodeURIComponent(subject.trim())}`
+    : "";
+  return `mailto:${fromEmail}${params}`;
 }
 
 async function storeBrevoEmailObjects(input: {

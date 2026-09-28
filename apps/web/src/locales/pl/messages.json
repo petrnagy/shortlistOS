@@ -1418,11 +1418,11 @@
       ],
       [
         "src/views/activity-log/index.tsx",
-        125
+        144
       ],
       [
         "src/views/activity-log/index.tsx",
-        132
+        151
       ]
     ],
     "translation": "Dziennik aktywności"
@@ -4538,12 +4538,12 @@
         86
       ],
       [
-        "src/views/card/components/DeleteCommentConfirmation.tsx",
-        77
-      ],
-      [
         "src/views/card/components/DeleteChecklistConfirmation.tsx",
         64
+      ],
+      [
+        "src/views/card/components/DeleteCommentConfirmation.tsx",
+        77
       ],
       [
         "src/views/card/index.tsx",
@@ -4570,6 +4570,10 @@
         287
       ],
       [
+        "src/views/settings/components/ChangePasswordConfirmation.tsx",
+        206
+      ],
+      [
         "src/views/settings/components/ClearCustomPermissionsConfirmation.tsx",
         40
       ],
@@ -4584,10 +4588,6 @@
       [
         "src/views/settings/components/DeleteWorkspaceConfirmation.tsx",
         98
-      ],
-      [
-        "src/views/settings/components/ChangePasswordConfirmation.tsx",
-        206
       ],
       [
         "src/views/settings/components/UpgradeToProConfirmation.tsx",
@@ -5179,6 +5179,18 @@
       ]
     ],
     "translation": ""
+  },
+  "nlOslx": {
+    "translation": "",
+    "message": "clipped a web opportunity",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/activity-log/index.tsx",
+        78
+      ]
+    ]
   },
   "yz7wBu": {
     "message": "Close",
@@ -6050,6 +6062,30 @@
     "translation": "Funkcje podstawowe",
     "obsolete": true
   },
+  "Moluts": {
+    "translation": "",
+    "message": "could not parse a clipped web opportunity",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/activity-log/index.tsx",
+        82
+      ]
+    ]
+  },
+  "jfRgiI": {
+    "translation": "",
+    "message": "could not parse an email opportunity",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/activity-log/index.tsx",
+        88
+      ]
+    ]
+  },
   "hYgDIe": {
     "message": "Create",
     "placeholders": {},
@@ -6885,12 +6921,12 @@
         92
       ],
       [
-        "src/views/card/components/DeleteCommentConfirmation.tsx",
-        83
-      ],
-      [
         "src/views/card/components/DeleteChecklistConfirmation.tsx",
         67
+      ],
+      [
+        "src/views/card/components/DeleteCommentConfirmation.tsx",
+        83
       ],
       [
         "src/views/card/index.tsx",
@@ -12410,7 +12446,7 @@
     "origin": [
       [
         "src/views/activity-log/index.tsx",
-        279
+        336
       ],
       [
         "src/views/card/components/ActivityList.tsx",
@@ -12438,7 +12474,7 @@
     "origin": [
       [
         "src/views/activity-log/index.tsx",
-        279
+        336
       ],
       [
         "src/views/card/components/ActivityList.tsx",
@@ -13818,7 +13854,7 @@
     "origin": [
       [
         "src/views/activity-log/index.tsx",
-        148
+        167
       ]
     ],
     "translation": "Brak aktywności."
@@ -15590,26 +15626,6 @@
         74
       ],
       [
-        "src/views/card/components/Comment.tsx",
-        95
-      ],
-      [
-        "src/views/card/components/DeleteCardConfirmation.tsx",
-        52
-      ],
-      [
-        "src/views/card/components/DeleteCommentConfirmation.tsx",
-        46
-      ],
-      [
-        "src/views/card/components/DeleteChecklistConfirmation.tsx",
-        38
-      ],
-      [
-        "src/views/card/components/DueDateSelector.tsx",
-        66
-      ],
-      [
         "src/views/card/components/ChecklistItemRow.tsx",
         67
       ],
@@ -15626,6 +15642,26 @@
         81
       ],
       [
+        "src/views/card/components/Comment.tsx",
+        95
+      ],
+      [
+        "src/views/card/components/DeleteCardConfirmation.tsx",
+        52
+      ],
+      [
+        "src/views/card/components/DeleteChecklistConfirmation.tsx",
+        38
+      ],
+      [
+        "src/views/card/components/DeleteCommentConfirmation.tsx",
+        46
+      ],
+      [
+        "src/views/card/components/DueDateSelector.tsx",
+        66
+      ],
+      [
         "src/views/card/components/LabelSelector.tsx",
         80
       ],
@@ -15638,16 +15674,16 @@
         82
       ],
       [
-        "src/views/card/components/NewCommentForm.tsx",
-        37
-      ],
-      [
         "src/views/card/components/NewChecklistForm.tsx",
         71
       ],
       [
         "src/views/card/components/NewChecklistItemForm.tsx",
         90
+      ],
+      [
+        "src/views/card/components/NewCommentForm.tsx",
+        37
       ],
       [
         "src/views/card/index.tsx",
@@ -16235,6 +16271,42 @@
     ],
     "translation": "Plan Pro ∞"
   },
+  "Y6qqi6": {
+    "translation": "",
+    "message": "processed a clipped web opportunity",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/activity-log/index.tsx",
+        80
+      ]
+    ]
+  },
+  "UpjXir": {
+    "translation": "",
+    "message": "processed an email opportunity",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/activity-log/index.tsx",
+        86
+      ]
+    ]
+  },
+  "ypeY0K": {
+    "translation": "",
+    "message": "processed an opportunity source",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/activity-log/index.tsx",
+        90
+      ]
+    ]
+  },
   "O6Y2dC": {
     "message": "Processes the job page, turns it into a card, adds salary insights and company rating data, and uses AI to assign labels and summarise the role and requirements.",
     "placeholders": {},
@@ -16581,6 +16653,18 @@
       ]
     ],
     "obsolete": true
+  },
+  "lxt68w": {
+    "translation": "",
+    "message": "received an email opportunity",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/activity-log/index.tsx",
+        84
+      ]
+    ]
   },
   "uJDO+u": {
     "message": "Receives the email, turns it into a card, adds salary insights and company rating data, and uses AI to assign labels and summarise the role and requirements.",
@@ -20415,12 +20499,12 @@
         78
       ],
       [
-        "src/views/card/components/DeleteCommentConfirmation.tsx",
-        69
-      ],
-      [
         "src/views/card/components/DeleteChecklistConfirmation.tsx",
         59
+      ],
+      [
+        "src/views/card/components/DeleteCommentConfirmation.tsx",
+        69
       ]
     ],
     "translation": "Tej operacji nie można cofnąć."
