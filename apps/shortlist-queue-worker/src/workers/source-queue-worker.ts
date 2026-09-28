@@ -281,7 +281,7 @@ async function getSourceActivityDetails(
       .from(shortlistEmailSources)
       .where(eq(shortlistEmailSources.id, job.sourceId))
       .limit(1);
-    const title = email?.subject?.trim() || "Email opportunity";
+    const title = email?.subject?.trim() ?? "Email opportunity";
     const url = email?.fromEmail
       ? `mailto:${email.fromEmail}?subject=${encodeURIComponent(title)}`
       : null;
@@ -300,7 +300,7 @@ async function getSourceActivityDetails(
       .limit(1);
     if (clip) {
       return {
-        title: clip.pageTitle?.trim() || clip.sourceUrl,
+        title: clip.pageTitle.trim() || clip.sourceUrl,
         url: clip.sourceUrl,
       };
     }

@@ -291,7 +291,7 @@ export default async function handler(
               payload: {
                 sourceId: insertedRows[0]?.id ?? item.MessageId,
                 sourceKind: "email",
-                sourceTitle: item.Subject?.trim() || "Email opportunity",
+                sourceTitle: item.Subject?.trim() ?? "Email opportunity",
                 sourceUrl: buildEmailSourceUrl(
                   item.From?.Address ?? null,
                   item.Subject ?? null,

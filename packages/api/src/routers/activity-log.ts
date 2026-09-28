@@ -140,7 +140,7 @@ export const activityLogRouter = createTRPCRouter({
         })),
         ...sourceResult.activities.map((activity) => ({
           ...activity,
-          result: activity.result as "SUCCESS" | "FAILED",
+          result: activity.result,
           reason: activity.reason ?? null,
           entityType: "source" as const,
         })),
