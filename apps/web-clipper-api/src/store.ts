@@ -11,6 +11,10 @@ import { and, asc, desc, eq, gt, gte, isNull, ne, or, sql } from "drizzle-orm";
 
 import type { dbClient } from "@kan/db/client";
 import {
+  createSourceActivity,
+  ensureShortlistRobotUser,
+} from "@kan/db/repository/shortlistActivityLog.repo";
+import {
   boards,
   cards,
   shortlistJobQueue,
@@ -22,6 +26,7 @@ import {
   webClipperRefreshTokens,
   workspaceMembers,
 } from "@kan/db/schema";
+import { createLogger } from "@kan/logger";
 import {
   SHORTLIST_JOB_STATUSES,
   SHORTLIST_JOB_TYPES,
@@ -43,6 +48,7 @@ import {
 const PAIRING_LIFETIME_MS = 5 * 60 * 1000;
 const REFRESH_TOKEN_LIFETIME_MS = 60 * 24 * 60 * 60 * 1000;
 const CLIP_DEDUPLICATION_WINDOW_MS = 24 * 60 * 60 * 1000;
+const log = createLogger("web-clipper-api:store");
 
 export const getUserById = (db: dbClient, userId: string) =>
   db.query.users.findFirst({
@@ -408,7 +414,7 @@ export const createClip = async (
   ].join("/");
 
   try {
-    return await db.transaction(async (tx) => {
+    const result = await db.transaction(async (tx) => {
       await tx.execute(
         sql`select pg_advisory_xact_lock(hashtextextended(${`${input.userId}:${input.boardId}:${input.page.url}`}, 0))`,
       );
@@ -501,6 +507,30 @@ export const createClip = async (
 
       return { ...clip, deduplicated: false as const };
     });
+
+    if (!result.deduplicated) {
+      try {
+        await ensureShortlistRobotUser(db);
+        await createSourceActivity(db, {
+          activityType: "source.web.clipped",
+          activityResult: "SUCCESS",
+          boardId: input.boardId,
+          payload: {
+            sourceId,
+            sourceKind: "web",
+            sourceTitle: input.page.title || input.page.url,
+            sourceUrl: input.page.canonicalUrl ?? input.page.url,
+          },
+        });
+      } catch (activityError) {
+        log.error(
+          { error: activityError, sourceId },
+          "Failed to record clip activity",
+        );
+      }
+    }
+
+    return result;
   } catch (error) {
     await deleteObject(config.SHORTLIST_SOURCE_BUCKET_NAME, s3Key).catch(
       () => undefined,

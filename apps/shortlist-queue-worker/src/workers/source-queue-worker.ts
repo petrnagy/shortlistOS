@@ -26,6 +26,7 @@ import * as cardRepo from "@kan/db/repository/card.repo";
 import * as cardActivityRepo from "@kan/db/repository/cardActivity.repo";
 import * as cardAttachmentRepo from "@kan/db/repository/cardAttachment.repo";
 import * as cardCommentRepo from "@kan/db/repository/cardComment.repo";
+import { createSourceActivity } from "@kan/db/repository/shortlistActivityLog.repo";
 import {
   boards,
   cards,
@@ -183,6 +184,7 @@ export async function processShortlistJobQueueBatch(
   for (const job of jobs) {
     const status = await processQueueJob(db, job, options);
     await syncWebClipperStatus(db, job, status);
+    await recordSourceProcessingActivity(db, job, status);
 
     if (status === SHORTLIST_JOB_STATUSES.COMPLETED) result.completed += 1;
     if (status === SHORTLIST_JOB_STATUSES.DUPLICATE) result.duplicates += 1;
@@ -191,6 +193,121 @@ export async function processShortlistJobQueueBatch(
   }
 
   return result;
+}
+
+async function recordSourceProcessingActivity(
+  db: dbClient,
+  job: QueueJobRow,
+  status: QueueProcessingStatus,
+) {
+  if (
+    job.sourceType !== SHORTLIST_SOURCE_TYPES.WEBPAGE &&
+    job.sourceType !== SHORTLIST_SOURCE_TYPES.EMAIL
+  ) {
+    return;
+  }
+  if (
+    status !== SHORTLIST_JOB_STATUSES.COMPLETED &&
+    status !== SHORTLIST_JOB_STATUSES.DUPLICATE &&
+    status !== SHORTLIST_JOB_STATUSES.FAILED
+  ) {
+    return;
+  }
+
+  try {
+    const source = await getSourceActivityDetails(db, job);
+    const [queueRow] = await db
+      .select({
+        cardId: shortlistSourceCards.cardId,
+        error: shortlistJobQueue.error,
+        processingLog: shortlistJobQueue.processingLog,
+      })
+      .from(shortlistJobQueue)
+      .leftJoin(
+        shortlistSourceCards,
+        and(
+          eq(shortlistSourceCards.sourceType, shortlistJobQueue.sourceType),
+          eq(shortlistSourceCards.sourceId, shortlistJobQueue.sourceId),
+        ),
+      )
+      .where(eq(shortlistJobQueue.id, job.id))
+      .limit(1);
+
+    const sourceKind =
+      job.sourceType === SHORTLIST_SOURCE_TYPES.EMAIL ? "email" : "web";
+    const succeeded =
+      status === SHORTLIST_JOB_STATUSES.COMPLETED ||
+      status === SHORTLIST_JOB_STATUSES.DUPLICATE;
+    const activityType = succeeded
+      ? `source.${sourceKind}.processed`
+      : `source.${sourceKind}.failed`;
+    const reason = succeeded
+      ? null
+      : (queueRow?.error ??
+        queueRow?.processingLog?.split("\n").filter(Boolean).at(-1) ??
+        "The source could not be processed.");
+
+    await createSourceActivity(db, {
+      activityType,
+      activityResult: succeeded ? "SUCCESS" : "FAILED",
+      boardId: job.boardId,
+      cardId: queueRow?.cardId ?? null,
+      payload: {
+        sourceId: job.sourceId,
+        sourceKind,
+        sourceTitle: source.title,
+        sourceUrl: source.url,
+        reason,
+      },
+    });
+  } catch (error) {
+    logger.error(
+      { error: formatError(error), jobId: job.id },
+      "Failed to record source processing activity",
+    );
+  }
+}
+
+async function getSourceActivityDetails(
+  db: dbClient,
+  job: QueueJobRow,
+): Promise<{ title: string; url: string | null }> {
+  if (job.sourceType === SHORTLIST_SOURCE_TYPES.EMAIL) {
+    const [email] = await db
+      .select({
+        subject: shortlistEmailSources.subject,
+        fromEmail: shortlistEmailSources.fromEmail,
+      })
+      .from(shortlistEmailSources)
+      .where(eq(shortlistEmailSources.id, job.sourceId))
+      .limit(1);
+    const title = email?.subject?.trim() || "Email opportunity";
+    const url = email?.fromEmail
+      ? `mailto:${email.fromEmail}?subject=${encodeURIComponent(title)}`
+      : null;
+    return { title, url };
+  }
+
+  const clipId = getWebClipperClipId(job.payloadJson);
+  if (clipId) {
+    const [clip] = await db
+      .select({
+        pageTitle: webClipperClips.pageTitle,
+        sourceUrl: webClipperClips.sourceUrl,
+      })
+      .from(webClipperClips)
+      .where(eq(webClipperClips.id, clipId))
+      .limit(1);
+    if (clip) {
+      return {
+        title: clip.pageTitle?.trim() || clip.sourceUrl,
+        url: clip.sourceUrl,
+      };
+    }
+  }
+
+  const url = getPayloadSourceUrl(job.payloadJson);
+  return { title: url ?? "Web opportunity", url };
 }
 
 async function getPendingJobs(
