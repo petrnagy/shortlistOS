@@ -26,7 +26,7 @@ export default function FeedbackForm({
   });
 
   const createFeedback = api.feedback.create.useMutation({
-    onSuccess: async () => {
+    onSuccess: () => {
       reset();
       if (!standalone) closeModal();
       showPopup({
@@ -35,7 +35,7 @@ export default function FeedbackForm({
         icon: "success",
       });
     },
-    onError: async () => {
+    onError: () => {
       showPopup({
         header: t`Unable to send feedback`,
         message: t`Please try again later, or contact customer support.`,
