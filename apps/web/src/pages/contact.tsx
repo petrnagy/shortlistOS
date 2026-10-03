@@ -22,7 +22,7 @@ export default function ContactPage() {
             {t`Need help?`}
           </p>
 
-          {!isPending && session?.user ? (
+          {isPending ? null : session?.user ? (
             <FeedbackForm standalone />
           ) : (
             <div className="rounded-xl border border-light-300 bg-white p-6 text-center dark:border-dark-300 dark:bg-dark-100">

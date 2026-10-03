@@ -1,6 +1,6 @@
 import React from "react";
 import { renderToStaticMarkup } from "react-dom/server";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import ContactPage from "~/pages/contact";
 
@@ -26,6 +26,11 @@ vi.mock("~/views/home/components/Layout", () => ({
 describe("contact page", () => {
   beforeEach(() => {
     useSession.mockReset();
+    vi.stubGlobal("React", React);
+  });
+
+  afterEach(() => {
+    vi.unstubAllGlobals();
   });
 
   it("shows the existing feedback form to signed-in users", () => {
