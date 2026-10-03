@@ -37,14 +37,6 @@
       "count": 1
     }
   },
-  "src/components/FeedbackModal.tsx": {
-    "@typescript-eslint/no-unused-vars": {
-      "count": 1
-    },
-    "@typescript-eslint/require-await": {
-      "count": 2
-    }
-  },
   "src/components/FontSizeSelector.tsx": {
     "import/consistent-type-specifier-style": {
       "count": 1
