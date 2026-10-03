@@ -12,20 +12,6 @@
     }
   ],
   "id": "/",
-  "screenshots": [
-    {
-      "sizes": "1624x1561",
-      "src": "/images/TODO.png",
-      "type": "image/png",
-      "form_factor": "wide"
-    },
-    {
-      "sizes": "1290x2796",
-      "src": "/images/TODO.png",
-      "type": "image/png",
-      "form_factor": "narrow"
-    }
-  ],
   "orientation": "portrait-primary",
   "name": "shortlistOS | Job hunting is hard. Tracking it shouldn't be.",
   "scope": "/",
