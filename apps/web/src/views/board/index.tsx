@@ -589,7 +589,7 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
           {boardData && (
             <form
               onSubmit={handleSubmit(onSubmit)}
-              className="order-2 focus-visible:outline-none md:order-1"
+              className="order-2 min-w-0 focus-visible:outline-none md:order-1 md:mr-4 md:max-w-[80%] md:flex-1"
             >
               <input
                 id="name"
@@ -598,7 +598,7 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
                 onBlur={canRenameBoard ? handleSubmit(onSubmit) : undefined}
                 readOnly={!canRenameBoard}
                 disabled={!canRenameBoard}
-                className="block border-0 bg-transparent p-0 py-0 font-bold leading-[2.3rem] tracking-tight text-neutral-900 focus:ring-0 focus-visible:outline-none disabled:cursor-not-allowed dark:text-dark-1000 sm:text-[1.2rem]"
+                className="block border-0 bg-transparent p-0 py-0 font-bold leading-[2.3rem] tracking-tight text-neutral-900 focus:ring-0 focus-visible:outline-none disabled:cursor-not-allowed dark:text-dark-1000 sm:text-[1.2rem] md:w-full md:truncate"
               />
             </form>
           )}
@@ -607,7 +607,7 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
               {t`${isTemplate ? "Template" : "Board"} not found`}
             </p>
           )}
-          <div className="order-1 mb-4 flex items-center justify-end space-x-2 md:order-2 md:mb-0">
+          <div className="order-1 mb-4 flex shrink-0 items-center justify-end space-x-2 md:order-2 md:mb-0">
             {isTemplate && (
               <div className="inline-flex cursor-default items-center justify-center whitespace-nowrap rounded-md border-[1px] border-light-300 bg-light-50 px-3 py-2 text-sm font-semibold text-light-950 shadow-sm dark:border-dark-300 dark:bg-dark-50 dark:text-dark-950">
                 <span className="mr-2">
