@@ -72,6 +72,25 @@ const getCardLinkConnector = (type: string) => {
   return t`on`;
 };
 
+const getSourceActivityText = (type: string) => {
+  switch (type) {
+    case "source.web.clipped":
+      return t`clipped a web opportunity`;
+    case "source.web.processed":
+      return t`processed a clipped web opportunity`;
+    case "source.web.failed":
+      return t`could not parse a clipped web opportunity`;
+    case "source.email.received":
+      return t`received an email opportunity`;
+    case "source.email.processed":
+      return t`processed an email opportunity`;
+    case "source.email.failed":
+      return t`could not parse an email opportunity`;
+    default:
+      return t`processed an opportunity source`;
+  }
+};
+
 export default function ActivityLog() {
   const { dateLocale } = useLocalisation();
   const { data: sessionData } = authClient.useSession();
@@ -151,41 +170,52 @@ export default function ActivityLog() {
                 <div className="flex flex-col space-y-4">
                   {activities.map((activity, index) => {
                     const isBoardActivity = activity.entityType === "board";
+                    const isSourceActivity = activity.entityType === "source";
                     const activityText = isBoardActivity
                       ? getBoardActivityText(activity.type)
-                      : getActivityText({
-                          type: activity.type,
-                          toTitle: activity.toTitle,
-                          fromList: activity.fromList?.name ?? null,
-                          toList: activity.toList?.name ?? null,
-                          memberName: activity.member?.user?.name ?? null,
-                          memberEmail: activity.member?.user?.email ?? null,
-                          isSelf:
-                            activity.member?.user?.id === sessionData?.user.id,
-                          label: activity.label?.name ?? null,
-                          fromTitle: activity.fromTitle ?? null,
-                          fromDescription: activity.fromDescription ?? null,
-                          toDescription: activity.toDescription ?? null,
-                          fromDueDate: activity.fromDueDate ?? null,
-                          toDueDate: activity.toDueDate ?? null,
-                          dateLocale,
-                          attachmentName:
-                            activity.attachment?.originalFilename ?? null,
-                        });
+                      : isSourceActivity
+                        ? null
+                        : getActivityText({
+                            type: activity.type,
+                            toTitle: activity.toTitle,
+                            fromList: activity.fromList?.name ?? null,
+                            toList: activity.toList?.name ?? null,
+                            memberName: activity.member?.user?.name ?? null,
+                            memberEmail: activity.member?.user?.email ?? null,
+                            isSelf:
+                              activity.member?.user?.id ===
+                              sessionData?.user.id,
+                            label: activity.label?.name ?? null,
+                            fromTitle: activity.fromTitle ?? null,
+                            fromDescription: activity.fromDescription ?? null,
+                            toDescription: activity.toDescription ?? null,
+                            fromDueDate: activity.fromDueDate ?? null,
+                            toDueDate: activity.toDueDate ?? null,
+                            dateLocale,
+                            attachmentName:
+                              activity.attachment?.originalFilename ?? null,
+                          });
 
-                    if (!activityText) return null;
+                    if (!activityText && !isSourceActivity) return null;
 
                     const subjectHref = isBoardActivity
                       ? activity.board.publicId
                         ? `/${activity.board.type === "template" ? "templates" : "boards"}/${activity.board.publicId}`
                         : null
-                      : `/cards/${activity.card.publicId}`;
+                      : isSourceActivity
+                        ? activity.card
+                          ? `/cards/${activity.card.publicId}`
+                          : null
+                        : `/cards/${activity.card.publicId}`;
                     const subjectTitle = isBoardActivity
                       ? activity.board.name
-                      : activity.card.title;
-                    const cardLinkConnector = isBoardActivity
-                      ? ""
-                      : getCardLinkConnector(activity.type);
+                      : isSourceActivity
+                        ? (activity.card?.title ?? activity.sourceTitle)
+                        : activity.card.title;
+                    const cardLinkConnector =
+                      isBoardActivity || isSourceActivity
+                        ? ""
+                        : getCardLinkConnector(activity.type);
                     const isMilestone = milestoneActivityIds.has(
                       activity.publicId,
                     );
@@ -218,11 +248,13 @@ export default function ActivityLog() {
                             icon={
                               isBoardActivity
                                 ? getBoardActivityIcon(activity.type)
-                                : getActivityIcon(
-                                    activity.type,
-                                    activity.fromList?.index,
-                                    activity.toList?.index,
-                                  )
+                                : isSourceActivity
+                                  ? null
+                                  : getActivityIcon(
+                                      activity.type,
+                                      activity.fromList?.index,
+                                      activity.toList?.index,
+                                    )
                             }
                             isLoading={isFetching || isLoadingMore}
                           />
@@ -234,25 +266,50 @@ export default function ActivityLog() {
                           <p className="min-w-0 flex-1 text-sm">
                             <span className="font-medium dark:text-dark-1000">{`${getUserDisplayName(activity.user)} `}</span>
                             <span className="text-light-900 dark:text-dark-800">
-                              {activityText}
+                              {isSourceActivity
+                                ? getSourceActivityText(activity.type)
+                                : activityText}
                             </span>{" "}
-                            {cardLinkConnector && (
+                            {isSourceActivity && activity.reason && (
                               <span className="text-light-900 dark:text-dark-800">
-                                {cardLinkConnector}{" "}
+                                ({activity.reason})
                               </span>
-                            )}
-                            {subjectHref ? (
-                              <Link
-                                href={subjectHref}
-                                className="font-medium text-light-1000 underline underline-offset-2 hover:text-light-900 dark:text-dark-1000 dark:hover:text-dark-900"
-                              >
-                                {subjectTitle}
-                              </Link>
+                            )}{" "}
+                            {isSourceActivity && !activity.card ? (
+                              activity.sourceUrl ? (
+                                <a
+                                  href={activity.sourceUrl}
+                                  target="_blank"
+                                  rel="noreferrer"
+                                  className="font-medium text-light-1000 underline underline-offset-2 hover:text-light-900 dark:text-dark-1000 dark:hover:text-dark-900"
+                                >
+                                  {activity.sourceTitle}
+                                </a>
+                              ) : (
+                                <span className="font-medium text-light-1000 dark:text-dark-1000">
+                                  {activity.sourceTitle}
+                                </span>
+                              )
                             ) : (
-                              <span className="font-medium text-light-1000 dark:text-dark-1000">
-                                {subjectTitle}
-                              </span>
+                              cardLinkConnector && (
+                                <span className="text-light-900 dark:text-dark-800">
+                                  {cardLinkConnector}{" "}
+                                </span>
+                              )
                             )}
+                            {(!isSourceActivity || activity.card) &&
+                              (subjectHref ? (
+                                <Link
+                                  href={subjectHref}
+                                  className="font-medium text-light-1000 underline underline-offset-2 hover:text-light-900 dark:text-dark-1000 dark:hover:text-dark-900"
+                                >
+                                  {subjectTitle}
+                                </Link>
+                              ) : (
+                                <span className="font-medium text-light-1000 dark:text-dark-1000">
+                                  {subjectTitle}
+                                </span>
+                              ))}
                           </p>
                           {isMilestone && (
                             <div className="flex-shrink-0">

@@ -39,7 +39,13 @@ const { mockDb, mockEnqueue, mockLogger, mockStoreObject } = vi.hoisted(() => {
     })),
     insert: vi.fn(() => ({
       values: vi.fn((value: unknown) => {
-        state.insertedValues.push(value);
+        if (
+          typeof value === "object" &&
+          value !== null &&
+          "externId" in value
+        ) {
+          state.insertedValues.push(value);
+        }
 
         return {
           onConflictDoNothing: vi.fn(() => ({

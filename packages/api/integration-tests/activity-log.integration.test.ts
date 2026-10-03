@@ -3,12 +3,67 @@ import { describe, expect, it } from "vitest";
 
 import * as boardActivityRepo from "@kan/db/repository/board-activity.repo";
 import * as boardRepo from "@kan/db/repository/board.repo";
+import * as shortlistActivityLogRepo from "@kan/db/repository/shortlistActivityLog.repo";
 import { boardActivities, boards, workspaceMembers } from "@kan/db/schema";
 
 import { activityLogRouter } from "../src/routers/activity-log";
 import { createTestDb, seedTestData } from "./test-db";
 
 describe("global activity log", () => {
+  it("includes source intake and processing activity with source metadata", async () => {
+    const db = await createTestDb();
+    const { user, workspace } = await seedTestData(db);
+    const board = await boardRepo.create(db, {
+      name: "Source activity",
+      slug: "source-activity",
+      createdBy: user.id,
+      workspaceId: workspace.id,
+    });
+    if (!board) throw new Error("Board was not created");
+
+    await shortlistActivityLogRepo.ensureShortlistRobotUser(db);
+    await shortlistActivityLogRepo.createSourceActivity(db, {
+      activityType: "source.web.clipped",
+      activityResult: "SUCCESS",
+      boardId: board.id,
+      payload: {
+        sourceId: "source-1",
+        sourceKind: "web",
+        sourceTitle: "Senior engineer",
+        sourceUrl: "https://example.com/jobs/senior-engineer",
+      },
+    });
+
+    const caller = activityLogRouter.createCaller({
+      user: {
+        id: user.id,
+        name: user.name ?? "Test User",
+        email: user.email,
+        emailVerified: user.emailVerified,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt,
+        image: user.image,
+      },
+      db,
+      auth: null as never,
+      headers: new Headers(),
+      transport: "trpc",
+      requestId: crypto.randomUUID(),
+    });
+
+    const result = await caller.list({ limit: 20 });
+    const sourceActivity = result.activities.find(
+      (activity) => activity.entityType === "source",
+    );
+    expect(sourceActivity).toMatchObject({
+      entityType: "source",
+      type: "source.web.clipped",
+      sourceTitle: "Senior engineer",
+      sourceUrl: "https://example.com/jobs/senior-engineer",
+      user: { id: "00000000-0000-0000-0000-000000000042" },
+    });
+  }, 15_000);
+
   it("includes a board creation for an active workspace member", async () => {
     const db = await createTestDb();
     const { user, workspace } = await seedTestData(db);
