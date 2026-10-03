@@ -12,22 +12,31 @@
     }
   ],
   "id": "/",
-  "screenshots": [
-    {
-      "sizes": "1624x1561",
-      "src": "/images/TODO.png",
-      "type": "image/png",
-      "form_factor": "wide"
-    },
-    {
-      "sizes": "1290x2796",
-      "src": "/images/TODO.png",
-      "type": "image/png",
-      "form_factor": "narrow"
-    }
-  ],
   "orientation": "portrait-primary",
   "name": "shortlistOS | Job hunting is hard. Tracking it shouldn't be.",
+  "screenshots": [
+    {
+      "src": "/images/screenshots/web-clipper-opportunity.png",
+      "sizes": "1280x800",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Web Clipper opportunity view"
+    },
+    {
+      "src": "/images/screenshots/web-clipper-clipped.png",
+      "sizes": "1280x800",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Web Clipper clipped opportunity"
+    },
+    {
+      "src": "/images/screenshots/shortlists-overview.png",
+      "sizes": "1280x800",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Shortlists overview"
+    }
+  ],
   "scope": "/",
   "short_name": "shortlistOS",
   "start_url": "/",

@@ -109,7 +109,7 @@ const Footer = () => {
       links: [
         { label: t`Privacy`, href: "/privacy" },
         { label: t`Terms`, href: "/terms" },
-        { label: t`Contact`, href: "mailto:petr@shortlistos.co" },
+        { label: t`Contact`, href: "/contact" },
       ],
     },
   ];
