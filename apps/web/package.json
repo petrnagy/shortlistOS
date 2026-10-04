@@ -5,7 +5,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "pnpm with-env next build --turbo",
+    "build": "pnpm fetch-legal-documents && pnpm with-env next build --turbo",
+    "fetch-legal-documents": "node scripts/fetch-legal-documents.mjs",
     "clean": "git clean -xdf .cache .next .turbo node_modules",
     "dev": "pnpm with-env next dev --turbo",
     "format": "prettier --check . --ignore-path ../../.gitignore",

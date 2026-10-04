@@ -52,11 +52,10 @@ the gate is disabled. Set it to `true` only after the first manual production
 deployment has passed its smoke tests.
 
 Protect `main` against direct pushes and require both jobs from the `CI`
-workflow. CI runs linting, type checking, unit tests, translation verification,
-and both production image builds for every pull request targeting `dev` or
-`main`. Lint and type checking are temporarily advisory while their existing
-baselines are cleaned up; tests, translations, and image builds remain
-blocking.
+workflow. Pull requests targeting `dev` or `main` run blocking lint, type
+checking, unit tests, and translation verification. ARM64 production image
+builds run for pull requests targeting `main`; `dev` is not a deployment
+environment.
 
 Production images are published only after a pull request targeting `main` is
 closed as merged and its source branch starts with `release/` or `hotfix/`.
@@ -77,6 +76,23 @@ are not pruned.
 The GitHub packages `petrnagy/shortlistos` and
 `petrnagy/shortlistos-migrate` must be public so the VPS can pull without a
 registry credential.
+
+## Legal content
+
+The canonical Terms of Use and Privacy Policy are maintained in the public
+[`shortlistOS-legal`](https://github.com/petrnagy/shortlistOS-legal) repository.
+The full source commit and SHA-256 hashes are pinned in
+`apps/web/content/legal/legal-content.lock.json`. The web package fetches those
+exact files and verifies their hashes, titles, and effective dates before its
+Next.js build. Missing, invalid, or changed content fails the build rather than
+silently publishing the example templates.
+
+To publish a legal revision, commit the updated Markdown files to
+`shortlistOS-legal`, then update the pinned commit and both SHA-256 hashes in
+the lock file in a shortlistOS pull request. Production deployments therefore
+record exactly which legal revision they contain. The fetched files are served
+as public legal pages in the application image; the fetch itself needs no
+credential because the source repository is public.
 
 ## Public routes
 
