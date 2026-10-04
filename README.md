@@ -212,15 +212,13 @@ pnpm typecheck
 pnpm build
 ```
 
-Pull requests targeting `dev` or `main` run the `CI` workflow, which performs
-linting, type checking, unit tests, translation verification, and ARM64 builds
-of the application and migration images. The checks are required before
-merging to `main`, except that lint and type checking are temporarily advisory
-while their existing baselines are cleaned up. Production publishing runs only
-after a merged `release/*` or `hotfix/*` pull request, or through a manual
-invocation with a full commit SHA already present on `main`. Automatic
-deployments remain disabled unless the `PRODUCTION_DEPLOYMENTS_ENABLED`
-repository variable is exactly `true`.
+Pull requests targeting `dev` or `main` run blocking lint, type checking, unit
+tests, and translation verification. ARM64 application and migration image
+builds run for pull requests targeting `main`; `dev` is not a deployment
+environment. Production images are published only after a merged `release/*`
+or `hotfix/*` pull request, or through a manual invocation with a full commit
+SHA already present on `main`. Automatic deployments require the
+`PRODUCTION_DEPLOYMENTS_ENABLED` repository variable to be exactly `true`.
 
 The human-facing application version comes from the root `package.json`
 `version` field and must use `major.minor.patch` format. CI checks that the
