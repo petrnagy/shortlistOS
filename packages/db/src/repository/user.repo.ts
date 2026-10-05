@@ -1,4 +1,4 @@
-import { and, count, desc, eq, isNotNull, isNull } from "drizzle-orm";
+import { and, count, desc, eq, isNotNull, isNull, sql } from "drizzle-orm";
 import { v4 as uuidv4 } from "uuid";
 
 import type { dbClient } from "@kan/db/client";
@@ -75,6 +75,25 @@ export const getById = async (db: dbClient, userId: string) => {
   ]);
 
   if (!user) return undefined;
+
+  // Auth-created and older accounts may not have forwarding/feed secrets yet.
+  // Preserve existing values atomically, including during concurrent requests.
+  if (!user.shortlistUserPublicSecret || !user.shortlistFeedSecret) {
+    const [secrets] = await db
+      .update(users)
+      .set({
+        shortlistUserPublicSecret: sql`coalesce(nullif(${users.shortlistUserPublicSecret}, ''), ${uuidv4()})`,
+        shortlistFeedSecret: sql`coalesce(nullif(${users.shortlistFeedSecret}, ''), ${uuidv4()})`,
+      })
+      .where(eq(users.id, userId))
+      .returning({
+        shortlistUserPublicSecret: users.shortlistUserPublicSecret,
+        shortlistFeedSecret: users.shortlistFeedSecret,
+      });
+
+    if (!secrets) return undefined;
+    Object.assign(user, secrets);
+  }
 
   return {
     ...user,
