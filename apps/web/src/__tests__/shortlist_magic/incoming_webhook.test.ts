@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { createDrizzleClient } from "@kan/db/client";
 
@@ -73,6 +73,7 @@ const { mockDb, mockEnqueue, mockLogger, mockStoreObject } = vi.hoisted(() => {
 vi.mock("~/env", () => ({
   env: {
     BREVO_MAGIC_INBOX_WEBHOOK_SECRET: "test-webhook-secret",
+    BREVO_API_KEY: "test-brevo-api-key",
     NEXT_PUBLIC_MAGIC_INBOX_DOMAIN: "magic-inbox.shortlistos.co",
     SHORTLIST_SOURCE_BUCKET_NAME: "source-bucket",
     SHORTLIST_MAGIC_CLIP_WEBHOOK_SECRET: "test-clip-secret",
@@ -175,6 +176,10 @@ const createBrevoPayload = () => ({
 });
 
 describe("shortlist magic inbox webhook", () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
   beforeEach(() => {
     vi.clearAllMocks();
     const now = new Date();
@@ -259,6 +264,75 @@ describe("shortlist magic inbox webhook", () => {
       }),
     );
     expect(mockEnqueue).toHaveBeenCalledOnce();
+  });
+
+  it("downloads Brevo attachments using the webhook DownloadToken", async () => {
+    const payload = createBrevoPayload();
+    const attachment = payload.items[0]?.Attachments?.[0];
+    expect(attachment).toBeDefined();
+    if (!attachment) return;
+    attachment.Base64Content = "";
+
+    const fetchMock = vi.fn().mockResolvedValue(
+      new Response("PDF downloaded from Brevo", {
+        headers: { "content-type": "application/pdf" },
+        status: 200,
+      }),
+    );
+    vi.stubGlobal("fetch", fetchMock);
+    const response = createResponse();
+
+    await handler(createRequest({ body: payload }), response);
+
+    expect(fetchMock).toHaveBeenCalledWith(
+      "https://api.brevo.com/v3/inbound/attachments/def",
+      { headers: { "api-key": "test-brevo-api-key" } },
+    );
+    expect(mockStoreObject).toHaveBeenCalledWith(
+      expect.objectContaining({
+        body: Buffer.from("PDF downloaded from Brevo"),
+        contentType: "application/pdf",
+        filename: "summer2021.pdf",
+        objectType: "ATTACHMENT_FILE",
+      }),
+    );
+  });
+
+  it("logs safe attachment diagnostics when Brevo rejects a download token", async () => {
+    const payload = createBrevoPayload();
+    const attachment = payload.items[0]?.Attachments?.[0];
+    expect(attachment).toBeDefined();
+    if (!attachment) return;
+    attachment.Base64Content = "";
+
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue(new Response(null, { status: 404 })),
+    );
+    const response = createResponse();
+
+    await handler(createRequest({ body: payload }), response);
+
+    expect(mockLogger.warn).toHaveBeenCalledWith(
+      expect.objectContaining({
+        attachmentName: "summer2021.pdf",
+        downloadSource: "brevo-download-token",
+        responseStatus: 404,
+      }),
+      "Brevo attachment download request failed",
+    );
+    expect(mockLogger.warn).toHaveBeenCalledWith(
+      expect.objectContaining({
+        attachmentName: "summer2021.pdf",
+        hasDownloadToken: true,
+        hasDownloadUrl: false,
+        hasInlineContent: false,
+      }),
+      "Skipping supported Brevo attachment because it could not be downloaded",
+    );
+    const warningDetails = JSON.stringify(mockLogger.warn.mock.calls);
+    expect(warningDetails).not.toContain('"downloadToken"');
+    expect(warningDetails).not.toContain('"api-key"');
   });
 
   it("treats an existing MessageId as a duplicate through on-conflict no-op", async () => {

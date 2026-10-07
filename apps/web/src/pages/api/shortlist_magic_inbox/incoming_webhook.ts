@@ -390,9 +390,16 @@ async function storeBrevoEmailObjects(input: {
       log.warn(
         {
           attachmentName: supportedAttachment.Name,
+          hasDownloadToken: !!supportedAttachment.DownloadToken,
+          hasDownloadUrl: !!(
+            supportedAttachment.DownloadUrl ?? supportedAttachment.Url
+          ),
+          hasInlineContent: !!(
+            supportedAttachment.Base64Content ?? supportedAttachment.Content
+          ),
           messageId: input.email.MessageId,
         },
-        "Skipping supported Brevo attachment because no downloadable content was provided",
+        "Skipping supported Brevo attachment because it could not be downloaded",
       );
       continue;
     }
@@ -587,6 +594,7 @@ async function getAttachmentUpload(
   if (downloadUrl) {
     return fetchAttachmentFromUrl({
       contentType,
+      downloadSource: "attachment-url",
       filename,
       url: downloadUrl,
     });
@@ -605,6 +613,7 @@ async function getAttachmentUpload(
 
   return fetchAttachmentFromUrl({
     contentType,
+    downloadSource: "brevo-download-token",
     filename,
     headers: {
       "api-key": env.BREVO_API_KEY,
@@ -617,6 +626,7 @@ async function getAttachmentUpload(
 
 async function fetchAttachmentFromUrl(input: {
   contentType: string;
+  downloadSource: "attachment-url" | "brevo-download-token";
   filename: string;
   headers?: HeadersInit;
   url: string;
@@ -625,7 +635,18 @@ async function fetchAttachmentFromUrl(input: {
     headers: input.headers,
   });
 
-  if (!response.ok) return null;
+  if (!response.ok) {
+    log.warn(
+      {
+        attachmentName: input.filename,
+        downloadSource: input.downloadSource,
+        responseStatus: response.status,
+      },
+      "Brevo attachment download request failed",
+    );
+
+    return null;
+  }
 
   return {
     buffer: Buffer.from(await response.arrayBuffer()),
