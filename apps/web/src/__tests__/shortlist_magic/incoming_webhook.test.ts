@@ -268,7 +268,7 @@ describe("shortlist magic inbox webhook", () => {
 
   it("downloads Brevo attachments using the webhook DownloadToken", async () => {
     const payload = createBrevoPayload();
-    const attachment = payload.items[0]?.Attachments?.[0];
+    const attachment = payload.items[0]?.Attachments[0];
     expect(attachment).toBeDefined();
     if (!attachment) return;
     attachment.Base64Content = "";
@@ -300,7 +300,7 @@ describe("shortlist magic inbox webhook", () => {
 
   it("logs safe attachment diagnostics when Brevo rejects a download token", async () => {
     const payload = createBrevoPayload();
-    const attachment = payload.items[0]?.Attachments?.[0];
+    const attachment = payload.items[0]?.Attachments[0];
     expect(attachment).toBeDefined();
     if (!attachment) return;
     attachment.Base64Content = "";
