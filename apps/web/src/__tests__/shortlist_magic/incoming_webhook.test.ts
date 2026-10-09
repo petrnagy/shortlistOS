@@ -24,6 +24,8 @@ const { mockDb, mockEnqueue, mockLogger, mockStoreObject } = vi.hoisted(() => {
     ],
     insertedRows: [{ id: "inbox-row-id" }],
     insertedValues: [] as unknown[],
+    insertError: false,
+    conflictOptions: null as unknown,
   };
 
   const db = {
@@ -51,6 +53,16 @@ const { mockDb, mockEnqueue, mockLogger, mockStoreObject } = vi.hoisted(() => {
           onConflictDoNothing: vi.fn(() => ({
             returning: vi.fn(() => Promise.resolve(state.insertedRows)),
           })),
+          onConflictDoUpdate: vi.fn((options: unknown) => {
+            state.conflictOptions = options;
+            return {
+              returning: vi.fn(() =>
+                state.insertError
+                  ? Promise.reject(new Error("queue persistence unavailable"))
+                  : Promise.resolve(state.insertedRows),
+              ),
+            };
+          }),
         };
       }),
     })),
@@ -75,6 +87,7 @@ vi.mock("~/env", () => ({
     BREVO_MAGIC_INBOX_WEBHOOK_SECRET: "test-webhook-secret",
     NEXT_PUBLIC_MAGIC_INBOX_DOMAIN: "magic-inbox.shortlistos.co",
     SHORTLIST_SOURCE_BUCKET_NAME: "source-bucket",
+    BREVO_API_KEY: "must-not-be-used-by-webhook",
     SHORTLIST_MAGIC_CLIP_WEBHOOK_SECRET: "test-clip-secret",
     STRIPE_SECRET_KEY: "test-stripe-secret",
     STRIPE_SHORTLIST_WEBHOOK_SECRET: "test-stripe-webhook-secret",
@@ -191,6 +204,8 @@ describe("shortlist magic inbox webhook", () => {
     ];
     mockDb._state.insertedRows = [{ id: "inbox-row-id" }];
     mockDb._state.insertedValues = [];
+    mockDb._state.insertError = false;
+    mockDb._state.conflictOptions = null;
     mockEnqueue.mockClear();
     mockStoreObject.mockClear();
   });
@@ -221,7 +236,7 @@ describe("shortlist magic inbox webhook", () => {
     });
   });
 
-  it("inserts a Brevo inbound email source without using a real database", async () => {
+  it("durably queues a Brevo inbound email without downloading or storing objects", async () => {
     const response = createResponse();
 
     await handler(createRequest({ body: createBrevoPayload() }), response);
@@ -240,28 +255,22 @@ describe("shortlist magic inbox webhook", () => {
         createdBy: "owner-user-id",
         externId:
           "<CAN0zNmMsj_xOx8hCREv3rbovcYE3m5rZh8eRe+QSKC0yff_W6A@mail.gmail.com>",
-        hasSupportedAttachment: true,
-        inReplyTo: "<previous-message@example.com>",
-        referencesJson: [
-          "<root-message@example.com>",
-          "<previous-message@example.com>",
-        ],
+        status: "PENDING",
       }),
     ]);
-    expect(mockStoreObject).toHaveBeenCalledTimes(4);
-    expect(mockStoreObject).toHaveBeenCalledWith(
-      expect.objectContaining({ objectType: "EMAIL_CURRENT" }),
-    );
-    expect(mockStoreObject).toHaveBeenCalledWith(
-      expect.objectContaining({
-        filename: "summer2021.pdf",
-        objectType: "ATTACHMENT_FILE",
-      }),
-    );
-    expect(mockEnqueue).toHaveBeenCalledOnce();
+    const persistedJob = mockDb._state.insertedValues[0] as {
+      payloadJson: {
+        RawTextBody: string;
+        Attachments: { DownloadToken?: string }[];
+      };
+    };
+    expect(persistedJob.payloadJson.RawTextBody).toBe("Hi Terry");
+    expect(persistedJob.payloadJson.Attachments[0]?.DownloadToken).toBe("def");
+    expect(mockStoreObject).not.toHaveBeenCalled();
+    expect(mockEnqueue).not.toHaveBeenCalled();
   });
 
-  it("treats an existing MessageId as a duplicate through on-conflict no-op", async () => {
+  it("treats an existing completed MessageId as a duplicate", async () => {
     mockDb._state.insertedRows = [];
     const response = createResponse();
 
@@ -273,6 +282,40 @@ describe("shortlist magic inbox webhook", () => {
       inserted: 0,
       received: 1,
       skipped: 0,
+    });
+  });
+
+  it("reuses the idempotency key and refreshes a pending job on duplicate delivery", async () => {
+    const body = createBrevoPayload();
+    const firstResponse = createResponse();
+    const secondResponse = createResponse();
+
+    await handler(createRequest({ body }), firstResponse);
+    await handler(createRequest({ body }), secondResponse);
+
+    const [firstJob, secondJob] = mockDb._state.insertedValues as {
+      idempotencyKey: string;
+    }[];
+    expect(firstJob?.idempotencyKey).toBe(secondJob?.idempotencyKey);
+    const conflictOptions = mockDb._state.conflictOptions as {
+      set: { payloadJson: unknown; runAfter: unknown };
+      setWhere: unknown;
+    };
+    expect(conflictOptions.set.payloadJson).toBeDefined();
+    expect(conflictOptions.set.runAfter).toBeDefined();
+    expect(conflictOptions.setWhere).toBeDefined();
+    expect(secondResponse.status).toHaveBeenCalledWith(200);
+  });
+
+  it("returns an error when durable queue persistence fails", async () => {
+    mockDb._state.insertError = true;
+    const response = createResponse();
+
+    await handler(createRequest({ body: createBrevoPayload() }), response);
+
+    expect(response.status).toHaveBeenCalledWith(500);
+    expect(response.json).toHaveBeenCalledWith({
+      message: "Webhook handler failed",
     });
   });
 
@@ -342,7 +385,7 @@ describe("shortlist magic inbox webhook", () => {
     expect(mockEnqueue).not.toHaveBeenCalled();
   });
 
-  it("ignores unsupported attachments while still queueing the email body", async () => {
+  it("queues unsupported attachments for body-only processing", async () => {
     const payload = createBrevoPayload();
     const item = payload.items[0];
     expect(item).toBeDefined();
@@ -362,13 +405,10 @@ describe("shortlist magic inbox webhook", () => {
     await handler(createRequest({ body: payload }), response);
 
     expect(response.status).toHaveBeenCalledWith(200);
-    expect(mockStoreObject).toHaveBeenCalledTimes(3);
-    expect(mockStoreObject).not.toHaveBeenCalledWith(
-      expect.objectContaining({ objectType: "ATTACHMENT_FILE" }),
-    );
-    expect(mockEnqueue).toHaveBeenCalledOnce();
+    expect(mockStoreObject).not.toHaveBeenCalled();
+    expect(mockEnqueue).not.toHaveBeenCalled();
     expect(mockDb._state.insertedValues).toEqual([
-      expect.objectContaining({ hasSupportedAttachment: false }),
+      expect.objectContaining({ status: "PENDING" }),
     ]);
   });
 
