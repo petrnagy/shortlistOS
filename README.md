@@ -292,7 +292,7 @@ Copy [`.env.example`](./.env.example) as the starting point. Empty optional valu
 | `POSTGRES_PASSWORD` | Compose | Password used by the bundled PostgreSQL container |
 | `WEB_PORT` | No | Host port for Compose; default `3000` |
 | `CONTAINER_NAME`, `MIGRATOR_CONTAINER_NAME` | No | Container-name overrides |
-| `APP_VERSION` | Deployment | Immutable container-image tag supplied by the deployment tooling |
+| `APP_IMAGE_TAG` | Deployment | Immutable container-image tag supplied by deployment tooling; optional for self-hosted installs |
 | `NODE_ENV` | No | `development`, `production`, or `test` |
 | `NEXT_PUBLIC_KAN_ENV` | No | Deployment/environment identifier retained for upstream compatibility |
 | `KAN_ADMIN_API_KEY` | No | Administrative API credential |

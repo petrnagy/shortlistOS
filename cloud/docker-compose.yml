@@ -27,6 +27,7 @@ services:
       - .env
     restart: unless-stopped
     environment:
+      - APP_IMAGE_TAG=${APP_IMAGE_TAG:-}
       - KAN_ADMIN_API_KEY=${KAN_ADMIN_API_KEY}
       - NEXT_PUBLIC_KAN_ENV=${NEXT_PUBLIC_KAN_ENV}
       - NEXT_PUBLIC_BASE_URL=${NEXT_PUBLIC_BASE_URL}

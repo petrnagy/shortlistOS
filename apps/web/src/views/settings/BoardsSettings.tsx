@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { t } from "@lingui/core/macro";
+import { env } from "next-runtime-env";
 import { useMemo } from "react";
 import {
   HiOutlineBellAlert,
@@ -17,7 +18,6 @@ import type { RouterInputs } from "~/utils/api";
 import { Alert } from "~/components/Alert";
 import Button from "~/components/Button";
 import Toggle from "~/components/Toggle";
-import { env } from "~/env";
 import { usePopup } from "~/providers/popup";
 import { api } from "~/utils/api";
 import { hasActivePowerpack } from "~/utils/powerpack";
@@ -194,11 +194,11 @@ const BoardsSettings = ({
     user?.shortlistUserPublicSecret,
   ]);
 
-  const magicInboxAddress = useMemo(() => {
-    const domain = env.NEXT_PUBLIC_MAGIC_INBOX_DOMAIN ?? "";
-
-    return `${boardPublicId || "board"}.${user?.shortlistUserPublicSecret ?? "user"}@${domain}`;
-  }, [boardPublicId, user?.shortlistUserPublicSecret]);
+  const magicInboxDomain = env("NEXT_PUBLIC_MAGIC_INBOX_DOMAIN")?.trim();
+  const magicInboxAddress =
+    boardPublicId && user?.shortlistUserPublicSecret && magicInboxDomain
+      ? `${boardPublicId}.${user.shortlistUserPublicSecret}@${magicInboxDomain}`
+      : "";
 
   const updateBoard = api.board.update.useMutation({
     onError: (error) => {
@@ -265,6 +265,7 @@ const BoardsSettings = ({
   };
 
   const handleCopyMagicInboxAddress = () => {
+    if (!magicInboxAddress) return;
     void navigator.clipboard.writeText(magicInboxAddress).then(
       () => {
         showPopup({
@@ -358,13 +359,14 @@ const BoardsSettings = ({
                 <input
                   readOnly
                   value={magicInboxAddress}
+                  placeholder={t`Unable to copy address`}
                   className="min-w-0 flex-1 rounded-md border-0 bg-light-100 px-3 py-2 text-sm text-light-900 shadow-sm ring-1 ring-inset ring-light-300 dark:bg-dark-200 dark:text-dark-900 dark:ring-dark-400"
                 />
                 <Button
                   type="button"
                   variant="secondary"
                   size="sm"
-                  disabled={mockupsDisabled}
+                  disabled={mockupsDisabled || !magicInboxAddress}
                   onClick={handleCopyMagicInboxAddress}
                   iconLeft={<HiOutlineClipboardDocument className="h-4 w-4" />}
                 >

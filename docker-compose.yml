@@ -29,6 +29,7 @@ services:
     env_file:
       - .env
     environment:
+      - APP_IMAGE_TAG=${APP_IMAGE_TAG:-}
       # Required environment variables
       - NEXT_PUBLIC_BASE_URL=${NEXT_PUBLIC_BASE_URL}
       - NEXT_PUBLIC_LANDING_PAGE_URL=${NEXT_PUBLIC_LANDING_PAGE_URL}
