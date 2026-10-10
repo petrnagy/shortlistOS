@@ -5,6 +5,7 @@ import { createDrizzleClient } from "@kan/db/client";
 import { createLogger } from "@kan/logger";
 
 import { DEFAULT_LLM_ACCOUNT_DAILY_REQUEST_LIMIT } from "../utils/provider-requests";
+import { processInboundEmailBatch } from "../workers/inbound-email-worker";
 import { processShortlistJobQueueBatch } from "../workers/source-queue-worker";
 
 const logger = createLogger("shortlist-queue-worker:watch-sources");
@@ -21,6 +22,10 @@ for (const signal of ["SIGINT", "SIGTERM"] as const) {
 
 try {
   while (!stopping) {
+    const inboundResult = await processInboundEmailBatch(db, {
+      apiKey: getOptionalEnv("BREVO_API_KEY"),
+      bucket: getRequiredEnv("SHORTLIST_SOURCE_BUCKET_NAME"),
+    });
     const result = await processShortlistJobQueueBatch(db, {
       apiKey: getRequiredEnv("LLM_CONNECTOR_API_KEY"),
       accountDailyRequestLimit: getNumberEnv(
@@ -31,8 +36,11 @@ try {
       retryLimit: getNumberEnv("INBOX_CLIP_RETRY_LIMIT", 3),
     });
 
-    if (result.selected > 0) {
-      logger.info(result, "Shortlist source queue batch finished");
+    if (result.selected > 0 || inboundResult.selected > 0) {
+      logger.info(
+        { inbound: inboundResult, sources: result },
+        "Shortlist worker batches finished",
+      );
       continue;
     }
 
@@ -49,6 +57,10 @@ function getRequiredEnv(name: string): string {
   const value = process.env[name]?.trim();
   if (!value) throw new Error(`${name} is required`);
   return value;
+}
+
+function getOptionalEnv(name: string): string | undefined {
+  return process.env[name]?.trim() ?? undefined;
 }
 
 function getNumberEnv(name: string, fallback: number): number {

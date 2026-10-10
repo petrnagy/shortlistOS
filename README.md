@@ -350,7 +350,7 @@ All bucket and connection variables in this section are required for a standard 
 | Variable | Purpose |
 | --- | --- |
 | `NEXT_PUBLIC_MAGIC_INBOX_DOMAIN` | Domain used to build Magic Inbox forwarding addresses |
-| `BREVO_API_KEY` | Downloads attachments delivered through Brevo |
+| `BREVO_API_KEY` | Used by the shortlist queue worker to download Brevo attachments |
 | `BREVO_MAGIC_INBOX_WEBHOOK_SECRET` | Bearer secret for `/api/shortlist_magic_inbox/incoming_webhook` |
 | `SHORTLIST_MAGIC_CLIP_WEBHOOK_SECRET` | Bearer secret for `/api/shortlist_magic_clip` |
 | `LLM_CONNECTOR_API_KEY`, `LLM_CONNECTOR_MODEL` | LLM provider credential and model |

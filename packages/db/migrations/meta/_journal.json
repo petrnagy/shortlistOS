@@ -463,6 +463,13 @@
       "when": 1789422497213,
       "tag": "20260914215000_AddPowerpackSettingsInitialization",
       "breakpoints": true
+    },
+    {
+      "idx": 66,
+      "version": "7",
+      "when": 1791547200000,
+      "tag": "20261009120000_AddDurableInboundEmailJobs",
+      "breakpoints": true
     }
   ]
 }

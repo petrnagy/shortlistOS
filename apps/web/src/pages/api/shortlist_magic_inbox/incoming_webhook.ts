@@ -6,28 +6,15 @@
  * Copyright: Copyright (c) 2026 Petr Nagy.
  * This file is part of shortlistOS.
  */
+import { createHash } from "node:crypto";
 import type { NextApiRequest, NextApiResponse } from "next";
+import { sql } from "drizzle-orm";
 
-import type { dbClient } from "@kan/db/client";
 import { createDrizzleClient } from "@kan/db/client";
-import {
-  createSourceActivity,
-  ensureShortlistRobotUser,
-} from "@kan/db/repository/shortlistActivityLog.repo";
-import { shortlistEmailSources } from "@kan/db/schema";
+import { shortlistInboundEmailJobs } from "@kan/db/schema";
 import { createLogger } from "@kan/logger";
-import {
-  isSupportedShortlistAttachment,
-  SHORTLIST_SOURCE_OBJECT_TYPES,
-  SHORTLIST_SOURCE_TYPES,
-} from "@kan/shared/constants";
 
 import { env } from "~/env";
-import {
-  enqueueShortlistSource,
-  sanitizeShortlistFilename,
-  storeShortlistSourceObject,
-} from "~/utils/shortlistSourceIntake";
 import {
   getBearerToken,
   resolveMagicInboxRecipientAccess,
@@ -36,8 +23,6 @@ import {
 const log = createLogger("api:shortlist-magic-inbox");
 
 const MAGIC_INBOX_DOMAIN = env.NEXT_PUBLIC_MAGIC_INBOX_DOMAIN?.toLowerCase();
-const BREVO_ATTACHMENT_DOWNLOAD_BASE_URL =
-  "https://api.brevo.com/v3/inbound/attachments";
 
 interface BrevoMailbox {
   Address?: string;
@@ -189,20 +174,11 @@ export default async function handler(
 
   const payload = req.body;
   const db = createDrizzleClient();
-  const bucket = env.SHORTLIST_SOURCE_BUCKET_NAME;
   let inserted = 0;
   let duplicates = 0;
   let skipped = 0;
 
   try {
-    if (!bucket) {
-      log.error("Shortlist source bucket is not configured");
-
-      return res
-        .status(500)
-        .json({ message: "Shortlist source bucket is not configured" });
-    }
-
     for (const item of payload.items) {
       if (!item.MessageId) {
         skipped += 1;
@@ -230,7 +206,6 @@ export default async function handler(
           log.warn(
             {
               boardPublicId: recipient.boardPublicId,
-              userPublicSecret: recipient.userPublicSecret,
               externId: item.MessageId,
             },
             "Skipping Brevo inbound email because board ownership or Powerpack access could not be resolved",
@@ -238,72 +213,35 @@ export default async function handler(
           continue;
         }
 
-        const supportedAttachments = getSupportedAttachments(item);
-        const inReplyTo = getEmailHeader(item, "in-reply-to");
-        const references = parseMessageIdList(
-          getEmailHeader(item, "references"),
-        );
-        const insertedRows = await db
-          .insert(shortlistEmailSources)
+        const idempotencyKey = createHash("sha256")
+          .update(
+            `${item.MessageId}\0${recipient.boardPublicId}.${recipient.userPublicSecret}`,
+          )
+          .digest("hex");
+        const persistedRows = await db
+          .insert(shortlistInboundEmailJobs)
           .values({
+            idempotencyKey,
+            externId: item.MessageId,
             createdBy: access.userId,
             boardId: access.boardId,
-            externId: item.MessageId,
-            fromEmail: item.From?.Address ?? null,
-            fromName: item.From?.Name ?? null,
-            hasSupportedAttachment: supportedAttachments.length > 0,
-            inReplyTo,
-            metadataJson: {
-              brevoUuid: item.Uuid ?? null,
-              boardPublicId: recipient.boardPublicId,
-              recipient: `${recipient.boardPublicId}.${recipient.userPublicSecret}`,
-              spamScore: item.SpamScore ?? null,
+            boardPublicId: recipient.boardPublicId,
+            payloadJson: item,
+            status: "PENDING",
+          })
+          .onConflictDoUpdate({
+            target: shortlistInboundEmailJobs.idempotencyKey,
+            set: {
+              payloadJson: item,
+              runAfter: sql`CASE WHEN ${shortlistInboundEmailJobs.status} = 'PENDING' THEN NOW() ELSE ${shortlistInboundEmailJobs.runAfter} END`,
+              updatedAt: new Date(),
             },
-            referencesJson: references,
-            sentAt: parseBrevoDate(item.SentAtDate),
-            subject: item.Subject ?? null,
+            setWhere: sql`${shortlistInboundEmailJobs.status} IN ('PENDING', 'RETRY')`,
           })
-          .onConflictDoNothing({
-            target: [
-              shortlistEmailSources.externId,
-              shortlistEmailSources.boardId,
-            ],
-          })
-          .returning({ id: shortlistEmailSources.id });
+          .returning({ id: shortlistInboundEmailJobs.id });
 
-        if (insertedRows.length > 0) {
+        if (persistedRows.length > 0) {
           inserted += 1;
-          await storeBrevoEmailObjects({
-            access,
-            bucket,
-            db,
-            email: item,
-            recipient,
-            sourceId: insertedRows[0]?.id,
-            supportedAttachments,
-          });
-          try {
-            await ensureShortlistRobotUser(db);
-            await createSourceActivity(db, {
-              activityType: "source.email.received",
-              activityResult: "SUCCESS",
-              boardId: access.boardId,
-              payload: {
-                sourceId: insertedRows[0]?.id ?? item.MessageId,
-                sourceKind: "email",
-                sourceTitle: item.Subject?.trim() ?? "Email opportunity",
-                sourceUrl: buildEmailSourceUrl(
-                  item.From?.Address ?? null,
-                  item.Subject ?? null,
-                ),
-              },
-            });
-          } catch (activityError) {
-            log.error(
-              { error: activityError, sourceId: insertedRows[0]?.id },
-              "Failed to record Magic Inbox activity",
-            );
-          }
         } else {
           duplicates += 1;
         }
@@ -327,180 +265,13 @@ export default async function handler(
       skipped,
     });
   } catch (error) {
-    log.error({ error }, "Failed to process Brevo magic inbox webhook");
+    log.error(
+      { errorType: error instanceof Error ? error.name : "UnknownError" },
+      "Failed to persist Brevo magic inbox webhook jobs",
+    );
 
     return res.status(500).json({ message: "Webhook handler failed" });
   }
-}
-
-function buildEmailSourceUrl(fromEmail: string | null, subject: string | null) {
-  if (!fromEmail) return null;
-  const params = subject
-    ? `?subject=${encodeURIComponent(subject.trim())}`
-    : "";
-  return `mailto:${fromEmail}${params}`;
-}
-
-async function storeBrevoEmailObjects(input: {
-  access: { boardId: number; userId: string };
-  bucket: string;
-  db: dbClient;
-  email: BrevoInboundEmail;
-  recipient: MagicInboxRecipient;
-  sourceId: string | undefined;
-  supportedAttachments: BrevoAttachment[];
-}) {
-  if (!input.sourceId) {
-    throw new Error("Email source id was not returned");
-  }
-
-  const objectIds: string[] = [];
-  const bodyObjects = getEmailBodyObjects(input.email);
-
-  for (const bodyObject of bodyObjects) {
-    const buffer = Buffer.from(bodyObject.content, "utf8");
-    const object = await storeShortlistSourceObject({
-      db: input.db,
-      bucket: input.bucket,
-      body: buffer,
-      boardId: input.access.boardId,
-      boardPublicId: input.recipient.boardPublicId,
-      contentLength: buffer.byteLength,
-      contentType: bodyObject.contentType,
-      createdBy: input.access.userId,
-      filename: bodyObject.filename,
-      metadata: {
-        "message-id": input.email.MessageId ?? "",
-      },
-      objectType: bodyObject.objectType,
-      sourceId: input.sourceId,
-      sourceType: SHORTLIST_SOURCE_TYPES.EMAIL,
-    });
-
-    if (object.id) objectIds.push(object.id);
-  }
-
-  for (const [
-    attachmentIndex,
-    supportedAttachment,
-  ] of input.supportedAttachments.entries()) {
-    const attachment = await getAttachmentUpload(supportedAttachment);
-
-    if (!attachment) {
-      log.warn(
-        {
-          attachmentName: supportedAttachment.Name,
-          hasDownloadToken: !!supportedAttachment.DownloadToken,
-          hasDownloadUrl: !!(
-            supportedAttachment.DownloadUrl ?? supportedAttachment.Url
-          ),
-          hasInlineContent: !!(
-            supportedAttachment.Base64Content ?? supportedAttachment.Content
-          ),
-          messageId: input.email.MessageId,
-        },
-        "Skipping supported Brevo attachment because it could not be downloaded",
-      );
-      continue;
-    }
-
-    const object = await storeShortlistSourceObject({
-      db: input.db,
-      bucket: input.bucket,
-      body: attachment.buffer,
-      boardId: input.access.boardId,
-      boardPublicId: input.recipient.boardPublicId,
-      contentLength: attachment.buffer.byteLength,
-      contentType: attachment.contentType,
-      createdBy: input.access.userId,
-      filename: attachment.filename,
-      metadata: {
-        "message-id": input.email.MessageId ?? "",
-        "original-filename": sanitizeShortlistFilename(attachment.filename),
-        "source-order": String(attachmentIndex),
-      },
-      objectType: SHORTLIST_SOURCE_OBJECT_TYPES.ATTACHMENT_FILE,
-      sourceId: input.sourceId,
-      sourceType: SHORTLIST_SOURCE_TYPES.EMAIL,
-    });
-
-    if (object.id) objectIds.push(object.id);
-  }
-
-  await enqueueShortlistSource({
-    db: input.db,
-    boardId: input.access.boardId,
-    createdBy: input.access.userId,
-    payloadJson: {
-      messageId: input.email.MessageId,
-      objectIds,
-      subject: input.email.Subject ?? null,
-    },
-    sourceId: input.sourceId,
-    sourceType: SHORTLIST_SOURCE_TYPES.EMAIL,
-  });
-}
-
-function getEmailBodyObjects(email: BrevoInboundEmail): Array<{
-  content: string;
-  contentType: string;
-  filename: string;
-  objectType:
-    | typeof SHORTLIST_SOURCE_OBJECT_TYPES.EMAIL_HTML
-    | typeof SHORTLIST_SOURCE_OBJECT_TYPES.EMAIL_CURRENT
-    | typeof SHORTLIST_SOURCE_OBJECT_TYPES.EMAIL_TEXT
-    | typeof SHORTLIST_SOURCE_OBJECT_TYPES.EMAIL_EML;
-}> {
-  const objects: Array<{
-    content: string;
-    contentType: string;
-    filename: string;
-    objectType:
-      | typeof SHORTLIST_SOURCE_OBJECT_TYPES.EMAIL_HTML
-      | typeof SHORTLIST_SOURCE_OBJECT_TYPES.EMAIL_CURRENT
-      | typeof SHORTLIST_SOURCE_OBJECT_TYPES.EMAIL_TEXT
-      | typeof SHORTLIST_SOURCE_OBJECT_TYPES.EMAIL_EML;
-  }> = [];
-
-  const currentMessage = getCurrentEmailMessage(email);
-  if (currentMessage) {
-    objects.push({
-      content: currentMessage.content,
-      contentType: currentMessage.contentType,
-      filename: currentMessage.filename,
-      objectType: SHORTLIST_SOURCE_OBJECT_TYPES.EMAIL_CURRENT,
-    });
-  }
-
-  if (email.RawHtmlBody) {
-    objects.push({
-      content: email.RawHtmlBody,
-      contentType: "text/html",
-      filename: "email.html",
-      objectType: SHORTLIST_SOURCE_OBJECT_TYPES.EMAIL_HTML,
-    });
-  }
-
-  if (email.RawTextBody) {
-    objects.push({
-      content: email.RawTextBody,
-      contentType: "text/plain",
-      filename: "email.txt",
-      objectType: SHORTLIST_SOURCE_OBJECT_TYPES.EMAIL_TEXT,
-    });
-  }
-
-  const rawEmail = email.RawEmailBody ?? email.RawMime;
-  if (rawEmail) {
-    objects.push({
-      content: rawEmail,
-      contentType: "message/rfc822",
-      filename: "email.eml",
-      objectType: SHORTLIST_SOURCE_OBJECT_TYPES.EMAIL_EML,
-    });
-  }
-
-  return objects;
 }
 
 export function getCurrentEmailMessage(
@@ -533,134 +304,6 @@ export function getCurrentEmailMessage(
   }
 
   return null;
-}
-
-function getSupportedAttachments(email: BrevoInboundEmail): BrevoAttachment[] {
-  return (email.Attachments ?? []).filter(
-    (attachment) =>
-      !!attachment.Name && isSupportedShortlistAttachment(attachment.Name),
-  );
-}
-
-function getEmailHeader(
-  email: BrevoInboundEmail,
-  headerName: string,
-): string | null {
-  if (!email.Headers) return null;
-
-  if (Array.isArray(email.Headers)) {
-    const prefix = `${headerName.toLowerCase()}:`;
-    const header = email.Headers.find((value) =>
-      value.toLowerCase().startsWith(prefix),
-    );
-    return header ? header.slice(header.indexOf(":") + 1).trim() : null;
-  }
-
-  const entry = Object.entries(email.Headers).find(
-    ([name]) => name.toLowerCase() === headerName.toLowerCase(),
-  );
-  const value = entry?.[1];
-
-  return Array.isArray(value) ? (value[0] ?? null) : (value ?? null);
-}
-
-function parseMessageIdList(value: string | null): string[] {
-  if (!value) return [];
-
-  const bracketed = value.match(/<[^>]+>/g);
-  return bracketed ?? value.split(/\s+/).filter(Boolean);
-}
-
-async function getAttachmentUpload(
-  attachment: BrevoAttachment,
-): Promise<{ buffer: Buffer; contentType: string; filename: string } | null> {
-  const filename = attachment.Name
-    ? sanitizeShortlistFilename(attachment.Name)
-    : "attachment";
-  const contentType = attachment.ContentType ?? "application/octet-stream";
-
-  if (attachment.Base64Content ?? attachment.Content) {
-    return {
-      buffer: Buffer.from(
-        attachment.Base64Content ?? attachment.Content ?? "",
-        "base64",
-      ),
-      contentType,
-      filename,
-    };
-  }
-
-  const downloadUrl = attachment.DownloadUrl ?? attachment.Url;
-  if (downloadUrl) {
-    return fetchAttachmentFromUrl({
-      contentType,
-      downloadSource: "attachment-url",
-      filename,
-      url: downloadUrl,
-    });
-  }
-
-  if (!attachment.DownloadToken) return null;
-
-  if (!env.BREVO_API_KEY) {
-    log.warn(
-      { attachmentName: attachment.Name },
-      "Skipping Brevo attachment download because BREVO_API_KEY is not configured",
-    );
-
-    return null;
-  }
-
-  return fetchAttachmentFromUrl({
-    contentType,
-    downloadSource: "brevo-download-token",
-    filename,
-    headers: {
-      "api-key": env.BREVO_API_KEY,
-    },
-    url: `${BREVO_ATTACHMENT_DOWNLOAD_BASE_URL}/${encodeURIComponent(
-      attachment.DownloadToken,
-    )}`,
-  });
-}
-
-async function fetchAttachmentFromUrl(input: {
-  contentType: string;
-  downloadSource: "attachment-url" | "brevo-download-token";
-  filename: string;
-  headers?: HeadersInit;
-  url: string;
-}): Promise<{ buffer: Buffer; contentType: string; filename: string } | null> {
-  const response = await fetch(input.url, {
-    headers: input.headers,
-  });
-
-  if (!response.ok) {
-    log.warn(
-      {
-        attachmentName: input.filename,
-        downloadSource: input.downloadSource,
-        responseStatus: response.status,
-      },
-      "Brevo attachment download request failed",
-    );
-
-    return null;
-  }
-
-  return {
-    buffer: Buffer.from(await response.arrayBuffer()),
-    contentType: response.headers.get("content-type") ?? input.contentType,
-    filename: input.filename,
-  };
-}
-
-function parseBrevoDate(value: string | undefined): Date | null {
-  if (!value) return null;
-
-  const parsed = new Date(value);
-
-  return Number.isNaN(parsed.getTime()) ? null : parsed;
 }
 
 export const config = {

@@ -32,7 +32,6 @@ export const env = createEnv({
     STRIPE_SECRET_KEY: z.string().optional(),
     STRIPE_POWERPACK_PRODUCT_ID: z.string().optional(),
     STRIPE_SHORTLIST_WEBHOOK_SECRET: z.string().optional(),
-    BREVO_API_KEY: z.string().optional(),
     BREVO_MAGIC_INBOX_WEBHOOK_SECRET: z.string().optional(),
     SHORTLIST_MAGIC_CLIP_WEBHOOK_SECRET: z.string().optional(),
     GOOGLE_CLIENT_ID: z.string().optional(),
@@ -157,8 +156,7 @@ export const env = createEnv({
     NEXT_PUBLIC_ATTACHMENTS_BUCKET_NAME:
       process.env.NEXT_PUBLIC_ATTACHMENTS_BUCKET_NAME,
     NEXT_PUBLIC_STORAGE_DOMAIN: process.env.NEXT_PUBLIC_STORAGE_DOMAIN,
-    NEXT_PUBLIC_MAGIC_INBOX_DOMAIN:
-      process.env.NEXT_PUBLIC_MAGIC_INBOX_DOMAIN,
+    NEXT_PUBLIC_MAGIC_INBOX_DOMAIN: process.env.NEXT_PUBLIC_MAGIC_INBOX_DOMAIN,
     NEXT_PUBLIC_USE_VIRTUAL_HOSTED_URLS:
       process.env.NEXT_PUBLIC_USE_VIRTUAL_HOSTED_URLS,
     NEXT_PUBLIC_ALLOW_CREDENTIALS: process.env.NEXT_PUBLIC_ALLOW_CREDENTIALS,
