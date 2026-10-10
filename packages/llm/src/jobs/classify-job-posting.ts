@@ -8,7 +8,6 @@
  */
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
-import TurndownService from "turndown";
 import { z } from "zod";
 
 import {
@@ -28,6 +27,12 @@ const JOB_POSTING_CLASSIFICATION_TEMPLATE = readFileSync(
 const OPPORTUNITY_FACTS_CLASSIFICATION_TEMPLATE = readFileSync(
   fileURLToPath(
     new URL("./prompts/opportunity-facts-classification.md", import.meta.url),
+  ),
+  "utf8",
+).trim();
+const SHARED_OPPORTUNITY_FACT_RULES = readFileSync(
+  fileURLToPath(
+    new URL("./prompts/shared-opportunity-fact-rules.md", import.meta.url),
   ),
   "utf8",
 ).trim();
@@ -447,6 +452,7 @@ export function buildOpportunityFactsPrompt({
     SOURCE_ROLE: sourceRole,
     SOURCE_URL: sourceUrl ?? "null",
     USER_TIME_ZONE: timeZone,
+    SHARED_FACT_RULES: SHARED_OPPORTUNITY_FACT_RULES,
   });
 }
 
@@ -463,16 +469,48 @@ function renderPromptTemplate(
   });
 }
 
-export function convertHtmlToJobPostingMarkdown(html: string): string {
-  const turndown = new TurndownService({
-    bulletListMarker: "-",
-    codeBlockStyle: "fenced",
-    headingStyle: "atx",
-  });
+export function sanitizeJobPostingHtml(html: string): string {
+  const structuredData = Array.from(
+    html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script\s*>/gi),
+  )
+    .filter((match) =>
+      /type\s*=\s*["']application\/ld\+json["']/i.test(match[1] ?? ""),
+    )
+    .map((match) => match[2]?.trim())
+    .filter((content): content is string => !!content);
 
-  turndown.remove(["script", "style", "noscript", "svg", "canvas"]);
+  const sanitizedHtml = `${html
+    .replace(/<!--[\s\S]*?-->/g, "")
+    .replace(/<!doctype[^>]*>/gi, "")
+    .replace(
+      /<(script|style|noscript|svg|canvas|iframe|object|embed|template)\b[^>]*>[\s\S]*?<\/\1\s*>/gi,
+      "",
+    )
+    .replace(
+      /<(script|style|noscript|svg|canvas|iframe|object|embed|template)\b[^>]*\/?\s*>/gi,
+      "",
+    )
+    .replace(/<meta\b[^>]*>/gi, (tag) =>
+      /(?:name|property)\s*=\s*["'](?:description|og:description|title|og:title|twitter:title)["']/i.test(
+        tag,
+      )
+        ? tag
+        : "",
+    )
+    .replace(/<link\b[^>]*>/gi, "")
+    .replace(/\sstyle\s*=\s*(?:"[^"]*"|'[^']*'|[^\s>]+)/gi, "")
+    .replace(/\son[a-z]+\s*=\s*(?:"[^"]*"|'[^']*'|[^\s>]+)/gi, "")}\n${
+    structuredData.length
+      ? `<section data-source="structured-data"><h2>Structured metadata (JSON-LD)</h2><pre>${structuredData
+          .map(escapeHtmlText)
+          .join("\n")}</pre></section>`
+      : ""
+  }`;
 
-  return normalizeContent(turndown.turndown(html));
+  return sanitizedHtml
+    .replace(/\r\n?/g, "\n")
+    .replace(/\n{4,}/g, "\n\n\n")
+    .trim();
 }
 
 export function buildJobPostingClassificationPrompt({
@@ -500,6 +538,7 @@ export function buildJobPostingClassificationPrompt({
     CONVERSION_WARNINGS: JSON.stringify(warnings),
     SOURCE_URL: sourceUrl ?? "null",
     USER_TIME_ZONE: timeZone,
+    SHARED_FACT_RULES: SHARED_OPPORTUNITY_FACT_RULES,
   });
 }
 
@@ -514,29 +553,40 @@ function prepareClassificationContent(
     throw new Error("Job posting classification requires HTML content.");
   }
 
-  try {
-    const markdown = convertHtmlToJobPostingMarkdown(trimmedHtml);
-
-    if (!markdown) {
-      throw new Error("HTML converted to empty markdown.");
+  if (looksLikeHtml(trimmedHtml)) {
+    const sanitizedHtml = sanitizeJobPostingHtml(trimmedHtml);
+    if (!sanitizedHtml) {
+      throw new Error("HTML sanitization produced empty content.");
     }
-
     return {
-      content: truncateContent(markdown, maxContentChars, warnings),
-      contentFormat: "MARKDOWN",
-      warnings,
-    };
-  } catch (error) {
-    warnings.push(
-      `HTML to markdown conversion failed; using raw HTML instead. ${getErrorMessage(error)}`,
-    );
-
-    return {
-      content: truncateContent(trimmedHtml, maxContentChars, warnings),
+      content: truncateContent(sanitizedHtml, maxContentChars, warnings),
       contentFormat: "RAW_HTML",
       warnings,
     };
   }
+
+  return {
+    content: truncateContent(
+      normalizeContent(trimmedHtml),
+      maxContentChars,
+      warnings,
+    ),
+    contentFormat: "MARKDOWN",
+    warnings,
+  };
+}
+
+function looksLikeHtml(content: string): boolean {
+  return /<(?:!doctype\b|html\b|head\b|body\b|title\b|meta\b|main\b|article\b|section\b|div\b|p\b|h[1-6]\b|ul\b|ol\b|li\b|a\b|table\b|span\b|b\b|strong\b|em\b|br\b|img\b|nav\b|footer\b|header\b)(?:\s|\/?>)/i.test(
+    content,
+  );
+}
+
+function escapeHtmlText(value: string): string {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
 }
 
 function parseJobPostingClassification(
@@ -602,8 +652,4 @@ function formatClippedAt(clippedAt: Date | string | null): string {
   }
 
   return clippedAt;
-}
-
-function getErrorMessage(error: unknown): string {
-  return error instanceof Error ? error.message : "Unknown error.";
 }

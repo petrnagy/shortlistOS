@@ -34,6 +34,8 @@ When `contentFormat` is `MARKDOWN`:
 - Treat the Markdown as the extracted visible content of the webpage.
 - Do not assume a field is absent merely because HTML metadata or JSON-LD is unavailable.
 
+{{SHARED_FACT_RULES}}
+
 ## Step 1 — Classify the webpage
 
 Determine whether the webpage describes one specific job opportunity.
@@ -82,6 +84,8 @@ Never guess or invent values.
 
 - `jobTitleDisplay` `string | null`  
   A clean, human-readable version of the title that preserves meaningful seniority, specialization, profession, platform, industry, or management information.
+  Do not add seniority inferred from the requirements or description; preserve a
+  level only when the title or an explicit role-level statement supports it. For example, "experienced" does not automatically mean "senior".
 
 - `jobTitleNormalized` `string | null`  
   The most specific commonly understandable occupation title represented by the posting.

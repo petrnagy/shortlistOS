@@ -117,6 +117,7 @@ interface ClassificationSourceContent {
   contentKind: "email" | "webpage";
   contentHash: string;
   currentEmailContent: string | null;
+  emailSubject?: string | null;
   provenance: Record<string, string[]>;
   sourceObjects: ExtractedSourceObject[];
   sourceUrl: string | null;
@@ -571,6 +572,7 @@ async function processQueueJob(
                 () => classifyOpportunityFactsContent(classificationInput),
               ),
             existingTitle: existingLink?.card.title ?? null,
+            emailSubject: sourceContent.emailSubject,
             model: options.model,
             sourceContent,
             timeZone,
@@ -872,6 +874,15 @@ async function getClassificationSourceContent(
   db: dbClient,
   job: QueueJobRow,
 ): Promise<ClassificationSourceContent> {
+  const emailSubject =
+    job.sourceType === SHORTLIST_SOURCE_TYPES.EMAIL
+      ? ((
+          await db.query.shortlistEmailSources.findFirst({
+            columns: { subject: true },
+            where: eq(shortlistEmailSources.id, job.sourceId),
+          })
+        )?.subject?.trim() ?? null)
+      : null;
   const objects = await db
     .select({
       bucket: shortlistSourceObjects.bucket,
@@ -965,12 +976,17 @@ async function getClassificationSourceContent(
     (left, right) =>
       sourceRolePriority(left.role) - sourceRolePriority(right.role),
   );
-  const content = orderedObjects
-    .map(
-      (object) =>
-        `<section><h2>SOURCE: ${object.role} (${escapeHtml(object.sourceObject.originalFilename)})</h2><pre>${escapeHtml(object.content)}</pre></section>`,
-    )
-    .join("\n");
+  const content =
+    job.sourceType === SHORTLIST_SOURCE_TYPES.EMAIL
+      ? buildEmailSourceSections(orderedObjects, emailSubject)
+      : job.sourceType === SHORTLIST_SOURCE_TYPES.WEBPAGE
+        ? (orderedObjects[0]?.content ?? "")
+        : orderedObjects
+            .map(
+              (object) =>
+                `<section><h2>SOURCE: ${object.role} (${escapeHtml(object.sourceObject.originalFilename)})</h2><pre>${escapeHtml(object.content)}</pre></section>`,
+            )
+            .join("\n");
 
   const contentHash = createHash("sha256");
   for (const object of extractedObjects) {
@@ -986,6 +1002,7 @@ async function getClassificationSourceContent(
     currentEmailContent:
       orderedObjects.find((object) => object.role === "CURRENT_EMAIL")
         ?.content ?? null,
+    emailSubject,
     provenance: orderedObjects.reduce<Record<string, string[]>>(
       (provenance, object) => {
         (provenance[object.role] ??= []).push(
@@ -1048,6 +1065,7 @@ export async function classifyEmailSourcesIndependently(input: {
     input: Parameters<typeof classifyOpportunityFactsContent>[0],
   ) => ReturnType<typeof classifyOpportunityFactsContent>;
   existingTitle: string | null;
+  emailSubject?: string | null;
   model: string;
   sourceContent: ClassificationSourceContent;
   timeZone: string;
@@ -1068,14 +1086,20 @@ export async function classifyEmailSourcesIndependently(input: {
   const classificationErrors: string[] = [];
 
   const classificationResults = await Promise.all(
-    sources.map(async (source) => {
+    sources.map(async (source, index) => {
       try {
+        const labeledContent = buildEmailSourceSection(
+          source,
+          input.emailSubject ?? null,
+          index,
+          sources,
+        );
         const result = await (
           input.classifySource ?? classifyOpportunityFactsContent
         )({
           apiKey: input.apiKey,
           model: input.model,
-          htmlContent: source.content,
+          htmlContent: labeledContent,
           sourceUrl: input.sourceContent.sourceUrl,
           clippedAt: input.sourceContent.clippedAt,
           contentKind: "email",
@@ -1127,6 +1151,59 @@ export async function classifyEmailSourcesIndependently(input: {
       ...classificationErrors,
     ],
   };
+}
+
+function buildEmailSourceSection(
+  source: ExtractedSourceObject & { content: string },
+  emailSubject: string | null,
+  sourceIndex: number,
+  allSources: (ExtractedSourceObject & { content: string })[],
+): string {
+  const filename = source.sourceObject.originalFilename;
+
+  if (source.role === "CURRENT_EMAIL") {
+    return [
+      `Last email subject: ${emailSubject ?? "(not provided)"}`,
+      "Last email body:",
+      source.content,
+    ].join("\n");
+  }
+
+  if (source.role === "ATTACHMENT") {
+    const attachmentNumber = allSources
+      .slice(0, sourceIndex + 1)
+      .filter((candidate) => candidate.role === "ATTACHMENT").length;
+    return `Last email attachment #${attachmentNumber} (${filename}):\n${source.content}`;
+  }
+
+  const previousEmailNumber = allSources
+    .slice(0, sourceIndex + 1)
+    .filter((candidate) => candidate.role === "QUOTED_HISTORY").length;
+  const previousEmailSubject = extractRawEmailSubject(source.content);
+  return [
+    `Quoted/prior email source #${previousEmailNumber} (${filename}):`,
+    `Quoted/prior email subject: ${previousEmailSubject ?? "(not separately available)"}`,
+    "Quoted/prior email body:",
+    source.content,
+  ].join("\n");
+}
+
+function extractRawEmailSubject(content: string): string | null {
+  const headers = content.split(/\r?\n\r?\n/, 1)[0] ?? "";
+  const unfoldedHeaders = headers.replace(/\r?\n[ \t]+/g, " ");
+  const match = /^subject\s*:\s*(\S.*?)\s*$/im.exec(unfoldedHeaders);
+  return match?.[1]?.trim() ?? null;
+}
+
+function buildEmailSourceSections(
+  sources: (ExtractedSourceObject & { content: string })[],
+  emailSubject: string | null,
+): string {
+  return sources
+    .map((source, index) =>
+      buildEmailSourceSection(source, emailSubject, index, sources),
+    )
+    .join("\n\n");
 }
 
 export function mergeOpportunityFactsDeterministically(
