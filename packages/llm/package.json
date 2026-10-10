@@ -30,14 +30,12 @@
   "dependencies": {
     "@kan/shared": "workspace:^",
     "@mistralai/mistralai": "^2.2.6",
-    "turndown": "^7.2.4",
     "zod": "catalog:"
   },
   "devDependencies": {
     "@kan/eslint-config": "workspace:*",
     "@kan/prettier-config": "workspace:*",
     "@kan/tsconfig": "workspace:*",
-    "@types/turndown": "^5.0.6",
     "dotenv-cli": "^7.4.4",
     "eslint": "catalog:",
     "prettier": "catalog:",

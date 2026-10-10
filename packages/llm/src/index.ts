@@ -19,7 +19,7 @@ export {
   classifyOpportunityFactsContent,
   classifyJobPostingContent,
   extractJobDescriptionMarkdown,
-  convertHtmlToJobPostingMarkdown,
+  sanitizeJobPostingHtml,
   jobPostingClassificationSchema,
   jobPostingSuccessSchema,
   opportunityFactsSchema,

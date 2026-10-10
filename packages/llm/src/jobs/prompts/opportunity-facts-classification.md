@@ -11,6 +11,20 @@ The source may be a complete job offer or a short communication containing only
 changes to an existing opportunity. A title or company is therefore not
 required. Set `isRelevant=false` only when it contains no job-opportunity facts.
 
+{{SHARED_FACT_RULES}}
+
+## Email source roles
+
+- `CURRENT_EMAIL` is the latest message. Its subject and body are labeled
+  separately when available.
+- `ATTACHMENT` is a distinct file attached to the latest message. A full job
+  offer in an attachment can establish baseline opportunity facts.
+- `QUOTED_HISTORY` is quoted, alternate raw, or older email context. Treat it as historical
+  context, not as a new change, unless the content explicitly says a fact was
+  changed or corrected.
+- Email attachments and message sources are provided as separate labeled sections;
+  never attribute a fact from one section to another.
+
 For `explicitCorrections`, list a field only when the text explicitly says its
 value changed, moved, increased, decreased, was corrected, or replaces an older
 value. For `fieldEvidence`, list every populated field with a short direct quote.
@@ -74,6 +88,15 @@ that are not present; do not output guessed defaults:
 - `contentFormat`: {{CONTENT_FORMAT}}
 
 Respond with one JSON object only.
+
+## Content format rules
+
+- When `contentFormat` is `RAW_HTML`, use the visible page content and any
+  separately labeled structured metadata. Ignore markup and attribute values
+  that are not relevant evidence.
+- When `contentFormat` is `MARKDOWN`, treat it as supplied source text; it may
+  contain explicit section labels for the email subject, body, attachments, or
+  quoted history.
 
 ## Content
 

@@ -20,6 +20,7 @@ import * as userRepo from "@kan/db/repository/user.repo";
 import * as workspaceRepo from "@kan/db/repository/workspace.repo";
 import { createLogger } from "@kan/logger";
 import { createS3Client } from "@kan/shared/utils";
+import packageJson from "../../../../package.json";
 
 import {
   adminProtectedProcedure,
@@ -28,6 +29,13 @@ import {
 } from "../trpc";
 
 const logger = createLogger("health-router");
+const IMAGE_REPOSITORY = "ghcr.io/petrnagy/shortlistos";
+
+const getApplicationImage = () => {
+  const tag = process.env.APP_IMAGE_TAG?.trim();
+
+  return tag ? { repository: IMAGE_REPOSITORY, tag } : null;
+};
 
 const checkDatabaseConnection = async (db: dbClient) => {
   try {
@@ -88,6 +96,13 @@ export const healthRouter = createTRPCRouter({
         status: z.enum(["ok", "error"]),
         database: z.enum(["ok", "error"]).optional(),
         storage: z.enum(["ok", "error", "not_configured"]).optional(),
+        version: z.string(),
+        image: z
+          .object({
+            repository: z.string(),
+            tag: z.string(),
+          })
+          .nullable(),
       }),
     )
     .query(async ({ ctx }) => {
@@ -111,6 +126,8 @@ export const healthRouter = createTRPCRouter({
         status,
         database,
         storage,
+        version: packageJson.version,
+        image: getApplicationImage(),
       };
     }),
   stats: adminProtectedProcedure
