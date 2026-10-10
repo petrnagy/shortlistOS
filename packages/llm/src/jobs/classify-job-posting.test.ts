@@ -14,11 +14,11 @@ import {
   buildOpportunityFactsPrompt,
   classifyJobPostingContent,
   classifyOpportunityFactsContent,
-  convertHtmlToJobPostingMarkdown,
   extractJobDescriptionMarkdown,
   jobPostingClassificationSchema,
   opportunityFactsSchema,
   sanitizeJobDescriptionMarkdown,
+  sanitizeJobPostingHtml,
 } from "./classify-job-posting";
 
 const { completeLlmMessageMock } = vi.hoisted(() => ({
@@ -34,23 +34,34 @@ describe("job posting classification", () => {
     vi.clearAllMocks();
   });
 
-  it("converts HTML into markdown-like content for the LLM prompt", () => {
-    const markdown = convertHtmlToJobPostingMarkdown(`
+  it("sanitizes noisy HTML while preserving semantic structure and useful metadata", () => {
+    const html = sanitizeJobPostingHtml(`
       <html>
-        <head><style>.x { color: red; }</style><script>alert("x")</script></head>
+        <head>
+          <title>Senior Product Engineer</title>
+          <meta name="description" content="Build applicant tracking workflows">
+          <meta name="robots" content="noindex">
+          <style>.x { color: red; }</style>
+          <script>alert("x")</script>
+          <script type="application/ld+json">{"@type":"JobPosting","title":"Product Engineer"}</script>
+        </head>
         <body>
-          <h1>Senior Product Engineer</h1>
+          <h1 onclick="alert('x')" style="color:red">Senior Product Engineer</h1>
           <p>Build applicant tracking workflows.</p>
           <a href="https://example.com/apply">Apply now</a>
         </body>
       </html>
     `);
 
-    expect(markdown).toContain("# Senior Product Engineer");
-    expect(markdown).toContain("Build applicant tracking workflows.");
-    expect(markdown).toContain("[Apply now](https://example.com/apply)");
-    expect(markdown).not.toContain("alert");
-    expect(markdown).not.toContain("color: red");
+    expect(html).toContain("<title>Senior Product Engineer</title>");
+    expect(html).toContain('name="description"');
+    expect(html).toContain("<h1>Senior Product Engineer</h1>");
+    expect(html).toContain('href="https://example.com/apply"');
+    expect(html).toContain('data-source="structured-data"');
+    expect(html).toContain('"@type":"JobPosting"');
+    expect(html).not.toContain("alert");
+    expect(html).not.toContain("color: red");
+    expect(html).not.toContain('name="robots"');
   });
 
   it("builds a prompt with runtime metadata and untrusted content", () => {
@@ -150,6 +161,8 @@ describe("job posting classification", () => {
     expect(prompt).toContain("Extract only facts explicitly present");
     expect(prompt).toContain("Do not compare, prioritize, merge, or resolve");
     expect(prompt).toContain("A title or company is therefore not");
+    expect(prompt).toContain("Do not infer seniority from wording such as");
+    expect(prompt).toContain("it does not make the title");
     expect(prompt).toContain("`userTimeZone`: America/New_York");
     expect(prompt).toContain("use `clippedAt` as the reference time");
     expect(prompt).toContain("April 2 of the following year");
@@ -365,7 +378,8 @@ describe("job posting classification", () => {
     expect(callInput?.apiKey).toBe("key");
     expect(callInput?.model).toBe("model");
     expect(callInput?.responseFormat).toBe("json_object");
-    expect(callInput?.message).toContain("# Senior Product Engineer");
+    expect(callInput?.message).toContain("<h1>Senior Product Engineer</h1>");
+    expect(callInput?.message).toContain("contentFormat`: RAW_HTML");
     expect(callInput?.message).toContain("`userTimeZone`: Europe/Budapest");
   });
 

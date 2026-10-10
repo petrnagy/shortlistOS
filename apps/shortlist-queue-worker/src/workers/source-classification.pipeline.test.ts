@@ -143,6 +143,7 @@ describe("mocked multi-source email classification pipeline", () => {
 
     const result = await classifyEmailSourcesIndependently({
       apiKey: "mock-key",
+      emailSubject: "Re: DevOps Engineer opportunity",
       existingTitle: null,
       model: "mock-model",
       timeZone: "Europe/Budapest",
@@ -169,6 +170,19 @@ describe("mocked multi-source email classification pipeline", () => {
     expect(classifyFactsMock).toHaveBeenCalledTimes(3);
     expect(classifyFactsMock).toHaveBeenCalledWith(
       expect.objectContaining({ timeZone: "Europe/Budapest" }),
+    );
+    const classifiedInputs = classifyFactsMock.mock.calls.map(
+      (call) => (call[0] as { htmlContent: string }).htmlContent,
+    );
+    expect(classifiedInputs[0]).toContain(
+      "Last email subject: Re: DevOps Engineer opportunity",
+    );
+    expect(classifiedInputs[0]).toContain("Last email body:");
+    expect(classifiedInputs[1]).toContain(
+      "Last email attachment #1 (offer.pdf):",
+    );
+    expect(classifiedInputs[2]).toContain(
+      "Last email attachment #2 (location.docx):",
     );
     expect(result.classification).toMatchObject({
       isJobOpportunity: true,
@@ -280,7 +294,12 @@ describe("mocked multi-source email classification pipeline", () => {
     } as const;
     classifyFactsMock.mockImplementation(
       async (input: { htmlContent: string }) => {
-        const scenario = scenarios[input.htmlContent as keyof typeof scenarios];
+        const scenario =
+          scenarios[
+            Object.keys(scenarios).find((sourceText) =>
+              input.htmlContent.includes(sourceText),
+            ) as keyof typeof scenarios
+          ];
         await new Promise((resolve) => setTimeout(resolve, scenario.delay));
         return {
           facts: scenario.facts,
@@ -307,7 +326,11 @@ describe("mocked multi-source email classification pipeline", () => {
           extractedSource("CURRENT_EMAIL", "current.md", "current"),
           extractedSource("ATTACHMENT", "primary.pdf", "primary"),
           extractedSource("ATTACHMENT", "secondary.docx", "secondary"),
-          extractedSource("QUOTED_HISTORY", "history.eml", "history"),
+          extractedSource(
+            "QUOTED_HISTORY",
+            "history.eml",
+            "Subject: Previous role\r\n\r\nhistory body",
+          ),
         ],
         sourceUrl: null,
       },
@@ -329,29 +352,35 @@ describe("mocked multi-source email classification pipeline", () => {
       salaryMin: 80_000,
       workSchedule: "PART_TIME",
     });
+    expect(
+      classifyFactsMock.mock.calls.some((call) =>
+        (call[0] as { htmlContent: string }).htmlContent.includes(
+          "Quoted/prior email subject: Previous role",
+        ),
+      ),
+    ).toBe(true);
   });
 
   it("lets explicit current-email corrections override attachments", async () => {
     classifyFactsMock.mockImplementation((input: { htmlContent: string }) =>
       Promise.resolve({
-        facts:
-          input.htmlContent === "current correction"
-            ? {
-                description: "Corrected current description",
-                explicitCorrections: ["description", "salaryMax"],
-                fieldEvidence: [],
-                isRelevant: true,
-                jobTitle: "Corrected Engineer",
-                salaryMax: 130_000,
-              }
-            : {
-                description: "Outdated attachment description",
-                explicitCorrections: [],
-                fieldEvidence: [],
-                isRelevant: true,
-                jobTitle: "Attachment Engineer",
-                salaryMax: 100_000,
-              },
+        facts: input.htmlContent.includes("current correction")
+          ? {
+              description: "Corrected current description",
+              explicitCorrections: ["description", "salaryMax"],
+              fieldEvidence: [],
+              isRelevant: true,
+              jobTitle: "Corrected Engineer",
+              salaryMax: 130_000,
+            }
+          : {
+              description: "Outdated attachment description",
+              explicitCorrections: [],
+              fieldEvidence: [],
+              isRelevant: true,
+              jobTitle: "Attachment Engineer",
+              salaryMax: 100_000,
+            },
         model: "mock-model",
         rawResponse: {},
         warnings: [],

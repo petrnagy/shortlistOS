@@ -65,3 +65,5 @@ apps/web/content/legal/terms-of-use.md
 /apps/web/pgdata
 
 .claude
+
+/tmp
