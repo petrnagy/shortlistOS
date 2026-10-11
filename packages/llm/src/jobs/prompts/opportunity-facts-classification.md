@@ -89,6 +89,10 @@ that are not present; do not output guessed defaults:
 
 Respond with one JSON object only.
 
+Write `description` in the language used by the primary job-offer content.
+Preserve that language; do not translate it. If the source contains multiple
+languages, use the language of the primary job description.
+
 ## Content format rules
 
 - When `contentFormat` is `RAW_HTML`, use the visible page content and any

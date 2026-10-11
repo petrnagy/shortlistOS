@@ -312,6 +312,10 @@ Do not classify a posting as expired merely because no deadline is shown.
   A factual, useful summary of the role. The summary may be longer when the
   source contains important decision-making details.
 
+Write the description in the language used by the job posting. Preserve that
+language; do not translate it. If the source contains multiple languages, use
+the language of the primary job description.
+
 Write the summary in neutral third-person language.
 
 Include, when available:
