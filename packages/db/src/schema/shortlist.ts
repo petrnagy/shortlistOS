@@ -116,6 +116,49 @@ export const shortlistEmailSourcesRelations = relations(
   }),
 );
 
+export const shortlistInboundEmailJobs = pgTable(
+  "shortlist_inbound_email_job",
+  {
+    id: uuid("id")
+      .notNull()
+      .primaryKey()
+      .default(sql`uuid_generate_v4()`),
+    idempotencyKey: varchar("idempotencyKey", { length: 64 }).notNull(),
+    externId: varchar("externId", { length: 250 }).notNull(),
+    createdBy: uuid("createdBy")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    boardId: bigint("boardId", { mode: "number" })
+      .notNull()
+      .references(() => boards.id, { onDelete: "cascade" }),
+    boardPublicId: varchar("boardPublicId", { length: 64 }).notNull(),
+    payloadJson: jsonb("payloadJson").notNull(),
+    sourceId: uuid("sourceId").references(() => shortlistEmailSources.id, {
+      onDelete: "set null",
+    }),
+    status: varchar("status", { length: 20 }).notNull().default("PENDING"),
+    attempts: smallint("attempts").notNull().default(0),
+    maxAttempts: smallint("maxAttempts").notNull().default(5),
+    runAfter: timestamp("runAfter").notNull().defaultNow(),
+    lockedAt: timestamp("lockedAt"),
+    lockedBy: varchar("lockedBy", { length: 100 }),
+    completedAt: timestamp("completedAt"),
+    lastError: text("lastError"),
+    createdAt: timestamp("createdAt").notNull().defaultNow(),
+    updatedAt: timestamp("updatedAt"),
+  },
+  (table) => [
+    uniqueIndex("shortlist_inbound_email_job_idempotency_idx").on(
+      table.idempotencyKey,
+    ),
+    index("shortlist_inbound_email_job_status_run_after_idx").on(
+      table.status,
+      table.runAfter,
+    ),
+    index("shortlist_inbound_email_job_board_idx").on(table.boardId),
+  ],
+).enableRLS();
+
 export const shortlistWebpageSources = pgTable(
   "shortlist_webpage_source",
   {

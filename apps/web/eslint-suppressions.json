@@ -162,11 +162,6 @@
       "count": 3
     }
   },
-  "src/pages/api/shortlist_magic_inbox/incoming_webhook.ts": {
-    "@typescript-eslint/array-type": {
-      "count": 2
-    }
-  },
   "src/pages/api/stripe/create_billing_session.ts": {
     "@typescript-eslint/no-unused-vars": {
       "count": 1
