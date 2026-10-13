@@ -16,6 +16,7 @@
     "process-clip": "dotenv -e ../../.env -- tsx src/jobs/process-clip.ts",
     "process-inbox": "dotenv -e ../../.env -- tsx src/jobs/process-inbox.ts",
     "start": "dotenv -e ../../.env -- tsx src/index.ts",
+    "test": "vitest run src",
     "test:pipeline": "dotenv -e ../../.env -- vitest run live-tests",
     "typecheck": "tsc --noEmit --emitDeclarationOnly false"
   },
