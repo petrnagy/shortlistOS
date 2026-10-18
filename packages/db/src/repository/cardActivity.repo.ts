@@ -12,6 +12,7 @@ import {
 } from "@kan/db/schema";
 import { generateUID } from "@kan/shared/utils";
 
+import { getActivityClient } from "./activity-context";
 import { markCardsForEnrichment } from "./shortlistEnrichment.repo";
 
 export const getCount = async (db: dbClient) => {
@@ -49,6 +50,7 @@ export const create = async (
     .insert(cardActivities)
     .values({
       publicId: generateUID(),
+      actorClientName: getActivityClient(),
       type: activityInput.type,
       cardId: activityInput.cardId,
       fromListId: activityInput.fromListId,
@@ -104,6 +106,7 @@ export const bulkCreate = async (
 ) => {
   const activitiesWithPublicIds = activityInputs.map((activity) => ({
     ...activity,
+    actorClientName: getActivityClient(),
     publicId: generateUID(),
   }));
 
@@ -154,6 +157,7 @@ export const getPaginatedActivities = async (
       publicId: true,
       type: true,
       createdAt: true,
+      actorClientName: true,
       fromIndex: true,
       toIndex: true,
       fromTitle: true,
@@ -311,6 +315,7 @@ export const getPaginatedUserActivities = async (
       publicId: true,
       type: true,
       createdAt: true,
+      actorClientName: true,
       fromIndex: true,
       toIndex: true,
       fromTitle: true,

@@ -74,6 +74,10 @@ const config = {
 
   async rewrites() {
     return [
+      { source: "/mcp/authorize", destination: "/api/mcp/authorize" },
+      { source: "/.well-known/oauth-protected-resource/api/mcp", destination: "/api/mcp/metadata?kind=resource" },
+      { source: "/.well-known/oauth-protected-resource", destination: "/api/mcp/metadata?kind=resource" },
+      { source: "/.well-known/oauth-authorization-server", destination: "/api/mcp/metadata?kind=authorization" },
       {
         source: "/web-clipper/connect",
         destination: "/api/web-clipper-connect",

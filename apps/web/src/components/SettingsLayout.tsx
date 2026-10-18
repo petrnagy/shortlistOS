@@ -77,6 +77,12 @@ export function SettingsLayout({ children, currentTab }: SettingsLayoutProps) {
         condition: true,
       },
       {
+        key: "mcp",
+        icon: <HiOutlineCodeBracketSquare />,
+        label: t`MCP`,
+        condition: true,
+      },
+      {
         key: "permissions",
         icon: <HiOutlineShieldCheck />,
         label: t`Permissions`,

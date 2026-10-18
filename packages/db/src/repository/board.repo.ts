@@ -32,6 +32,7 @@ import {
 } from "@kan/db/schema";
 import { generateUID } from "@kan/shared/utils";
 
+import { getActivityClient } from "./activity-context";
 import {
   hasActivePowerpack,
   initializedPowerpackDefaults,
@@ -683,6 +684,7 @@ export const create = async (
 
     if (result)
       await tx.insert(boardActivities).values({
+        actorClientName: getActivityClient(),
         publicId: generateUID(),
         type: "board.created",
         boardId: result.id,
@@ -878,6 +880,22 @@ export const update = async (
         shortlistIsCardAgingEnabled: boards.shortlistIsCardAgingEnabled,
       });
 
+    if (
+      result &&
+      boardInput.name !== undefined &&
+      previous.name !== result.name
+    ) {
+      await tx.insert(boardActivities).values({
+        publicId: generateUID(),
+        type: "board.renamed",
+        actorClientName: getActivityClient(),
+        boardId: previous.id,
+        boardName: result.name,
+        boardType: previous.type,
+        workspaceId: previous.workspaceId,
+        createdBy: boardInput.updatedBy,
+      });
+    }
     if (
       result &&
       boardInput.isArchived !== undefined &&

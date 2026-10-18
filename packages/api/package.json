@@ -4,6 +4,10 @@
   "private": true,
   "type": "module",
   "exports": {
+    "./mcp": {
+      "types": "./src/mcp.ts",
+      "default": "./src/mcp.ts"
+    },
     ".": {
       "types": "./src/index.ts",
       "default": "./src/index.ts"

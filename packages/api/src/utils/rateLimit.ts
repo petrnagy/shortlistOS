@@ -1,8 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import {
-  RateLimiterRedis,
-  RateLimiterMemory,
-} from "rate-limiter-flexible";
+import { RateLimiterMemory, RateLimiterRedis } from "rate-limiter-flexible";
 
 import { getRedisClient } from "@kan/db/redis";
 import { createLogger } from "@kan/logger";
@@ -10,6 +7,7 @@ import { createLogger } from "@kan/logger";
 const log = createLogger("rateLimit");
 
 export interface RateLimitOptions {
+  keyPrefix?: string;
   points?: number;
   duration?: number;
   identifier?: (req: NextApiRequest) => string | Promise<string>;
@@ -77,11 +75,9 @@ export function withRateLimit(
   return async (req: NextApiRequest, res: NextApiResponse) => {
     try {
       const id = await identifier(req);
-      const key = `ratelimit_${id}`;
+      const key = `ratelimit_${options.keyPrefix ? `${options.keyPrefix}_` : ""}${id}`;
 
       await rateLimiter.consume(key);
-
-      return await handler(req, res);
     } catch (error) {
       // rate-limiter-flexible throws an error with msBeforeNext or remainingPoints
       // when limit is exceeded. Check for these properties directly.
@@ -94,9 +90,8 @@ export function withRateLimit(
           message: errorMessage,
         });
       }
-
-      return await handler(req, res);
     }
+    // Handler failures must propagate; retrying here could duplicate MCP writes.
+    return await handler(req, res);
   };
 }
-

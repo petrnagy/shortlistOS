@@ -169,6 +169,7 @@ export const cardsRelations = relations(cards, ({ one, many }) => ({
 }));
 
 export const cardActivities = pgTable("card_activity", {
+  actorClientName: varchar("actorClientName", { length: 100 }),
   id: bigserial("id", { mode: "number" }).primaryKey(),
   publicId: varchar("publicId", { length: 12 }).notNull().unique(),
   type: activityTypeEnum("type").notNull(),

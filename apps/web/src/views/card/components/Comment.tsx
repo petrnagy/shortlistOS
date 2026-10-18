@@ -4,11 +4,11 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { HiEllipsisHorizontal, HiPencil, HiTrash } from "react-icons/hi2";
 
+import type { WorkspaceMember } from "~/components/Editor";
 import Avatar from "~/components/Avatar";
 import Button from "~/components/Button";
-import Editor from "~/components/Editor";
-import type { WorkspaceMember } from "~/components/Editor";
 import Dropdown from "~/components/Dropdown";
+import Editor from "~/components/Editor";
 import { usePermissions } from "~/hooks/usePermissions";
 import { useModal } from "~/providers/modal";
 import { usePopup } from "~/providers/popup";
@@ -24,6 +24,7 @@ const Comment = ({
   publicId,
   cardPublicId,
   name,
+  actorClientName,
   email,
   image,
   isLoading,
@@ -37,6 +38,7 @@ const Comment = ({
   publicId: string | undefined;
   cardPublicId: string;
   name: string;
+  actorClientName?: string | null;
   email: string;
   image: string | null;
   isLoading: boolean;
@@ -143,7 +145,10 @@ const Comment = ({
           />
 
           <p className="text-sm">
-            <span className="font-medium dark:text-dark-1000">{`${name} `}</span>
+            <span className="font-medium dark:text-dark-1000">
+              {`${name} `}
+              {actorClientName ? t`via ${actorClientName} ` : null}
+            </span>
             <span className="mx-1 text-light-900 dark:text-dark-800">·</span>
             <span className="space-x-1 text-light-900 dark:text-dark-800">
               {formatDistanceToNow(new Date(createdAt), {
@@ -188,7 +193,7 @@ const Comment = ({
               disableHeadings={true}
             />
           </div>
-          <div className="flex justify-end space-x-2 mt-2">
+          <div className="mt-2 flex justify-end space-x-2">
             <Button
               size="sm"
               variant="ghost"

@@ -6,7 +6,7 @@
     "origin": [
       [
         "src/views/card/components/Comment.tsx",
-        155
+        160
       ]
     ],
     "translation": " (edytowano)"
@@ -29,8 +29,8 @@
     "comments": [],
     "origin": [
       [
-        "src/components/FeedbackModal.tsx",
-        102
+        "src/components/FeedbackForm.tsx",
+        118
       ]
     ],
     "translation": ", lub zobacz nasze"
@@ -265,6 +265,26 @@
       ]
     ],
     "translation": "{boardCount, plural, one {Importuj tablicę (1)} few {Importuj tablice ({boardCount})} many {Importuj tablic ({boardCount})} other {Importuj tablice ({boardCount})}}"
+  },
+  "UIA7wO": {
+    "message": "{clientName} is requesting access to your shortlistOS account as {username}.",
+    "placeholders": {
+      "clientName": [
+        "clientName"
+      ],
+      "username": [
+        "username"
+      ]
+    },
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/mcp/authorize.tsx",
+        98
+      ]
+    ],
+    "translation": "{clientName} prosi o dostęp do Twojego konta shortlistOS jako {username}.",
+    "obsolete": true
   },
   "yndBF+": {
     "message": "{projectCount, plural, one {Import project (1)} other {Import projects ({projectCount})}}",
@@ -1306,6 +1326,50 @@
     ],
     "translation": "Akcje"
   },
+  "lQTDqn": {
+    "message": "Actions are attributed to you via the authorized client name. MCP clients do not reliably disclose which underlying model performed an action.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/settings/McpSettings.tsx",
+        66
+      ]
+    ],
+    "translation": "Działania są przypisywane Tobie za pośrednictwem nazwy autoryzowanego klienta. Klienci MCP nie podają wiarygodnie modelu, który wykonał działanie."
+  },
+  "M6IOrR": {
+    "message": "Actions are recorded as {username} via {clientName}. The client name is supplied by the app.",
+    "placeholders": {
+      "username": [
+        "username"
+      ],
+      "clientName": [
+        "clientName"
+      ]
+    },
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/api/mcp/authorize.ts",
+        81
+      ]
+    ],
+    "translation": "Działania są zapisywane jako {username} przez {clientName}. Nazwę klienta podaje aplikacja."
+  },
+  "Fv5UjD": {
+    "message": "Actions are recorded with your name and the client name shown here. This name is supplied by the client; it does not verify a particular AI model.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/mcp/authorize.tsx",
+        100
+      ]
+    ],
+    "translation": "Działania są zapisywane z Twoim imieniem i widoczną tu nazwą klienta. Nazwę podaje klient; nie potwierdza ona konkretnego modelu AI.",
+    "obsolete": true
+  },
   "JEt3q7": {
     "message": "Activate | kan.bn",
     "placeholders": {},
@@ -1418,11 +1482,11 @@
       ],
       [
         "src/views/activity-log/index.tsx",
-        144
+        146
       ],
       [
         "src/views/activity-log/index.tsx",
-        151
+        153
       ]
     ],
     "translation": "Dziennik aktywności"
@@ -1599,7 +1663,7 @@
     "origin": [
       [
         "src/views/card/components/Comment.tsx",
-        187
+        192
       ],
       [
         "src/views/card/components/NewCommentForm.tsx",
@@ -2292,6 +2356,18 @@
     ],
     "translation": ""
   },
+  "Die6ER": {
+    "message": "Allow access",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/api/mcp/authorize.ts",
+        78
+      ]
+    ],
+    "translation": "Zezwól na dostęp"
+  },
   "Z3krJD": {
     "message": "Allow workspace members to see each other's email addresses",
     "placeholders": {},
@@ -2331,6 +2407,22 @@
       ]
     ],
     "translation": "Masz już konto? <0><1>Zaloguj się</1></0>"
+  },
+  "59YU4M": {
+    "message": "An active Powerpack is required to connect.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/api/mcp/authorize.ts",
+        53
+      ],
+      [
+        "src/pages/api/mcp/consent.ts",
+        95
+      ]
+    ],
+    "translation": "Połączenie wymaga aktywnego Powerpacka."
   },
   "j1+HPc": {
     "message": "An error occurred while connecting your GitHub account.",
@@ -2435,7 +2527,7 @@
     "origin": [
       [
         "src/components/SettingsLayout.tsx",
-        94
+        100
       ]
     ],
     "translation": "API"
@@ -2698,7 +2790,7 @@
     "origin": [
       [
         "src/views/activity-log/index.tsx",
-        37
+        39
       ]
     ],
     "translation": "zarchiwizował(-a)"
@@ -3187,7 +3279,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        319
+        320
       ]
     ],
     "translation": "Automatyczne dane o wynagrodzeniach"
@@ -3228,7 +3320,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        470
+        472
       ]
     ],
     "translation": "Archiwizuj automatycznie"
@@ -3253,7 +3345,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        320
+        321
       ]
     ],
     "translation": "Automatycznie uzupełnia każdą ofertę o dane porównawcze wynagrodzeń z USA, UE, Wielkiej Brytanii, regionu APAC i rynku globalnego, aby szybko porównać ofertę lokalnie i na świecie."
@@ -3307,7 +3399,7 @@
       ],
       [
         "src/views/settings/BoardsSettings.tsx",
-        291
+        292
       ]
     ],
     "translation": "Automatyzacja"
@@ -3649,7 +3741,7 @@
     "origin": [
       [
         "src/components/SettingsLayout.tsx",
-        87
+        93
       ],
       [
         "src/views/settings/BillingSettings.tsx",
@@ -4014,7 +4106,7 @@
       ],
       [
         "src/views/settings/BoardsSettings.tsx",
-        383
+        385
       ]
     ],
     "translation": "Kanał kalendarza"
@@ -4518,6 +4610,10 @@
         176
       ],
       [
+        "src/pages/api/mcp/authorize.ts",
+        77
+      ],
+      [
         "src/views/board/components/CardContextDuplicateModal.tsx",
         267
       ],
@@ -4531,19 +4627,19 @@
       ],
       [
         "src/views/card/components/Comment.tsx",
-        197
+        202
       ],
       [
         "src/views/card/components/DeleteCardConfirmation.tsx",
         86
       ],
       [
-        "src/views/card/components/DeleteChecklistConfirmation.tsx",
-        64
-      ],
-      [
         "src/views/card/components/DeleteCommentConfirmation.tsx",
         77
+      ],
+      [
+        "src/views/card/components/DeleteChecklistConfirmation.tsx",
+        64
       ],
       [
         "src/views/card/index.tsx",
@@ -4570,10 +4666,6 @@
         287
       ],
       [
-        "src/views/settings/components/ChangePasswordConfirmation.tsx",
-        206
-      ],
-      [
         "src/views/settings/components/ClearCustomPermissionsConfirmation.tsx",
         40
       ],
@@ -4588,6 +4680,10 @@
       [
         "src/views/settings/components/DeleteWorkspaceConfirmation.tsx",
         98
+      ],
+      [
+        "src/views/settings/components/ChangePasswordConfirmation.tsx",
+        206
       ],
       [
         "src/views/settings/components/UpgradeToProConfirmation.tsx",
@@ -4648,7 +4744,7 @@
       ],
       [
         "src/views/settings/BoardsSettings.tsx",
-        310
+        311
       ]
     ],
     "translation": "Starzenie kart"
@@ -5181,16 +5277,16 @@
     "translation": ""
   },
   "nlOslx": {
-    "translation": "",
     "message": "clipped a web opportunity",
     "placeholders": {},
     "comments": [],
     "origin": [
       [
         "src/views/activity-log/index.tsx",
-        78
+        80
       ]
-    ]
+    ],
+    "translation": ""
   },
   "yz7wBu": {
     "message": "Close",
@@ -5315,6 +5411,18 @@
     ],
     "translation": "",
     "obsolete": true
+  },
+  "ZWHTV5": {
+    "message": "Columns stay fixed. Magic email and job attachment ingestion are unavailable.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/api/mcp/authorize.ts",
+        71
+      ]
+    ],
+    "translation": "Kolumny pozostają stałe. Magic email i import załączników do ofert pracy są niedostępne."
   },
   "AUYALh": {
     "message": "Coming soon",
@@ -5499,7 +5607,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        332
+        333
       ]
     ],
     "translation": "Opinie o firmie"
@@ -5684,6 +5792,22 @@
     ],
     "translation": "Połącz"
   },
+  "AhkanB": {
+    "message": "Connect {clientName}",
+    "placeholders": {
+      "clientName": [
+        "clientName"
+      ]
+    },
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/api/mcp/authorize.ts",
+        66
+      ]
+    ],
+    "translation": "Połącz {clientName}"
+  },
   "3jod3l": {
     "message": "Connect GitHub",
     "placeholders": {},
@@ -5696,6 +5820,22 @@
     ],
     "translation": "Połącz z GitHub"
   },
+  "pFWVN2": {
+    "message": "Connect to shortlistOS",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/api/mcp/authorize.ts",
+        65
+      ],
+      [
+        "src/server/mcp/consent-page.ts",
+        33
+      ]
+    ],
+    "translation": "Połącz z shortlistOS"
+  },
   "nk7caK": {
     "message": "Connect Trello",
     "placeholders": {},
@@ -5707,6 +5847,18 @@
       ]
     ],
     "translation": "Połącz Trello"
+  },
+  "iZWbGJ": {
+    "message": "Connect your AI assistant",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/settings/McpSettings.tsx",
+        28
+      ]
+    ],
+    "translation": "Połącz swojego asystenta AI"
   },
   "sDLCvT": {
     "message": "Connect your favorite tools to streamline your workflow.",
@@ -5744,11 +5896,43 @@
     ],
     "translation": "Połącz swoje konto Trello, aby zaimportować tablice."
   },
+  "sk/Z5E": {
+    "message": "Connected {0}",
+    "placeholders": {
+      "0": [
+        "connection.createdAt.toLocaleDateString()"
+      ]
+    },
+    "comments": [],
+    "origin": [
+      [
+        "src/views/settings/McpSettings.tsx",
+        83
+      ]
+    ],
+    "translation": "Połączono {0}"
+  },
+  "f/bZVs": {
+    "message": "Connected clients",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/settings/McpSettings.tsx",
+        67
+      ]
+    ],
+    "translation": "Połączeni klienci"
+  },
   "jfC/xh": {
     "message": "Contact",
     "placeholders": {},
     "comments": [],
     "origin": [
+      [
+        "src/pages/contact.tsx",
+        15
+      ],
       [
         "src/views/home/components/Footer.tsx",
         112
@@ -5775,8 +5959,12 @@
     "comments": [],
     "origin": [
       [
-        "src/components/FeedbackModal.tsx",
-        100
+        "src/components/FeedbackForm.tsx",
+        116
+      ],
+      [
+        "src/pages/contact.tsx",
+        19
       ]
     ],
     "translation": "Skontaktuj się z nami"
@@ -5922,6 +6110,18 @@
     ],
     "translation": "Konwertuj na link"
   },
+  "6V3Ea3": {
+    "message": "Copied",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/settings/McpSettings.tsx",
+        54
+      ]
+    ],
+    "translation": "Skopiowano"
+  },
   "he3ygx": {
     "message": "Copy",
     "placeholders": {},
@@ -5929,11 +6129,11 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        371
+        373
       ],
       [
         "src/views/settings/BoardsSettings.tsx",
-        409
+        411
       ]
     ],
     "translation": "Kopiuj"
@@ -6037,6 +6237,18 @@
     "translation": "Skopiuj ID zgłoszenia",
     "obsolete": true
   },
+  "E6nRW7": {
+    "message": "Copy URL",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/settings/McpSettings.tsx",
+        54
+      ]
+    ],
+    "translation": "Kopiuj URL"
+  },
   "FxmcEj": {
     "message": "Copywriter at Pinecone Digital",
     "placeholders": {},
@@ -6062,29 +6274,65 @@
     "translation": "Funkcje podstawowe",
     "obsolete": true
   },
+  "1Yk9qh": {
+    "message": "Could not copy. Select and copy the URL above.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/settings/McpSettings.tsx",
+        57
+      ]
+    ],
+    "translation": "Nie udało się skopiować. Zaznacz i skopiuj powyższy URL."
+  },
+  "4XeJbx": {
+    "message": "Could not load connections.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/settings/McpSettings.tsx",
+        70
+      ]
+    ],
+    "translation": "Nie udało się wczytać połączeń."
+  },
   "Moluts": {
-    "translation": "",
     "message": "could not parse a clipped web opportunity",
     "placeholders": {},
     "comments": [],
     "origin": [
       [
         "src/views/activity-log/index.tsx",
-        82
+        84
       ]
-    ]
+    ],
+    "translation": ""
   },
   "jfRgiI": {
-    "translation": "",
     "message": "could not parse an email opportunity",
     "placeholders": {},
     "comments": [],
     "origin": [
       [
         "src/views/activity-log/index.tsx",
-        88
+        90
       ]
-    ]
+    ],
+    "translation": ""
+  },
+  "nhtMVg": {
+    "message": "Could not revoke access. Try again.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/settings/McpSettings.tsx",
+        94
+      ]
+    ],
+    "translation": "Nie udało się cofnąć dostępu. Spróbuj ponownie."
   },
   "hYgDIe": {
     "message": "Create",
@@ -6423,7 +6671,7 @@
     "origin": [
       [
         "src/views/activity-log/index.tsx",
-        41
+        43
       ]
     ],
     "translation": ""
@@ -6921,12 +7169,12 @@
         92
       ],
       [
-        "src/views/card/components/DeleteChecklistConfirmation.tsx",
-        67
-      ],
-      [
         "src/views/card/components/DeleteCommentConfirmation.tsx",
         83
+      ],
+      [
+        "src/views/card/components/DeleteChecklistConfirmation.tsx",
+        67
       ],
       [
         "src/views/card/index.tsx",
@@ -7004,7 +7252,7 @@
     "origin": [
       [
         "src/views/card/components/Comment.tsx",
-        122
+        124
       ]
     ],
     "translation": "Usuń komentarz"
@@ -7137,7 +7385,7 @@
     "origin": [
       [
         "src/views/activity-log/index.tsx",
-        35
+        37
       ]
     ],
     "translation": "usunął(-ęła)"
@@ -7428,7 +7676,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        375
+        377
       ]
     ],
     "translation": ""
@@ -7463,8 +7711,8 @@
     "comments": [],
     "origin": [
       [
-        "src/components/FeedbackModal.tsx",
-        109
+        "src/components/FeedbackForm.tsx",
+        125
       ]
     ],
     "translation": "dokumentacja"
@@ -7871,7 +8119,7 @@
     "origin": [
       [
         "src/views/card/components/Comment.tsx",
-        113
+        115
       ]
     ],
     "translation": "Edytuj komentarz"
@@ -8050,7 +8298,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        440
+        442
       ]
     ],
     "translation": "Przypomnienia e-mail"
@@ -8098,7 +8346,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        345
+        346
       ]
     ],
     "translation": "Wyślij e-mail do tej listy"
@@ -8820,7 +9068,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        384
+        386
       ]
     ],
     "translation": ""
@@ -9090,8 +9338,8 @@
     "comments": [],
     "origin": [
       [
-        "src/components/FeedbackModal.tsx",
-        59
+        "src/components/FeedbackForm.tsx",
+        66
       ],
       [
         "src/components/UserMenu.tsx",
@@ -9106,7 +9354,7 @@
     "comments": [],
     "origin": [
       [
-        "src/components/FeedbackModal.tsx",
+        "src/components/FeedbackForm.tsx",
         33
       ]
     ],
@@ -9284,7 +9532,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        495
+        497
       ]
     ],
     "translation": "Przypomnienie o kontakcie"
@@ -9385,7 +9633,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        272
+        273
       ]
     ],
     "translation": "Przekaż lub wyślij wiadomości na ten adres, aby dodać je do tej listy."
@@ -9521,7 +9769,7 @@
     "origin": [
       [
         "src/views/activity-log/index.tsx",
-        70
+        72
       ]
     ],
     "translation": "od"
@@ -9761,7 +10009,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        346
+        347
       ]
     ],
     "translation": ""
@@ -10010,7 +10258,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        297
+        298
       ]
     ],
     "translation": "Pobierz Powerpack, aby zautomatyzować poszukiwanie pracy."
@@ -10262,7 +10510,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        421
+        423
       ]
     ],
     "translation": "Google Calendar"
@@ -10594,7 +10842,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        414
+        416
       ]
     ],
     "translation": "Jak zasubskrybować w"
@@ -10711,8 +10959,8 @@
     "comments": [],
     "origin": [
       [
-        "src/components/FeedbackModal.tsx",
-        75
+        "src/components/FeedbackForm.tsx",
+        87
       ]
     ],
     "translation": "Pomysły na ulepszenie tej strony..."
@@ -10914,6 +11162,18 @@
     "translation": "W trakcie",
     "obsolete": true
   },
+  "u7AZx+": {
+    "message": "In your AI client's integrations or MCP settings, add a remote MCP server using the URL above. Select Streamable HTTP and browser authorization (OAuth), if asked.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/settings/McpSettings.tsx",
+        61
+      ]
+    ],
+    "translation": "W ustawieniach integracji lub MCP klienta AI dodaj zdalny serwer MCP, używając powyższego URL. Jeśli pojawi się pytanie, wybierz Streamable HTTP i autoryzację w przeglądarce (OAuth)."
+  },
   "NoNwIX": {
     "message": "Inactive",
     "placeholders": {},
@@ -10984,7 +11244,7 @@
     "origin": [
       [
         "src/components/SettingsLayout.tsx",
-        106
+        112
       ],
       [
         "src/views/home/components/Features.tsx",
@@ -11824,7 +12084,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        374
+        376
       ]
     ],
     "translation": ""
@@ -12212,6 +12472,18 @@
     "translation": "",
     "obsolete": true
   },
+  "+p8+P+": {
+    "message": "Let this AI client work with your opportunities and shortlists.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/api/mcp/authorize.ts",
+        67
+      ]
+    ],
+    "translation": "Zezwól temu klientowi AI na pracę z Twoimi ofertami i listami."
+  },
   "sA86eU": {
     "message": "Let's get your job search organised",
     "placeholders": {},
@@ -12434,7 +12706,7 @@
     "origin": [
       [
         "src/views/card/components/ActivityList.tsx",
-        701
+        707
       ]
     ],
     "translation": "Wczytaj więcej notatek"
@@ -12446,14 +12718,26 @@
     "origin": [
       [
         "src/views/activity-log/index.tsx",
-        336
+        344
       ],
       [
         "src/views/card/components/ActivityList.tsx",
-        702
+        708
       ]
     ],
     "translation": "Wczytaj starsze aktualizacje"
+  },
+  "/kPaWM": {
+    "message": "Loading connections…",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/settings/McpSettings.tsx",
+        68
+      ]
+    ],
+    "translation": "Wczytywanie połączeń…"
   },
   "0qyZ4b": {
     "message": "Loading permissions...",
@@ -12474,11 +12758,11 @@
     "origin": [
       [
         "src/views/activity-log/index.tsx",
-        336
+        344
       ],
       [
         "src/views/card/components/ActivityList.tsx",
-        699
+        705
       ]
     ],
     "translation": "Ładowanie..."
@@ -12721,7 +13005,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        271
+        272
       ]
     ],
     "translation": "Skopiowano adres Magic Inbox"
@@ -12873,7 +13157,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        514
+        516
       ]
     ],
     "translation": "Oznacz ofertę jako brak odpowiedzi"
@@ -12953,6 +13237,46 @@
       ]
     ],
     "translation": "Maks."
+  },
+  "nA8kxD": {
+    "message": "MCP",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/components/SettingsLayout.tsx",
+        82
+      ]
+    ],
+    "translation": "MCP"
+  },
+  "4Aw8d0": {
+    "message": "MCP access requires an active Powerpack. You can still manage and revoke connections here.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/settings/McpSettings.tsx",
+        32
+      ]
+    ],
+    "translation": "Dostęp MCP wymaga aktywnego Powerpacka. Nadal możesz tu zarządzać połączeniami i je odwoływać."
+  },
+  "POyW96": {
+    "message": "MCP settings",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/api/mcp/authorize.ts",
+        83
+      ],
+      [
+        "src/server/mcp/consent-page.ts",
+        37
+      ]
+    ],
+    "translation": "Ustawienia MCP"
   },
   "agPptk": {
     "message": "Medium",
@@ -13515,8 +13839,12 @@
     "comments": [],
     "origin": [
       [
-        "src/components/FeedbackModal.tsx",
-        95
+        "src/components/FeedbackForm.tsx",
+        111
+      ],
+      [
+        "src/pages/contact.tsx",
+        22
       ]
     ],
     "translation": "Potrzebujesz pomocy?"
@@ -13854,7 +14182,7 @@
     "origin": [
       [
         "src/views/activity-log/index.tsx",
-        167
+        169
       ]
     ],
     "translation": "Brak aktywności."
@@ -14028,6 +14356,18 @@
       ]
     ],
     "translation": "Nie utworzono jeszcze żadnych list"
+  },
+  "39+EPc": {
+    "message": "No MCP clients connected.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/settings/McpSettings.tsx",
+        73
+      ]
+    ],
+    "translation": "Brak połączonych klientów MCP."
   },
   "i30J2U": {
     "message": "No projects found",
@@ -14218,7 +14558,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        538
+        540
       ]
     ],
     "translation": "Przypomnij mi o kontakcie z rekruterem"
@@ -14230,7 +14570,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        561
+        563
       ]
     ],
     "translation": "Przypomnij mi o powrocie do negocjacji"
@@ -14298,7 +14638,7 @@
     "origin": [
       [
         "src/views/activity-log/index.tsx",
-        72
+        74
       ]
     ],
     "translation": "dnia"
@@ -14669,6 +15009,18 @@
     ],
     "translation": ""
   },
+  "NQi0Qc": {
+    "message": "Opportunities support reading and writing, including moving and deletion. Shortlists support reading, creation, and renaming. Columns are fixed. Magic email and job attachment ingestion are unavailable through MCP. Normal Powerpack automations run after opportunity changes.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/settings/McpSettings.tsx",
+        65
+      ]
+    ],
+    "translation": "Oferty można odczytywać, edytować, przenosić i usuwać. Listy można odczytywać, tworzyć i zmieniać ich nazwy. Kolumny są stałe. Magic email i import załączników ofert nie są dostępne przez MCP. Po zmianach ofert działają zwykłe automatyzacje Powerpacka."
+  },
   "aqLLHC": {
     "message": "Opportunity detail",
     "placeholders": {},
@@ -14792,7 +15144,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        430
+        432
       ]
     ],
     "translation": "Outlook.com"
@@ -15204,7 +15556,7 @@
     "origin": [
       [
         "src/components/SettingsLayout.tsx",
-        82
+        88
       ]
     ],
     "translation": "Uprawnienia"
@@ -15471,7 +15823,7 @@
       ],
       [
         "src/views/settings/BoardsSettings.tsx",
-        279
+        280
       ]
     ],
     "translation": "Skopiuj ręcznie z pola."
@@ -15566,7 +15918,7 @@
         26
       ],
       [
-        "src/components/FeedbackModal.tsx",
+        "src/components/FeedbackForm.tsx",
         41
       ],
       [
@@ -15626,6 +15978,26 @@
         74
       ],
       [
+        "src/views/card/components/Comment.tsx",
+        97
+      ],
+      [
+        "src/views/card/components/DeleteCardConfirmation.tsx",
+        52
+      ],
+      [
+        "src/views/card/components/DeleteCommentConfirmation.tsx",
+        46
+      ],
+      [
+        "src/views/card/components/DeleteChecklistConfirmation.tsx",
+        38
+      ],
+      [
+        "src/views/card/components/DueDateSelector.tsx",
+        66
+      ],
+      [
         "src/views/card/components/ChecklistItemRow.tsx",
         67
       ],
@@ -15642,26 +16014,6 @@
         81
       ],
       [
-        "src/views/card/components/Comment.tsx",
-        95
-      ],
-      [
-        "src/views/card/components/DeleteCardConfirmation.tsx",
-        52
-      ],
-      [
-        "src/views/card/components/DeleteChecklistConfirmation.tsx",
-        38
-      ],
-      [
-        "src/views/card/components/DeleteCommentConfirmation.tsx",
-        46
-      ],
-      [
-        "src/views/card/components/DueDateSelector.tsx",
-        66
-      ],
-      [
         "src/views/card/components/LabelSelector.tsx",
         80
       ],
@@ -15674,16 +16026,16 @@
         82
       ],
       [
+        "src/views/card/components/NewCommentForm.tsx",
+        37
+      ],
+      [
         "src/views/card/components/NewChecklistForm.tsx",
         71
       ],
       [
         "src/views/card/components/NewChecklistItemForm.tsx",
         90
-      ],
-      [
-        "src/views/card/components/NewCommentForm.tsx",
-        37
       ],
       [
         "src/views/card/index.tsx",
@@ -16272,40 +16624,40 @@
     "translation": "Plan Pro ∞"
   },
   "Y6qqi6": {
-    "translation": "",
     "message": "processed a clipped web opportunity",
     "placeholders": {},
     "comments": [],
     "origin": [
       [
         "src/views/activity-log/index.tsx",
-        80
+        82
       ]
-    ]
+    ],
+    "translation": ""
   },
   "UpjXir": {
-    "translation": "",
     "message": "processed an email opportunity",
     "placeholders": {},
     "comments": [],
     "origin": [
       [
         "src/views/activity-log/index.tsx",
-        86
+        88
       ]
-    ]
+    ],
+    "translation": ""
   },
   "ypeY0K": {
-    "translation": "",
     "message": "processed an opportunity source",
     "placeholders": {},
     "comments": [],
     "origin": [
       [
         "src/views/activity-log/index.tsx",
-        90
+        92
       ]
-    ]
+    ],
+    "translation": ""
   },
   "O6Y2dC": {
     "message": "Processes the job page, turns it into a card, adds salary insights and company rating data, and uses AI to assign labels and summarise the role and requirements.",
@@ -16655,16 +17007,16 @@
     "obsolete": true
   },
   "lxt68w": {
-    "translation": "",
     "message": "received an email opportunity",
     "placeholders": {},
     "comments": [],
     "origin": [
       [
         "src/views/activity-log/index.tsx",
-        84
+        86
       ]
-    ]
+    ],
+    "translation": ""
   },
   "uJDO+u": {
     "message": "Receives the email, turns it into a card, adds salary insights and company rating data, and uses AI to assign labels and summarise the role and requirements.",
@@ -17124,6 +17476,18 @@
     "translation": "",
     "obsolete": true
   },
+  "RV1D5P": {
+    "message": "renamed",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/activity-log/index.tsx",
+        35
+      ]
+    ],
+    "translation": "zmieniono nazwę"
+  },
   "NypLoL": {
     "message": "renamed a checklist",
     "placeholders": {},
@@ -17235,6 +17599,18 @@
     ],
     "translation": "Zasoby"
   },
+  "0LDZ7n": {
+    "message": "Return to your AI client and ask it to list your shortlists or manage an opportunity. Your client must support remote MCP with OAuth and dynamic client registration.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/settings/McpSettings.tsx",
+        63
+      ]
+    ],
+    "translation": "Wróć do klienta AI i poproś o wyświetlenie list lub zarządzanie ofertą. Klient musi obsługiwać zdalne MCP z OAuth i dynamiczną rejestracją klientów."
+  },
   "5k0NLb": {
     "message": "Review",
     "placeholders": {},
@@ -17284,6 +17660,18 @@
       ]
     ],
     "translation": ""
+  },
+  "cg+Poy": {
+    "message": "Revoke access",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/settings/McpSettings.tsx",
+        89
+      ]
+    ],
+    "translation": "Cofnij dostęp"
   },
   "sj9d1r": {
     "message": "Right now, you are <0>ready to go</0>. The second part of this guide covers the paid Powerpack features, which are not necessary for using shortlistOS.",
@@ -17616,7 +18004,7 @@
       ],
       [
         "src/views/card/components/Comment.tsx",
-        204
+        209
       ],
       [
         "src/views/card/index.tsx",
@@ -18300,8 +18688,8 @@
     "comments": [],
     "origin": [
       [
-        "src/components/FeedbackModal.tsx",
-        116
+        "src/components/FeedbackForm.tsx",
+        131
       ]
     ],
     "translation": "Prześlij opinię"
@@ -18326,7 +18714,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        584
+        586
       ]
     ],
     "translation": ""
@@ -18338,7 +18726,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        454
+        456
       ]
     ],
     "translation": "Wyślij mi przypomnienie e-mail"
@@ -18560,6 +18948,18 @@
     ],
     "translation": "Opinie"
   },
+  "9rG25a": {
+    "message": "Server URL",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/settings/McpSettings.tsx",
+        40
+      ]
+    ],
+    "translation": "URL serwera"
+  },
   "GXGbXi": {
     "message": "Set a password to enable password-based login.",
     "placeholders": {},
@@ -18672,7 +19072,7 @@
     "origin": [
       [
         "src/components/SettingsLayout.tsx",
-        140
+        146
       ],
       [
         "src/components/SideNavigation.tsx",
@@ -18728,6 +19128,18 @@
       ]
     ],
     "translation": "Ustawienia | Integracje"
+  },
+  "Q+G42f": {
+    "message": "Settings | MCP",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/settings/McpSettings.tsx",
+        26
+      ]
+    ],
+    "translation": "Ustawienia | MCP"
   },
   "F/FPk/": {
     "message": "Settings | Permissions",
@@ -19043,7 +19455,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        311
+        312
       ]
     ],
     "translation": "Pokazuje wizualne efekty starzenia kart na podstawie ostatniej aktywności. Karty starsze niż tydzień z czasem stopniowo zyskują coraz wyraźniejszy ciepły odcień."
@@ -19054,12 +19466,11 @@
     "comments": [],
     "origin": [
       [
-        "src/views/home/components/Header.tsx",
-        104
+        "src/pages/contact.tsx",
+        35
       ]
     ],
-    "translation": "Zaloguj się",
-    "obsolete": true
+    "translation": "Zaloguj się"
   },
   "n1ekoW": {
     "message": "Sign In",
@@ -19100,6 +19511,18 @@
       ]
     ],
     "translation": "Zaloguj się lub utwórz konto, aby aktywować swoją licencję"
+  },
+  "5qr4kD": {
+    "message": "Sign in to shortlistOS in the browser, review the client name and requested access, then select Allow access. You do not need an API key.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/settings/McpSettings.tsx",
+        62
+      ]
+    ],
+    "translation": "Zaloguj się do shortlistOS w przeglądarce, sprawdź nazwę klienta i żądany dostęp, a następnie wybierz Zezwól na dostęp. Klucz API nie jest potrzebny."
   },
   "fcWrnU": {
     "message": "Sign out",
@@ -19197,6 +19620,18 @@
       ]
     ],
     "translation": "Zarejestruj się przez "
+  },
+  "zU+Ro7": {
+    "message": "Signed in as",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/api/mcp/authorize.ts",
+        73
+      ]
+    ],
+    "translation": "Zalogowano jako"
   },
   "m2nk0i": {
     "message": "Simple pricing",
@@ -19475,6 +19910,18 @@
     ],
     "translation": "Rozpocznij 14-dniowy bezpłatny okres próbny"
   },
+  "UtbfD8": {
+    "message": "Start again from your AI client to open a fresh authorization page.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/server/mcp/consent-page.ts",
+        36
+      ]
+    ],
+    "translation": "Zacznij ponownie w swoim kliencie AI, aby otworzyć nową stronę autoryzacji."
+  },
   "31VjoK": {
     "message": "Start download",
     "placeholders": {},
@@ -19643,7 +20090,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        443
+        445
       ]
     ],
     "translation": "Pilnuj ofert, przy których zapadła cisza, zanim wypadną Ci z radaru."
@@ -19704,7 +20151,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        491
+        493
       ]
     ],
     "translation": "Utknęła w Aplikowano"
@@ -19716,7 +20163,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        535
+        537
       ]
     ],
     "translation": "Utknęła w Rozmowach"
@@ -19728,7 +20175,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        558
+        560
       ]
     ],
     "translation": "Utknęła w Negocjacjach"
@@ -19740,7 +20187,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        450
+        452
       ]
     ],
     "translation": "Utknęła w Zapisanych"
@@ -20128,7 +20575,7 @@
     "comments": [],
     "origin": [
       [
-        "src/components/FeedbackModal.tsx",
+        "src/components/FeedbackForm.tsx",
         34
       ]
     ],
@@ -20499,12 +20946,12 @@
         78
       ],
       [
-        "src/views/card/components/DeleteChecklistConfirmation.tsx",
-        59
-      ],
-      [
         "src/views/card/components/DeleteCommentConfirmation.tsx",
         69
+      ],
+      [
+        "src/views/card/components/DeleteChecklistConfirmation.tsx",
+        59
       ]
     ],
     "translation": "Tej operacji nie można cofnąć."
@@ -20520,6 +20967,38 @@
       ]
     ],
     "translation": "Ten klucz API zostanie wyświetlony tylko raz. Zapisz go w bezpiecznym miejscu."
+  },
+  "r6MiTw": {
+    "message": "This authorization page has expired. Start again from your AI client.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/api/mcp/consent.ts",
+        70
+      ]
+    ],
+    "translation": "Ta strona autoryzacji wygasła. Zacznij ponownie w swoim kliencie AI."
+  },
+  "8bsDu5": {
+    "message": "This authorization request is invalid. Start again from your AI client.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/api/mcp/authorize.ts",
+        91
+      ],
+      [
+        "src/pages/api/mcp/consent.ts",
+        80
+      ],
+      [
+        "src/pages/api/mcp/consent.ts",
+        115
+      ]
+    ],
+    "translation": "To żądanie autoryzacji jest nieprawidłowe. Zacznij ponownie w kliencie AI."
   },
   "l4asa1": {
     "message": "This board is private or does not exist",
@@ -20544,6 +21023,19 @@
       ]
     ],
     "translation": "Ten adres URL tablicy jest już zajęty"
+  },
+  "zmop4I": {
+    "message": "This client can read your shortlists, create and rename shortlists, and read, create, update, move, and delete opportunities. Your existing workspace permissions apply. Columns cannot be modified. Magic email and job attachment ingestion are unavailable.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/mcp/authorize.tsx",
+        99
+      ]
+    ],
+    "translation": "Ten klient może odczytywać, tworzyć i zmieniać nazwy list oraz odczytywać, tworzyć, edytować, przenosić i usuwać oferty. Obowiązują Twoje aktualne uprawnienia w przestrzeni roboczej. Kolumn nie można zmieniać. Magic email i import załączników ofert są niedostępne.",
+    "obsolete": true
   },
   "MzyVOo": {
     "message": "This guide explains the basics, shows you how to organise each job opportunity, and introduces the optional tools that can save you time.",
@@ -20606,6 +21098,18 @@
       ]
     ],
     "translation": "Uprawnienia tego członka zostały zresetowane do domyślnych dla jego roli."
+  },
+  "qERR/p": {
+    "message": "This request did not come from shortlistOS. Start again from your AI client.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/api/mcp/consent.ts",
+        38
+      ]
+    ],
+    "translation": "To żądanie nie pochodzi z shortlistOS. Zacznij ponownie w swoim kliencie AI."
   },
   "r4u0Nz": {
     "message": "This row lets you choose the opportunity status, labels, interview date, and where in the column the card should land (up or down).",
@@ -20812,7 +21316,7 @@
       ],
       [
         "src/views/activity-log/index.tsx",
-        64
+        66
       ]
     ],
     "translation": "do"
@@ -21118,6 +21622,18 @@
     ],
     "translation": "Nie udało się zarchiwizować listy"
   },
+  "XYJT34": {
+    "message": "Unable to authorize",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/server/mcp/consent-page.ts",
+        34
+      ]
+    ],
+    "translation": "Nie udało się autoryzować"
+  },
   "LeM5RY": {
     "message": "Unable to clear overrides",
     "placeholders": {},
@@ -21137,7 +21653,11 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        278
+        279
+      ],
+      [
+        "src/views/settings/BoardsSettings.tsx",
+        362
       ]
     ],
     "translation": "Nie udało się skopiować adresu"
@@ -21409,7 +21929,7 @@
     "comments": [],
     "origin": [
       [
-        "src/components/FeedbackModal.tsx",
+        "src/components/FeedbackForm.tsx",
         40
       ]
     ],
@@ -21554,7 +22074,7 @@
     "origin": [
       [
         "src/views/card/components/Comment.tsx",
-        94
+        96
       ]
     ],
     "translation": "Nie można zaktualizować komentarza"
@@ -21731,7 +22251,7 @@
     "origin": [
       [
         "src/views/activity-log/index.tsx",
-        39
+        41
       ]
     ],
     "translation": "przywrócił(-a) z archiwum"
@@ -22290,7 +22810,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        302
+        303
       ]
     ],
     "translation": "Ulepsz teraz"
@@ -22522,6 +23042,18 @@
     "translation": "",
     "obsolete": true
   },
+  "a8bxRr": {
+    "message": "Use MCP to work with your opportunities and shortlists from an AI assistant. One browser authorization connects your account, using your existing workspace permissions.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/settings/McpSettings.tsx",
+        29
+      ]
+    ],
+    "translation": "Używaj MCP do pracy z ofertami i listami za pomocą asystenta AI. Jedna autoryzacja w przeglądarce łączy konto z Twoimi aktualnymi uprawnieniami."
+  },
   "TuoYBb": {
     "translation": "",
     "message": "Use shortlistOS for free",
@@ -22681,6 +23213,42 @@
     ],
     "translation": ""
   },
+  "2NNe/G": {
+    "message": "via {0} ",
+    "placeholders": {
+      "0": [
+        "activity.actorClientName"
+      ]
+    },
+    "comments": [],
+    "origin": [
+      [
+        "src/views/activity-log/index.tsx",
+        273
+      ],
+      [
+        "src/views/card/components/ActivityList.tsx",
+        678
+      ]
+    ],
+    "translation": "przez {0} "
+  },
+  "WMgCsU": {
+    "message": "via {actorClientName} ",
+    "placeholders": {
+      "actorClientName": [
+        "actorClientName"
+      ]
+    },
+    "comments": [],
+    "origin": [
+      [
+        "src/views/card/components/Comment.tsx",
+        150
+      ]
+    ],
+    "translation": "przez {actorClientName} "
+  },
   "vSJd18": {
     "message": "Video",
     "placeholders": {},
@@ -22773,12 +23341,11 @@
     "comments": [],
     "origin": [
       [
-        "src/pages/get-started.tsx",
-        650
+        "src/views/settings/McpSettings.tsx",
+        36
       ]
     ],
-    "translation": "",
-    "obsolete": true
+    "translation": ""
   },
   "Kw+LP3": {
     "message": "View the repository on GitHub",
@@ -22804,6 +23371,30 @@
       ]
     ],
     "translation": "Zobacz przestrzeń roboczą"
+  },
+  "3yXoPB": {
+    "message": "View, create and rename shortlists.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/api/mcp/authorize.ts",
+        69
+      ]
+    ],
+    "translation": "Wyświetlać, tworzyć i zmieniać nazwy list."
+  },
+  "dqklgc": {
+    "message": "View, create, update, move and delete opportunities, comments and checklists.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/api/mcp/authorize.ts",
+        70
+      ]
+    ],
+    "translation": "Wyświetlać, tworzyć, aktualizować, przenosić i usuwać oferty, komentarze i listy kontrolne."
   },
   "2q/Q7x": {
     "message": "Visibility",
@@ -23097,7 +23688,7 @@
     "origin": [
       [
         "src/components/SettingsLayout.tsx",
-        100
+        106
       ],
       [
         "src/views/settings/WebhookSettings.tsx",
@@ -23145,7 +23736,7 @@
       ],
       [
         "src/views/settings/BoardsSettings.tsx",
-        583
+        585
       ]
     ],
     "translation": "Podsumowanie tygodniowe"
@@ -23318,7 +23909,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        333
+        334
       ]
     ],
     "translation": ""
@@ -24024,6 +24615,18 @@
     "translation": "",
     "obsolete": true
   },
+  "G+oRsa": {
+    "message": "You can revoke access at any time.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/api/mcp/authorize.ts",
+        82
+      ]
+    ],
+    "translation": "Możesz odwołać dostęp w dowolnym momencie."
+  },
   "vAj6xG": {
     "message": "You can self-host by following the instructions in our <0>repo</0>.",
     "placeholders": {},
@@ -24547,6 +25150,18 @@
       ]
     ],
     "translation": "Rozpoczęto pobieranie eksportu danych shortlistOS."
+  },
+  "4utf6o": {
+    "message": "Your sign-in has expired. Sign in and start again from your AI client.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/api/mcp/consent.ts",
+        52
+      ]
+    ],
+    "translation": "Twoja sesja wygasła. Zaloguj się i zacznij ponownie w swoim kliencie AI."
   },
   "CJWDTP": {
     "message": "Your Trello account has been disconnected.",
