@@ -20,3 +20,4 @@ export * from "./shortlist";
 export * from "./shortlistAutomation";
 export * from "./webhooks";
 export * from "./web-clipper";
+export * from "./mcp";

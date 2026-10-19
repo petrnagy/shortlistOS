@@ -33,6 +33,40 @@ export const cardContactsJsonSchema = z.array(
 );
 
 // ─── card.create ─────────────────────────────────────────────
+export const cardOpportunityDetailsSchema = z.object({
+  contactsJson: cardContactsJsonSchema.optional(),
+  manualUpdatedOnly: z.boolean().optional(),
+  shortlistSalaryMin: z.number().int().nonnegative().nullable().optional(),
+  shortlistSalaryMax: z.number().int().nonnegative().nullable().optional(),
+  shortlistSalaryCurrency: z.string().max(10).nullable().optional(),
+  shortlistSalaryInterval: z
+    .enum(["PER_MONTH", "PER_YEAR", "PER_WEEK", "PER_DAY", "PER_HOUR"])
+    .optional(),
+  shortlistCompanyRatingAggregated: z
+    .number()
+    .min(0)
+    .max(5)
+    .nullable()
+    .optional(),
+  shortlistCompanySentimentSummary: z.string().nullable().optional(),
+  shortlistJobLocation: z.string().max(255).nullable().optional(),
+  shortlistJobLocationType: z
+    .enum(["onsite", "hybrid", "remote"])
+    .nullable()
+    .optional(),
+  shortlistJobType: z
+    .enum([
+      "FULL_TIME",
+      "PART_TIME",
+      "CONTRACT",
+      "INTERNSHIP",
+      "TEMPORARY",
+      "FREELANCE",
+    ])
+    .optional(),
+  shortlistCompanyLocation: z.string().max(255).nullable().optional(),
+});
+
 export const cardCreateResponseSchema = z.object({
   publicId: z.string(),
 });
@@ -52,7 +86,9 @@ export const cardUpdateResponseSchema = z.object({
   shortlistSalaryCurrency: z.string().nullable(),
   shortlistSalaryInterval: z.string(),
   shortlistSalaryData: z.unknown().nullable(),
-  shortlistCompanyRatingAggregated: z.union([z.string(), z.number()]).nullable(),
+  shortlistCompanyRatingAggregated: z
+    .union([z.string(), z.number()])
+    .nullable(),
   shortlistCompanySentimentSummary: z.string().nullable(),
   shortlistCardSource: z.string(),
   shortlistJobLocation: z.string().nullable(),
@@ -102,7 +138,9 @@ export const cardDetailSchema = z.object({
   shortlistSalaryCurrency: z.string().nullable(),
   shortlistSalaryInterval: z.string(),
   shortlistSalaryData: z.unknown().nullable(),
-  shortlistCompanyRatingAggregated: z.union([z.string(), z.number()]).nullable(),
+  shortlistCompanyRatingAggregated: z
+    .union([z.string(), z.number()])
+    .nullable(),
   shortlistCompanySentimentSummary: z.string().nullable(),
   shortlistCardSource: z.string(),
   shortlistJobLocation: z.string().nullable(),
@@ -209,6 +247,7 @@ export const cardDetailSchema = z.object({
 
 // ─── card.getActivities ──────────────────────────────────────
 export const activityItemSchema = z.object({
+  actorClientName: z.string().nullable().optional(),
   publicId: z.string(),
   type: z.string(),
   createdAt: z.date(),

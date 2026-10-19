@@ -12,6 +12,7 @@ import * as workspaceRepo from "@kan/db/repository/workspace.repo";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 import {
   cardCreateResponseSchema,
+  cardOpportunityDetailsSchema,
   cardUpdateResponseSchema,
   cardDetailSchema,
   commentResponseSchema,
@@ -61,6 +62,7 @@ export const cardRouter = createTRPCRouter({
         dueDate: z.date().nullable().optional(),
         shortlistCompanyName: z.string().max(255).nullable().optional(),
         shortlistJobPostingUrl: z.string().url().nullable().optional(),
+        ...cardOpportunityDetailsSchema.shape,
       }),
     )
     .output(cardCreateResponseSchema)
@@ -87,6 +89,11 @@ export const cardRouter = createTRPCRouter({
       await assertPermission(ctx.db, userId, list.workspaceId, "card:create");
 
       const newCard = await cardRepo.create(ctx.db, {
+        ...input,
+        shortlistCompanyRatingAggregated:
+          input.shortlistCompanyRatingAggregated == null
+            ? input.shortlistCompanyRatingAggregated
+            : String(input.shortlistCompanyRatingAggregated),
         title: input.title,
         description: input.description,
         createdBy: userId,

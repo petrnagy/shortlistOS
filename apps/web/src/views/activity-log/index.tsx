@@ -31,6 +31,8 @@ type ActivityLogItem = GetActivityLogOutput["activities"][number];
 
 const getBoardActivityText = (type: string) => {
   switch (type) {
+    case "board.renamed":
+      return t`renamed`;
     case "board.deleted":
       return t`deleted`;
     case "board.archived":
@@ -264,7 +266,13 @@ export default function ActivityLog() {
                         </div>
                         <div className="flex min-w-0 flex-1 items-center gap-3">
                           <p className="min-w-0 flex-1 text-sm">
-                            <span className="font-medium dark:text-dark-1000">{`${getUserDisplayName(activity.user)} `}</span>
+                            <span className="font-medium dark:text-dark-1000">
+                              {`${getUserDisplayName(activity.user)} `}
+                              {"actorClientName" in activity &&
+                              activity.actorClientName
+                                ? t`via ${activity.actorClientName} `
+                                : null}
+                            </span>
                             <span className="text-light-900 dark:text-dark-800">
                               {isSourceActivity
                                 ? getSourceActivityText(activity.type)

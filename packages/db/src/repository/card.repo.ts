@@ -26,6 +26,7 @@ import {
 } from "@kan/db/schema";
 import { generateUID } from "@kan/shared/utils";
 
+import { getActivityClient } from "./activity-context";
 import { markCardsForEnrichment } from "./shortlistEnrichment.repo";
 
 export const getCount = async (db: dbClient) => {
@@ -48,6 +49,7 @@ export const create = async (
     position: "start" | "end";
     dueDate?: Date | null;
     contactsJson?: unknown;
+    manualUpdatedOnly?: boolean;
     shortlistCompanyName?: string | null;
     shortlistJobPostingUrl?: string | null;
     shortlistSalaryMin?: number | null;
@@ -125,6 +127,7 @@ export const create = async (
         cardNumber,
         dueDate: cardInput.dueDate ?? null,
         contactsJson: cardInput.contactsJson,
+        manualUpdatedOnly: cardInput.manualUpdatedOnly,
         shortlistCompanyName: cardInput.shortlistCompanyName,
         shortlistJobPostingUrl: cardInput.shortlistJobPostingUrl,
         shortlistSalaryMin: cardInput.shortlistSalaryMin,
@@ -153,6 +156,7 @@ export const create = async (
     if (!result[0]) throw new Error("Unable to create card");
 
     await tx.insert(cardActivities).values({
+      actorClientName: getActivityClient(),
       publicId: generateUID(),
       cardId: result[0].id,
       type: "card.created",

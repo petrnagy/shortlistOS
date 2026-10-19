@@ -147,4 +147,4 @@ jobs:
             -p "$DEPLOY_PORT" \
             -o BatchMode=yes \
             -o IdentitiesOnly=yes \
-            "$DEPLOY_USER@$DEPLOY_HOST" "APP_IMAGE_TAG='$RELEASE' deploy '$RELEASE'"
+            "$DEPLOY_USER@$DEPLOY_HOST" "deploy $RELEASE"

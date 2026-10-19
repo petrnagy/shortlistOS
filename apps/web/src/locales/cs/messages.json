@@ -6,7 +6,7 @@
     "origin": [
       [
         "src/views/card/components/Comment.tsx",
-        155
+        160
       ]
     ],
     "translation": " (upraveno)"
@@ -18,7 +18,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        404
+        418
       ]
     ],
     "translation": "— Petr, tvůrce shortlistOS"
@@ -29,8 +29,8 @@
     "comments": [],
     "origin": [
       [
-        "src/components/FeedbackModal.tsx",
-        102
+        "src/components/FeedbackForm.tsx",
+        118
       ]
     ],
     "translation": ", nebo si prohlédněte naše"
@@ -266,6 +266,26 @@
     ],
     "translation": "{boardCount, plural, one {Importovat nástěnku (1)} other {Importovat nástěnky ({boardCount})}}"
   },
+  "UIA7wO": {
+    "message": "{clientName} is requesting access to your shortlistOS account as {username}.",
+    "placeholders": {
+      "clientName": [
+        "clientName"
+      ],
+      "username": [
+        "username"
+      ]
+    },
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/mcp/authorize.tsx",
+        98
+      ]
+    ],
+    "translation": "{clientName} žádá o přístup k vašemu účtu shortlistOS jako {username}.",
+    "obsolete": true
+  },
   "yndBF+": {
     "message": "{projectCount, plural, one {Import project (1)} other {Import projects ({projectCount})}}",
     "placeholders": {
@@ -484,7 +504,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1061
+        1079
       ]
     ],
     "translation": ""
@@ -496,7 +516,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1104
+        1122
       ]
     ],
     "translation": ""
@@ -791,7 +811,7 @@
     "origin": [
       [
         "src/views/settings/PowerpackSettings.tsx",
-        498
+        503
       ]
     ],
     "translation": "3 měsíce za {POWERPACK_PRICE}"
@@ -807,7 +827,7 @@
       ],
       [
         "src/views/home/index.tsx",
-        227
+        241
       ]
     ],
     "translation": ""
@@ -1007,7 +1027,7 @@
     "origin": [
       [
         "src/views/pricing/components/PricingCards.tsx",
-        72
+        76
       ]
     ],
     "translation": ""
@@ -1240,7 +1260,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        315
+        329
       ]
     ],
     "translation": "Data účtu hostovaná v EU"
@@ -1252,7 +1272,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        144
+        148
       ]
     ],
     "translation": "Data účtu jsou hostovaná v Německu. Nahrané soubory a přílohy jsou uložené na AWS ve Stockholmu. Některé funkce Powerpack odesílají relevantní obsah ke zpracování službě Mistral, například obsah pracovní nabídky uložené přes Web Clipper nebo e-mailu přeposlaného do Magic Inbox."
@@ -1305,6 +1325,50 @@
       ]
     ],
     "translation": "Akce"
+  },
+  "lQTDqn": {
+    "message": "Actions are attributed to you via the authorized client name. MCP clients do not reliably disclose which underlying model performed an action.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/settings/McpSettings.tsx",
+        56
+      ]
+    ],
+    "translation": "Akce se připisují vám prostřednictvím názvu autorizovaného klienta. Klienti MCP spolehlivě nesdělují, který model akci provedl."
+  },
+  "M6IOrR": {
+    "message": "Actions are recorded as {username} via {clientName}. The client name is supplied by the app.",
+    "placeholders": {
+      "username": [
+        "username"
+      ],
+      "clientName": [
+        "clientName"
+      ]
+    },
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/api/mcp/authorize.ts",
+        67
+      ]
+    ],
+    "translation": "Akce se zaznamenávají jako {username} přes {clientName}. Název klienta poskytuje aplikace."
+  },
+  "Fv5UjD": {
+    "message": "Actions are recorded with your name and the client name shown here. This name is supplied by the client; it does not verify a particular AI model.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/mcp/authorize.tsx",
+        100
+      ]
+    ],
+    "translation": "Akce se zaznamenávají s vaším jménem a názvem klienta zobrazeným zde. Název poskytuje klient; neověřuje konkrétní model AI.",
+    "obsolete": true
   },
   "JEt3q7": {
     "message": "Activate | kan.bn",
@@ -1374,7 +1438,7 @@
     "origin": [
       [
         "src/views/settings/PowerpackSettings.tsx",
-        483
+        488
       ]
     ],
     "translation": "Aktivní do {formattedPowerpackExpiry}"
@@ -1418,11 +1482,11 @@
       ],
       [
         "src/views/activity-log/index.tsx",
-        144
+        146
       ],
       [
         "src/views/activity-log/index.tsx",
-        151
+        153
       ]
     ],
     "translation": "Přehled aktivit"
@@ -1462,7 +1526,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        280
+        294
       ]
     ],
     "translation": ""
@@ -1599,7 +1663,7 @@
     "origin": [
       [
         "src/views/card/components/Comment.tsx",
-        187
+        192
       ],
       [
         "src/views/card/components/NewCommentForm.tsx",
@@ -2186,7 +2250,7 @@
     "origin": [
       [
         "src/views/settings/PowerpackSettings.tsx",
-        408
+        413
       ]
     ],
     "translation": "Po 3 měsících se funkce Powerpack pozastaví, ale nic nezmizí. Každá příležitost, poznámka, informace o platu i karta zůstane přesně tam, kde je. Pokračujte v hledání práce bez Powerpack, nebo si kupte další 3 měsíce, až budete kouzlo znovu potřebovat. Žádné automatické platby. Nikdy."
@@ -2203,6 +2267,38 @@
       ]
     ],
     "obsolete": true
+  },
+  "QIN7ln": {
+    "message": "AI assistant access (MCP)",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        1068
+      ],
+      [
+        "src/views/pricing/components/FeatureComparisonTable.tsx",
+        45
+      ],
+      [
+        "src/views/pricing/components/PricingCards.tsx",
+        48
+      ],
+      [
+        "src/views/pricing/components/PricingCards.tsx",
+        80
+      ],
+      [
+        "src/views/pricing/components/PricingCards.tsx",
+        101
+      ],
+      [
+        "src/views/settings/PowerpackSettings.tsx",
+        109
+      ]
+    ],
+    "translation": "Přístup pro AI asistenta (MCP)"
   },
   "h2ztFt": {
     "message": "All Free features +",
@@ -2275,7 +2371,7 @@
     "origin": [
       [
         "src/views/pricing/components/PricingCards.tsx",
-        91
+        99
       ]
     ],
     "translation": ""
@@ -2287,10 +2383,22 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1044
+        1054
       ]
     ],
     "translation": ""
+  },
+  "Die6ER": {
+    "message": "Allow access",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/api/mcp/authorize.ts",
+        64
+      ]
+    ],
+    "translation": "Povolit přístup"
   },
   "Z3krJD": {
     "message": "Allow workspace members to see each other's email addresses",
@@ -2311,7 +2419,7 @@
     "origin": [
       [
         "src/views/settings/PowerpackSettings.tsx",
-        478
+        483
       ]
     ],
     "translation": "Už ho mám!"
@@ -2331,6 +2439,23 @@
       ]
     ],
     "translation": "Už máte účet? <0><1>Přihlaste se</1></0>"
+  },
+  "59YU4M": {
+    "message": "An active Powerpack is required to connect.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/api/mcp/authorize.ts",
+        53
+      ],
+      [
+        "src/pages/api/mcp/consent.ts",
+        95
+      ]
+    ],
+    "translation": "Pro připojení je nutný aktivní Powerpack.",
+    "obsolete": true
   },
   "j1+HPc": {
     "message": "An error occurred while connecting your GitHub account.",
@@ -2435,7 +2560,7 @@
     "origin": [
       [
         "src/components/SettingsLayout.tsx",
-        94
+        100
       ]
     ],
     "translation": "API"
@@ -2698,7 +2823,7 @@
     "origin": [
       [
         "src/views/activity-log/index.tsx",
-        37
+        39
       ]
     ],
     "translation": "archivoval(a)"
@@ -2954,7 +3079,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1069
+        1087
       ]
     ],
     "translation": ""
@@ -3055,11 +3180,11 @@
     "origin": [
       [
         "src/views/pricing/components/FeatureComparisonTable.tsx",
-        120
+        125
       ],
       [
         "src/views/settings/PowerpackSettings.tsx",
-        184
+        189
       ]
     ],
     "translation": "Automaticky archivovat neaktuální uložené příležitosti"
@@ -3071,7 +3196,7 @@
     "origin": [
       [
         "src/views/pricing/components/FeatureComparisonTable.tsx",
-        105
+        110
       ]
     ],
     "translation": "Po období bez odpovědi ve fázi Přihlášeno automaticky přesunout do Bez odezvy"
@@ -3175,7 +3300,7 @@
     "origin": [
       [
         "src/views/pricing/components/PricingCards.tsx",
-        69
+        73
       ]
     ],
     "translation": "Automatické připomínky a upozornění"
@@ -3187,7 +3312,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        319
+        320
       ]
     ],
     "translation": "Automatická data o platech"
@@ -3199,11 +3324,11 @@
     "origin": [
       [
         "src/views/pricing/components/FeatureComparisonTable.tsx",
-        65
+        70
       ],
       [
         "src/views/settings/PowerpackSettings.tsx",
-        129
+        134
       ]
     ],
     "translation": "Automatické platové rozpětí pro cílovou pozici"
@@ -3228,7 +3353,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        470
+        472
       ]
     ],
     "translation": "Automaticky archivovat"
@@ -3253,7 +3378,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        320
+        321
       ]
     ],
     "translation": "Automaticky doplní každou příležitost o srovnání platů v USA, EU, Spojeném království, regionu APAC a na globálním trhu, abyste rychle viděli, jak si nabídka stojí místně i ve světě."
@@ -3265,7 +3390,7 @@
     "origin": [
       [
         "src/views/settings/PowerpackSettings.tsx",
-        169
+        174
       ]
     ],
     "translation": ""
@@ -3307,7 +3432,7 @@
       ],
       [
         "src/views/settings/BoardsSettings.tsx",
-        291
+        292
       ]
     ],
     "translation": "Automatizace"
@@ -3319,11 +3444,11 @@
     "origin": [
       [
         "src/views/pricing/components/FeatureComparisonTable.tsx",
-        87
+        92
       ],
       [
         "src/views/settings/PowerpackSettings.tsx",
-        151
+        156
       ]
     ],
     "translation": "Automatizace a upozornění"
@@ -3335,7 +3460,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        321
+        335
       ]
     ],
     "translation": "Vyhněte se závislosti na dodavateli"
@@ -3649,7 +3774,7 @@
     "origin": [
       [
         "src/components/SettingsLayout.tsx",
-        87
+        93
       ],
       [
         "src/views/settings/BillingSettings.tsx",
@@ -3961,7 +4086,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        395
+        409
       ]
     ],
     "translation": "Vytvořeno nezávisle pro lidi, kteří už tak dělají náročnou věc."
@@ -4014,7 +4139,7 @@
       ],
       [
         "src/views/settings/BoardsSettings.tsx",
-        383
+        385
       ]
     ],
     "translation": "Kalendářový kanál"
@@ -4051,11 +4176,11 @@
     "origin": [
       [
         "src/views/pricing/components/FeatureComparisonTable.tsx",
-        95
+        100
       ],
       [
         "src/views/settings/PowerpackSettings.tsx",
-        159
+        164
       ]
     ],
     "translation": ""
@@ -4307,7 +4432,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        131
+        135
       ]
     ],
     "translation": "Mohu exportovat svá data?"
@@ -4319,7 +4444,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        151
+        155
       ]
     ],
     "translation": ""
@@ -4331,10 +4456,22 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        135
+        139
       ]
     ],
     "translation": "Mohu shortlistOS hostovat sám?"
+  },
+  "zRuz5n": {
+    "message": "Can I use my own AI assistant?",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/home/index.tsx",
+        115
+      ]
+    ],
+    "translation": "Mohu používat vlastního AI asistenta?"
   },
   "KjP/23": {
     "message": "Can I use Powerpack with a self-hosted installation?",
@@ -4343,7 +4480,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        139
+        143
       ]
     ],
     "translation": "Mohu Powerpack používat s vlastní instalací?"
@@ -4403,7 +4540,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        147
+        151
       ]
     ],
     "translation": ""
@@ -4518,6 +4655,10 @@
         176
       ],
       [
+        "src/pages/api/mcp/authorize.ts",
+        63
+      ],
+      [
         "src/views/board/components/CardContextDuplicateModal.tsx",
         267
       ],
@@ -4531,19 +4672,19 @@
       ],
       [
         "src/views/card/components/Comment.tsx",
-        197
+        202
       ],
       [
         "src/views/card/components/DeleteCardConfirmation.tsx",
         86
       ],
       [
-        "src/views/card/components/DeleteChecklistConfirmation.tsx",
-        64
-      ],
-      [
         "src/views/card/components/DeleteCommentConfirmation.tsx",
         77
+      ],
+      [
+        "src/views/card/components/DeleteChecklistConfirmation.tsx",
+        64
       ],
       [
         "src/views/card/index.tsx",
@@ -4570,10 +4711,6 @@
         287
       ],
       [
-        "src/views/settings/components/ChangePasswordConfirmation.tsx",
-        206
-      ],
-      [
         "src/views/settings/components/ClearCustomPermissionsConfirmation.tsx",
         40
       ],
@@ -4588,6 +4725,10 @@
       [
         "src/views/settings/components/DeleteWorkspaceConfirmation.tsx",
         98
+      ],
+      [
+        "src/views/settings/components/ChangePasswordConfirmation.tsx",
+        206
       ],
       [
         "src/views/settings/components/UpgradeToProConfirmation.tsx",
@@ -4616,11 +4757,11 @@
     "origin": [
       [
         "src/views/pricing/components/FeatureComparisonTable.tsx",
-        47
+        52
       ],
       [
         "src/views/settings/PowerpackSettings.tsx",
-        111
+        116
       ]
     ],
     "translation": "Ukládání příležitostí"
@@ -4648,7 +4789,7 @@
       ],
       [
         "src/views/settings/BoardsSettings.tsx",
-        310
+        311
       ]
     ],
     "translation": "Stárnutí karet"
@@ -4660,11 +4801,11 @@
     "origin": [
       [
         "src/views/pricing/components/FeatureComparisonTable.tsx",
-        90
+        95
       ],
       [
         "src/views/settings/PowerpackSettings.tsx",
-        154
+        159
       ]
     ],
     "translation": "Stárnutí karet: vizuální označení neaktivních příležitostí"
@@ -4959,7 +5100,7 @@
     "origin": [
       [
         "src/views/settings/PowerpackSettings.tsx",
-        344
+        349
       ]
     ],
     "translation": "Chyba platby"
@@ -5050,7 +5191,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        295
+        309
       ],
       [
         "src/views/pricing/index.tsx",
@@ -5181,16 +5322,16 @@
     "translation": ""
   },
   "nlOslx": {
-    "translation": "",
     "message": "clipped a web opportunity",
     "placeholders": {},
     "comments": [],
     "origin": [
       [
         "src/views/activity-log/index.tsx",
-        78
+        80
       ]
-    ]
+    ],
+    "translation": ""
   },
   "yz7wBu": {
     "message": "Close",
@@ -5315,6 +5456,18 @@
     ],
     "translation": "",
     "obsolete": true
+  },
+  "ZWHTV5": {
+    "message": "Columns stay fixed. Magic email and job attachment ingestion are unavailable.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/api/mcp/authorize.ts",
+        57
+      ]
+    ],
+    "translation": "Sloupce zůstávají pevné. Magic email a zpracování pracovních příloh nejsou k dispozici."
   },
   "AUYALh": {
     "message": "Coming soon",
@@ -5474,7 +5627,7 @@
       ],
       [
         "src/views/pricing/components/PricingCards.tsx",
-        67
+        71
       ]
     ],
     "translation": ""
@@ -5499,7 +5652,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        332
+        333
       ]
     ],
     "translation": "Pověst společnosti"
@@ -5511,7 +5664,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        303
+        317
       ],
       [
         "src/views/pricing/index.tsx",
@@ -5684,6 +5837,46 @@
     ],
     "translation": "Připojit"
   },
+  "AhkanB": {
+    "message": "Connect {clientName}",
+    "placeholders": {
+      "clientName": [
+        "clientName"
+      ]
+    },
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/api/mcp/authorize.ts",
+        52
+      ]
+    ],
+    "translation": "Připojit {clientName}"
+  },
+  "lYrZDI": {
+    "message": "Connect a compatible AI assistant to read and manage your opportunities and shortlists.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        1069
+      ],
+      [
+        "src/views/pricing/components/PricingCards.tsx",
+        49
+      ],
+      [
+        "src/views/pricing/components/PricingCards.tsx",
+        81
+      ],
+      [
+        "src/views/pricing/components/PricingCards.tsx",
+        102
+      ]
+    ],
+    "translation": "Připojte kompatibilního AI asistenta, který může číst a spravovat vaše pracovní příležitosti a seznamy."
+  },
   "3jod3l": {
     "message": "Connect GitHub",
     "placeholders": {},
@@ -5696,6 +5889,22 @@
     ],
     "translation": "Připojit GitHub"
   },
+  "pFWVN2": {
+    "message": "Connect to shortlistOS",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/api/mcp/authorize.ts",
+        51
+      ],
+      [
+        "src/server/mcp/consent-page.ts",
+        33
+      ]
+    ],
+    "translation": "Připojit k shortlistOS"
+  },
   "nk7caK": {
     "message": "Connect Trello",
     "placeholders": {},
@@ -5707,6 +5916,30 @@
       ]
     ],
     "translation": "Připojit Trello"
+  },
+  "iZWbGJ": {
+    "message": "Connect your AI assistant",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/settings/McpSettings.tsx",
+        25
+      ]
+    ],
+    "translation": "Připojte svého AI asistenta"
+  },
+  "1bflXh": {
+    "message": "Connect your AI assistant through MCP, included with every account.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/home/index.tsx",
+        177
+      ]
+    ],
+    "translation": "Připojte svého AI asistenta přes MCP, které je součástí každého účtu."
   },
   "sDLCvT": {
     "message": "Connect your favorite tools to streamline your workflow.",
@@ -5744,14 +5977,46 @@
     ],
     "translation": "Připojte účet Trello a importujte nástěnky."
   },
+  "sk/Z5E": {
+    "message": "Connected {0}",
+    "placeholders": {
+      "0": [
+        "connection.createdAt.toLocaleDateString()"
+      ]
+    },
+    "comments": [],
+    "origin": [
+      [
+        "src/views/settings/McpSettings.tsx",
+        73
+      ]
+    ],
+    "translation": "Připojeno {0}"
+  },
+  "f/bZVs": {
+    "message": "Connected clients",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/settings/McpSettings.tsx",
+        57
+      ]
+    ],
+    "translation": "Připojení klienti"
+  },
   "jfC/xh": {
     "message": "Contact",
     "placeholders": {},
     "comments": [],
     "origin": [
       [
+        "src/pages/contact.tsx",
+        15
+      ],
+      [
         "src/views/home/components/Footer.tsx",
-        112
+        113
       ]
     ],
     "translation": "Kontakt"
@@ -5775,8 +6040,12 @@
     "comments": [],
     "origin": [
       [
-        "src/components/FeedbackModal.tsx",
-        100
+        "src/components/FeedbackForm.tsx",
+        116
+      ],
+      [
+        "src/pages/contact.tsx",
+        19
       ]
     ],
     "translation": "Kontaktujte nás"
@@ -5922,6 +6191,18 @@
     ],
     "translation": "Převést na odkaz"
   },
+  "6V3Ea3": {
+    "message": "Copied",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/settings/McpSettings.tsx",
+        43
+      ]
+    ],
+    "translation": "Zkopírováno"
+  },
   "he3ygx": {
     "message": "Copy",
     "placeholders": {},
@@ -5929,11 +6210,11 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        371
+        373
       ],
       [
         "src/views/settings/BoardsSettings.tsx",
-        409
+        411
       ]
     ],
     "translation": "Kopírovat"
@@ -6037,6 +6318,18 @@
     "translation": "Kopírovat ID požadavku",
     "obsolete": true
   },
+  "E6nRW7": {
+    "message": "Copy URL",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/settings/McpSettings.tsx",
+        43
+      ]
+    ],
+    "translation": "Kopírovat URL"
+  },
   "FxmcEj": {
     "message": "Copywriter at Pinecone Digital",
     "placeholders": {},
@@ -6062,29 +6355,65 @@
     "translation": "Základní funkce",
     "obsolete": true
   },
+  "1Yk9qh": {
+    "message": "Could not copy. Select and copy the URL above.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/settings/McpSettings.tsx",
+        46
+      ]
+    ],
+    "translation": "Kopírování se nezdařilo. Označte a zkopírujte URL výše."
+  },
+  "4XeJbx": {
+    "message": "Could not load connections.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/settings/McpSettings.tsx",
+        60
+      ]
+    ],
+    "translation": "Připojení se nepodařilo načíst."
+  },
   "Moluts": {
-    "translation": "",
     "message": "could not parse a clipped web opportunity",
     "placeholders": {},
     "comments": [],
     "origin": [
       [
         "src/views/activity-log/index.tsx",
-        82
+        84
       ]
-    ]
+    ],
+    "translation": ""
   },
   "jfRgiI": {
-    "translation": "",
     "message": "could not parse an email opportunity",
     "placeholders": {},
     "comments": [],
     "origin": [
       [
         "src/views/activity-log/index.tsx",
-        88
+        90
       ]
-    ]
+    ],
+    "translation": ""
+  },
+  "nhtMVg": {
+    "message": "Could not revoke access. Try again.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/settings/McpSettings.tsx",
+        84
+      ]
+    ],
+    "translation": "Přístup se nepodařilo zrušit. Zkuste to znovu."
   },
   "hYgDIe": {
     "message": "Create",
@@ -6190,7 +6519,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1182
+        1200
       ],
       [
         "src/views/home/components/FinalCta.tsx",
@@ -6423,7 +6752,7 @@
     "origin": [
       [
         "src/views/activity-log/index.tsx",
-        41
+        43
       ]
     ],
     "translation": ""
@@ -6576,11 +6905,11 @@
     "origin": [
       [
         "src/views/pricing/components/FeatureComparisonTable.tsx",
-        155
+        160
       ],
       [
         "src/views/settings/PowerpackSettings.tsx",
-        219
+        224
       ]
     ],
     "translation": "Export CSV"
@@ -6921,12 +7250,12 @@
         92
       ],
       [
-        "src/views/card/components/DeleteChecklistConfirmation.tsx",
-        67
-      ],
-      [
         "src/views/card/components/DeleteCommentConfirmation.tsx",
         83
+      ],
+      [
+        "src/views/card/components/DeleteChecklistConfirmation.tsx",
+        67
       ],
       [
         "src/views/card/index.tsx",
@@ -7004,7 +7333,7 @@
     "origin": [
       [
         "src/views/card/components/Comment.tsx",
-        122
+        124
       ]
     ],
     "translation": "Smazat komentář"
@@ -7137,7 +7466,7 @@
     "origin": [
       [
         "src/views/activity-log/index.tsx",
-        35
+        37
       ]
     ],
     "translation": "smazal(a)"
@@ -7416,7 +7745,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        123
+        127
       ]
     ],
     "translation": ""
@@ -7428,7 +7757,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        375
+        377
       ]
     ],
     "translation": ""
@@ -7463,8 +7792,8 @@
     "comments": [],
     "origin": [
       [
-        "src/components/FeedbackModal.tsx",
-        109
+        "src/components/FeedbackForm.tsx",
+        125
       ]
     ],
     "translation": "dokumentace"
@@ -7562,7 +7891,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1075
+        1093
       ]
     ],
     "translation": ""
@@ -7815,7 +8144,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1063
+        1081
       ]
     ],
     "translation": ""
@@ -7871,7 +8200,7 @@
     "origin": [
       [
         "src/views/card/components/Comment.tsx",
-        113
+        115
       ]
     ],
     "translation": "Upravit komentář"
@@ -8012,7 +8341,7 @@
     "origin": [
       [
         "src/views/pricing/components/PricingCards.tsx",
-        61
+        65
       ]
     ],
     "translation": "Posílejte nabídky práce a jejich aktualizace e-mailem na svůj účet. AI v Magic Inbox automaticky vytvoří nebo aktualizuje vaše pracovní příležitosti."
@@ -8050,7 +8379,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        440
+        442
       ]
     ],
     "translation": "E-mailové připomínky"
@@ -8074,7 +8403,7 @@
     "origin": [
       [
         "src/views/pricing/components/FeatureComparisonTable.tsx",
-        100
+        105
       ]
     ],
     "translation": "E-mailové připomínky nadcházejících pohovorů a dalších kroků"
@@ -8086,7 +8415,7 @@
     "origin": [
       [
         "src/views/settings/PowerpackSettings.tsx",
-        164
+        169
       ]
     ],
     "translation": ""
@@ -8098,7 +8427,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        345
+        346
       ]
     ],
     "translation": "Poslat e-mail do tohoto seznamu"
@@ -8659,7 +8988,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1082
+        1100
       ]
     ],
     "translation": ""
@@ -8759,7 +9088,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1123
+        1141
       ]
     ],
     "translation": ""
@@ -8771,7 +9100,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        375
+        389
       ]
     ],
     "translation": "Prozkoumat zdrojový kód"
@@ -8820,7 +9149,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        384
+        386
       ]
     ],
     "translation": ""
@@ -8844,7 +9173,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        314
+        328
       ]
     ],
     "translation": "Exportujte celý účet kdykoli"
@@ -9014,7 +9343,7 @@
     "origin": [
       [
         "src/views/home/components/Footer.tsx",
-        99
+        100
       ],
       [
         "src/views/home/components/Header.tsx",
@@ -9034,7 +9363,7 @@
       ],
       [
         "src/views/home/index.tsx",
-        421
+        435
       ]
     ],
     "translation": "Časté dotazy"
@@ -9046,11 +9375,11 @@
     "origin": [
       [
         "src/views/pricing/components/FeatureComparisonTable.tsx",
-        170
+        175
       ],
       [
         "src/views/settings/PowerpackSettings.tsx",
-        416
+        421
       ]
     ],
     "translation": "Funkce"
@@ -9090,8 +9419,8 @@
     "comments": [],
     "origin": [
       [
-        "src/components/FeedbackModal.tsx",
-        59
+        "src/components/FeedbackForm.tsx",
+        66
       ],
       [
         "src/components/UserMenu.tsx",
@@ -9106,7 +9435,7 @@
     "comments": [],
     "origin": [
       [
-        "src/components/FeedbackModal.tsx",
+        "src/components/FeedbackForm.tsx",
         33
       ]
     ],
@@ -9193,7 +9522,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        427
+        441
       ]
     ],
     "translation": "Najděte odpovědi na časté otázky o shortlistOS, než mu svěříte své hledání práce."
@@ -9284,7 +9613,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        495
+        497
       ]
     ],
     "translation": "Připomínka dalšího kontaktu"
@@ -9296,11 +9625,11 @@
     "origin": [
       [
         "src/views/pricing/components/FeatureComparisonTable.tsx",
-        110
+        115
       ],
       [
         "src/views/settings/PowerpackSettings.tsx",
-        174
+        179
       ]
     ],
     "translation": ""
@@ -9385,7 +9714,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        272
+        273
       ]
     ],
     "translation": "Přepošlete nebo pošlete e-maily na tuto adresu a přidejte je do tohoto seznamu."
@@ -9521,7 +9850,7 @@
     "origin": [
       [
         "src/views/activity-log/index.tsx",
-        70
+        72
       ]
     ],
     "translation": "od"
@@ -9579,7 +9908,7 @@
     "origin": [
       [
         "src/views/pricing/components/PricingCards.tsx",
-        88
+        96
       ]
     ],
     "translation": "Plná kontrola nad vašimi daty"
@@ -9591,11 +9920,11 @@
     "origin": [
       [
         "src/views/pricing/components/FeatureComparisonTable.tsx",
-        145
+        150
       ],
       [
         "src/views/settings/PowerpackSettings.tsx",
-        209
+        214
       ]
     ],
     "translation": "Kompletní stažení dat kdykoli"
@@ -9619,7 +9948,7 @@
     "origin": [
       [
         "src/views/pricing/components/PricingCards.tsx",
-        86
+        94
       ]
     ],
     "translation": "Kompletní zdrojový kód"
@@ -9761,7 +10090,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        346
+        347
       ]
     ],
     "translation": ""
@@ -9998,7 +10327,7 @@
       ],
       [
         "src/views/pricing/components/PricingCards.tsx",
-        53
+        57
       ]
     ],
     "translation": "Získat Powerpack"
@@ -10010,7 +10339,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        297
+        298
       ]
     ],
     "translation": "Získejte Powerpack a automatizujte hledání práce."
@@ -10250,7 +10579,7 @@
     "origin": [
       [
         "src/views/pricing/components/PricingCards.tsx",
-        71
+        75
       ]
     ],
     "translation": "Google Calendar"
@@ -10262,7 +10591,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        421
+        423
       ]
     ],
     "translation": "Google Calendar"
@@ -10321,7 +10650,7 @@
     "origin": [
       [
         "src/views/pricing/components/PricingCards.tsx",
-        65
+        69
       ]
     ],
     "translation": "Uložte si jakoukoli zajímavou pracovní nabídku z internetu do seznamu bez ručního kopírování."
@@ -10522,7 +10851,7 @@
     "origin": [
       [
         "src/views/home/components/Footer.tsx",
-        195
+        196
       ]
     ],
     "translation": "Hostováno v"
@@ -10594,7 +10923,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        414
+        416
       ]
     ],
     "translation": "Jak odebírat v"
@@ -10711,8 +11040,8 @@
     "comments": [],
     "origin": [
       [
-        "src/components/FeedbackModal.tsx",
-        75
+        "src/components/FeedbackForm.tsx",
+        87
       ]
     ],
     "translation": "Nápady na vylepšení této stránky…"
@@ -10914,6 +11243,18 @@
     "translation": "Probíhá",
     "obsolete": true
   },
+  "u7AZx+": {
+    "message": "In your AI client's integrations or MCP settings, add a remote MCP server using the URL above. Select Streamable HTTP and browser authorization (OAuth), if asked.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/settings/McpSettings.tsx",
+        50
+      ]
+    ],
+    "translation": "V nastavení integrací nebo MCP vašeho AI klienta přidejte vzdálený server MCP pomocí URL výše. Pokud budete vyzváni, zvolte Streamable HTTP a autorizaci v prohlížeči (OAuth)."
+  },
   "NoNwIX": {
     "message": "Inactive",
     "placeholders": {},
@@ -10972,7 +11313,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        318
+        332
       ]
     ],
     "translation": "Zjistěte přesně, jak produkt funguje"
@@ -10984,7 +11325,7 @@
     "origin": [
       [
         "src/components/SettingsLayout.tsx",
-        106
+        112
       ],
       [
         "src/views/home/components/Features.tsx",
@@ -11308,7 +11649,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        119
+        123
       ]
     ],
     "translation": "Je Powerpack předplatné?"
@@ -11381,7 +11722,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        202
+        216
       ]
     ],
     "translation": "Hledání práce je těžké. Mít v něm přehled by být nemělo."
@@ -11495,7 +11836,7 @@
     "origin": [
       [
         "src/views/pricing/components/PricingCards.tsx",
-        64
+        68
       ]
     ],
     "translation": "Web Clipper pro pracovní nabídky"
@@ -11696,7 +12037,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        166
+        172
       ]
     ],
     "translation": "Mějte každou příležitost, e-mail, poznámku a soubor pohromadě. Postupujte podle procesu navrženého pro hledání práce a vždy přesně víte, kde se nacházíte."
@@ -11824,7 +12165,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        374
+        376
       ]
     ],
     "translation": ""
@@ -12144,7 +12485,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        178
+        192
       ]
     ],
     "translation": "Nechte Powerpack vyřídit opakující se práci."
@@ -12156,7 +12497,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1105
+        1123
       ]
     ],
     "translation": ""
@@ -12211,6 +12552,18 @@
     ],
     "translation": "",
     "obsolete": true
+  },
+  "+p8+P+": {
+    "message": "Let this AI client work with your opportunities and shortlists.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/api/mcp/authorize.ts",
+        53
+      ]
+    ],
+    "translation": "Umožněte tomuto AI klientovi pracovat s vašimi pracovními příležitostmi a seznamy."
   },
   "sA86eU": {
     "message": "Let's get your job search organised",
@@ -12434,7 +12787,7 @@
     "origin": [
       [
         "src/views/card/components/ActivityList.tsx",
-        701
+        707
       ]
     ],
     "translation": "Načíst další poznámky"
@@ -12446,14 +12799,26 @@
     "origin": [
       [
         "src/views/activity-log/index.tsx",
-        336
+        344
       ],
       [
         "src/views/card/components/ActivityList.tsx",
-        702
+        708
       ]
     ],
     "translation": "Načíst starší aktualizace"
+  },
+  "/kPaWM": {
+    "message": "Loading connections…",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/settings/McpSettings.tsx",
+        58
+      ]
+    ],
+    "translation": "Načítání připojení…"
   },
   "0qyZ4b": {
     "message": "Loading permissions...",
@@ -12474,11 +12839,11 @@
     "origin": [
       [
         "src/views/activity-log/index.tsx",
-        336
+        344
       ],
       [
         "src/views/card/components/ActivityList.tsx",
-        699
+        705
       ]
     ],
     "translation": "Načítání…"
@@ -12554,11 +12919,11 @@
     "origin": [
       [
         "src/views/pricing/components/FeatureComparisonTable.tsx",
-        70
+        75
       ],
       [
         "src/views/settings/PowerpackSettings.tsx",
-        134
+        139
       ]
     ],
     "translation": "Platová data podle místa: vaše země, EU a USA"
@@ -12657,7 +13022,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        247
+        261
       ]
     ],
     "translation": "Vytvořeno a hostováno v EU"
@@ -12669,11 +13034,11 @@
     "origin": [
       [
         "src/views/pricing/components/FeatureComparisonTable.tsx",
-        150
+        155
       ],
       [
         "src/views/settings/PowerpackSettings.tsx",
-        214
+        219
       ]
     ],
     "translation": "Vytvořeno a hostováno v EU"
@@ -12685,7 +13050,7 @@
     "origin": [
       [
         "src/views/home/components/Footer.tsx",
-        192
+        193
       ]
     ],
     "translation": "Vytvořeno v"
@@ -12709,7 +13074,7 @@
       ],
       [
         "src/views/pricing/components/PricingCards.tsx",
-        60
+        64
       ]
     ],
     "translation": "Magic Inbox"
@@ -12721,7 +13086,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        271
+        272
       ]
     ],
     "translation": "Adresa Magic Inbox zkopírována"
@@ -12772,11 +13137,11 @@
     "origin": [
       [
         "src/views/pricing/components/FeatureComparisonTable.tsx",
-        55
+        60
       ],
       [
         "src/views/settings/PowerpackSettings.tsx",
-        119
+        124
       ]
     ],
     "translation": "Magic Inbox: přepošlete jakýkoli pracovní e-mail a automaticky vytvořte nebo aktualizujte karty"
@@ -12873,7 +13238,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        514
+        516
       ]
     ],
     "translation": "Označit příležitost jako bez odezvy"
@@ -12953,6 +13318,63 @@
       ]
     ],
     "translation": "Max."
+  },
+  "nA8kxD": {
+    "message": "MCP",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/components/SettingsLayout.tsx",
+        82
+      ],
+      [
+        "src/views/home/components/Footer.tsx",
+        99
+      ]
+    ],
+    "translation": "MCP"
+  },
+  "4Aw8d0": {
+    "message": "MCP access requires an active Powerpack. You can still manage and revoke connections here.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/settings/McpSettings.tsx",
+        32
+      ]
+    ],
+    "translation": "Přístup přes MCP vyžaduje aktivní Powerpack. Připojení zde můžete spravovat a rušit i nadále.",
+    "obsolete": true
+  },
+  "e7Mcgo": {
+    "message": "MCP is available to every shortlistOS account.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/settings/McpSettings.tsx",
+        27
+      ]
+    ],
+    "translation": "MCP je k dispozici všem účtům shortlistOS."
+  },
+  "POyW96": {
+    "message": "MCP settings",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/api/mcp/authorize.ts",
+        69
+      ],
+      [
+        "src/server/mcp/consent-page.ts",
+        37
+      ]
+    ],
+    "translation": "Nastavení MCP"
   },
   "agPptk": {
     "message": "Medium",
@@ -13111,7 +13533,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1186
+        1204
       ]
     ],
     "translation": ""
@@ -13123,7 +13545,7 @@
     "origin": [
       [
         "src/views/settings/PowerpackSettings.tsx",
-        292
+        297
       ]
     ],
     "translation": "Chybí proměnná prostředí NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY."
@@ -13161,7 +13583,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        320
+        334
       ]
     ],
     "translation": "Upravte si podle vlastních potřeb"
@@ -13209,7 +13631,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1152
+        1170
       ]
     ],
     "translation": ""
@@ -13284,7 +13706,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1076
+        1094
       ]
     ],
     "translation": ""
@@ -13309,7 +13731,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1062
+        1080
       ]
     ],
     "translation": ""
@@ -13515,8 +13937,12 @@
     "comments": [],
     "origin": [
       [
-        "src/components/FeedbackModal.tsx",
-        95
+        "src/components/FeedbackForm.tsx",
+        111
+      ],
+      [
+        "src/pages/contact.tsx",
+        22
       ]
     ],
     "translation": "Potřebujete pomoc?"
@@ -13854,7 +14280,7 @@
     "origin": [
       [
         "src/views/activity-log/index.tsx",
-        167
+        169
       ]
     ],
     "translation": "Zatím žádná aktivita."
@@ -13866,7 +14292,7 @@
     "origin": [
       [
         "src/views/home/components/Footer.tsx",
-        198
+        199
       ]
     ],
     "translation": "Bez reklam, bez osobního sledování, v souladu s GDPR."
@@ -13878,7 +14304,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        312
+        326
       ]
     ],
     "translation": "Bez reklamy a osobního sledování"
@@ -13976,7 +14402,7 @@
     "origin": [
       [
         "src/views/pricing/components/PricingCards.tsx",
-        89
+        97
       ]
     ],
     "translation": "Není potřeba hostovaný účet"
@@ -14028,6 +14454,18 @@
       ]
     ],
     "translation": "Zatím nebyly vytvořeny žádné seznamy"
+  },
+  "39+EPc": {
+    "message": "No MCP clients connected.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/settings/McpSettings.tsx",
+        63
+      ]
+    ],
+    "translation": "Žádní klienti MCP nejsou připojeni."
   },
   "i30J2U": {
     "message": "No projects found",
@@ -14100,11 +14538,11 @@
     "origin": [
       [
         "src/views/pricing/components/FeatureComparisonTable.tsx",
-        140
+        145
       ],
       [
         "src/views/settings/PowerpackSettings.tsx",
-        204
+        209
       ]
     ],
     "translation": "Bez sledování, bez reklam, v souladu s GDPR"
@@ -14128,7 +14566,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        120
+        124
       ]
     ],
     "translation": "Ne. Powerpack stojí 29 $ a zůstává aktivní tři měsíce. Automaticky se neobnovuje a nevznikají žádné opakované platby."
@@ -14166,7 +14604,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        148
+        152
       ]
     ],
     "translation": ""
@@ -14178,7 +14616,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        124
+        128
       ]
     ],
     "translation": ""
@@ -14218,7 +14656,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        538
+        540
       ]
     ],
     "translation": "Připomenout další kontakt s náborářem"
@@ -14230,7 +14668,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        561
+        563
       ]
     ],
     "translation": "Připomenout návrat k vyjednávání"
@@ -14242,11 +14680,11 @@
     "origin": [
       [
         "src/views/pricing/components/FeatureComparisonTable.tsx",
-        125
+        130
       ],
       [
         "src/views/settings/PowerpackSettings.tsx",
-        189
+        194
       ]
     ],
     "translation": "Upozornění, když pohovory nebo vyjednávání ztrácejí tempo"
@@ -14298,7 +14736,7 @@
     "origin": [
       [
         "src/views/activity-log/index.tsx",
-        72
+        74
       ]
     ],
     "translation": "dne"
@@ -14430,7 +14868,7 @@
     "origin": [
       [
         "src/views/pricing/components/PricingCards.tsx",
-        52
+        56
       ]
     ],
     "translation": "Jednorázová platba"
@@ -14446,7 +14884,7 @@
     "origin": [
       [
         "src/views/settings/PowerpackSettings.tsx",
-        405
+        410
       ]
     ],
     "translation": "Jednorázová platba {POWERPACK_PRICE} vám poskytne 3 měsíce plného přístupu. Žádné předplatné. Hledání práce je už tak dost stresující."
@@ -14548,11 +14986,11 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        358
+        372
       ],
       [
         "src/views/pricing/components/PricingCards.tsx",
-        79
+        87
       ]
     ],
     "translation": "Open source"
@@ -14564,7 +15002,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        246
+        260
       ]
     ],
     "translation": "Otevřené jádro"
@@ -14652,7 +15090,7 @@
     "origin": [
       [
         "src/views/home/components/Footer.tsx",
-        128
+        129
       ]
     ],
     "translation": ""
@@ -14668,6 +15106,31 @@
       ]
     ],
     "translation": ""
+  },
+  "3odo8B": {
+    "message": "Opportunities support reading and writing, including moving and deletion. Shortlists support reading, creation, and renaming. Columns are fixed. Magic email and job attachment ingestion are unavailable through MCP.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/settings/McpSettings.tsx",
+        54
+      ]
+    ],
+    "translation": "Příležitosti lze číst a upravovat, včetně přesouvání a mazání. Seznamy lze číst, vytvářet a přejmenovávat. Sloupce jsou pevně dané. Magic email a zpracování pracovních příloh nejsou přes MCP dostupné."
+  },
+  "NQi0Qc": {
+    "message": "Opportunities support reading and writing, including moving and deletion. Shortlists support reading, creation, and renaming. Columns are fixed. Magic email and job attachment ingestion are unavailable through MCP. Normal Powerpack automations run after opportunity changes.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/settings/McpSettings.tsx",
+        65
+      ]
+    ],
+    "translation": "Příležitosti lze číst a upravovat, včetně přesouvání a mazání. Seznamy lze číst, vytvářet a přejmenovávat. Sloupce jsou pevně dané. Magic email a zpracování pracovních příloh nejsou přes MCP dostupné. Po změnách příležitostí běží běžné automatizace Powerpacku.",
+    "obsolete": true
   },
   "aqLLHC": {
     "message": "Opportunity detail",
@@ -14733,6 +15196,18 @@
     ],
     "translation": "nebo"
   },
+  "dXTJaj": {
+    "translation": "Nebo požádejte kompatibilního AI asistenta o přidání pracovních příležitostí přes <0>MCP</0>.",
+    "message": "Or ask a compatible AI assistant to add opportunities through <0>MCP</0>.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        1038
+      ]
+    ]
+  },
   "ZqDqbi": {
     "message": "Organize and find cards quickly with powerful filtering tools.",
     "placeholders": {},
@@ -14792,7 +15267,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        430
+        432
       ]
     ],
     "translation": "Outlook.com"
@@ -14840,7 +15315,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        249
+        263
       ]
     ],
     "translation": "Mějte svá data pod kontrolou"
@@ -15204,7 +15679,7 @@
     "origin": [
       [
         "src/components/SettingsLayout.tsx",
-        82
+        88
       ]
     ],
     "translation": "Oprávnění"
@@ -15257,7 +15732,7 @@
     "origin": [
       [
         "src/views/home/components/Footer.tsx",
-        186
+        187
       ]
     ],
     "translation": "Petr Nagy"
@@ -15471,7 +15946,7 @@
       ],
       [
         "src/views/settings/BoardsSettings.tsx",
-        279
+        280
       ]
     ],
     "translation": "Zkopírujte ho prosím ručně z pole."
@@ -15566,7 +16041,7 @@
         26
       ],
       [
-        "src/components/FeedbackModal.tsx",
+        "src/components/FeedbackForm.tsx",
         41
       ],
       [
@@ -15626,6 +16101,26 @@
         74
       ],
       [
+        "src/views/card/components/Comment.tsx",
+        97
+      ],
+      [
+        "src/views/card/components/DeleteCardConfirmation.tsx",
+        52
+      ],
+      [
+        "src/views/card/components/DeleteCommentConfirmation.tsx",
+        46
+      ],
+      [
+        "src/views/card/components/DeleteChecklistConfirmation.tsx",
+        38
+      ],
+      [
+        "src/views/card/components/DueDateSelector.tsx",
+        66
+      ],
+      [
         "src/views/card/components/ChecklistItemRow.tsx",
         67
       ],
@@ -15642,26 +16137,6 @@
         81
       ],
       [
-        "src/views/card/components/Comment.tsx",
-        95
-      ],
-      [
-        "src/views/card/components/DeleteCardConfirmation.tsx",
-        52
-      ],
-      [
-        "src/views/card/components/DeleteChecklistConfirmation.tsx",
-        38
-      ],
-      [
-        "src/views/card/components/DeleteCommentConfirmation.tsx",
-        46
-      ],
-      [
-        "src/views/card/components/DueDateSelector.tsx",
-        66
-      ],
-      [
         "src/views/card/components/LabelSelector.tsx",
         80
       ],
@@ -15674,16 +16149,16 @@
         82
       ],
       [
+        "src/views/card/components/NewCommentForm.tsx",
+        37
+      ],
+      [
         "src/views/card/components/NewChecklistForm.tsx",
         71
       ],
       [
         "src/views/card/components/NewChecklistItemForm.tsx",
         90
-      ],
-      [
-        "src/views/card/components/NewCommentForm.tsx",
-        37
       ],
       [
         "src/views/card/index.tsx",
@@ -15859,7 +16334,7 @@
       ],
       [
         "src/pages/get-started.tsx",
-        1113
+        1131
       ],
       [
         "src/views/board/components/BoardOpportunityTutorial.tsx",
@@ -15875,11 +16350,11 @@
       ],
       [
         "src/views/home/index.tsx",
-        177
+        191
       ],
       [
         "src/views/pricing/components/PricingCards.tsx",
-        50
+        54
       ]
     ],
     "translation": "Powerpack"
@@ -15891,7 +16366,7 @@
     "origin": [
       [
         "src/views/settings/PowerpackSettings.tsx",
-        397
+        402
       ]
     ],
     "translation": "Powerpack je aktivní"
@@ -15903,7 +16378,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1106
+        1124
       ]
     ],
     "translation": ""
@@ -15915,7 +16390,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        179
+        193
       ]
     ],
     "translation": "Powerpack přidává do vašeho prostoru shortlistOS automatizaci a AI, takže strávíte méně času kopírováním informací a více času posouváním hledání vpřed."
@@ -15940,10 +16415,22 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        116
+        120
       ]
     ],
     "translation": ""
+  },
+  "Mbuk5y": {
+    "message": "Powerpack automations follow your existing subscription and shortlist settings.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/settings/McpSettings.tsx",
+        55
+      ]
+    ],
+    "translation": "Automatizace Powerpacku se řídí vaším stávajícím předplatným a nastavením seznamu."
   },
   "AIBvve": {
     "message": "Powerpack can also add jobs from the <0>Web Clipper</0> or <1>Magic Inbox</1>.",
@@ -16045,7 +16532,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        237
+        251
       ]
     ],
     "translation": "Chcete ho provozovat sami? Hostujte si open-source verzi na vlastní infrastruktuře."
@@ -16090,7 +16577,7 @@
       ],
       [
         "src/views/home/index.tsx",
-        293
+        307
       ],
       [
         "src/views/pricing/index.tsx",
@@ -16142,7 +16629,7 @@
     "origin": [
       [
         "src/views/home/components/Footer.tsx",
-        110
+        111
       ],
       [
         "src/views/home/components/Header.tsx",
@@ -16150,7 +16637,7 @@
       ],
       [
         "src/views/home/index.tsx",
-        341
+        355
       ]
     ],
     "translation": "Soukromí"
@@ -16162,7 +16649,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        329
+        343
       ]
     ],
     "translation": "Soukromí a otevřený kód"
@@ -16174,11 +16661,11 @@
     "origin": [
       [
         "src/views/pricing/components/FeatureComparisonTable.tsx",
-        137
+        142
       ],
       [
         "src/views/settings/PowerpackSettings.tsx",
-        201
+        206
       ]
     ],
     "translation": "Soukromí a data"
@@ -16190,7 +16677,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        248
+        262
       ]
     ],
     "translation": "Šetrné k soukromí"
@@ -16202,7 +16689,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        383
+        397
       ]
     ],
     "translation": "Zásady ochrany osobních údajů"
@@ -16226,7 +16713,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        332
+        346
       ]
     ],
     "translation": "Soukromé už od návrhu. Otevřené ve výchozím nastavení."
@@ -16272,40 +16759,40 @@
     "translation": "Tarif Pro ∞"
   },
   "Y6qqi6": {
-    "translation": "",
     "message": "processed a clipped web opportunity",
     "placeholders": {},
     "comments": [],
     "origin": [
       [
         "src/views/activity-log/index.tsx",
-        80
+        82
       ]
-    ]
+    ],
+    "translation": ""
   },
   "UpjXir": {
-    "translation": "",
     "message": "processed an email opportunity",
     "placeholders": {},
     "comments": [],
     "origin": [
       [
         "src/views/activity-log/index.tsx",
-        86
+        88
       ]
-    ]
+    ],
+    "translation": ""
   },
   "ypeY0K": {
-    "translation": "",
     "message": "processed an opportunity source",
     "placeholders": {},
     "comments": [],
     "origin": [
       [
         "src/views/activity-log/index.tsx",
-        90
+        92
       ]
-    ]
+    ],
+    "translation": ""
   },
   "O6Y2dC": {
     "message": "Processes the job page, turns it into a card, adds salary insights and company rating data, and uses AI to assign labels and summarise the role and requirements.",
@@ -16440,7 +16927,7 @@
     "origin": [
       [
         "src/views/home/components/Footer.tsx",
-        108
+        109
       ]
     ],
     "translation": ""
@@ -16535,7 +17022,7 @@
       ],
       [
         "src/views/home/index.tsx",
-        424
+        438
       ]
     ],
     "translation": "Otázky?"
@@ -16598,7 +17085,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1173
+        1191
       ]
     ],
     "translation": ""
@@ -16610,7 +17097,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1081
+        1099
       ]
     ],
     "translation": ""
@@ -16655,16 +17142,16 @@
     "obsolete": true
   },
   "lxt68w": {
-    "translation": "",
     "message": "received an email opportunity",
     "placeholders": {},
     "comments": [],
     "origin": [
       [
         "src/views/activity-log/index.tsx",
-        84
+        86
       ]
-    ]
+    ],
+    "translation": ""
   },
   "uJDO+u": {
     "message": "Receives the email, turns it into a card, adds salary insights and company rating data, and uses AI to assign labels and summarise the role and requirements.",
@@ -16685,7 +17172,7 @@
     "origin": [
       [
         "src/views/pricing/components/PricingCards.tsx",
-        57
+        61
       ]
     ],
     "translation": "Doporučeno"
@@ -16865,11 +17352,11 @@
     "origin": [
       [
         "src/views/pricing/components/FeatureComparisonTable.tsx",
-        115
+        120
       ],
       [
         "src/views/settings/PowerpackSettings.tsx",
-        179
+        184
       ]
     ],
     "translation": "Připomínka, když uložená příležitost zůstane příliš dlouho bez změny"
@@ -17124,6 +17611,18 @@
     "translation": "",
     "obsolete": true
   },
+  "RV1D5P": {
+    "message": "renamed",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/activity-log/index.tsx",
+        35
+      ]
+    ],
+    "translation": "přejmenoval(a)"
+  },
   "NypLoL": {
     "message": "renamed a checklist",
     "placeholders": {},
@@ -17235,6 +17734,18 @@
     ],
     "translation": "Zdroje"
   },
+  "0LDZ7n": {
+    "message": "Return to your AI client and ask it to list your shortlists or manage an opportunity. Your client must support remote MCP with OAuth and dynamic client registration.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/settings/McpSettings.tsx",
+        52
+      ]
+    ],
+    "translation": "Vraťte se do AI klienta a požádejte ho o zobrazení seznamů nebo správu příležitosti. Klient musí podporovat vzdálené MCP s OAuth a dynamickou registrací klientů."
+  },
   "5k0NLb": {
     "message": "Review",
     "placeholders": {},
@@ -17285,6 +17796,18 @@
     ],
     "translation": ""
   },
+  "cg+Poy": {
+    "message": "Revoke access",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/settings/McpSettings.tsx",
+        79
+      ]
+    ],
+    "translation": "Zrušit přístup"
+  },
   "sj9d1r": {
     "message": "Right now, you are <0>ready to go</0>. The second part of this guide covers the paid Powerpack features, which are not necessary for using shortlistOS.",
     "placeholders": {},
@@ -17292,7 +17815,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1089
+        1107
       ]
     ],
     "translation": ""
@@ -17399,7 +17922,7 @@
     "origin": [
       [
         "src/views/pricing/components/PricingCards.tsx",
-        80
+        88
       ]
     ],
     "translation": "Spusťte základní verzi na vlastní infrastruktuře."
@@ -17486,11 +18009,11 @@
     "origin": [
       [
         "src/views/pricing/components/FeatureComparisonTable.tsx",
-        62
+        67
       ],
       [
         "src/views/settings/PowerpackSettings.tsx",
-        126
+        131
       ]
     ],
     "translation": "Informace o platech a společnostech"
@@ -17526,7 +18049,7 @@
     "origin": [
       [
         "src/views/pricing/components/PricingCards.tsx",
-        68
+        72
       ]
     ],
     "translation": "Platové přehledy pro každou pozici"
@@ -17538,7 +18061,7 @@
     "origin": [
       [
         "src/views/settings/PowerpackSettings.tsx",
-        139
+        144
       ]
     ],
     "translation": ""
@@ -17550,7 +18073,7 @@
     "origin": [
       [
         "src/views/pricing/components/FeatureComparisonTable.tsx",
-        75
+        80
       ]
     ],
     "translation": "Srovnání platových percentilů: EU, USA a svět"
@@ -17616,7 +18139,7 @@
       ],
       [
         "src/views/card/components/Comment.tsx",
-        204
+        209
       ],
       [
         "src/views/card/index.tsx",
@@ -17677,11 +18200,11 @@
     "origin": [
       [
         "src/views/pricing/components/FeatureComparisonTable.tsx",
-        50
+        55
       ],
       [
         "src/views/settings/PowerpackSettings.tsx",
-        114
+        119
       ]
     ],
     "translation": "Ukládejte nabídky jedním kliknutím přes Web Clipper"
@@ -18051,7 +18574,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1070
+        1088
       ]
     ],
     "translation": ""
@@ -18265,7 +18788,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        319
+        333
       ]
     ],
     "translation": "Hostovat hlavní aplikaci na vlastní infrastruktuře"
@@ -18277,7 +18800,7 @@
     "origin": [
       [
         "src/views/pricing/components/PricingCards.tsx",
-        78
+        86
       ]
     ],
     "translation": "Vlastní hosting"
@@ -18289,7 +18812,7 @@
     "origin": [
       [
         "src/views/home/components/Footer.tsx",
-        101
+        102
       ]
     ],
     "translation": ""
@@ -18300,8 +18823,8 @@
     "comments": [],
     "origin": [
       [
-        "src/components/FeedbackModal.tsx",
-        116
+        "src/components/FeedbackForm.tsx",
+        131
       ]
     ],
     "translation": "Odeslat zpětnou vazbu"
@@ -18326,7 +18849,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        584
+        586
       ]
     ],
     "translation": ""
@@ -18338,7 +18861,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        454
+        456
       ]
     ],
     "translation": "Poslat e-mailovou připomínku"
@@ -18560,6 +19083,18 @@
     ],
     "translation": "Pověst"
   },
+  "9rG25a": {
+    "message": "Server URL",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/settings/McpSettings.tsx",
+        29
+      ]
+    ],
+    "translation": "URL serveru"
+  },
   "GXGbXi": {
     "message": "Set a password to enable password-based login.",
     "placeholders": {},
@@ -18672,7 +19207,7 @@
     "origin": [
       [
         "src/components/SettingsLayout.tsx",
-        140
+        146
       ],
       [
         "src/components/SideNavigation.tsx",
@@ -18729,6 +19264,18 @@
     ],
     "translation": "Nastavení | Integrace"
   },
+  "Q+G42f": {
+    "message": "Settings | MCP",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/settings/McpSettings.tsx",
+        23
+      ]
+    ],
+    "translation": "Nastavení | MCP"
+  },
   "F/FPk/": {
     "message": "Settings | Permissions",
     "placeholders": {},
@@ -18748,7 +19295,7 @@
     "origin": [
       [
         "src/views/settings/PowerpackSettings.tsx",
-        391
+        396
       ]
     ],
     "translation": "Nastavení | Powerpack"
@@ -18893,11 +19440,11 @@
       ],
       [
         "src/views/pricing/components/FeatureComparisonTable.tsx",
-        173
+        178
       ],
       [
         "src/views/settings/PowerpackSettings.tsx",
-        419
+        424
       ]
     ],
     "translation": "shortlistOS"
@@ -18909,11 +19456,11 @@
     "origin": [
       [
         "src/views/pricing/components/FeatureComparisonTable.tsx",
-        176
+        181
       ],
       [
         "src/views/settings/PowerpackSettings.tsx",
-        422
+        427
       ]
     ],
     "translation": "shortlistOS + Powerpack ⚡"
@@ -18937,7 +19484,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        335
+        349
       ]
     ],
     "translation": "shortlistOS vás nesleduje, neprodává vaše data ani je nezamyká. Svůj účet můžete kdykoli exportovat, prohlédnout si zdrojový kód nebo si základní aplikaci provozovat sami."
@@ -18961,7 +19508,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        398
+        412
       ]
     ],
     "translation": "shortlistOS je nezávislý produkt — nikoli náborová platforma, reklamní síť nebo růstová firma financovaná rizikovým kapitálem."
@@ -18999,7 +19546,7 @@
     "origin": [
       [
         "src/views/settings/PowerpackSettings.tsx",
-        402
+        407
       ]
     ],
     "translation": "shortlistOS sleduje vaše hledání práce."
@@ -19043,7 +19590,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        311
+        312
       ]
     ],
     "translation": "Zobrazuje vizuální stárnutí karet podle poslední aktivity. Karty starší než týden získávají s postupujícím stářím stále výraznější teplý odstín."
@@ -19054,12 +19601,11 @@
     "comments": [],
     "origin": [
       [
-        "src/views/home/components/Header.tsx",
-        104
+        "src/pages/contact.tsx",
+        35
       ]
     ],
-    "translation": "Přihlásit se",
-    "obsolete": true
+    "translation": "Přihlásit se"
   },
   "n1ekoW": {
     "message": "Sign In",
@@ -19100,6 +19646,18 @@
       ]
     ],
     "translation": "Přihlaste se nebo si vytvořte účet a aktivujte licenci"
+  },
+  "5qr4kD": {
+    "message": "Sign in to shortlistOS in the browser, review the client name and requested access, then select Allow access. You do not need an API key.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/settings/McpSettings.tsx",
+        51
+      ]
+    ],
+    "translation": "Přihlaste se do shortlistOS v prohlížeči, zkontrolujte název klienta a požadovaný přístup a zvolte Povolit přístup. API klíč nepotřebujete."
   },
   "fcWrnU": {
     "message": "Sign out",
@@ -19197,6 +19755,18 @@
       ]
     ],
     "translation": "Zaregistrovat se přes "
+  },
+  "zU+Ro7": {
+    "message": "Signed in as",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/api/mcp/authorize.ts",
+        59
+      ]
+    ],
+    "translation": "Přihlášeni jako"
   },
   "m2nk0i": {
     "message": "Simple pricing",
@@ -19403,7 +19973,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1115
+        1133
       ]
     ],
     "translation": ""
@@ -19474,6 +20044,18 @@
       ]
     ],
     "translation": "Zahájit 14denní zkušební období zdarma"
+  },
+  "UtbfD8": {
+    "message": "Start again from your AI client to open a fresh authorization page.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/server/mcp/consent-page.ts",
+        36
+      ]
+    ],
+    "translation": "Začněte znovu ve svém AI klientovi a otevřete novou autorizační stránku."
   },
   "31VjoK": {
     "message": "Start download",
@@ -19643,7 +20225,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        443
+        445
       ]
     ],
     "translation": "Mějte přehled o příležitostech, u kterých se odmlčeli, než vám úplně zmizí z radaru."
@@ -19692,7 +20274,7 @@
     "origin": [
       [
         "src/views/settings/PowerpackSettings.tsx",
-        291
+        296
       ]
     ],
     "translation": "Stripe není nakonfigurován"
@@ -19704,7 +20286,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        491
+        493
       ]
     ],
     "translation": "Uvízla ve fázi Přihlášeno"
@@ -19716,7 +20298,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        535
+        537
       ]
     ],
     "translation": "Uvízla ve fázi Pohovory"
@@ -19728,7 +20310,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        558
+        560
       ]
     ],
     "translation": "Uvízla ve fázi Vyjednávání"
@@ -19740,7 +20322,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        450
+        452
       ]
     ],
     "translation": "Uvízla ve fázi Uloženo"
@@ -20032,7 +20614,7 @@
     "origin": [
       [
         "src/views/home/components/Footer.tsx",
-        111
+        112
       ]
     ],
     "translation": "Podmínky"
@@ -20128,7 +20710,7 @@
     "comments": [],
     "origin": [
       [
-        "src/components/FeedbackModal.tsx",
+        "src/components/FeedbackForm.tsx",
         34
       ]
     ],
@@ -20305,7 +20887,7 @@
     "origin": [
       [
         "src/views/settings/PowerpackSettings.tsx",
-        394
+        399
       ]
     ],
     "translation": "Powerpack"
@@ -20317,7 +20899,7 @@
     "origin": [
       [
         "src/views/settings/PowerpackSettings.tsx",
-        403
+        408
       ]
     ],
     "translation": "Powerpack to udělá za vás."
@@ -20422,7 +21004,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        401
+        415
       ]
     ],
     "translation": "Žádné reklamy, žádný prodej dat a žádná motivace držet vás při hledání práce déle, než je nutné. Cíl je jednoduchý: usnadnit vám hledání, respektovat soukromí a nepřekážet."
@@ -20472,11 +21054,11 @@
     "origin": [
       [
         "src/views/pricing/components/FeatureComparisonTable.tsx",
-        80
+        85
       ],
       [
         "src/views/settings/PowerpackSettings.tsx",
-        144
+        149
       ]
     ],
     "translation": ""
@@ -20499,12 +21081,12 @@
         78
       ],
       [
-        "src/views/card/components/DeleteChecklistConfirmation.tsx",
-        59
-      ],
-      [
         "src/views/card/components/DeleteCommentConfirmation.tsx",
         69
+      ],
+      [
+        "src/views/card/components/DeleteChecklistConfirmation.tsx",
+        59
       ]
     ],
     "translation": "Tuto akci nelze vrátit zpět."
@@ -20520,6 +21102,38 @@
       ]
     ],
     "translation": "Tento klíč API se zobrazí pouze jednou. Uložte jej na bezpečné místo."
+  },
+  "r6MiTw": {
+    "message": "This authorization page has expired. Start again from your AI client.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/api/mcp/consent.ts",
+        70
+      ]
+    ],
+    "translation": "Platnost této autorizační stránky vypršela. Začněte znovu ve svém AI klientovi."
+  },
+  "8bsDu5": {
+    "message": "This authorization request is invalid. Start again from your AI client.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/api/mcp/authorize.ts",
+        77
+      ],
+      [
+        "src/pages/api/mcp/consent.ts",
+        80
+      ],
+      [
+        "src/pages/api/mcp/consent.ts",
+        105
+      ]
+    ],
+    "translation": "Tento požadavek na autorizaci je neplatný. Začněte znovu ve svém AI klientovi."
   },
   "l4asa1": {
     "message": "This board is private or does not exist",
@@ -20544,6 +21158,19 @@
       ]
     ],
     "translation": "Tato URL nástěnky je již obsazena"
+  },
+  "zmop4I": {
+    "message": "This client can read your shortlists, create and rename shortlists, and read, create, update, move, and delete opportunities. Your existing workspace permissions apply. Columns cannot be modified. Magic email and job attachment ingestion are unavailable.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/mcp/authorize.tsx",
+        99
+      ]
+    ],
+    "translation": "Tento klient může číst vaše seznamy, vytvářet a přejmenovávat je a číst, vytvářet, upravovat, přesouvat a mazat příležitosti. Platí vaše stávající oprávnění v pracovním prostoru. Sloupce nelze měnit. Magic email a zpracování pracovních příloh nejsou dostupné.",
+    "obsolete": true
   },
   "MzyVOo": {
     "message": "This guide explains the basics, shows you how to organise each job opportunity, and introduces the optional tools that can save you time.",
@@ -20606,6 +21233,18 @@
       ]
     ],
     "translation": "Oprávnění tohoto člena byla obnovena na výchozí nastavení jeho role."
+  },
+  "qERR/p": {
+    "message": "This request did not come from shortlistOS. Start again from your AI client.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/api/mcp/consent.ts",
+        38
+      ]
+    ],
+    "translation": "Tento požadavek nepochází ze shortlistOS. Začněte znovu ve svém AI klientovi."
   },
   "r4u0Nz": {
     "message": "This row lets you choose the opportunity status, labels, interview date, and where in the column the card should land (up or down).",
@@ -20812,7 +21451,7 @@
       ],
       [
         "src/views/activity-log/index.tsx",
-        64
+        66
       ]
     ],
     "translation": "do"
@@ -20918,7 +21557,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        205
+        219
       ]
     ],
     "translation": "Sledujte každou příležitost, e-mail, naplánovaný pohovor a následný krok v jednom soukromém prostoru. Pořiďte si Powerpack a automatizujte své hledání."
@@ -21118,6 +21757,18 @@
     ],
     "translation": "Seznam se nepodařilo archivovat"
   },
+  "XYJT34": {
+    "message": "Unable to authorize",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/server/mcp/consent-page.ts",
+        34
+      ]
+    ],
+    "translation": "Autorizaci se nepodařilo dokončit"
+  },
   "LeM5RY": {
     "message": "Unable to clear overrides",
     "placeholders": {},
@@ -21137,7 +21788,11 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        278
+        279
+      ],
+      [
+        "src/views/settings/BoardsSettings.tsx",
+        362
       ]
     ],
     "translation": "Adresu se nepodařilo zkopírovat"
@@ -21409,7 +22064,7 @@
     "comments": [],
     "origin": [
       [
-        "src/components/FeedbackModal.tsx",
+        "src/components/FeedbackForm.tsx",
         40
       ]
     ],
@@ -21434,7 +22089,7 @@
     "origin": [
       [
         "src/views/settings/PowerpackSettings.tsx",
-        348
+        353
       ]
     ],
     "translation": "Platbu nyní nelze zahájit. Zkuste to prosím znovu."
@@ -21554,7 +22209,7 @@
     "origin": [
       [
         "src/views/card/components/Comment.tsx",
-        94
+        96
       ]
     ],
     "translation": "Komentář se nepodařilo aktualizovat"
@@ -21731,7 +22386,7 @@
     "origin": [
       [
         "src/views/activity-log/index.tsx",
-        39
+        41
       ]
     ],
     "translation": "obnovil(a) z archivu"
@@ -22290,7 +22945,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        302
+        303
       ]
     ],
     "translation": "Upgradovat nyní"
@@ -22522,6 +23177,18 @@
     "translation": "",
     "obsolete": true
   },
+  "a8bxRr": {
+    "message": "Use MCP to work with your opportunities and shortlists from an AI assistant. One browser authorization connects your account, using your existing workspace permissions.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/settings/McpSettings.tsx",
+        26
+      ]
+    ],
+    "translation": "Pomocí MCP můžete se svými příležitostmi a seznamy pracovat z AI asistenta. Jedna autorizace v prohlížeči propojí váš účet s využitím stávajících oprávnění v pracovním prostoru."
+  },
   "TuoYBb": {
     "translation": "",
     "message": "Use shortlistOS for free",
@@ -22550,7 +23217,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        294
+        308
       ],
       [
         "src/views/pricing/index.tsx",
@@ -22681,6 +23348,42 @@
     ],
     "translation": ""
   },
+  "2NNe/G": {
+    "message": "via {0} ",
+    "placeholders": {
+      "0": [
+        "activity.actorClientName"
+      ]
+    },
+    "comments": [],
+    "origin": [
+      [
+        "src/views/activity-log/index.tsx",
+        273
+      ],
+      [
+        "src/views/card/components/ActivityList.tsx",
+        678
+      ]
+    ],
+    "translation": "přes {0} "
+  },
+  "WMgCsU": {
+    "message": "via {actorClientName} ",
+    "placeholders": {
+      "actorClientName": [
+        "actorClientName"
+      ]
+    },
+    "comments": [],
+    "origin": [
+      [
+        "src/views/card/components/Comment.tsx",
+        150
+      ]
+    ],
+    "translation": "přes {actorClientName} "
+  },
   "vSJd18": {
     "message": "Video",
     "placeholders": {},
@@ -22738,7 +23441,7 @@
     "origin": [
       [
         "src/views/pricing/components/PricingCards.tsx",
-        81
+        89
       ]
     ],
     "translation": "Zobrazit na GitHub"
@@ -22773,8 +23476,8 @@
     "comments": [],
     "origin": [
       [
-        "src/pages/get-started.tsx",
-        650
+        "src/views/settings/McpSettings.tsx",
+        36
       ]
     ],
     "translation": "",
@@ -22804,6 +23507,30 @@
       ]
     ],
     "translation": "Zobrazit pracovní prostor"
+  },
+  "3yXoPB": {
+    "message": "View, create and rename shortlists.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/api/mcp/authorize.ts",
+        55
+      ]
+    ],
+    "translation": "Zobrazovat, vytvářet a přejmenovávat seznamy."
+  },
+  "dqklgc": {
+    "message": "View, create, update, move and delete opportunities, comments and checklists.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/api/mcp/authorize.ts",
+        56
+      ]
+    ],
+    "translation": "Zobrazovat, vytvářet, upravovat, přesouvat a mazat pracovní příležitosti, komentáře a kontrolní seznamy."
   },
   "2q/Q7x": {
     "message": "Visibility",
@@ -23097,7 +23824,7 @@
     "origin": [
       [
         "src/components/SettingsLayout.tsx",
-        100
+        106
       ],
       [
         "src/views/settings/WebhookSettings.tsx",
@@ -23141,11 +23868,11 @@
       ],
       [
         "src/views/pricing/components/PricingCards.tsx",
-        74
+        78
       ],
       [
         "src/views/settings/BoardsSettings.tsx",
-        583
+        585
       ]
     ],
     "translation": "Týdenní přehled"
@@ -23157,7 +23884,7 @@
     "origin": [
       [
         "src/views/settings/PowerpackSettings.tsx",
-        194
+        199
       ]
     ],
     "translation": ""
@@ -23169,7 +23896,7 @@
     "origin": [
       [
         "src/views/pricing/components/FeatureComparisonTable.tsx",
-        130
+        135
       ]
     ],
     "translation": "Týdenní přehled: co právě teď vyžaduje vaši pozornost"
@@ -23219,7 +23946,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        127
+        131
       ]
     ],
     "translation": "Co se stane po vypršení Powerpack?"
@@ -23257,7 +23984,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        115
+        119
       ]
     ],
     "translation": ""
@@ -23318,7 +24045,7 @@
     "origin": [
       [
         "src/views/settings/BoardsSettings.tsx",
-        333
+        334
       ]
     ],
     "translation": ""
@@ -23391,7 +24118,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        143
+        147
       ]
     ],
     "translation": "Kde jsou moje data hostována?"
@@ -23481,7 +24208,7 @@
       ],
       [
         "src/views/home/index.tsx",
-        164
+        168
       ],
       [
         "src/views/members/index.tsx",
@@ -23821,6 +24548,18 @@
     ],
     "translation": "Ano, pro jednotlivce nabízíme tarif zdarma navždy. Bez omezení, placených bariér a limitů."
   },
+  "I9MJMz": {
+    "message": "Yes. Connect an AI assistant that supports remote MCP and browser authorization to read and manage your opportunities and shortlists. MCP is included with every account. Set up or revoke access in Settings → MCP.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/home/index.tsx",
+        116
+      ]
+    ],
+    "translation": "Ano. Připojte AI asistenta, který podporuje vzdálené MCP a autorizaci v prohlížeči, a čtěte a spravujte s ním své pracovní příležitosti a seznamy. MCP je součástí každého účtu. Přístup nastavíte nebo odvoláte v Nastavení → MCP."
+  },
   "cjOJKJ": {
     "message": "Yes. Powerpack and all of its features are open source and included with the rest of the shortlistOS code on GitHub. With the required infrastructure and configuration, you can self-host the complete application, including its automation and AI features.",
     "placeholders": {},
@@ -23828,7 +24567,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        140
+        144
       ]
     ],
     "translation": ""
@@ -23852,7 +24591,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        136
+        140
       ]
     ],
     "translation": "Ano. Open-source jádro lze podle pokynů na GitHub nainstalovat a provozovat na vlastní infrastruktuře. Odpovídáte za hosting, konfiguraci, aktualizace a zálohy."
@@ -23864,7 +24603,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        152
+        156
       ]
     ],
     "translation": ""
@@ -23876,7 +24615,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        132
+        136
       ]
     ],
     "translation": "Ano. Celý účet můžete kdykoli exportovat jako soubor JSON."
@@ -23945,7 +24684,7 @@
     "origin": [
       [
         "src/views/settings/PowerpackSettings.tsx",
-        398
+        403
       ]
     ],
     "translation": "Právě využíváte plný výkon Powerpack a budete jej mít k dispozici ještě {remainingPowerpackTime}."
@@ -24024,6 +24763,18 @@
     "translation": "",
     "obsolete": true
   },
+  "G+oRsa": {
+    "message": "You can revoke access at any time.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/api/mcp/authorize.ts",
+        68
+      ]
+    ],
+    "translation": "Přístup můžete kdykoli odvolat."
+  },
   "vAj6xG": {
     "message": "You can self-host by following the instructions in our <0>repo</0>.",
     "placeholders": {},
@@ -24043,7 +24794,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1116
+        1134
       ]
     ],
     "translation": ""
@@ -24135,7 +24886,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1175
+        1193
       ]
     ],
     "translation": ""
@@ -24160,7 +24911,7 @@
     "origin": [
       [
         "src/views/pricing/components/PricingCards.tsx",
-        90
+        98
       ]
     ],
     "translation": "Sami spravujete nastavení, aktualizace a zálohy"
@@ -24285,7 +25036,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        128
+        132
       ]
     ],
     "translation": "Váš účet, příležitosti, poznámky a soubory zůstanou dostupné. Účet se vrátí k základní verzi a funkce Powerpack se zastaví, dokud je znovu neaktivujete."
@@ -24321,7 +25072,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        313
+        327
       ]
     ],
     "translation": "Vaše data se nikdy neprodávají"
@@ -24345,7 +25096,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        165
+        169
       ]
     ],
     "translation": "Celé hledání práce na jednom místě."
@@ -24470,7 +25221,7 @@
     "origin": [
       [
         "src/views/pricing/components/PricingCards.tsx",
-        87
+        95
       ]
     ],
     "translation": "Vlastní hosting a databáze"
@@ -24547,6 +25298,18 @@
       ]
     ],
     "translation": "Stahování exportu dat shortlistOS bylo zahájeno."
+  },
+  "4utf6o": {
+    "message": "Your sign-in has expired. Sign in and start again from your AI client.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/api/mcp/consent.ts",
+        52
+      ]
+    ],
+    "translation": "Vaše přihlášení vypršelo. Přihlaste se a začněte znovu ve svém AI klientovi."
   },
   "CJWDTP": {
     "message": "Your Trello account has been disconnected.",

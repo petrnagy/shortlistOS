@@ -621,6 +621,7 @@ const ActivityList = ({
               publicId={activity.comment?.publicId}
               cardPublicId={cardPublicId}
               name={activity.user?.name ?? ""}
+              actorClientName={activity.actorClientName}
               email={activity.user?.email ?? ""}
               image={activity.user?.image ?? null}
               isLoading={isLoading}
@@ -671,7 +672,12 @@ const ActivityList = ({
             </div>
             <div className="flex min-w-0 flex-1 items-center gap-3">
               <p className="min-w-0 flex-1 text-sm">
-                <span className="font-medium dark:text-dark-1000">{`${getUserDisplayName(activity.user)} `}</span>
+                <span className="font-medium dark:text-dark-1000">
+                  {`${getUserDisplayName(activity.user)} `}
+                  {activity.actorClientName
+                    ? t`via ${activity.actorClientName} `
+                    : null}
+                </span>
                 <span className="text-light-900 dark:text-dark-800">
                   {activityText}
                 </span>

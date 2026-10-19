@@ -8,12 +8,13 @@ describe("webhook repository integration tests", () => {
   let testUser: { id: string; name: string | null };
   let testWorkspace: { id: number; publicId: string };
 
+  // Cold PGlite startup and migrations can exceed 10 seconds on CI runners.
   beforeEach(async () => {
     db = await createTestDb();
     const seeded = await seedTestData(db);
     testUser = seeded.user;
     testWorkspace = seeded.workspace;
-  });
+  }, 30_000);
 
   describe("create", () => {
     it("creates a webhook with all fields", async () => {

@@ -1034,6 +1034,16 @@ export default function GetStartedPage() {
                       Magic Inbox
                     </Link>
                     .
+                  </Trans>{" "}
+                  <Trans>
+                    Or ask a compatible AI assistant to add opportunities through{" "}
+                    <Link
+                      href="#mcp"
+                      className="decoration-current/50 font-medium underline underline-offset-4 hover:decoration-current"
+                    >
+                      MCP
+                    </Link>
+                    .
                   </Trans>
                 </Alert>
               </div>
@@ -1052,6 +1062,14 @@ export default function GetStartedPage() {
                     liftOnHover={false}
                   />
                 ))}
+                <div id="mcp" className="scroll-mt-24">
+                  <FeatureCard
+                    icon={HiOutlineChatBubbleLeft}
+                    title={t`AI assistant access (MCP)`}
+                    description={t`Connect a compatible AI assistant to read and manage your opportunities and shortlists.`}
+                    liftOnHover={false}
+                  />
+                </div>
               </div>
             </div>
           </Section>

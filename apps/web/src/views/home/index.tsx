@@ -112,6 +112,10 @@ export default function HomeView() {
       answer: t`Yes. The base version is completely free, including unlimited shortlists, unlimited opportunities, notes, attachments, activity history, and data export. Powerpack is optional and adds automation and AI features.`,
     },
     {
+      question: t`Can I use my own AI assistant?`,
+      answer: t`Yes. Connect an AI assistant that supports remote MCP and browser authorization to read and manage your opportunities and shortlists. MCP is included with every account. Set up or revoke access in Settings → MCP.`,
+    },
+    {
       question: t`What is Powerpack?`,
       answer: t`Powerpack adds tools that take care of repetitive work. The browser clipper lets you save a job posting directly from your browser and turns its key details into an organized opportunity. With Magic Inbox, you can forward job alerts and recruiter emails to create new opportunities or update existing ones automatically. Powerpack also adds reminders, follow-up nudges, and salary insights to help you keep your search moving.`,
     },
@@ -163,7 +167,17 @@ export default function HomeView() {
         <Section
           eyebrow={t`Workspace`}
           title={t`Your entire job search in one place.`}
-          description={t`Keep every opportunity, email, note, and file together. Follow a purpose-built pipeline and see exactly where your search stands.`}
+          description={
+            <>
+              {t`Keep every opportunity, email, note, and file together. Follow a purpose-built pipeline and see exactly where your search stands.`}
+              <Link
+                href="/get-started#mcp"
+                className="mt-4 block text-sm font-medium leading-normal text-light-1000 underline decoration-light-500 underline-offset-4 hover:decoration-light-1000 dark:text-dark-1000 dark:decoration-dark-500 dark:hover:decoration-dark-1000"
+              >
+                {t`Connect your AI assistant through MCP, included with every account.`}
+              </Link>
+            </>
+          }
         >
           <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-4">
             {workspaceFeatures.map((feature) => (
