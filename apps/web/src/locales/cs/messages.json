@@ -3006,16 +3006,16 @@
     "translation": "Jako rozsah"
   },
   "/PmiVv": {
-    "translation": "Požádejte kompatibilního AI asistenta o přidání pracovních příležitostí přes <0>MCP</0>.",
     "message": "Ask a compatible AI assistant to add opportunities through <0>MCP</0>.",
     "placeholders": {},
     "comments": [],
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1021
+        1038
       ]
-    ]
+    ],
+    "translation": "Požádejte kompatibilního AI asistenta o přidání pracovních příležitostí přes <0>MCP</0>."
   },
   "1Gqn0z": {
     "message": "Ask shortlistOS to email you when a saved job has been sitting untouched for too long.",
@@ -16439,7 +16439,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1031
+        1021
       ]
     ],
     "translation": ""

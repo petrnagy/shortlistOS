@@ -3006,16 +3006,16 @@
     "translation": "As range"
   },
   "/PmiVv": {
-    "translation": "Ask a compatible AI assistant to add opportunities through <0>MCP</0>.",
     "message": "Ask a compatible AI assistant to add opportunities through <0>MCP</0>.",
     "placeholders": {},
     "comments": [],
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1021
+        1038
       ]
-    ]
+    ],
+    "translation": "Ask a compatible AI assistant to add opportunities through <0>MCP</0>."
   },
   "1Gqn0z": {
     "message": "Ask shortlistOS to email you when a saved job has been sitting untouched for too long.",
@@ -16439,7 +16439,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1031
+        1021
       ]
     ],
     "translation": "Powerpack can also add jobs from the <0>Web Clipper</0> or <1>Magic Inbox</1>."

@@ -1019,16 +1019,6 @@ export default function GetStartedPage() {
                   className="mt-6"
                 >
                   <Trans>
-                    Ask a compatible AI assistant to add opportunities through{" "}
-                    <Link
-                      href="#mcp"
-                      className="decoration-current/50 font-medium underline underline-offset-4 hover:decoration-current"
-                    >
-                      MCP
-                    </Link>
-                    .
-                  </Trans>{" "}
-                  <Trans>
                     Powerpack can also add jobs from the{" "}
                     <Link
                       href="#powerpack-web-clipper"
@@ -1042,6 +1032,16 @@ export default function GetStartedPage() {
                       className="decoration-current/50 font-medium underline underline-offset-4 hover:decoration-current"
                     >
                       Magic Inbox
+                    </Link>
+                    .
+                  </Trans>{" "}
+                  <Trans>
+                    Ask a compatible AI assistant to add opportunities through{" "}
+                    <Link
+                      href="#mcp"
+                      className="decoration-current/50 font-medium underline underline-offset-4 hover:decoration-current"
+                    >
+                      MCP
                     </Link>
                     .
                   </Trans>
