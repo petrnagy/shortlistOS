@@ -96,6 +96,7 @@ const Footer = () => {
       title: t`Resources`,
       links: [
         { label: t`Get started`, href: "/get-started" },
+        { label: t`MCP`, href: "/get-started#mcp" },
         { label: t`FAQ`, href: "/#faq" },
         {
           label: t`Self-hosting`,

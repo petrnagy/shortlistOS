@@ -18,7 +18,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        404
+        418
       ]
     ],
     "translation": "— Petr, creador de shortlistOS"
@@ -504,7 +504,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1061
+        1080
       ]
     ],
     "translation": ""
@@ -516,7 +516,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1104
+        1123
       ]
     ],
     "translation": ""
@@ -811,7 +811,7 @@
     "origin": [
       [
         "src/views/settings/PowerpackSettings.tsx",
-        498
+        503
       ]
     ],
     "translation": "3 meses por {POWERPACK_PRICE}"
@@ -827,7 +827,7 @@
       ],
       [
         "src/views/home/index.tsx",
-        227
+        241
       ]
     ],
     "translation": ""
@@ -1027,7 +1027,7 @@
     "origin": [
       [
         "src/views/pricing/components/PricingCards.tsx",
-        72
+        76
       ]
     ],
     "translation": ""
@@ -1260,7 +1260,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        315
+        329
       ]
     ],
     "translation": "Datos de la cuenta alojados en la UE"
@@ -1272,7 +1272,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        144
+        148
       ]
     ],
     "translation": "Los datos de la cuenta se alojan en Alemania. Los archivos y adjuntos subidos se almacenan en AWS, en Estocolmo. Algunas funciones de Powerpack envían el contenido pertinente a Mistral para procesarlo, como el contenido de una oferta guardada con Web Clipper o de un correo reenviado a Magic Inbox."
@@ -1438,7 +1438,7 @@
     "origin": [
       [
         "src/views/settings/PowerpackSettings.tsx",
-        483
+        488
       ]
     ],
     "translation": "Activo hasta el {formattedPowerpackExpiry}"
@@ -1526,7 +1526,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        280
+        294
       ]
     ],
     "translation": ""
@@ -2250,7 +2250,7 @@
     "origin": [
       [
         "src/views/settings/PowerpackSettings.tsx",
-        408
+        413
       ]
     ],
     "translation": "Después de 3 meses, las funciones de Powerpack se pausan, pero no desaparece nada. Cada oportunidad, nota, dato salarial y tarjeta permanece exactamente donde está. Continúa tu búsqueda sin Powerpack o compra otros 3 meses si vuelves a necesitar la magia. Nunca habrá cargos automáticos."
@@ -2267,6 +2267,38 @@
       ]
     ],
     "obsolete": true
+  },
+  "QIN7ln": {
+    "translation": "Acceso para asistentes de IA (MCP)",
+    "message": "AI assistant access (MCP)",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        1060
+      ],
+      [
+        "src/views/pricing/components/FeatureComparisonTable.tsx",
+        45
+      ],
+      [
+        "src/views/pricing/components/PricingCards.tsx",
+        48
+      ],
+      [
+        "src/views/pricing/components/PricingCards.tsx",
+        80
+      ],
+      [
+        "src/views/pricing/components/PricingCards.tsx",
+        101
+      ],
+      [
+        "src/views/settings/PowerpackSettings.tsx",
+        109
+      ]
+    ]
   },
   "h2ztFt": {
     "message": "All Free features +",
@@ -2339,7 +2371,7 @@
     "origin": [
       [
         "src/views/pricing/components/PricingCards.tsx",
-        91
+        99
       ]
     ],
     "translation": ""
@@ -2387,7 +2419,7 @@
     "origin": [
       [
         "src/views/settings/PowerpackSettings.tsx",
-        478
+        483
       ]
     ],
     "translation": "¡Ya lo tengo!"
@@ -3047,7 +3079,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1069
+        1088
       ]
     ],
     "translation": ""
@@ -3148,11 +3180,11 @@
     "origin": [
       [
         "src/views/pricing/components/FeatureComparisonTable.tsx",
-        120
+        125
       ],
       [
         "src/views/settings/PowerpackSettings.tsx",
-        184
+        189
       ]
     ],
     "translation": "Archivar automáticamente las oportunidades guardadas inactivas"
@@ -3164,7 +3196,7 @@
     "origin": [
       [
         "src/views/pricing/components/FeatureComparisonTable.tsx",
-        105
+        110
       ]
     ],
     "translation": "Mover automáticamente a Sin respuesta tras un periodo de silencio en Solicitud enviada"
@@ -3268,7 +3300,7 @@
     "origin": [
       [
         "src/views/pricing/components/PricingCards.tsx",
-        69
+        73
       ]
     ],
     "translation": "Recordatorios y avisos automáticos"
@@ -3292,11 +3324,11 @@
     "origin": [
       [
         "src/views/pricing/components/FeatureComparisonTable.tsx",
-        65
+        70
       ],
       [
         "src/views/settings/PowerpackSettings.tsx",
-        129
+        134
       ]
     ],
     "translation": "Rango salarial automático para tu puesto objetivo"
@@ -3358,7 +3390,7 @@
     "origin": [
       [
         "src/views/settings/PowerpackSettings.tsx",
-        169
+        174
       ]
     ],
     "translation": ""
@@ -3412,11 +3444,11 @@
     "origin": [
       [
         "src/views/pricing/components/FeatureComparisonTable.tsx",
-        87
+        92
       ],
       [
         "src/views/settings/PowerpackSettings.tsx",
-        151
+        156
       ]
     ],
     "translation": "Automatizaciones y avisos"
@@ -3428,7 +3460,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        321
+        335
       ]
     ],
     "translation": "Evita la dependencia de un proveedor"
@@ -4054,7 +4086,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        395
+        409
       ]
     ],
     "translation": "Creado de forma independiente, para personas que ya afrontan una tarea difícil."
@@ -4144,11 +4176,11 @@
     "origin": [
       [
         "src/views/pricing/components/FeatureComparisonTable.tsx",
-        95
+        100
       ],
       [
         "src/views/settings/PowerpackSettings.tsx",
-        159
+        164
       ]
     ],
     "translation": ""
@@ -4400,7 +4432,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        131
+        135
       ]
     ],
     "translation": "¿Puedo exportar mis datos?"
@@ -4412,7 +4444,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        151
+        155
       ]
     ],
     "translation": ""
@@ -4424,10 +4456,22 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        135
+        139
       ]
     ],
     "translation": "¿Puedo alojar shortlistOS por mi cuenta?"
+  },
+  "zRuz5n": {
+    "translation": "¿Puedo usar mi propio asistente de IA?",
+    "message": "Can I use my own AI assistant?",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/home/index.tsx",
+        115
+      ]
+    ]
   },
   "KjP/23": {
     "message": "Can I use Powerpack with a self-hosted installation?",
@@ -4436,7 +4480,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        139
+        143
       ]
     ],
     "translation": "¿Puedo usar Powerpack con una instalación propia?"
@@ -4496,7 +4540,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        147
+        151
       ]
     ],
     "translation": ""
@@ -4713,11 +4757,11 @@
     "origin": [
       [
         "src/views/pricing/components/FeatureComparisonTable.tsx",
-        47
+        52
       ],
       [
         "src/views/settings/PowerpackSettings.tsx",
-        111
+        116
       ]
     ],
     "translation": "Captura de oportunidades"
@@ -4757,11 +4801,11 @@
     "origin": [
       [
         "src/views/pricing/components/FeatureComparisonTable.tsx",
-        90
+        95
       ],
       [
         "src/views/settings/PowerpackSettings.tsx",
-        154
+        159
       ]
     ],
     "translation": "Antigüedad de las tarjetas: señal visual en oportunidades inactivas"
@@ -5056,7 +5100,7 @@
     "origin": [
       [
         "src/views/settings/PowerpackSettings.tsx",
-        344
+        349
       ]
     ],
     "translation": "Error de pago"
@@ -5147,7 +5191,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        295
+        309
       ],
       [
         "src/views/pricing/index.tsx",
@@ -5583,7 +5627,7 @@
       ],
       [
         "src/views/pricing/components/PricingCards.tsx",
-        67
+        71
       ]
     ],
     "translation": ""
@@ -5620,7 +5664,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        303
+        317
       ],
       [
         "src/views/pricing/index.tsx",
@@ -5809,6 +5853,30 @@
     ],
     "translation": "Conectar {clientName}"
   },
+  "lYrZDI": {
+    "translation": "Conecta un asistente de IA compatible para consultar y gestionar tus oportunidades y listas.",
+    "message": "Connect a compatible AI assistant to read and manage your opportunities and shortlists.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        1063
+      ],
+      [
+        "src/views/pricing/components/PricingCards.tsx",
+        49
+      ],
+      [
+        "src/views/pricing/components/PricingCards.tsx",
+        81
+      ],
+      [
+        "src/views/pricing/components/PricingCards.tsx",
+        102
+      ]
+    ]
+  },
   "3jod3l": {
     "message": "Connect GitHub",
     "placeholders": {},
@@ -5860,6 +5928,18 @@
       ]
     ],
     "translation": "Conecta tu asistente de IA"
+  },
+  "1bflXh": {
+    "translation": "Conecta tu asistente de IA mediante MCP, incluido en todas las cuentas.",
+    "message": "Connect your AI assistant through MCP, included with every account.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/home/index.tsx",
+        177
+      ]
+    ]
   },
   "sDLCvT": {
     "message": "Connect your favorite tools to streamline your workflow.",
@@ -5936,7 +6016,7 @@
       ],
       [
         "src/views/home/components/Footer.tsx",
-        112
+        113
       ]
     ],
     "translation": "Contacto"
@@ -6439,7 +6519,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1182
+        1201
       ],
       [
         "src/views/home/components/FinalCta.tsx",
@@ -6825,11 +6905,11 @@
     "origin": [
       [
         "src/views/pricing/components/FeatureComparisonTable.tsx",
-        155
+        160
       ],
       [
         "src/views/settings/PowerpackSettings.tsx",
-        219
+        224
       ]
     ],
     "translation": "Exportación CSV"
@@ -7665,7 +7745,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        123
+        127
       ]
     ],
     "translation": ""
@@ -7811,7 +7891,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1075
+        1094
       ]
     ],
     "translation": ""
@@ -8064,7 +8144,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1063
+        1082
       ]
     ],
     "translation": ""
@@ -8261,7 +8341,7 @@
     "origin": [
       [
         "src/views/pricing/components/PricingCards.tsx",
-        61
+        65
       ]
     ],
     "translation": "Envía empleos y novedades por correo a tu cuenta. La IA de Magic Inbox creará o actualizará automáticamente tus oportunidades."
@@ -8323,7 +8403,7 @@
     "origin": [
       [
         "src/views/pricing/components/FeatureComparisonTable.tsx",
-        100
+        105
       ]
     ],
     "translation": "Recordatorios por correo para próximas entrevistas y acciones"
@@ -8335,7 +8415,7 @@
     "origin": [
       [
         "src/views/settings/PowerpackSettings.tsx",
-        164
+        169
       ]
     ],
     "translation": ""
@@ -8908,7 +8988,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1082
+        1101
       ]
     ],
     "translation": ""
@@ -9008,7 +9088,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1123
+        1142
       ]
     ],
     "translation": ""
@@ -9020,7 +9100,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        375
+        389
       ]
     ],
     "translation": "Explorar el código fuente"
@@ -9093,7 +9173,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        314
+        328
       ]
     ],
     "translation": "Exporta tu cuenta completa en cualquier momento"
@@ -9263,7 +9343,7 @@
     "origin": [
       [
         "src/views/home/components/Footer.tsx",
-        99
+        100
       ],
       [
         "src/views/home/components/Header.tsx",
@@ -9283,7 +9363,7 @@
       ],
       [
         "src/views/home/index.tsx",
-        421
+        435
       ]
     ],
     "translation": "Preguntas frecuentes"
@@ -9295,11 +9375,11 @@
     "origin": [
       [
         "src/views/pricing/components/FeatureComparisonTable.tsx",
-        170
+        175
       ],
       [
         "src/views/settings/PowerpackSettings.tsx",
-        416
+        421
       ]
     ],
     "translation": "Función"
@@ -9442,7 +9522,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        427
+        441
       ]
     ],
     "translation": "Encuentra respuestas a preguntas habituales sobre shortlistOS antes de confiarle tu búsqueda de empleo."
@@ -9545,11 +9625,11 @@
     "origin": [
       [
         "src/views/pricing/components/FeatureComparisonTable.tsx",
-        110
+        115
       ],
       [
         "src/views/settings/PowerpackSettings.tsx",
-        174
+        179
       ]
     ],
     "translation": ""
@@ -9828,7 +9908,7 @@
     "origin": [
       [
         "src/views/pricing/components/PricingCards.tsx",
-        88
+        96
       ]
     ],
     "translation": "Control total de tus datos"
@@ -9840,11 +9920,11 @@
     "origin": [
       [
         "src/views/pricing/components/FeatureComparisonTable.tsx",
-        145
+        150
       ],
       [
         "src/views/settings/PowerpackSettings.tsx",
-        209
+        214
       ]
     ],
     "translation": "Descarga completa de datos en cualquier momento"
@@ -9868,7 +9948,7 @@
     "origin": [
       [
         "src/views/pricing/components/PricingCards.tsx",
-        86
+        94
       ]
     ],
     "translation": "Código fuente completo"
@@ -10247,7 +10327,7 @@
       ],
       [
         "src/views/pricing/components/PricingCards.tsx",
-        53
+        57
       ]
     ],
     "translation": "Obtener Powerpack"
@@ -10499,7 +10579,7 @@
     "origin": [
       [
         "src/views/pricing/components/PricingCards.tsx",
-        71
+        75
       ]
     ],
     "translation": "Google Calendar"
@@ -10570,7 +10650,7 @@
     "origin": [
       [
         "src/views/pricing/components/PricingCards.tsx",
-        65
+        69
       ]
     ],
     "translation": "Guarda cualquier vacante interesante de internet en tu lista sin copiar y pegar nada manualmente."
@@ -10771,7 +10851,7 @@
     "origin": [
       [
         "src/views/home/components/Footer.tsx",
-        195
+        196
       ]
     ],
     "translation": "Alojado en"
@@ -11233,7 +11313,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        318
+        332
       ]
     ],
     "translation": "Comprueba exactamente cómo funciona el producto"
@@ -11569,7 +11649,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        119
+        123
       ]
     ],
     "translation": "¿Powerpack es una suscripción?"
@@ -11642,7 +11722,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        202
+        216
       ]
     ],
     "translation": "Buscar trabajo es difícil. Llevar el control no debería serlo."
@@ -11756,7 +11836,7 @@
     "origin": [
       [
         "src/views/pricing/components/PricingCards.tsx",
-        64
+        68
       ]
     ],
     "translation": "Web Clipper de ofertas de empleo"
@@ -11957,7 +12037,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        166
+        172
       ]
     ],
     "translation": "Mantén cada oportunidad, correo, nota y archivo en un mismo lugar. Sigue un proceso diseñado para buscar empleo y comprueba exactamente en qué punto estás."
@@ -12405,7 +12485,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        178
+        192
       ]
     ],
     "translation": "Deja que Powerpack se encargue del trabajo repetitivo."
@@ -12417,7 +12497,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1105
+        1124
       ]
     ],
     "translation": ""
@@ -12839,11 +12919,11 @@
     "origin": [
       [
         "src/views/pricing/components/FeatureComparisonTable.tsx",
-        70
+        75
       ],
       [
         "src/views/settings/PowerpackSettings.tsx",
-        134
+        139
       ]
     ],
     "translation": "Datos salariales según la ubicación: tu país, la UE y EE. UU."
@@ -12942,7 +13022,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        247
+        261
       ]
     ],
     "translation": "Creado y alojado en la UE"
@@ -12954,11 +13034,11 @@
     "origin": [
       [
         "src/views/pricing/components/FeatureComparisonTable.tsx",
-        150
+        155
       ],
       [
         "src/views/settings/PowerpackSettings.tsx",
-        214
+        219
       ]
     ],
     "translation": "Creado y alojado en la UE"
@@ -12970,7 +13050,7 @@
     "origin": [
       [
         "src/views/home/components/Footer.tsx",
-        192
+        193
       ]
     ],
     "translation": "Creado en"
@@ -12994,7 +13074,7 @@
       ],
       [
         "src/views/pricing/components/PricingCards.tsx",
-        60
+        64
       ]
     ],
     "translation": "Magic Inbox"
@@ -13057,11 +13137,11 @@
     "origin": [
       [
         "src/views/pricing/components/FeatureComparisonTable.tsx",
-        55
+        60
       ],
       [
         "src/views/settings/PowerpackSettings.tsx",
-        119
+        124
       ]
     ],
     "translation": "Magic Inbox: reenvía cualquier correo de empleo y crea o actualiza tarjetas automáticamente"
@@ -13247,6 +13327,10 @@
       [
         "src/components/SettingsLayout.tsx",
         82
+      ],
+      [
+        "src/views/home/components/Footer.tsx",
+        99
       ]
     ],
     "translation": "MCP"
@@ -13265,16 +13349,20 @@
     "obsolete": true
   },
   "e7Mcgo": {
-    "translation": "MCP está disponible para todas las cuentas de shortlistOS.",
     "message": "MCP is available to every shortlistOS account.",
     "placeholders": {},
     "comments": [],
     "origin": [
       [
+        "src/pages/get-started.tsx",
+        1064
+      ],
+      [
         "src/views/settings/McpSettings.tsx",
         27
       ]
-    ]
+    ],
+    "translation": "MCP está disponible para todas las cuentas de shortlistOS."
   },
   "POyW96": {
     "message": "MCP settings",
@@ -13284,6 +13372,10 @@
       [
         "src/pages/api/mcp/authorize.ts",
         69
+      ],
+      [
+        "src/pages/get-started.tsx",
+        1069
       ],
       [
         "src/server/mcp/consent-page.ts",
@@ -13449,7 +13541,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1186
+        1205
       ]
     ],
     "translation": ""
@@ -13461,7 +13553,7 @@
     "origin": [
       [
         "src/views/settings/PowerpackSettings.tsx",
-        292
+        297
       ]
     ],
     "translation": "Falta la variable de entorno NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY."
@@ -13499,7 +13591,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        320
+        334
       ]
     ],
     "translation": "Modifícalo según tus necesidades"
@@ -13547,7 +13639,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1152
+        1171
       ]
     ],
     "translation": ""
@@ -13622,7 +13714,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1076
+        1095
       ]
     ],
     "translation": ""
@@ -13647,7 +13739,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1062
+        1081
       ]
     ],
     "translation": ""
@@ -14208,7 +14300,7 @@
     "origin": [
       [
         "src/views/home/components/Footer.tsx",
-        198
+        199
       ]
     ],
     "translation": "Sin anuncios, sin seguimiento personal y conforme al RGPD."
@@ -14220,7 +14312,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        312
+        326
       ]
     ],
     "translation": "Sin publicidad ni seguimiento personal"
@@ -14318,7 +14410,7 @@
     "origin": [
       [
         "src/views/pricing/components/PricingCards.tsx",
-        89
+        97
       ]
     ],
     "translation": "No se necesita una cuenta alojada"
@@ -14454,11 +14546,11 @@
     "origin": [
       [
         "src/views/pricing/components/FeatureComparisonTable.tsx",
-        140
+        145
       ],
       [
         "src/views/settings/PowerpackSettings.tsx",
-        204
+        209
       ]
     ],
     "translation": "Sin seguimiento, sin anuncios y alineado con el RGPD"
@@ -14482,7 +14574,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        120
+        124
       ]
     ],
     "translation": "No. Powerpack cuesta 29 $ y permanece activo durante tres meses. No hay renovación automática ni pagos recurrentes."
@@ -14520,7 +14612,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        148
+        152
       ]
     ],
     "translation": ""
@@ -14532,7 +14624,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        124
+        128
       ]
     ],
     "translation": ""
@@ -14596,11 +14688,11 @@
     "origin": [
       [
         "src/views/pricing/components/FeatureComparisonTable.tsx",
-        125
+        130
       ],
       [
         "src/views/settings/PowerpackSettings.tsx",
-        189
+        194
       ]
     ],
     "translation": "Avisos cuando las entrevistas o negociaciones pierden impulso"
@@ -14784,7 +14876,7 @@
     "origin": [
       [
         "src/views/pricing/components/PricingCards.tsx",
-        52
+        56
       ]
     ],
     "translation": "Pago único"
@@ -14800,7 +14892,7 @@
     "origin": [
       [
         "src/views/settings/PowerpackSettings.tsx",
-        405
+        410
       ]
     ],
     "translation": "Un pago único de {POWERPACK_PRICE} te da 3 meses de acceso completo. Sin suscripción. Buscar trabajo ya es bastante estresante."
@@ -14902,11 +14994,11 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        358
+        372
       ],
       [
         "src/views/pricing/components/PricingCards.tsx",
-        79
+        87
       ]
     ],
     "translation": "Código abierto"
@@ -14918,7 +15010,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        246
+        260
       ]
     ],
     "translation": "Núcleo de código abierto"
@@ -15006,7 +15098,7 @@
     "origin": [
       [
         "src/views/home/components/Footer.tsx",
-        128
+        129
       ]
     ],
     "translation": ""
@@ -15024,7 +15116,6 @@
     "translation": ""
   },
   "3odo8B": {
-    "translation": "Las oportunidades se pueden consultar, editar, mover y eliminar. Las listas se pueden consultar, crear y renombrar. Las columnas son fijas. Magic email y la importación de adjuntos de ofertas no están disponibles mediante MCP.",
     "message": "Opportunities support reading and writing, including moving and deletion. Shortlists support reading, creation, and renaming. Columns are fixed. Magic email and job attachment ingestion are unavailable through MCP.",
     "placeholders": {},
     "comments": [],
@@ -15033,7 +15124,8 @@
         "src/views/settings/McpSettings.tsx",
         54
       ]
-    ]
+    ],
+    "translation": "Las oportunidades se pueden consultar, editar, mover y eliminar. Las listas se pueden consultar, crear y renombrar. Las columnas son fijas. Magic email y la importación de adjuntos de ofertas no están disponibles mediante MCP."
   },
   "NQi0Qc": {
     "message": "Opportunities support reading and writing, including moving and deletion. Shortlists support reading, creation, and renaming. Columns are fixed. Magic email and job attachment ingestion are unavailable through MCP. Normal Powerpack automations run after opportunity changes.",
@@ -15219,7 +15311,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        249
+        263
       ]
     ],
     "translation": "Tus datos te pertenecen"
@@ -15636,7 +15728,7 @@
     "origin": [
       [
         "src/views/home/components/Footer.tsx",
-        186
+        187
       ]
     ],
     "translation": "Petr Nagy"
@@ -16238,7 +16330,7 @@
       ],
       [
         "src/pages/get-started.tsx",
-        1113
+        1132
       ],
       [
         "src/views/board/components/BoardOpportunityTutorial.tsx",
@@ -16254,11 +16346,11 @@
       ],
       [
         "src/views/home/index.tsx",
-        177
+        191
       ],
       [
         "src/views/pricing/components/PricingCards.tsx",
-        50
+        54
       ]
     ],
     "translation": "Powerpack"
@@ -16270,7 +16362,7 @@
     "origin": [
       [
         "src/views/settings/PowerpackSettings.tsx",
-        397
+        402
       ]
     ],
     "translation": "Powerpack activo"
@@ -16282,7 +16374,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1106
+        1125
       ]
     ],
     "translation": ""
@@ -16294,7 +16386,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        179
+        193
       ]
     ],
     "translation": "Powerpack añade automatización e IA a tu espacio de shortlistOS, para que dediques menos tiempo a copiar información y más a avanzar en tu búsqueda."
@@ -16319,13 +16411,12 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        116
+        120
       ]
     ],
     "translation": ""
   },
   "Mbuk5y": {
-    "translation": "Las automatizaciones de Powerpack respetan tu suscripción y la configuración de tus listas.",
     "message": "Powerpack automations follow your existing subscription and shortlist settings.",
     "placeholders": {},
     "comments": [],
@@ -16334,7 +16425,8 @@
         "src/views/settings/McpSettings.tsx",
         55
       ]
-    ]
+    ],
+    "translation": "Las automatizaciones de Powerpack respetan tu suscripción y la configuración de tus listas."
   },
   "AIBvve": {
     "message": "Powerpack can also add jobs from the <0>Web Clipper</0> or <1>Magic Inbox</1>.",
@@ -16436,7 +16528,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        237
+        251
       ]
     ],
     "translation": "¿Prefieres gestionarlo tú? Aloja por tu cuenta la versión de código abierto."
@@ -16481,7 +16573,7 @@
       ],
       [
         "src/views/home/index.tsx",
-        293
+        307
       ],
       [
         "src/views/pricing/index.tsx",
@@ -16533,7 +16625,7 @@
     "origin": [
       [
         "src/views/home/components/Footer.tsx",
-        110
+        111
       ],
       [
         "src/views/home/components/Header.tsx",
@@ -16541,7 +16633,7 @@
       ],
       [
         "src/views/home/index.tsx",
-        341
+        355
       ]
     ],
     "translation": "Privacidad"
@@ -16553,7 +16645,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        329
+        343
       ]
     ],
     "translation": "Privacidad y código abierto"
@@ -16565,11 +16657,11 @@
     "origin": [
       [
         "src/views/pricing/components/FeatureComparisonTable.tsx",
-        137
+        142
       ],
       [
         "src/views/settings/PowerpackSettings.tsx",
-        201
+        206
       ]
     ],
     "translation": "Privacidad y datos"
@@ -16581,7 +16673,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        248
+        262
       ]
     ],
     "translation": "Respetuoso con la privacidad"
@@ -16593,7 +16685,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        383
+        397
       ]
     ],
     "translation": "Política de privacidad"
@@ -16617,7 +16709,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        332
+        346
       ]
     ],
     "translation": "Privado por diseño. Abierto por defecto."
@@ -16831,7 +16923,7 @@
     "origin": [
       [
         "src/views/home/components/Footer.tsx",
-        108
+        109
       ]
     ],
     "translation": ""
@@ -16926,7 +17018,7 @@
       ],
       [
         "src/views/home/index.tsx",
-        424
+        438
       ]
     ],
     "translation": "¿Preguntas?"
@@ -16989,7 +17081,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1173
+        1192
       ]
     ],
     "translation": ""
@@ -17001,7 +17093,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1081
+        1100
       ]
     ],
     "translation": ""
@@ -17076,7 +17168,7 @@
     "origin": [
       [
         "src/views/pricing/components/PricingCards.tsx",
-        57
+        61
       ]
     ],
     "translation": "Recomendado"
@@ -17256,11 +17348,11 @@
     "origin": [
       [
         "src/views/pricing/components/FeatureComparisonTable.tsx",
-        115
+        120
       ],
       [
         "src/views/settings/PowerpackSettings.tsx",
-        179
+        184
       ]
     ],
     "translation": "Recordatorio cuando una oportunidad guardada permanece inactiva demasiado tiempo"
@@ -17719,7 +17811,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1089
+        1108
       ]
     ],
     "translation": ""
@@ -17826,7 +17918,7 @@
     "origin": [
       [
         "src/views/pricing/components/PricingCards.tsx",
-        80
+        88
       ]
     ],
     "translation": "Ejecuta la versión base en tu propia infraestructura."
@@ -17913,11 +18005,11 @@
     "origin": [
       [
         "src/views/pricing/components/FeatureComparisonTable.tsx",
-        62
+        67
       ],
       [
         "src/views/settings/PowerpackSettings.tsx",
-        126
+        131
       ]
     ],
     "translation": "Información salarial y de la empresa"
@@ -17953,7 +18045,7 @@
     "origin": [
       [
         "src/views/pricing/components/PricingCards.tsx",
-        68
+        72
       ]
     ],
     "translation": "Información salarial para cada empleo"
@@ -17965,7 +18057,7 @@
     "origin": [
       [
         "src/views/settings/PowerpackSettings.tsx",
-        139
+        144
       ]
     ],
     "translation": ""
@@ -17977,7 +18069,7 @@
     "origin": [
       [
         "src/views/pricing/components/FeatureComparisonTable.tsx",
-        75
+        80
       ]
     ],
     "translation": "Referencias de percentiles salariales: UE, EE. UU. y globales"
@@ -18104,11 +18196,11 @@
     "origin": [
       [
         "src/views/pricing/components/FeatureComparisonTable.tsx",
-        50
+        55
       ],
       [
         "src/views/settings/PowerpackSettings.tsx",
-        114
+        119
       ]
     ],
     "translation": "Guarda empleos con un clic mediante Web Clipper"
@@ -18478,7 +18570,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1070
+        1089
       ]
     ],
     "translation": ""
@@ -18692,7 +18784,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        319
+        333
       ]
     ],
     "translation": "Alojar por tu cuenta la aplicación principal"
@@ -18704,7 +18796,7 @@
     "origin": [
       [
         "src/views/pricing/components/PricingCards.tsx",
-        78
+        86
       ]
     ],
     "translation": "Alojamiento propio"
@@ -18716,7 +18808,7 @@
     "origin": [
       [
         "src/views/home/components/Footer.tsx",
-        101
+        102
       ]
     ],
     "translation": ""
@@ -19199,7 +19291,7 @@
     "origin": [
       [
         "src/views/settings/PowerpackSettings.tsx",
-        391
+        396
       ]
     ],
     "translation": "Ajustes | Powerpack"
@@ -19344,11 +19436,11 @@
       ],
       [
         "src/views/pricing/components/FeatureComparisonTable.tsx",
-        173
+        178
       ],
       [
         "src/views/settings/PowerpackSettings.tsx",
-        419
+        424
       ]
     ],
     "translation": "shortlistOS"
@@ -19360,11 +19452,11 @@
     "origin": [
       [
         "src/views/pricing/components/FeatureComparisonTable.tsx",
-        176
+        181
       ],
       [
         "src/views/settings/PowerpackSettings.tsx",
-        422
+        427
       ]
     ],
     "translation": "shortlistOS + Powerpack ⚡"
@@ -19388,7 +19480,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        335
+        349
       ]
     ],
     "translation": "shortlistOS no te rastrea, no vende tus datos ni los bloquea. Exporta tu cuenta cuando quieras, inspecciona el código fuente o ejecuta la aplicación principal por tu cuenta."
@@ -19412,7 +19504,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        398
+        412
       ]
     ],
     "translation": "shortlistOS es un producto independiente, no una plataforma de contratación, una red publicitaria ni una empresa de crecimiento financiada por capital riesgo."
@@ -19450,7 +19542,7 @@
     "origin": [
       [
         "src/views/settings/PowerpackSettings.tsx",
-        402
+        407
       ]
     ],
     "translation": "shortlistOS registra tu búsqueda de empleo."
@@ -19877,7 +19969,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1115
+        1134
       ]
     ],
     "translation": ""
@@ -20178,7 +20270,7 @@
     "origin": [
       [
         "src/views/settings/PowerpackSettings.tsx",
-        291
+        296
       ]
     ],
     "translation": "Stripe no está configurado"
@@ -20518,7 +20610,7 @@
     "origin": [
       [
         "src/views/home/components/Footer.tsx",
-        111
+        112
       ]
     ],
     "translation": "Términos"
@@ -20791,7 +20883,7 @@
     "origin": [
       [
         "src/views/settings/PowerpackSettings.tsx",
-        394
+        399
       ]
     ],
     "translation": "El Powerpack"
@@ -20803,7 +20895,7 @@
     "origin": [
       [
         "src/views/settings/PowerpackSettings.tsx",
-        403
+        408
       ]
     ],
     "translation": "Powerpack lo hace por ti."
@@ -20908,7 +21000,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        401
+        415
       ]
     ],
     "translation": "No hay anuncios, venta de datos ni incentivos para mantenerte buscando empleo más tiempo del necesario. El objetivo es simple: facilitar tu búsqueda, respetar tu privacidad y no estorbar."
@@ -20958,11 +21050,11 @@
     "origin": [
       [
         "src/views/pricing/components/FeatureComparisonTable.tsx",
-        80
+        85
       ],
       [
         "src/views/settings/PowerpackSettings.tsx",
-        144
+        149
       ]
     ],
     "translation": ""
@@ -21461,7 +21553,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        205
+        219
       ]
     ],
     "translation": "Registra cada oportunidad, correo, entrevista programada y seguimiento en un espacio privado. Consigue Powerpack para automatizar tu búsqueda."
@@ -21993,7 +22085,7 @@
     "origin": [
       [
         "src/views/settings/PowerpackSettings.tsx",
-        348
+        353
       ]
     ],
     "translation": "No se puede iniciar el pago ahora mismo. Inténtalo de nuevo."
@@ -23121,7 +23213,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        294
+        308
       ],
       [
         "src/views/pricing/index.tsx",
@@ -23345,7 +23437,7 @@
     "origin": [
       [
         "src/views/pricing/components/PricingCards.tsx",
-        81
+        89
       ]
     ],
     "translation": "Ver en GitHub"
@@ -23772,7 +23864,7 @@
       ],
       [
         "src/views/pricing/components/PricingCards.tsx",
-        74
+        78
       ],
       [
         "src/views/settings/BoardsSettings.tsx",
@@ -23788,7 +23880,7 @@
     "origin": [
       [
         "src/views/settings/PowerpackSettings.tsx",
-        194
+        199
       ]
     ],
     "translation": ""
@@ -23800,7 +23892,7 @@
     "origin": [
       [
         "src/views/pricing/components/FeatureComparisonTable.tsx",
-        130
+        135
       ]
     ],
     "translation": "Resumen semanal: qué requiere tu atención ahora"
@@ -23850,7 +23942,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        127
+        131
       ]
     ],
     "translation": "¿Qué ocurre cuando caduca Powerpack?"
@@ -23888,7 +23980,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        115
+        119
       ]
     ],
     "translation": ""
@@ -24022,7 +24114,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        143
+        147
       ]
     ],
     "translation": "¿Dónde se alojan mis datos?"
@@ -24112,7 +24204,7 @@
       ],
       [
         "src/views/home/index.tsx",
-        164
+        168
       ],
       [
         "src/views/members/index.tsx",
@@ -24452,6 +24544,18 @@
     ],
     "translation": "Sí, ofrecemos un plan gratuito para siempre para uso individual. Sin restricciones, sin muros de pago, sin límites."
   },
+  "I9MJMz": {
+    "translation": "Sí. Conecta un asistente de IA que admita MCP remoto y autorización en el navegador para consultar y gestionar tus oportunidades y listas. MCP está incluido en todas las cuentas. Configura o revoca el acceso en Ajustes → MCP.",
+    "message": "Yes. Connect an AI assistant that supports remote MCP and browser authorization to read and manage your opportunities and shortlists. MCP is included with every account. Set up or revoke access in Settings → MCP.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/home/index.tsx",
+        116
+      ]
+    ]
+  },
   "cjOJKJ": {
     "message": "Yes. Powerpack and all of its features are open source and included with the rest of the shortlistOS code on GitHub. With the required infrastructure and configuration, you can self-host the complete application, including its automation and AI features.",
     "placeholders": {},
@@ -24459,7 +24563,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        140
+        144
       ]
     ],
     "translation": ""
@@ -24483,7 +24587,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        136
+        140
       ]
     ],
     "translation": "Sí. El núcleo de código abierto se puede instalar y ejecutar en tu propia infraestructura siguiendo las instrucciones de GitHub. Tú te encargas del alojamiento, la configuración, las actualizaciones y las copias de seguridad."
@@ -24495,7 +24599,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        152
+        156
       ]
     ],
     "translation": ""
@@ -24507,7 +24611,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        132
+        136
       ]
     ],
     "translation": "Sí. Puedes exportar tu cuenta completa como archivo JSON en cualquier momento."
@@ -24576,7 +24680,7 @@
     "origin": [
       [
         "src/views/settings/PowerpackSettings.tsx",
-        398
+        403
       ]
     ],
     "translation": "Actualmente disfrutas de toda la potencia de Powerpack y seguirás haciéndolo durante {remainingPowerpackTime}."
@@ -24686,7 +24790,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1116
+        1135
       ]
     ],
     "translation": ""
@@ -24778,7 +24882,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1175
+        1194
       ]
     ],
     "translation": ""
@@ -24803,7 +24907,7 @@
     "origin": [
       [
         "src/views/pricing/components/PricingCards.tsx",
-        90
+        98
       ]
     ],
     "translation": "Tú gestionas la instalación, las actualizaciones y las copias de seguridad"
@@ -24928,7 +25032,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        128
+        132
       ]
     ],
     "translation": "Tu cuenta, oportunidades, notas y archivos siguen disponibles. Tu cuenta vuelve a la versión base y las funciones de Powerpack se detienen hasta que lo actives de nuevo."
@@ -24964,7 +25068,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        313
+        327
       ]
     ],
     "translation": "Tus datos nunca se venden"
@@ -24988,7 +25092,7 @@
     "origin": [
       [
         "src/views/home/index.tsx",
-        165
+        169
       ]
     ],
     "translation": "Toda tu búsqueda de empleo en un solo lugar."
@@ -25113,7 +25217,7 @@
     "origin": [
       [
         "src/views/pricing/components/PricingCards.tsx",
-        87
+        95
       ]
     ],
     "translation": "Tu propio alojamiento y base de datos"

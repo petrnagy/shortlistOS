@@ -38,6 +38,7 @@ The repository includes:
 - company and salary enrichment with OpenWebNinja, regional salary sampling, currency conversion through Frankfurter, caching, retry limits, and per-account quotas;
 - Powerpack settings and Stripe checkout/webhook support;
 - the Web Clipper authorization and ingestion API;
+- a browser-authorized [MCP server](./docs/mcp.md) for AI assistants to read and manage opportunities and shortlists, included for every account;
 - email, OAuth/OIDC, notifications, analytics, partner integration, and white-label configuration.
 
 Most third-party integrations are optional. A standard installation requires PostgreSQL, an S3-compatible object store, a base URL, and an authentication secret.
