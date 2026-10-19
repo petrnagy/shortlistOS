@@ -1059,7 +1059,6 @@ export default function GetStartedPage() {
                     description={
                       <>
                         <p>{t`Connect a compatible AI assistant to read and manage your opportunities and shortlists.`}</p>
-                        <p className="mt-3">{t`MCP is available to every shortlistOS account.`}</p>
                         <Link
                           href="/settings/mcp"
                           className="mt-3 inline-block font-medium underline decoration-light-500 underline-offset-4 hover:decoration-light-1000 dark:decoration-dark-500 dark:hover:decoration-dark-1000"
