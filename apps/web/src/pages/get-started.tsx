@@ -1036,7 +1036,7 @@ export default function GetStartedPage() {
                     .
                   </Trans>{" "}
                   <Trans>
-                    Ask a compatible AI assistant to add opportunities through{" "}
+                    Or ask a compatible AI assistant to add opportunities through{" "}
                     <Link
                       href="#mcp"
                       className="decoration-current/50 font-medium underline underline-offset-4 hover:decoration-current"

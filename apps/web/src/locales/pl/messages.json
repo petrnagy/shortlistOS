@@ -3005,18 +3005,6 @@
     ],
     "translation": "Jako zakres"
   },
-  "/PmiVv": {
-    "message": "Ask a compatible AI assistant to add opportunities through <0>MCP</0>.",
-    "placeholders": {},
-    "comments": [],
-    "origin": [
-      [
-        "src/pages/get-started.tsx",
-        1038
-      ]
-    ],
-    "translation": "Poproś kompatybilnego asystenta AI o dodanie ofert pracy przez <0>MCP</0>."
-  },
   "1Gqn0z": {
     "message": "Ask shortlistOS to email you when a saved job has been sitting untouched for too long.",
     "placeholders": {},
@@ -15207,6 +15195,18 @@
       ]
     ],
     "translation": "lub"
+  },
+  "dXTJaj": {
+    "translation": "Lub poproś kompatybilnego asystenta AI o dodanie ofert pracy przez <0>MCP</0>.",
+    "message": "Or ask a compatible AI assistant to add opportunities through <0>MCP</0>.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        1038
+      ]
+    ]
   },
   "ZqDqbi": {
     "message": "Organize and find cards quickly with powerful filtering tools.",
