@@ -77,7 +77,7 @@ interface CreateContextOptions {
   db: dbClient;
   auth: ReturnType<typeof createAuthWithHeaders>;
   headers: Headers;
-  transport?: "trpc" | "rest";
+  transport?: "trpc" | "rest" | "mcp";
 }
 
 export const createInnerTRPCContext = (opts: CreateContextOptions) => {
@@ -190,7 +190,7 @@ const loggingMiddleware = t.middleware(async ({ path, type, next, ctx, getRawInp
     input,
   };
 
-  const label = transport === "rest" ? "REST" : "tRPC";
+  const label = transport === "mcp" ? "MCP" : transport === "rest" ? "REST" : "tRPC";
 
   if (result.ok) {
     log.info({ ...meta, status: 200 }, `${label} OK`);

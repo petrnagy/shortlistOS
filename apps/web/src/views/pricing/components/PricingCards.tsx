@@ -44,6 +44,10 @@ export function getPricingPlans(): PricingPlan[] {
         { label: t`Notes and attachments` },
         { label: t`Activity history` },
         { label: t`Full data export` },
+        {
+          label: t`AI assistant access (MCP)`,
+          info: t`Connect a compatible AI assistant to read and manage your opportunities and shortlists.`,
+        },
       ],
     },
     {
@@ -72,6 +76,10 @@ export function getPricingPlans(): PricingPlan[] {
           info: t`A private calendar feed for scheduled interviews, compatible with Google Calendar, Outlook, and other calendar apps.`,
         },
         { label: t`Weekly digest` },
+        {
+          label: t`AI assistant access (MCP)`,
+          info: t`Connect a compatible AI assistant to read and manage your opportunities and shortlists.`,
+        },
       ],
     },
     {
@@ -89,6 +97,10 @@ export function getPricingPlans(): PricingPlan[] {
         { label: t`No hosted account required` },
         { label: t`You manage setup, updates, backups` },
         { label: t`All the features` },
+        {
+          label: t`AI assistant access (MCP)`,
+          info: t`Connect a compatible AI assistant to read and manage your opportunities and shortlists.`,
+        },
       ],
     },
   ];

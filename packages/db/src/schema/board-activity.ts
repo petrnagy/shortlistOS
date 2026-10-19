@@ -16,6 +16,7 @@ import { workspaces } from "./workspaces";
 
 export const boardActivityTypes = [
   "board.created",
+  "board.renamed",
   "board.deleted",
   "board.archived",
   "board.unarchived",
@@ -34,6 +35,7 @@ export const boardActivities = pgTable(
     boardId: bigint("boardId", { mode: "number" }).references(() => boards.id, {
       onDelete: "set null",
     }),
+    actorClientName: varchar("actorClientName", { length: 100 }),
     boardName: varchar("boardName", { length: 255 }).notNull(),
     boardType: boardTypeEnum("boardType").notNull(),
     workspaceId: bigint("workspaceId", { mode: "number" })

@@ -27,6 +27,7 @@ export const getPaginatedUserActivities = async (
       type: boardActivities.boardType,
       activityType: boardActivities.type,
       createdAt: boardActivities.createdAt,
+      actorClientName: boardActivities.actorClientName,
       userId: users.id,
       userName: users.name,
       userEmail: users.email,
@@ -56,6 +57,7 @@ export const getPaginatedUserActivities = async (
   const hasMore = rows.length > limit;
   const items = rows.slice(0, limit).map((row) => ({
     publicId: row.publicId,
+    actorClientName: row.actorClientName,
     type: row.activityType,
     createdAt: row.createdAt,
     board: {

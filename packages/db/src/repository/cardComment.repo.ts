@@ -45,6 +45,7 @@ export const getByPublicId = (db: dbClient, publicId: string) => {
   return db.query.comments.findFirst({
     columns: {
       id: true,
+      cardId: true,
       publicId: true,
       comment: true,
       createdBy: true,

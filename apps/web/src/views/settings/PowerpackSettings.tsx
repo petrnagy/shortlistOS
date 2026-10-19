@@ -105,6 +105,11 @@ const featureGroups: { title: string; items: FeatureRow[] }[] = [
         inFree: true,
         inPowerpack: true,
       },
+      {
+        label: t`AI assistant access (MCP)`,
+        inFree: true,
+        inPowerpack: true,
+      },
     ],
   },
   {

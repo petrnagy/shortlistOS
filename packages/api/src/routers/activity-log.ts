@@ -19,6 +19,7 @@ const cardActivityLogItemSchema = activityItemSchema.extend({
 });
 
 const boardActivityLogItemSchema = z.object({
+  actorClientName: z.string().nullable().optional(),
   entityType: z.literal("board"),
   publicId: z.string(),
   type: z.enum(boardActivityTypes),

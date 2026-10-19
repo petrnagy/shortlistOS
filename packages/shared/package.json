@@ -4,6 +4,10 @@
   "version": "0.1.0",
   "type": "module",
   "exports": {
+    "./connection-consent": {
+      "types": "./src/utils/connection-consent.ts",
+      "default": "./src/utils/connection-consent.ts"
+    },
     ".": {
       "types": "./src/index.ts",
       "default": "./src/index.ts"

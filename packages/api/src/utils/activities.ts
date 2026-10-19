@@ -59,6 +59,7 @@ export function mergeActivities(activities: Activity[]): Activity[] {
 
       if (
         next.type === current.type &&
+        next.actorClientName === current.actorClientName &&
         next.user?.id === current.user?.id &&
         timeDiff >= 0 && // next is older or same time in newest-first order
         timeDiff <= MERGE_TIME_WINDOW_MS

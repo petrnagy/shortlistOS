@@ -18,6 +18,7 @@ import type { dbClient } from "@kan/db/client";
 import { initAuth } from "@kan/auth/server";
 import { createDrizzleClient } from "@kan/db/client";
 import { createLogger } from "@kan/logger";
+import { renderConnectionConsent } from "@kan/shared/connection-consent";
 
 import { config, WEB_CLIPPER_CLIENT_ID } from "./config";
 import { webClipperStrings } from "./dictionary";
@@ -320,144 +321,25 @@ const renderConsent = (
     "Content-Security-Policy":
       "default-src 'none'; style-src 'unsafe-inline'; form-action 'self'; frame-ancestors 'none'; base-uri 'none'",
   });
-  response.end(`<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>${escapeHtml(webClipperStrings.consent.pageTitle)}</title>
-  <style>
-    :root {
-      color-scheme: light;
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: #f7f7f5;
-      color: #171717;
-    }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      min-height: 100vh;
-      display: grid;
-      place-items: center;
-      padding: 1.5rem;
-      position: relative;
-      background: #faf9f6;
-    }
-    ${paperGrainStyles}
-    main {
-      position: relative;
-      z-index: 1;
-      width: min(29rem, 100%);
-      padding: 2rem;
-      border: 1px solid #deded9;
-      border-radius: .75rem;
-      background: rgba(255, 255, 255, .96);
-      box-shadow: 0 18px 45px rgba(23, 23, 23, .08);
-    }
-    .brand {
-      margin: 0 0 1.75rem;
-      font-size: 1rem;
-      font-weight: 750;
-      letter-spacing: -.025em;
-    }
-    h1 {
-      margin: 0;
-      font-size: 1.625rem;
-      line-height: 1.2;
-      letter-spacing: -.035em;
-    }
-    .description {
-      margin: .75rem 0 1.5rem;
-      color: #66665f;
-      font-size: .9375rem;
-      line-height: 1.6;
-    }
-    .account {
-      display: flex;
-      align-items: center;
-      gap: .65rem;
-      margin: 0;
-      padding: .8rem .9rem;
-      border: 1px solid #e5e5e0;
-      border-radius: .5rem;
-      background: #f7f7f5;
-      color: #3f3f3b;
-      font-size: .875rem;
-    }
-    .account::before {
-      content: "";
-      width: .5rem;
-      height: .5rem;
-      flex: 0 0 auto;
-      border-radius: 999px;
-      background: #22a06b;
-      box-shadow: 0 0 0 3px rgba(34, 160, 107, .12);
-    }
-    .actions { display: flex; gap: .625rem; margin-top: 1.5rem; }
-    button {
-      min-height: 2.75rem;
-      flex: 1;
-      border: 1px solid transparent;
-      border-radius: .5rem;
-      padding: .7rem 1rem;
-      font: inherit;
-      font-size: .875rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: background-color .15s ease, border-color .15s ease, transform .15s ease;
-    }
-    button:active { transform: translateY(1px); }
-    button:focus-visible { outline: 2px solid #171717; outline-offset: 2px; }
-    .approve { background: #171717; color: #fff; }
-    .approve:hover { background: #30302d; }
-    .deny { border-color: #deded9; background: #fff; color: #3f3f3b; }
-    .deny:hover { background: #f2f2ef; }
-    .privacy {
-      margin: 1.25rem 0 0;
-      color: #85857e;
-      font-size: .75rem;
-      line-height: 1.5;
-      text-align: center;
-    }
-    @media (max-width: 32rem) {
-      main { padding: 1.5rem; }
-      .actions { flex-direction: column-reverse; }
-    }
-    @media (prefers-color-scheme: dark) {
-      :root { color-scheme: dark; background: #171717; color: #f5f5f3; }
-      body {
-        background-color: #171717;
-      }
-      main { border-color: #3b3b38; background: rgba(32, 32, 30, .97); box-shadow: 0 18px 50px rgba(0, 0, 0, .3); }
-      .description { color: #b7b7b0; }
-      .account { border-color: #41413d; background: #292927; color: #deded8; }
-      .approve { background: #f4f4f1; color: #171717; }
-      .approve:hover { background: #dfdfda; }
-      .deny { border-color: #41413d; background: #292927; color: #deded8; }
-      .deny:hover { background: #353532; }
-      button:focus-visible { outline-color: #f4f4f1; }
-    }
-  </style>
-</head>
-<body>
-  ${renderPaperGrainBackground()}
-  <main>
-    <p class="brand">${escapeHtml(webClipperStrings.brand)}</p>
-    <h1>${escapeHtml(webClipperStrings.consent.heading)}</h1>
-    <p class="description">${escapeHtml(webClipperStrings.consent.description)} ${escapeHtml(scopes.map(translateScope).join(", "))}.</p>
-    <p class="account">${escapeHtml(webClipperStrings.consent.signedInAs)} ${escapeHtml(userEmail)}</p>
-    <form method="post" action="/web-clipper/connect">
-      <input type="hidden" name="pairing_id" value="${escapeHtml(pairingId)}">
-      <input type="hidden" name="csrf_token" value="${escapeHtml(csrfToken)}">
-      <div class="actions">
-        <button class="deny" name="decision" value="deny">${escapeHtml(webClipperStrings.consent.cancel)}</button>
-        <button class="approve" name="decision" value="approve">${escapeHtml(webClipperStrings.consent.allow)}</button>
-      </div>
-    </form>
-    <p class="privacy">${escapeHtml(webClipperStrings.consent.privacy)}</p>
-  </main>
-</body>
-</html>`);
+  response.end(
+    renderConnectionConsent({
+      title: webClipperStrings.consent.pageTitle,
+      heading: webClipperStrings.consent.heading,
+      description: `${webClipperStrings.consent.description} ${scopes.map(translateScope).join(", ")}.`,
+      account: {
+        label: webClipperStrings.consent.signedInAs,
+        email: userEmail,
+      },
+      form: {
+        action: "/web-clipper/connect",
+        fields: { pairing_id: pairingId, csrf_token: csrfToken },
+        cancel: webClipperStrings.consent.cancel,
+        allow: webClipperStrings.consent.allow,
+        allowValue: "approve",
+      },
+      privacy: webClipperStrings.consent.privacy,
+    }),
+  );
 };
 
 const renderCompletion = (response: ServerResponse, approved: boolean) => {
