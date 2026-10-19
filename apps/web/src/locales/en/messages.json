@@ -504,7 +504,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1069
+        1079
       ]
     ],
     "translation": "03 · Pipeline"
@@ -516,7 +516,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1112
+        1122
       ]
     ],
     "translation": "04 · Powerpack"
@@ -2275,7 +2275,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1058
+        1068
       ],
       [
         "src/views/pricing/components/FeatureComparisonTable.tsx",
@@ -2383,7 +2383,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1044
+        1054
       ]
     ],
     "translation": "All the important data in one place"
@@ -3005,6 +3005,18 @@
     ],
     "translation": "As range"
   },
+  "/PmiVv": {
+    "translation": "Ask a compatible AI assistant to add opportunities through <0>MCP</0>.",
+    "message": "Ask a compatible AI assistant to add opportunities through <0>MCP</0>.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        1021
+      ]
+    ]
+  },
   "1Gqn0z": {
     "message": "Ask shortlistOS to email you when a saved job has been sitting untouched for too long.",
     "placeholders": {},
@@ -3079,7 +3091,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1077
+        1087
       ]
     ],
     "translation": "At a glance"
@@ -5860,7 +5872,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1059
+        1069
       ],
       [
         "src/views/pricing/components/PricingCards.tsx",
@@ -6519,7 +6531,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1190
+        1200
       ],
       [
         "src/views/home/components/FinalCta.tsx",
@@ -7891,7 +7903,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1083
+        1093
       ]
     ],
     "translation": "Drag and drop"
@@ -8144,7 +8156,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1071
+        1081
       ]
     ],
     "translation": "Each column shows a stage of your job search. When you apply, start interviewing, receive an offer, or decide not to continue, move the card to the matching column."
@@ -8988,7 +9000,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1090
+        1100
       ]
     ],
     "translation": "Every new shortlist comes with a complete job-search pipeline, ready to use."
@@ -9088,7 +9100,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1131
+        1141
       ]
     ],
     "translation": "Explore Powerpack"
@@ -12497,7 +12509,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1113
+        1123
       ]
     ],
     "translation": "Let Powerpack take care of repetitive work"
@@ -13533,7 +13545,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1194
+        1204
       ]
     ],
     "translation": "Missed something? No worries! A short in-app tutorial will guide you through the first steps."
@@ -13631,7 +13643,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1160
+        1170
       ]
     ],
     "translation": "More Powerpack features"
@@ -13706,7 +13718,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1084
+        1094
       ]
     ],
     "translation": "Move cards between stages to keep your shortlist up to date."
@@ -13731,7 +13743,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1070
+        1080
       ]
     ],
     "translation": "Move the card as things change"
@@ -16322,7 +16334,7 @@
       ],
       [
         "src/pages/get-started.tsx",
-        1121
+        1131
       ],
       [
         "src/views/board/components/BoardOpportunityTutorial.tsx",
@@ -16366,7 +16378,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1114
+        1124
       ]
     ],
     "translation": "Powerpack adds automation and AI to shortlistOS. Save jobs with Magic Inbox or the Web Clipper, get salary insights and company rating data, receive reminders, and automate routine housekeeping."
@@ -16427,7 +16439,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1021
+        1031
       ]
     ],
     "translation": "Powerpack can also add jobs from the <0>Web Clipper</0> or <1>Magic Inbox</1>."
@@ -17073,7 +17085,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1181
+        1191
       ]
     ],
     "translation": "Ready to start your job search?"
@@ -17085,7 +17097,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1089
+        1099
       ]
     ],
     "translation": "Ready-made pipeline"
@@ -17803,7 +17815,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1097
+        1107
       ]
     ],
     "translation": "Right now, you are <0>ready to go</0>. The second part of this guide covers the paid Powerpack features, which are not necessary for using shortlistOS."
@@ -18562,7 +18574,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1078
+        1088
       ]
     ],
     "translation": "See exactly where every opportunity in your job search stands."
@@ -19961,7 +19973,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1123
+        1133
       ]
     ],
     "translation": "Spend less time copying information and remembering follow-ups."
@@ -24782,7 +24794,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1124
+        1134
       ]
     ],
     "translation": "You choose which features to use on each shortlist. You can also turn automation off for one opportunity whenever you want to manage it by hand."
@@ -24874,7 +24886,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1183
+        1193
       ]
     ],
     "translation": "You have everything you need. Create your free account and build your first shortlist."

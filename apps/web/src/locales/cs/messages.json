@@ -504,7 +504,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1069
+        1079
       ]
     ],
     "translation": ""
@@ -516,7 +516,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1112
+        1122
       ]
     ],
     "translation": ""
@@ -2275,7 +2275,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1058
+        1068
       ],
       [
         "src/views/pricing/components/FeatureComparisonTable.tsx",
@@ -2383,7 +2383,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1044
+        1054
       ]
     ],
     "translation": ""
@@ -3005,6 +3005,18 @@
     ],
     "translation": "Jako rozsah"
   },
+  "/PmiVv": {
+    "translation": "Požádejte kompatibilního AI asistenta o přidání pracovních příležitostí přes <0>MCP</0>.",
+    "message": "Ask a compatible AI assistant to add opportunities through <0>MCP</0>.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/pages/get-started.tsx",
+        1021
+      ]
+    ]
+  },
   "1Gqn0z": {
     "message": "Ask shortlistOS to email you when a saved job has been sitting untouched for too long.",
     "placeholders": {},
@@ -3079,7 +3091,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1077
+        1087
       ]
     ],
     "translation": ""
@@ -5860,7 +5872,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1059
+        1069
       ],
       [
         "src/views/pricing/components/PricingCards.tsx",
@@ -6519,7 +6531,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1190
+        1200
       ],
       [
         "src/views/home/components/FinalCta.tsx",
@@ -7891,7 +7903,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1083
+        1093
       ]
     ],
     "translation": ""
@@ -8144,7 +8156,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1071
+        1081
       ]
     ],
     "translation": ""
@@ -8988,7 +9000,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1090
+        1100
       ]
     ],
     "translation": ""
@@ -9088,7 +9100,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1131
+        1141
       ]
     ],
     "translation": ""
@@ -12497,7 +12509,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1113
+        1123
       ]
     ],
     "translation": ""
@@ -13533,7 +13545,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1194
+        1204
       ]
     ],
     "translation": ""
@@ -13631,7 +13643,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1160
+        1170
       ]
     ],
     "translation": ""
@@ -13706,7 +13718,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1084
+        1094
       ]
     ],
     "translation": ""
@@ -13731,7 +13743,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1070
+        1080
       ]
     ],
     "translation": ""
@@ -16322,7 +16334,7 @@
       ],
       [
         "src/pages/get-started.tsx",
-        1121
+        1131
       ],
       [
         "src/views/board/components/BoardOpportunityTutorial.tsx",
@@ -16366,7 +16378,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1114
+        1124
       ]
     ],
     "translation": ""
@@ -16427,7 +16439,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1021
+        1031
       ]
     ],
     "translation": ""
@@ -17073,7 +17085,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1181
+        1191
       ]
     ],
     "translation": ""
@@ -17085,7 +17097,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1089
+        1099
       ]
     ],
     "translation": ""
@@ -17803,7 +17815,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1097
+        1107
       ]
     ],
     "translation": ""
@@ -18562,7 +18574,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1078
+        1088
       ]
     ],
     "translation": ""
@@ -19961,7 +19973,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1123
+        1133
       ]
     ],
     "translation": ""
@@ -24782,7 +24794,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1124
+        1134
       ]
     ],
     "translation": ""
@@ -24874,7 +24886,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1183
+        1193
       ]
     ],
     "translation": ""
