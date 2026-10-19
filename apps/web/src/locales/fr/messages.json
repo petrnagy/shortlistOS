@@ -2269,14 +2269,13 @@
     "obsolete": true
   },
   "QIN7ln": {
-    "translation": "Accès pour assistant IA (MCP)",
     "message": "AI assistant access (MCP)",
     "placeholders": {},
     "comments": [],
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1060
+        1058
       ],
       [
         "src/views/pricing/components/FeatureComparisonTable.tsx",
@@ -2298,7 +2297,8 @@
         "src/views/settings/PowerpackSettings.tsx",
         109
       ]
-    ]
+    ],
+    "translation": "Accès pour assistant IA (MCP)"
   },
   "h2ztFt": {
     "message": "All Free features +",
@@ -4462,7 +4462,6 @@
     "translation": "Puis-je auto-héberger shortlistOS ?"
   },
   "zRuz5n": {
-    "translation": "Puis-je utiliser mon propre assistant IA ?",
     "message": "Can I use my own AI assistant?",
     "placeholders": {},
     "comments": [],
@@ -4471,7 +4470,8 @@
         "src/views/home/index.tsx",
         115
       ]
-    ]
+    ],
+    "translation": "Puis-je utiliser mon propre assistant IA ?"
   },
   "KjP/23": {
     "message": "Can I use Powerpack with a self-hosted installation?",
@@ -5854,14 +5854,13 @@
     "translation": "Connecter {clientName}"
   },
   "lYrZDI": {
-    "translation": "Connectez un assistant IA compatible pour consulter et gérer vos opportunités et listes.",
     "message": "Connect a compatible AI assistant to read and manage your opportunities and shortlists.",
     "placeholders": {},
     "comments": [],
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1063
+        1061
       ],
       [
         "src/views/pricing/components/PricingCards.tsx",
@@ -5875,7 +5874,8 @@
         "src/views/pricing/components/PricingCards.tsx",
         102
       ]
-    ]
+    ],
+    "translation": "Connectez un assistant IA compatible pour consulter et gérer vos opportunités et listes."
   },
   "3jod3l": {
     "message": "Connect GitHub",
@@ -5930,7 +5930,6 @@
     "translation": "Connectez votre assistant IA"
   },
   "1bflXh": {
-    "translation": "Connectez votre assistant IA via MCP, inclus dans chaque compte.",
     "message": "Connect your AI assistant through MCP, included with every account.",
     "placeholders": {},
     "comments": [],
@@ -5939,7 +5938,8 @@
         "src/views/home/index.tsx",
         177
       ]
-    ]
+    ],
+    "translation": "Connectez votre assistant IA via MCP, inclus dans chaque compte."
   },
   "sDLCvT": {
     "message": "Connect your favorite tools to streamline your workflow.",
@@ -13355,7 +13355,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1064
+        1062
       ],
       [
         "src/views/settings/McpSettings.tsx",
@@ -13375,7 +13375,7 @@
       ],
       [
         "src/pages/get-started.tsx",
-        1069
+        1067
       ],
       [
         "src/server/mcp/consent-page.ts",
@@ -24545,7 +24545,6 @@
     "translation": "Oui, nous proposons un forfait gratuit à vie pour un usage individuel. Aucune restriction, aucun paywall, aucune limite."
   },
   "I9MJMz": {
-    "translation": "Oui. Connectez un assistant IA prenant en charge MCP à distance et l’autorisation dans le navigateur pour consulter et gérer vos opportunités et listes. MCP est inclus dans chaque compte. Configurez ou révoquez l’accès dans Paramètres → MCP.",
     "message": "Yes. Connect an AI assistant that supports remote MCP and browser authorization to read and manage your opportunities and shortlists. MCP is included with every account. Set up or revoke access in Settings → MCP.",
     "placeholders": {},
     "comments": [],
@@ -24554,7 +24553,8 @@
         "src/views/home/index.tsx",
         116
       ]
-    ]
+    ],
+    "translation": "Oui. Connectez un assistant IA prenant en charge MCP à distance et l’autorisation dans le navigateur pour consulter et gérer vos opportunités et listes. MCP est inclus dans chaque compte. Configurez ou révoquez l’accès dans Paramètres → MCP."
   },
   "cjOJKJ": {
     "message": "Yes. Powerpack and all of its features are open source and included with the rest of the shortlistOS code on GitHub. With the required infrastructure and configuration, you can self-host the complete application, including its automation and AI features.",

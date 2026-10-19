@@ -169,10 +169,10 @@ export default function HomeView() {
           title={t`Your entire job search in one place.`}
           description={
             <>
-              {t`Keep every opportunity, email, note, and file together. Follow a purpose-built pipeline and see exactly where your search stands.`}{" "}
+              {t`Keep every opportunity, email, note, and file together. Follow a purpose-built pipeline and see exactly where your search stands.`}
               <Link
                 href="/get-started#mcp"
-                className="font-medium underline decoration-light-500 underline-offset-4 hover:decoration-light-1000 dark:decoration-dark-500 dark:hover:decoration-dark-1000"
+                className="mt-4 block text-sm font-medium leading-normal text-light-1000 underline decoration-light-500 underline-offset-4 hover:decoration-light-1000 dark:text-dark-1000 dark:decoration-dark-500 dark:hover:decoration-dark-1000"
               >
                 {t`Connect your AI assistant through MCP, included with every account.`}
               </Link>
