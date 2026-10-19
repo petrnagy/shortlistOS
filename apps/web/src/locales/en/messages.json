@@ -504,7 +504,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1079
+        1069
       ]
     ],
     "translation": "03 · Pipeline"
@@ -516,7 +516,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1122
+        1112
       ]
     ],
     "translation": "04 · Powerpack"
@@ -3079,7 +3079,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1087
+        1077
       ]
     ],
     "translation": "At a glance"
@@ -5860,7 +5860,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1061
+        1059
       ],
       [
         "src/views/pricing/components/PricingCards.tsx",
@@ -6519,7 +6519,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1200
+        1190
       ],
       [
         "src/views/home/components/FinalCta.tsx",
@@ -7891,7 +7891,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1093
+        1083
       ]
     ],
     "translation": "Drag and drop"
@@ -8144,7 +8144,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1081
+        1071
       ]
     ],
     "translation": "Each column shows a stage of your job search. When you apply, start interviewing, receive an offer, or decide not to continue, move the card to the matching column."
@@ -8988,7 +8988,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1100
+        1090
       ]
     ],
     "translation": "Every new shortlist comes with a complete job-search pipeline, ready to use."
@@ -9088,7 +9088,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1141
+        1131
       ]
     ],
     "translation": "Explore Powerpack"
@@ -12497,7 +12497,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1123
+        1113
       ]
     ],
     "translation": "Let Powerpack take care of repetitive work"
@@ -13370,10 +13370,6 @@
         69
       ],
       [
-        "src/pages/get-started.tsx",
-        1066
-      ],
-      [
         "src/server/mcp/consent-page.ts",
         37
       ]
@@ -13537,7 +13533,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1204
+        1194
       ]
     ],
     "translation": "Missed something? No worries! A short in-app tutorial will guide you through the first steps."
@@ -13635,7 +13631,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1170
+        1160
       ]
     ],
     "translation": "More Powerpack features"
@@ -13710,7 +13706,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1094
+        1084
       ]
     ],
     "translation": "Move cards between stages to keep your shortlist up to date."
@@ -13735,7 +13731,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1080
+        1070
       ]
     ],
     "translation": "Move the card as things change"
@@ -16326,7 +16322,7 @@
       ],
       [
         "src/pages/get-started.tsx",
-        1131
+        1121
       ],
       [
         "src/views/board/components/BoardOpportunityTutorial.tsx",
@@ -16370,7 +16366,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1124
+        1114
       ]
     ],
     "translation": "Powerpack adds automation and AI to shortlistOS. Save jobs with Magic Inbox or the Web Clipper, get salary insights and company rating data, receive reminders, and automate routine housekeeping."
@@ -17077,7 +17073,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1191
+        1181
       ]
     ],
     "translation": "Ready to start your job search?"
@@ -17089,7 +17085,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1099
+        1089
       ]
     ],
     "translation": "Ready-made pipeline"
@@ -17807,7 +17803,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1107
+        1097
       ]
     ],
     "translation": "Right now, you are <0>ready to go</0>. The second part of this guide covers the paid Powerpack features, which are not necessary for using shortlistOS."
@@ -18566,7 +18562,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1088
+        1078
       ]
     ],
     "translation": "See exactly where every opportunity in your job search stands."
@@ -19965,7 +19961,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1133
+        1123
       ]
     ],
     "translation": "Spend less time copying information and remembering follow-ups."
@@ -24786,7 +24782,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1134
+        1124
       ]
     ],
     "translation": "You choose which features to use on each shortlist. You can also turn automation off for one opportunity whenever you want to manage it by hand."
@@ -24878,7 +24874,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1193
+        1183
       ]
     ],
     "translation": "You have everything you need. Create your free account and build your first shortlist."

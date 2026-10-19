@@ -1056,17 +1056,7 @@ export default function GetStartedPage() {
                   <FeatureCard
                     icon={HiOutlineChatBubbleLeft}
                     title={t`AI assistant access (MCP)`}
-                    description={
-                      <>
-                        <p>{t`Connect a compatible AI assistant to read and manage your opportunities and shortlists.`}</p>
-                        <Link
-                          href="/settings/mcp"
-                          className="mt-3 inline-block font-medium underline decoration-light-500 underline-offset-4 hover:decoration-light-1000 dark:decoration-dark-500 dark:hover:decoration-dark-1000"
-                        >
-                          {t`MCP settings`}
-                        </Link>
-                      </>
-                    }
+                    description={t`Connect a compatible AI assistant to read and manage your opportunities and shortlists.`}
                     liftOnHover={false}
                   />
                 </div>

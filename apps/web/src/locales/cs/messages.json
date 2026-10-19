@@ -504,7 +504,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1079
+        1069
       ]
     ],
     "translation": ""
@@ -516,7 +516,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1122
+        1112
       ]
     ],
     "translation": ""
@@ -3079,7 +3079,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1087
+        1077
       ]
     ],
     "translation": ""
@@ -5860,7 +5860,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1061
+        1059
       ],
       [
         "src/views/pricing/components/PricingCards.tsx",
@@ -6519,7 +6519,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1200
+        1190
       ],
       [
         "src/views/home/components/FinalCta.tsx",
@@ -7891,7 +7891,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1093
+        1083
       ]
     ],
     "translation": ""
@@ -8144,7 +8144,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1081
+        1071
       ]
     ],
     "translation": ""
@@ -8988,7 +8988,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1100
+        1090
       ]
     ],
     "translation": ""
@@ -9088,7 +9088,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1141
+        1131
       ]
     ],
     "translation": ""
@@ -12497,7 +12497,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1123
+        1113
       ]
     ],
     "translation": ""
@@ -13370,10 +13370,6 @@
         69
       ],
       [
-        "src/pages/get-started.tsx",
-        1066
-      ],
-      [
         "src/server/mcp/consent-page.ts",
         37
       ]
@@ -13537,7 +13533,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1204
+        1194
       ]
     ],
     "translation": ""
@@ -13635,7 +13631,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1170
+        1160
       ]
     ],
     "translation": ""
@@ -13710,7 +13706,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1094
+        1084
       ]
     ],
     "translation": ""
@@ -13735,7 +13731,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1080
+        1070
       ]
     ],
     "translation": ""
@@ -16326,7 +16322,7 @@
       ],
       [
         "src/pages/get-started.tsx",
-        1131
+        1121
       ],
       [
         "src/views/board/components/BoardOpportunityTutorial.tsx",
@@ -16370,7 +16366,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1124
+        1114
       ]
     ],
     "translation": ""
@@ -17077,7 +17073,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1191
+        1181
       ]
     ],
     "translation": ""
@@ -17089,7 +17085,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1099
+        1089
       ]
     ],
     "translation": ""
@@ -17807,7 +17803,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1107
+        1097
       ]
     ],
     "translation": ""
@@ -18566,7 +18562,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1088
+        1078
       ]
     ],
     "translation": ""
@@ -19965,7 +19961,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1133
+        1123
       ]
     ],
     "translation": ""
@@ -24786,7 +24782,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1134
+        1124
       ]
     ],
     "translation": ""
@@ -24878,7 +24874,7 @@
     "origin": [
       [
         "src/pages/get-started.tsx",
-        1193
+        1183
       ]
     ],
     "translation": ""
