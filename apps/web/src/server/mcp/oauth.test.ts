@@ -12,7 +12,6 @@ import { consentCookieName } from "./consent";
 const mocks = vi.hoisted(() => ({
   getClient: vi.fn(),
   issueCode: vi.fn(),
-  requirePowerpack: vi.fn(),
   registerClient: vi.fn(),
   exchangeCode: vi.fn(),
   refreshTokens: vi.fn(),
@@ -89,10 +88,15 @@ beforeEach(() => {
     redirectUris: ["https://client.example/callback"],
   });
   mocks.getSession.mockResolvedValue({
-    user: { id: "user", name: "Test User", email: "test@example.com" },
+    user: {
+      id: "user",
+      name: "Test User",
+      email: "test@example.com",
+      shortlistPowerpackActivatedAt: null,
+      shortlistPowerpackExpiresAt: null,
+    },
   });
   mocks.newMcpSecret.mockReturnValue(secret);
-  mocks.requirePowerpack.mockResolvedValue({});
   mocks.issueCode.mockResolvedValue("one-time-code");
 });
 
@@ -260,7 +264,35 @@ describe("MCP browser authorization", () => {
     expect(redirect.searchParams.get("state")).toBe("opaque-state");
     expect(redirect.searchParams.get("iss")).toBe(mcpUrls().origin);
   });
-  it("rejects invalid requests and expired Powerpack without issuing a code", async () => {
+  it("authorizes accounts with an expired Powerpack", async () => {
+    mocks.getSession.mockResolvedValue({
+      user: {
+        id: "user",
+        name: "Test User",
+        email: "test@example.com",
+        shortlistPowerpackActivatedAt: new Date(0),
+        shortlistPowerpackExpiresAt: new Date(1),
+      },
+    });
+    const page = response();
+    await authorize(
+      request({
+        method: "GET",
+        headers: {},
+        cookies: {},
+        query: authorization(),
+      }),
+      page.typed,
+    );
+    expect(page.res.status).toHaveBeenCalledWith(200);
+    const submitted = response();
+    await consent(post(), submitted.typed);
+    expect(submitted.res.redirect).toHaveBeenCalledWith(
+      303,
+      expect.stringContaining("code=one-time-code"),
+    );
+  });
+  it("rejects invalid and unauthenticated requests without issuing a code", async () => {
     for (const body of [
       { ...authorization(), redirect_uri: "https://evil.example/callback" },
       { ...authorization(), code_challenge_method: "plain" },
@@ -271,10 +303,10 @@ describe("MCP browser authorization", () => {
       expect(res.status).toHaveBeenCalledWith(400);
       expect(res.redirect).not.toHaveBeenCalled();
     }
-    mocks.requirePowerpack.mockRejectedValueOnce(new Error("Expired"));
-    const expired = response();
-    await consent(post(), expired.typed);
-    expect(expired.res.status).toHaveBeenCalledWith(403);
+    mocks.getSession.mockResolvedValueOnce(null);
+    const unauthenticated = response();
+    await consent(post(), unauthenticated.typed);
+    expect(unauthenticated.res.status).toHaveBeenCalledWith(401);
     expect(mocks.issueCode).not.toHaveBeenCalled();
   });
   it("returns access_denied on cancellation without issuing a code", async () => {

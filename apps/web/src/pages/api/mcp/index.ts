@@ -45,11 +45,6 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     )
       return res.status(403).json({ error: "invalid_origin" });
   }
-  try {
-    await mcpRepo.requirePowerpack(db, connection.userId);
-  } catch {
-    return res.status(403).json({ error: "powerpack_required" });
-  }
   // Stateless transport: requests remain portable across replicas and restarts.
   if (req.method !== "POST") {
     res.setHeader("Allow", "POST, OPTIONS");

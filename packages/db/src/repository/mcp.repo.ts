@@ -68,17 +68,9 @@ export async function registerClient(
   return publicId;
 }
 
-export async function requirePowerpack(db: dbClient, userId: string) {
+export async function requireAccount(db: dbClient, userId: string) {
   const user = await db.query.users.findFirst({ where: eq(users.id, userId) });
-  const now = new Date();
-  if (
-    !user?.shortlistPowerpackActivatedAt ||
-    !user.shortlistPowerpackExpiresAt ||
-    now < user.shortlistPowerpackActivatedAt ||
-    now > user.shortlistPowerpackExpiresAt
-  ) {
-    throw new Error("Active Powerpack required");
-  }
+  if (!user) throw new Error("Account not found");
   return user;
 }
 
@@ -141,7 +133,7 @@ export async function exchangeCode(
       )
       .returning();
     if (!code) throw new Error("Invalid authorization code");
-    await requirePowerpack(tx as unknown as dbClient, code.userId);
+    await requireAccount(tx as unknown as dbClient, code.userId);
     const client = await getClient(tx as unknown as dbClient, code.clientId);
     if (!client) throw new Error("Unknown client");
     const pair = tokenPair();
@@ -195,7 +187,7 @@ export async function refreshTokens(
           );
       return null;
     }
-    await requirePowerpack(tx as unknown as dbClient, connection.userId);
+    await requireAccount(tx as unknown as dbClient, connection.userId);
     await tx.insert(mcpConsumedRefreshTokens).values({
       tokenHash: hashMcpSecret(refreshToken),
       connectionPublicId: connection.publicId,

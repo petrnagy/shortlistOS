@@ -6,17 +6,13 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 
 import handler from "~/pages/api/mcp";
 
-const mocks = vi.hoisted(() => ({ active: true }));
+const mocks = vi.hoisted(() => ({ revoked: false }));
 vi.mock("@kan/db/client", () => ({ createDrizzleClient: () => ({}) }));
 vi.mock("@kan/db/repository/mcp.repo", () => ({
   getConnection: (_db: unknown, token: string) =>
-    token === "a".repeat(43)
+    token === "a".repeat(43) && !mocks.revoked
       ? { userId: "user", clientName: "Claude", clientId: "client" }
       : undefined,
-  requirePowerpack: () => {
-    if (!mocks.active) throw new Error("Expired");
-    return {};
-  },
   getClient: () => ({ redirectUris: ["https://client.example/callback"] }),
 }));
 vi.mock("@kan/api/utils/rateLimit", () => ({
@@ -38,7 +34,7 @@ vi.mock("~/server/mcp/server", async () => {
   };
 });
 afterEach(() => {
-  mocks.active = true;
+  mocks.revoked = false;
 });
 
 describe("MCP Streamable HTTP", () => {
@@ -99,8 +95,8 @@ describe("MCP Streamable HTTP", () => {
       expect(
         (await client.callTool({ name: "ping", arguments: {} })).content,
       ).toEqual([{ type: "text", text: "pong" }]);
-      mocks.active = false;
-      expect((await fetch(url, { headers })).status).toBe(403);
+      mocks.revoked = true;
+      expect((await fetch(url, { headers })).status).toBe(401);
     } finally {
       await client.close();
       http.closeAllConnections();

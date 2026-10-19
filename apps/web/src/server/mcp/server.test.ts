@@ -22,7 +22,7 @@ import { createMcpServer, publicResult } from "./server";
 vi.mock("@kan/auth/server", () => ({ initAuth: () => ({ api: {} }) }));
 
 describe("MCP tools", () => {
-  it("preserves GUI automation and attribution, limits tools, and enforces membership and expiry", async () => {
+  it("preserves GUI automation and attribution, limits tools, and enforces membership", async () => {
     const db = await createTestDb();
     const { user, workspace } = await seedTestData(db);
     await db
@@ -173,13 +173,109 @@ describe("MCP tools", () => {
         .update(users)
         .set({ shortlistPowerpackExpiresAt: new Date(0) })
         .where(eq(users.id, user.id));
-      expect((await call("list_workspaces")).isError).toBe(true);
+      expect((await call("list_workspaces")).isError).not.toBe(true);
     } finally {
       await client.close();
       await server.close();
       await (db.$client as unknown as { close(): Promise<void> }).close();
     }
   }, 30_000);
+
+  it.each(["free", "expired Powerpack"])(
+    "supports reads and writes for an account with %s access without enabling paid enrichment",
+    async (plan) => {
+      const db = await createTestDb();
+      const { user, workspace } = await seedTestData(db);
+      if (plan === "expired Powerpack")
+        await db
+          .update(users)
+          .set({
+            shortlistPowerpackActivatedAt: new Date(0),
+            shortlistPowerpackExpiresAt: new Date(1),
+          })
+          .where(eq(users.id, user.id));
+      const server = createMcpServer(db, {
+        userId: user.id,
+        clientName: "ChatGPT",
+      });
+      const client = new Client({ name: "Test client", version: "1.0.0" });
+      const [clientTransport, serverTransport] =
+        InMemoryTransport.createLinkedPair();
+      await server.connect(serverTransport);
+      await client.connect(clientTransport);
+      const call = async (name: string, args: Record<string, unknown> = {}) => {
+        const result = await client.callTool({ name, arguments: args });
+        expect(result.isError).not.toBe(true);
+        return JSON.parse(
+          (result.content as { text: string }[])[0]?.text ?? "null",
+        ) as Record<string, unknown>;
+      };
+      try {
+        await call("list_workspaces");
+        const shortlist = await call("create_shortlist", {
+          workspacePublicId: workspace.publicId,
+          name: "My shortlist",
+        });
+        const boardPublicId = shortlist.publicId as string;
+        const board = await call("get_shortlist", { boardPublicId });
+        const columns = board.lists as { publicId: string }[];
+        expect(columns).toHaveLength(8);
+        const [saved, applied] = columns;
+        if (!saved || !applied) throw new Error("Expected standard columns");
+        // Retained shortlist settings must not bypass Powerpack eligibility.
+        await db
+          .update(boards)
+          .set({
+            shortlistIsSalaryDataEnabled: true,
+            shortlistIsCompanySentimentEnabled: true,
+          })
+          .where(eq(boards.publicId, boardPublicId));
+        const opportunity = await call("create_opportunity", {
+          listPublicId: saved.publicId,
+          title: "Engineer",
+          shortlistCompanyName: "Acme",
+          shortlistSalaryMin: 100_000,
+        });
+        const cardPublicId = opportunity.publicId as string;
+        await call("update_opportunity", {
+          cardPublicId,
+          title: "Senior Engineer",
+          listPublicId: applied.publicId,
+        });
+        expect(await call("get_opportunity", { cardPublicId })).toMatchObject({
+          title: "Senior Engineer",
+          shortlistSalaryMin: 100_000,
+        });
+        await call("rename_shortlist", { boardPublicId, name: "Renamed" });
+        expect(await db.select().from(cards)).toEqual([
+          expect.objectContaining({
+            publicId: cardPublicId,
+            shortlistDataFetchNeeded: false,
+            shortlistDataFetchRequestedBy: null,
+          }),
+        ]);
+        expect(await db.select().from(cardActivities)).toEqual(
+          expect.arrayContaining([
+            expect.objectContaining({
+              type: "card.created",
+              actorClientName: "ChatGPT",
+              createdBy: user.id,
+            }),
+          ]),
+        );
+        await call("delete_opportunity", { cardPublicId });
+        const [deleted] = await db
+          .select({ deletedAt: cards.deletedAt })
+          .from(cards);
+        expect(deleted?.deletedAt).toBeInstanceOf(Date);
+      } finally {
+        await client.close();
+        await server.close();
+        await (db.$client as unknown as { close(): Promise<void> }).close();
+      }
+    },
+    30_000,
+  );
 
   it("removes internal identifiers recursively and validates callback schemes", () => {
     expect(

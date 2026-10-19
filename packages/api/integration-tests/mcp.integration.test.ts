@@ -7,17 +7,10 @@ import { mcpAuthorizationCodes, mcpConnections, users } from "@kan/db/schema";
 import { createTestDb, seedTestData } from "./test-db";
 
 describe("MCP authorization storage", () => {
-  it("binds codes to client, redirect, PKCE and resource; rotates tokens and revokes access", async () => {
+  it("binds codes and rotates tokens for free accounts, preserving access after Powerpack expiry", async () => {
     const db = await createTestDb();
     try {
       const { user } = await seedTestData(db);
-      await db
-        .update(users)
-        .set({
-          shortlistPowerpackActivatedAt: new Date(Date.now() - 1000),
-          shortlistPowerpackExpiresAt: new Date(Date.now() + 86_400_000),
-        })
-        .where(eq(users.id, user.id));
       const clientId = await mcp.registerClient(db, "Claude", [
         "https://client.example/callback",
       ]);
@@ -60,6 +53,13 @@ describe("MCP authorization storage", () => {
       await expect(
         mcp.refreshTokens(db, "wrong-client", tokens.refreshToken),
       ).rejects.toThrow();
+      await db
+        .update(users)
+        .set({
+          shortlistPowerpackActivatedAt: new Date(0),
+          shortlistPowerpackExpiresAt: new Date(1),
+        })
+        .where(eq(users.id, user.id));
       const rotated = await mcp.refreshTokens(
         db,
         clientId,
@@ -96,12 +96,15 @@ describe("MCP authorization storage", () => {
     }
   }, 30_000);
 
-  it("rejects expired codes and Powerpack; keeps connection management available", async () => {
+  it("rejects expired codes and missing accounts; keeps connection management available", async () => {
     const db = await createTestDb();
     try {
       const { user } = await seedTestData(db);
-      await expect(mcp.requirePowerpack(db, user.id)).rejects.toThrow(
-        "Active Powerpack required",
+      expect(await mcp.requireAccount(db, user.id)).toMatchObject({
+        id: user.id,
+      });
+      await expect(mcp.requireAccount(db, crypto.randomUUID())).rejects.toThrow(
+        "Account not found",
       );
       expect(await mcp.listConnections(db, user.id)).toEqual([]);
       const clientId = await mcp.registerClient(db, "Cursor", [

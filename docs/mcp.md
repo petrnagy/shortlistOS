@@ -2,15 +2,16 @@
 
 shortlistOS exposes a remote MCP server at `/api/mcp` using Streamable HTTP.
 Open **Settings → MCP** (`/settings/mcp`) for the server URL, connection instructions,
-and a list of authorized clients. Connections can be revoked there even after
-Powerpack expires.
+and a list of authorized clients. MCP is available to every shortlistOS account;
+connections can be revoked in these settings at any time.
 
 Add the URL in an MCP client that supports remote Streamable HTTP, OAuth browser
 authorization, and dynamic client registration. Sign in to shortlistOS, review the
 client's requested access, approve it, then return to the client. No API key is
 needed. Authorization covers the account; existing workspace membership and
-permissions still apply to each operation. All MCP access requires an active
-Powerpack, including reads and refresh-token exchanges.
+permissions still apply to each operation. Browser authorization, reads, writes,
+and token refreshes work without a Powerpack subscription, including after a
+previous subscription expires.
 
 ## Supported operations
 
@@ -23,9 +24,10 @@ Powerpack, including reads and refresh-token exchanges.
 
 There are no tools for deleting shortlists, changing columns, changing shortlist
 settings, invoking Magic Inbox, or processing job attachments. The usual GUI
-procedures run underneath the tools, so Powerpack enrichment and automation remain
-active. Automation settings and manually maintained card preferences keep their
-normal behavior.
+procedures run underneath the tools, so Powerpack enrichment and automation use
+the same subscription eligibility and shortlist settings as the GUI. MCP access
+does not enable Powerpack features for free accounts. Automation settings and
+manually maintained card preferences keep their normal behavior.
 
 Card activities and shortlist creation/renaming record the authorizing user and
 client name, displayed as “Username via Client”. The name is supplied during

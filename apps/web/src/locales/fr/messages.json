@@ -1333,7 +1333,7 @@
     "origin": [
       [
         "src/views/settings/McpSettings.tsx",
-        66
+        56
       ]
     ],
     "translation": "Les actions vous sont attribuées via le nom du client autorisé. Les clients MCP ne précisent pas de manière fiable le modèle utilisé."
@@ -1352,7 +1352,7 @@
     "origin": [
       [
         "src/pages/api/mcp/authorize.ts",
-        81
+        67
       ]
     ],
     "translation": "Les actions sont enregistrées au nom de {username} via {clientName}. Le nom du client est fourni par l’application."
@@ -2363,7 +2363,7 @@
     "origin": [
       [
         "src/pages/api/mcp/authorize.ts",
-        78
+        64
       ]
     ],
     "translation": "Autoriser l’accès"
@@ -2422,7 +2422,8 @@
         95
       ]
     ],
-    "translation": "Un Powerpack actif est nécessaire pour se connecter."
+    "translation": "Un Powerpack actif est nécessaire pour se connecter.",
+    "obsolete": true
   },
   "j1+HPc": {
     "message": "An error occurred while connecting your GitHub account.",
@@ -4611,7 +4612,7 @@
       ],
       [
         "src/pages/api/mcp/authorize.ts",
-        77
+        63
       ],
       [
         "src/views/board/components/CardContextDuplicateModal.tsx",
@@ -5419,7 +5420,7 @@
     "origin": [
       [
         "src/pages/api/mcp/authorize.ts",
-        71
+        57
       ]
     ],
     "translation": "Les colonnes restent fixes. Magic email et l’importation de pièces jointes aux offres ne sont pas disponibles."
@@ -5803,7 +5804,7 @@
     "origin": [
       [
         "src/pages/api/mcp/authorize.ts",
-        66
+        52
       ]
     ],
     "translation": "Connecter {clientName}"
@@ -5827,7 +5828,7 @@
     "origin": [
       [
         "src/pages/api/mcp/authorize.ts",
-        65
+        51
       ],
       [
         "src/server/mcp/consent-page.ts",
@@ -5855,7 +5856,7 @@
     "origin": [
       [
         "src/views/settings/McpSettings.tsx",
-        28
+        25
       ]
     ],
     "translation": "Connectez votre assistant IA"
@@ -5907,7 +5908,7 @@
     "origin": [
       [
         "src/views/settings/McpSettings.tsx",
-        83
+        73
       ]
     ],
     "translation": "Connecté le {0}"
@@ -5919,7 +5920,7 @@
     "origin": [
       [
         "src/views/settings/McpSettings.tsx",
-        67
+        57
       ]
     ],
     "translation": "Clients connectés"
@@ -6117,7 +6118,7 @@
     "origin": [
       [
         "src/views/settings/McpSettings.tsx",
-        54
+        43
       ]
     ],
     "translation": "Copié"
@@ -6244,7 +6245,7 @@
     "origin": [
       [
         "src/views/settings/McpSettings.tsx",
-        54
+        43
       ]
     ],
     "translation": "Copier l’URL"
@@ -6281,7 +6282,7 @@
     "origin": [
       [
         "src/views/settings/McpSettings.tsx",
-        57
+        46
       ]
     ],
     "translation": "Copie impossible. Sélectionnez et copiez l’URL ci-dessus."
@@ -6293,7 +6294,7 @@
     "origin": [
       [
         "src/views/settings/McpSettings.tsx",
-        70
+        60
       ]
     ],
     "translation": "Impossible de charger les connexions."
@@ -6329,7 +6330,7 @@
     "origin": [
       [
         "src/views/settings/McpSettings.tsx",
-        94
+        84
       ]
     ],
     "translation": "Impossible de révoquer l’accès. Réessayez."
@@ -11169,7 +11170,7 @@
     "origin": [
       [
         "src/views/settings/McpSettings.tsx",
-        61
+        50
       ]
     ],
     "translation": "Dans les paramètres d’intégrations ou MCP de votre client IA, ajoutez un serveur MCP distant avec l’URL ci-dessus. Si nécessaire, choisissez Streamable HTTP et l’autorisation par navigateur (OAuth)."
@@ -12479,7 +12480,7 @@
     "origin": [
       [
         "src/pages/api/mcp/authorize.ts",
-        67
+        53
       ]
     ],
     "translation": "Autorisez ce client IA à travailler avec vos opportunités et shortlists."
@@ -12734,7 +12735,7 @@
     "origin": [
       [
         "src/views/settings/McpSettings.tsx",
-        68
+        58
       ]
     ],
     "translation": "Chargement des connexions…"
@@ -13260,7 +13261,20 @@
         32
       ]
     ],
-    "translation": "L’accès MCP nécessite un Powerpack actif. Vous pouvez toujours gérer et révoquer les connexions ici."
+    "translation": "L’accès MCP nécessite un Powerpack actif. Vous pouvez toujours gérer et révoquer les connexions ici.",
+    "obsolete": true
+  },
+  "e7Mcgo": {
+    "translation": "MCP est disponible pour tous les comptes shortlistOS.",
+    "message": "MCP is available to every shortlistOS account.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/settings/McpSettings.tsx",
+        27
+      ]
+    ]
   },
   "POyW96": {
     "message": "MCP settings",
@@ -13269,7 +13283,7 @@
     "origin": [
       [
         "src/pages/api/mcp/authorize.ts",
-        83
+        69
       ],
       [
         "src/server/mcp/consent-page.ts",
@@ -14364,7 +14378,7 @@
     "origin": [
       [
         "src/views/settings/McpSettings.tsx",
-        73
+        63
       ]
     ],
     "translation": "Aucun client MCP connecté."
@@ -15009,6 +15023,18 @@
     ],
     "translation": ""
   },
+  "3odo8B": {
+    "translation": "Les opportunités peuvent être consultées, modifiées, déplacées et supprimées. Les listes peuvent être consultées, créées et renommées. Les colonnes sont fixes. Magic email et l’importation de pièces jointes d’offres ne sont pas disponibles via MCP.",
+    "message": "Opportunities support reading and writing, including moving and deletion. Shortlists support reading, creation, and renaming. Columns are fixed. Magic email and job attachment ingestion are unavailable through MCP.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/settings/McpSettings.tsx",
+        54
+      ]
+    ]
+  },
   "NQi0Qc": {
     "message": "Opportunities support reading and writing, including moving and deletion. Shortlists support reading, creation, and renaming. Columns are fixed. Magic email and job attachment ingestion are unavailable through MCP. Normal Powerpack automations run after opportunity changes.",
     "placeholders": {},
@@ -15019,7 +15045,8 @@
         65
       ]
     ],
-    "translation": "Les opportunités peuvent être consultées, modifiées, déplacées et supprimées. Les listes peuvent être consultées, créées et renommées. Les colonnes sont fixes. Magic email et l’importation de pièces jointes d’offres ne sont pas disponibles via MCP. Les automatisations Powerpack habituelles suivent les modifications."
+    "translation": "Les opportunités peuvent être consultées, modifiées, déplacées et supprimées. Les listes peuvent être consultées, créées et renommées. Les colonnes sont fixes. Magic email et l’importation de pièces jointes d’offres ne sont pas disponibles via MCP. Les automatisations Powerpack habituelles suivent les modifications.",
+    "obsolete": true
   },
   "aqLLHC": {
     "message": "Opportunity detail",
@@ -16296,6 +16323,18 @@
       ]
     ],
     "translation": ""
+  },
+  "Mbuk5y": {
+    "translation": "Les automatisations Powerpack suivent votre abonnement et les paramètres de vos listes.",
+    "message": "Powerpack automations follow your existing subscription and shortlist settings.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/settings/McpSettings.tsx",
+        55
+      ]
+    ]
   },
   "AIBvve": {
     "message": "Powerpack can also add jobs from the <0>Web Clipper</0> or <1>Magic Inbox</1>.",
@@ -17606,7 +17645,7 @@
     "origin": [
       [
         "src/views/settings/McpSettings.tsx",
-        63
+        52
       ]
     ],
     "translation": "Revenez à votre client IA et demandez-lui de lister vos listes ou de gérer une opportunité. Le client doit prendre en charge MCP distant avec OAuth et l’enregistrement dynamique des clients."
@@ -17668,7 +17707,7 @@
     "origin": [
       [
         "src/views/settings/McpSettings.tsx",
-        89
+        79
       ]
     ],
     "translation": "Révoquer l’accès"
@@ -18955,7 +18994,7 @@
     "origin": [
       [
         "src/views/settings/McpSettings.tsx",
-        40
+        29
       ]
     ],
     "translation": "URL du serveur"
@@ -19136,7 +19175,7 @@
     "origin": [
       [
         "src/views/settings/McpSettings.tsx",
-        26
+        23
       ]
     ],
     "translation": "Paramètres | MCP"
@@ -19519,7 +19558,7 @@
     "origin": [
       [
         "src/views/settings/McpSettings.tsx",
-        62
+        51
       ]
     ],
     "translation": "Connectez-vous à shortlistOS dans le navigateur, vérifiez le nom du client et l’accès demandé, puis choisissez Autoriser l’accès. Aucune clé API n’est nécessaire."
@@ -19628,7 +19667,7 @@
     "origin": [
       [
         "src/pages/api/mcp/authorize.ts",
-        73
+        59
       ]
     ],
     "translation": "Connecté en tant que"
@@ -20987,7 +21026,7 @@
     "origin": [
       [
         "src/pages/api/mcp/authorize.ts",
-        91
+        77
       ],
       [
         "src/pages/api/mcp/consent.ts",
@@ -20995,7 +21034,7 @@
       ],
       [
         "src/pages/api/mcp/consent.ts",
-        115
+        105
       ]
     ],
     "translation": "Cette demande d’autorisation est invalide. Recommencez depuis votre client IA."
@@ -23049,7 +23088,7 @@
     "origin": [
       [
         "src/views/settings/McpSettings.tsx",
-        29
+        26
       ]
     ],
     "translation": "Utilisez MCP pour gérer vos opportunités et listes depuis un assistant IA. Une autorisation dans le navigateur connecte votre compte avec vos permissions actuelles."
@@ -23345,7 +23384,8 @@
         36
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "Kw+LP3": {
     "message": "View the repository on GitHub",
@@ -23379,7 +23419,7 @@
     "origin": [
       [
         "src/pages/api/mcp/authorize.ts",
-        69
+        55
       ]
     ],
     "translation": "Consulter, créer et renommer des shortlists."
@@ -23391,7 +23431,7 @@
     "origin": [
       [
         "src/pages/api/mcp/authorize.ts",
-        70
+        56
       ]
     ],
     "translation": "Consulter, créer, modifier, déplacer et supprimer des opportunités, commentaires et listes de tâches."
@@ -24622,7 +24662,7 @@
     "origin": [
       [
         "src/pages/api/mcp/authorize.ts",
-        82
+        68
       ]
     ],
     "translation": "Vous pouvez révoquer l’accès à tout moment."

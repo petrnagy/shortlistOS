@@ -3,7 +3,7 @@ import { t } from "@lingui/core/macro";
 
 import { initAuth } from "@kan/auth/server";
 import { createDrizzleClient } from "@kan/db/client";
-import { newMcpSecret, requirePowerpack } from "@kan/db/repository/mcp.repo";
+import { newMcpSecret } from "@kan/db/repository/mcp.repo";
 import { renderConnectionConsent } from "@kan/shared/connection-consent";
 
 import { validateAuthorization } from "~/server/mcp/authorization";
@@ -39,20 +39,6 @@ export default async function handler(
         `/login?next=${encodeURIComponent(`/mcp/authorize?${params}`)}`,
       );
     }
-    let active = true;
-    try {
-      await requirePowerpack(db, session.user.id);
-    } catch {
-      active = false;
-    }
-    if (!active)
-      return consentError(
-        res,
-        403,
-        "powerpack_required",
-        t`An active Powerpack is required to connect.`,
-      );
-
     const cookieName = consentCookieName(input, session.user.id);
     const existing: unknown = req.cookies[cookieName];
     const csrf = isConsentSecret(existing) ? existing : newMcpSecret();

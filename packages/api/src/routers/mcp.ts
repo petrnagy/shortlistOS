@@ -44,7 +44,7 @@ export const mcpRouter = createTRPCRouter({
     .input(z.object({ publicId: z.string().length(12) }))
     .output(z.object({ success: z.boolean() }))
     .mutation(async ({ ctx, input }) => {
-      // Management stays available after Powerpack expires. Never accept API-key sessions.
+      // Connection management uses browser sessions, never API-key sessions.
       if (
         !ctx.user ||
         ctx.headers.has("authorization") ||

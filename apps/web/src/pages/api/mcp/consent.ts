@@ -85,16 +85,6 @@ export default async function handler(
       target.searchParams.set("state", input.state);
     if (decision === "deny") target.searchParams.set("error", "access_denied");
     else {
-      try {
-        await mcpRepo.requirePowerpack(db, session.user.id);
-      } catch {
-        return consentError(
-          res,
-          403,
-          "powerpack_required",
-          t`An active Powerpack is required to connect.`,
-        );
-      }
       const code = await mcpRepo.issueCode(db, {
         userId: session.user.id,
         clientId: input.client_id,

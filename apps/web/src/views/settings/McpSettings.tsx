@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { t } from "@lingui/core/macro";
 import { env } from "next-runtime-env";
 import { useState } from "react";
@@ -6,10 +5,8 @@ import { useState } from "react";
 import Button from "~/components/Button";
 import { PageHead } from "~/components/PageHead";
 import { api } from "~/utils/api";
-import { hasActivePowerpack } from "~/utils/powerpack";
 
 export default function McpSettings() {
-  const { data: user } = api.user.getUser.useQuery();
   const connections = api.mcp.connections.useQuery();
   const utils = api.useUtils();
   const revoke = api.mcp.revoke.useMutation({
@@ -27,15 +24,7 @@ export default function McpSettings() {
       <div className="space-y-6 py-8 text-sm text-light-1000 dark:text-dark-1000">
         <h2 className="font-bold">{t`Connect your AI assistant`}</h2>
         <p>{t`Use MCP to work with your opportunities and shortlists from an AI assistant. One browser authorization connects your account, using your existing workspace permissions.`}</p>
-        {user && !hasActivePowerpack(user) && (
-          <p className="rounded border border-yellow-500 p-4">
-            {t`MCP access requires an active Powerpack. You can still manage and revoke connections here.`}{" "}
-            <Link
-              href="/settings/powerpack"
-              className="underline"
-            >{t`View Powerpack`}</Link>
-          </p>
-        )}
+        <p>{t`MCP is available to every shortlistOS account.`}</p>
         <div className="space-y-3 rounded-lg border border-light-400 p-4 dark:border-dark-400">
           <h3 className="font-semibold">{t`Server URL`}</h3>
           <code className="block select-all break-all">{url}</code>
@@ -62,7 +51,8 @@ export default function McpSettings() {
           <li>{t`Sign in to shortlistOS in the browser, review the client name and requested access, then select Allow access. You do not need an API key.`}</li>
           <li>{t`Return to your AI client and ask it to list your shortlists or manage an opportunity. Your client must support remote MCP with OAuth and dynamic client registration.`}</li>
         </ol>
-        <p>{t`Opportunities support reading and writing, including moving and deletion. Shortlists support reading, creation, and renaming. Columns are fixed. Magic email and job attachment ingestion are unavailable through MCP. Normal Powerpack automations run after opportunity changes.`}</p>
+        <p>{t`Opportunities support reading and writing, including moving and deletion. Shortlists support reading, creation, and renaming. Columns are fixed. Magic email and job attachment ingestion are unavailable through MCP.`}</p>
+        <p>{t`Powerpack automations follow your existing subscription and shortlist settings.`}</p>
         <p>{t`Actions are attributed to you via the authorized client name. MCP clients do not reliably disclose which underlying model performed an action.`}</p>
         <h3 className="font-semibold">{t`Connected clients`}</h3>
         {connections.isLoading && <p>{t`Loading connections…`}</p>}
