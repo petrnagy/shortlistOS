@@ -14,7 +14,7 @@ export default function ContactPage() {
     <Layout>
       <PageHead title={`${t`Contact`} | shortlistOS`} />
       <section className="px-4 pb-20 pt-28">
-        <div className="mx-auto max-w-[680px]">
+        <div className="w-full">
           <h1 className="text-center text-3xl font-bold leading-[1.35] text-light-1000 dark:text-dark-1000 md:text-4xl">
             {t`Contact us`}
           </h1>
@@ -30,7 +30,7 @@ export default function ContactPage() {
                 <p>
                   <Link
                     href="/login?next=%2Fcontact"
-                    className="font-semibold text-blue-600 underline dark:text-blue-300"
+                    className="font-semibold text-light-1000 underline dark:text-dark-1000"
                   >
                     {t`Sign in`}
                   </Link>
@@ -38,7 +38,7 @@ export default function ContactPage() {
                 <p>
                   <a
                     href="mailto:support@shortlistos.co"
-                    className="font-semibold text-blue-600 underline dark:text-blue-300"
+                    className="font-semibold text-light-1000 underline dark:text-dark-1000"
                   >
                     support@shortlistos.co
                   </a>
