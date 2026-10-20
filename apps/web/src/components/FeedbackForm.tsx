@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { t } from "@lingui/core/macro";
 import { useForm } from "react-hook-form";
 import { HiXMark } from "react-icons/hi2";
@@ -102,31 +101,10 @@ export default function FeedbackForm({
       <div
         className={
           standalone
-            ? "mt-6 flex flex-wrap items-center justify-between gap-4 border-t border-light-300 pt-5 dark:border-dark-600"
-            : "mt-6 flex items-center justify-between border-t border-light-600 px-5 pb-5 pt-5 dark:border-dark-600"
+            ? "mt-6 flex justify-end"
+            : "mt-6 flex justify-end px-5 pb-5"
         }
       >
-        <div className="text-xs text-neutral-600 dark:text-dark-800">
-          <p>
-            {t`Need help?`}{" "}
-            <Link
-              href="/contact"
-              className="text-blue-600 underline dark:text-blue-300"
-            >
-              {t`Contact us`}
-            </Link>
-            {t`, or see our`}{" "}
-            <Link
-              href="https://docs.shortlistos.co"
-              target="_blank"
-              rel="noreferrer"
-              className="text-blue-600 underline dark:text-blue-300"
-            >
-              {t`docs`}
-            </Link>
-            .
-          </p>
-        </div>
         <Button type="submit" isLoading={createFeedback.isPending}>
           {t`Send feedback`}
         </Button>

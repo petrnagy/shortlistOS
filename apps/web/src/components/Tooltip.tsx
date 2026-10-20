@@ -10,6 +10,7 @@ interface TooltipProps {
   content?: ReactNode;
   placement?: Placement;
   delay?: number | [number, number];
+  touch?: boolean;
 }
 
 export function Tooltip({
@@ -18,6 +19,7 @@ export function Tooltip({
   content,
   placement = "bottom",
   delay = [500, 0],
+  touch = false,
 }: TooltipProps) {
   const triggerRef = useRef<HTMLDivElement>(null);
 
@@ -36,14 +38,15 @@ export function Tooltip({
       delay,
       interactive: false,
       theme: "tooltip",
-      touch: false,
+      touch,
+      trigger: touch ? "mouseenter focusin click" : "mouseenter focus",
     });
 
     return () => {
       instance.destroy();
       window.setTimeout(() => root.unmount(), 0);
     };
-  }, [content, placement, delay]);
+  }, [content, placement, delay, touch]);
 
   return (
     <div ref={triggerRef} className={className}>
