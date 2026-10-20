@@ -157,14 +157,19 @@ export function PricingCards({ plans }: { plans: PricingPlan[] }) {
                 <span className="inline-flex items-center gap-1.5">
                   {item.label}
                   {item.info ? (
-                    <Tooltip content={item.info} placement="top">
-                      <span
-                        className="inline-flex cursor-help text-light-800 dark:text-dark-800"
+                    <Tooltip
+                      content={item.info}
+                      placement="top"
+                      delay={0}
+                      touch
+                    >
+                      <button
+                        type="button"
+                        className="inline-flex min-h-6 min-w-6 shrink-0 cursor-help items-center justify-center rounded text-light-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 dark:text-dark-800"
                         aria-label={item.info}
-                        title={item.info}
                       >
-                        <FaInfoCircle className="h-3 w-3" />
-                      </span>
+                        <FaInfoCircle aria-hidden="true" className="h-3 w-3" />
+                      </button>
                     </Tooltip>
                   ) : null}
                 </span>
