@@ -535,6 +535,27 @@ export const createClip = async (
     await deleteObject(config.SHORTLIST_SOURCE_BUCKET_NAME, s3Key).catch(
       () => undefined,
     );
+    try {
+      await ensureShortlistRobotUser(db);
+      await createSourceActivity(db, {
+        activityType: "source.web.failed",
+        activityResult: "FAILED",
+        boardId: input.boardId,
+        payload: {
+          sourceId,
+          sourceKind: "web",
+          sourceTitle: input.page.title || input.page.url,
+          sourceUrl: input.page.canonicalUrl ?? input.page.url,
+          reason:
+            "The clipped page could not be saved for processing. Please try again.",
+        },
+      });
+    } catch (activityError) {
+      log.error(
+        { error: activityError },
+        "Failed to record clip intake failure",
+      );
+    }
     throw error;
   }
 };
