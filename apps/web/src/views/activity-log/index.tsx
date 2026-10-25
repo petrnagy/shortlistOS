@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import {
   HiOutlineArchiveBox,
   HiOutlineArrowUturnLeft,
+  HiOutlineExclamationTriangle,
   HiOutlinePlus,
   HiOutlineTrash,
 } from "react-icons/hi2";
@@ -88,6 +89,30 @@ const getSourceActivityText = (type: string) => {
       return t`processed an email opportunity`;
     case "source.email.failed":
       return t`could not parse an email opportunity`;
+    case "source.upload.received":
+      return t`queued an uploaded opportunity`;
+    case "source.upload.processed":
+      return t`processed an uploaded opportunity`;
+    case "source.upload.failed":
+      return t`could not process an uploaded opportunity`;
+    case "source.link.received":
+      return t`queued a linked opportunity`;
+    case "source.link.processed":
+      return t`processed a linked opportunity`;
+    case "source.link.failed":
+      return t`could not process a linked opportunity`;
+    case "source.text.received":
+      return t`queued pasted opportunity text`;
+    case "source.text.processed":
+      return t`processed pasted opportunity text`;
+    case "source.text.failed":
+      return t`could not process pasted opportunity text`;
+    case "source.web.retrying":
+    case "source.email.retrying":
+    case "source.upload.retrying":
+    case "source.link.retrying":
+    case "source.text.retrying":
+      return t`could not process an opportunity; an automatic retry is scheduled`;
     default:
       return t`processed an opportunity source`;
   }
@@ -248,15 +273,19 @@ export default function ActivityLog() {
                               undefined
                             }
                             icon={
-                              isBoardActivity
-                                ? getBoardActivityIcon(activity.type)
-                                : isSourceActivity
-                                  ? null
-                                  : getActivityIcon(
-                                      activity.type,
-                                      activity.fromList?.index,
-                                      activity.toList?.index,
-                                    )
+                              isBoardActivity ? (
+                                getBoardActivityIcon(activity.type)
+                              ) : isSourceActivity ? (
+                                activity.result === "FAILED" ? (
+                                  <HiOutlineExclamationTriangle className="text-red-600 dark:text-red-400" />
+                                ) : null
+                              ) : (
+                                getActivityIcon(
+                                  activity.type,
+                                  activity.fromList?.index,
+                                  activity.toList?.index,
+                                )
+                              )
                             }
                             isLoading={isFetching || isLoadingMore}
                           />

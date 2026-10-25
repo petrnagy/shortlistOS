@@ -2,13 +2,17 @@ import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
 import * as boardActivityRepo from "@kan/db/repository/board-activity.repo";
+import * as boardRepo from "@kan/db/repository/board.repo";
 import * as cardActivityRepo from "@kan/db/repository/cardActivity.repo";
+import { getImportContext } from "@kan/db/repository/shortlist-intake.repo";
 import * as shortlistActivityLogRepo from "@kan/db/repository/shortlistActivityLog.repo";
 import { boardActivityTypes } from "@kan/db/schema";
 import { generateAvatarUrl } from "@kan/shared/utils";
 
 import { activityItemSchema } from "../schemas";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { assertUserInWorkspace } from "../utils/auth";
+import { assertPermission } from "../utils/permissions";
 
 const cardActivityLogItemSchema = activityItemSchema.extend({
   entityType: z.literal("card"),
@@ -48,7 +52,8 @@ const activityLogItemSchema = z.discriminatedUnion("entityType", [
     type: z.string(),
     result: z.enum(["SUCCESS", "FAILED"]),
     createdAt: z.date(),
-    sourceKind: z.enum(["web", "email"]),
+    sourceKind: z.enum(shortlistActivityLogRepo.sourceActivityKinds),
+    attempt: z.number().int().nonnegative().optional(),
     sourceTitle: z.string(),
     sourceUrl: z.string().nullable(),
     reason: z.string().nullable(),
@@ -75,6 +80,91 @@ const activityLogItemSchema = z.discriminatedUnion("entityType", [
 ]);
 
 export const activityLogRouter = createTRPCRouter({
+  recordImportFailure: protectedProcedure
+    .meta({
+      openapi: {
+        summary: "Record a failed opportunity import",
+        method: "POST",
+        path: "/activity-log/import-failure",
+        tags: ["Activity Log"],
+        protect: true,
+      },
+    })
+    .input(
+      z.object({
+        boardPublicId: z.string().length(12),
+        sourceKind: z.enum(["upload", "link", "text"]),
+        sourceTitle: z.string().trim().min(1).max(512),
+        sourceUrl: z
+          .string()
+          .url()
+          .max(4096)
+          .refine((value) => {
+            const url = new URL(value);
+            return (
+              ["http:", "https:"].includes(url.protocol) &&
+              !url.username &&
+              !url.password
+            );
+          })
+          .optional(),
+        reason: z.enum(["PAGE_FETCH_FAILED", "SUBMISSION_FAILED"]),
+      }),
+    )
+    .output(z.object({ recorded: z.boolean() }))
+    .mutation(async ({ ctx, input }) => {
+      const userId = ctx.user?.id;
+      if (!userId)
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "User not authenticated",
+        });
+      const board = await boardRepo.getWorkspaceAndBoardIdByBoardPublicId(
+        ctx.db,
+        input.boardPublicId,
+      );
+      if (!board)
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Shortlist not found",
+        });
+      await assertUserInWorkspace(ctx.db, userId, board.workspaceId);
+      await assertPermission(ctx.db, userId, board.workspaceId, "card:create");
+      const { user, activeBoard } = await getImportContext(ctx.db, {
+        boardId: board.id,
+        userId,
+      });
+      const now = new Date();
+      if (
+        !activeBoard ||
+        !user?.shortlistPowerpackActivatedAt ||
+        !user.shortlistPowerpackExpiresAt ||
+        now < user.shortlistPowerpackActivatedAt ||
+        now > user.shortlistPowerpackExpiresAt
+      ) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "An active Powerpack and shortlist are required",
+        });
+      }
+      await shortlistActivityLogRepo.ensureShortlistRobotUser(ctx.db);
+      await shortlistActivityLogRepo.createSourceActivity(ctx.db, {
+        activityType: `source.${input.sourceKind}.failed`,
+        activityResult: "FAILED",
+        boardId: board.id,
+        payload: {
+          sourceId: "",
+          sourceKind: input.sourceKind,
+          sourceTitle: input.sourceTitle,
+          sourceUrl: input.sourceUrl ?? null,
+          reason:
+            input.reason === "PAGE_FETCH_FAILED"
+              ? "The website could not be read. Use pasted text or the Web Clipper instead."
+              : "The opportunity could not be submitted. Please try again.",
+        },
+      });
+      return { recorded: true };
+    }),
   list: protectedProcedure
     .meta({
       openapi: {

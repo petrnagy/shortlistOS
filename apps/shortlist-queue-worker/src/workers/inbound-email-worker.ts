@@ -2,7 +2,10 @@ import { createHash } from "node:crypto";
 import { and, asc, eq, isNull, lte, or, sql } from "drizzle-orm";
 
 import type { dbClient } from "@kan/db/client";
-import { ensureShortlistRobotUser } from "@kan/db/repository/shortlistActivityLog.repo";
+import {
+  createSourceActivity,
+  ensureShortlistRobotUser,
+} from "@kan/db/repository/shortlistActivityLog.repo";
 import {
   shortlistActivityLogs,
   shortlistEmailSources,
@@ -134,7 +137,7 @@ export async function processInboundEmailBatch(
       const runAfter = retry
         ? new Date(Date.now() + retryDelay(job.attempts, failure))
         : null;
-      await db
+      const [failedJob] = await db
         .update(shortlistInboundEmailJobs)
         .set({
           status: retry ? "RETRY" : "FAILED",
@@ -150,7 +153,42 @@ export async function processInboundEmailBatch(
             eq(shortlistInboundEmailJobs.status, "PROCESSING"),
             eq(shortlistInboundEmailJobs.lockedBy, workerId),
           ),
-        );
+        )
+        .returning({ id: shortlistInboundEmailJobs.id });
+
+      if (failedJob) {
+        try {
+          await ensureShortlistRobotUser(db);
+          let sourceTitle = "Email opportunity";
+          try {
+            const subject = parseEmail(job.payloadJson).Subject?.trim();
+            if (subject) sourceTitle = subject;
+          } catch {
+            /* Invalid email payloads still need a visible failure. */
+          }
+          await createSourceActivity(db, {
+            activityType: retry
+              ? "source.email.retrying"
+              : "source.email.failed",
+            activityResult: "FAILED",
+            boardId: job.boardId,
+            payload: {
+              sourceId: job.sourceId ?? job.id,
+              sourceKind: "email",
+              sourceTitle,
+              sourceUrl: null,
+              reason:
+                "The email or its attachments could not be received for processing.",
+              attempt: job.attempts,
+            },
+          });
+        } catch (activityError) {
+          logger.error(
+            { error: activityError, jobId: job.id },
+            "Failed to record inbound email processing failure",
+          );
+        }
+      }
 
       if (retry) result.retried += 1;
       else result.failed += 1;

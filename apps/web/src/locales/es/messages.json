@@ -33,7 +33,8 @@
         118
       ]
     ],
-    "translation": ", o consulta nuestro"
+    "translation": ", o consulta nuestro",
+    "obsolete": true
   },
   "J/hVSQ": {
     "message": "{0}",
@@ -175,7 +176,7 @@
     "origin": [
       [
         "src/views/board/components/NewCardForm.tsx",
-        528
+        511
       ]
     ],
     "translation": "{0} etiquetas"
@@ -207,7 +208,7 @@
     "origin": [
       [
         "src/views/board/index.tsx",
-        607
+        599
       ]
     ],
     "translation": "{0} no encontrado"
@@ -1482,11 +1483,11 @@
       ],
       [
         "src/views/activity-log/index.tsx",
-        146
+        171
       ],
       [
         "src/views/activity-log/index.tsx",
-        153
+        178
       ]
     ],
     "translation": "Registro de actividad"
@@ -1567,6 +1568,30 @@
       ]
     ],
     "translation": ""
+  },
+  "hAxHyE": {
+    "message": "Add a job opportunity from a link",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/board/components/SavedFileUploadForm.tsx",
+        201
+      ]
+    ],
+    "translation": "Añadir una oportunidad laboral desde un enlace"
+  },
+  "i+HvQc": {
+    "message": "Add a job opportunity from text",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/board/components/SavedFileUploadForm.tsx",
+        202
+      ]
+    ],
+    "translation": "Añadir una oportunidad laboral desde texto"
   },
   "/LWYC2": {
     "message": "Add a private shortlistOS calendar feed to Google Calendar, Apple Calendar, Outlook, or another calendar app. Your opportunity dates will appear in the calendar you already use.",
@@ -1788,16 +1813,11 @@
     "comments": [],
     "origin": [
       [
-        "src/views/home/index.tsx",
-        321
-      ],
-      [
-        "src/views/home/index.tsx",
-        376
+        "src/views/board/components/NewOpportunityForm.tsx",
+        34
       ]
     ],
-    "translation": "Añadir oportunidad",
-    "obsolete": true
+    "translation": "Añadir oportunidad"
   },
   "pVpLbt": {
     "message": "Add person",
@@ -2440,6 +2460,18 @@
     ],
     "translation": "¿Ya tienes una cuenta? <0><1>Inicia sesión</1></0>"
   },
+  "wPAj0V": {
+    "message": "An active Powerpack and permission to add opportunities are required.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/board/components/SavedFileUploadForm.tsx",
+        169
+      ]
+    ],
+    "translation": "Se requiere un Powerpack activo y permiso para añadir oportunidades."
+  },
   "59YU4M": {
     "message": "An active Powerpack is required to connect.",
     "placeholders": {},
@@ -2823,7 +2855,7 @@
     "origin": [
       [
         "src/views/activity-log/index.tsx",
-        39
+        40
       ]
     ],
     "translation": "archivó"
@@ -2847,11 +2879,7 @@
     "origin": [
       [
         "src/views/board/components/List.tsx",
-        76
-      ],
-      [
-        "src/views/board/components/List.tsx",
-        98
+        68
       ]
     ],
     "translation": "Las listas archivadas son de solo lectura"
@@ -3067,7 +3095,7 @@
     "origin": [
       [
         "src/views/board/components/NewCardForm.tsx",
-        386
+        366
       ]
     ],
     "translation": "en"
@@ -4667,10 +4695,6 @@
         44
       ],
       [
-        "src/views/board/components/SavedFileUploadForm.tsx",
-        163
-      ],
-      [
         "src/views/card/components/Comment.tsx",
         202
       ],
@@ -4679,12 +4703,12 @@
         86
       ],
       [
-        "src/views/card/components/DeleteCommentConfirmation.tsx",
-        77
-      ],
-      [
         "src/views/card/components/DeleteChecklistConfirmation.tsx",
         64
+      ],
+      [
+        "src/views/card/components/DeleteCommentConfirmation.tsx",
+        77
       ],
       [
         "src/views/card/index.tsx",
@@ -4711,6 +4735,10 @@
         287
       ],
       [
+        "src/views/settings/components/ChangePasswordConfirmation.tsx",
+        206
+      ],
+      [
         "src/views/settings/components/ClearCustomPermissionsConfirmation.tsx",
         40
       ],
@@ -4725,10 +4753,6 @@
       [
         "src/views/settings/components/DeleteWorkspaceConfirmation.tsx",
         98
-      ],
-      [
-        "src/views/settings/components/ChangePasswordConfirmation.tsx",
-        206
       ],
       [
         "src/views/settings/components/UpgradeToProConfirmation.tsx",
@@ -4887,7 +4911,7 @@
     "origin": [
       [
         "src/views/board/index.tsx",
-        341
+        340
       ],
       [
         "src/views/public/board/CardModal.tsx",
@@ -5112,7 +5136,7 @@
     "origin": [
       [
         "src/views/board/components/SavedFileUploadForm.tsx",
-        148
+        278
       ]
     ],
     "translation": ""
@@ -5328,7 +5352,7 @@
     "origin": [
       [
         "src/views/activity-log/index.tsx",
-        80
+        81
       ]
     ],
     "translation": ""
@@ -5345,6 +5369,10 @@
       [
         "src/views/board/components/BoardOpportunityTutorial.tsx",
         348
+      ],
+      [
+        "src/views/board/components/NewOpportunityForm.tsx",
+        26
       ],
       [
         "src/views/boards/components/BoardsTutorial.tsx",
@@ -5533,7 +5561,7 @@
       ],
       [
         "src/views/board/components/NewCardForm.tsx",
-        391
+        371
       ],
       [
         "src/views/card/index.tsx",
@@ -6040,10 +6068,6 @@
     "comments": [],
     "origin": [
       [
-        "src/components/FeedbackForm.tsx",
-        116
-      ],
-      [
         "src/pages/contact.tsx",
         19
       ]
@@ -6386,7 +6410,7 @@
     "origin": [
       [
         "src/views/activity-log/index.tsx",
-        84
+        85
       ]
     ],
     "translation": ""
@@ -6398,10 +6422,58 @@
     "origin": [
       [
         "src/views/activity-log/index.tsx",
-        90
+        91
       ]
     ],
     "translation": ""
+  },
+  "g00rrT": {
+    "translation": "no pudo procesar una oportunidad de un enlace",
+    "message": "could not process a linked opportunity",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/activity-log/index.tsx",
+        103
+      ]
+    ]
+  },
+  "WsNNcy": {
+    "translation": "no pudo procesar una oportunidad; se ha programado un reintento automático",
+    "message": "could not process an opportunity; an automatic retry is scheduled",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/activity-log/index.tsx",
+        115
+      ]
+    ]
+  },
+  "tjQTzi": {
+    "translation": "no pudo procesar una oportunidad cargada",
+    "message": "could not process an uploaded opportunity",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/activity-log/index.tsx",
+        97
+      ]
+    ]
+  },
+  "P+1Rtn": {
+    "translation": "no pudo procesar el texto pegado de una oportunidad",
+    "message": "could not process pasted opportunity text",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/activity-log/index.tsx",
+        109
+      ]
+    ]
   },
   "nhtMVg": {
     "message": "Could not revoke access. Try again.",
@@ -6422,7 +6494,7 @@
     "origin": [
       [
         "src/views/board/components/NewCardForm.tsx",
-        604
+        581
       ]
     ],
     "translation": "Crear"
@@ -6464,10 +6536,6 @@
       [
         "src/components/LabelForm.tsx",
         224
-      ],
-      [
-        "src/views/board/components/NewCardForm.tsx",
-        593
       ],
       [
         "src/views/board/components/NewListForm.tsx",
@@ -6611,7 +6679,7 @@
     "origin": [
       [
         "src/views/board/components/NewCardForm.tsx",
-        490
+        473
       ],
       [
         "src/views/card/components/LabelSelector.tsx",
@@ -6627,11 +6695,11 @@
     "origin": [
       [
         "src/views/board/index.tsx",
-        97
+        96
       ],
       [
         "src/views/board/index.tsx",
-        724
+        716
       ]
     ],
     "translation": "Crear nueva lista"
@@ -6752,7 +6820,7 @@
     "origin": [
       [
         "src/views/activity-log/index.tsx",
-        43
+        44
       ]
     ],
     "translation": ""
@@ -7250,12 +7318,12 @@
         92
       ],
       [
-        "src/views/card/components/DeleteCommentConfirmation.tsx",
-        83
-      ],
-      [
         "src/views/card/components/DeleteChecklistConfirmation.tsx",
         67
+      ],
+      [
+        "src/views/card/components/DeleteCommentConfirmation.tsx",
+        83
       ],
       [
         "src/views/card/index.tsx",
@@ -7466,7 +7534,7 @@
     "origin": [
       [
         "src/views/activity-log/index.tsx",
-        37
+        38
       ]
     ],
     "translation": "eliminó"
@@ -7796,7 +7864,8 @@
         125
       ]
     ],
-    "translation": "docs"
+    "translation": "docs",
+    "obsolete": true
   },
   "TbjyhA": {
     "message": "Docs",
@@ -9420,7 +9489,7 @@
     "origin": [
       [
         "src/components/FeedbackForm.tsx",
-        66
+        65
       ],
       [
         "src/components/UserMenu.tsx",
@@ -9436,7 +9505,7 @@
     "origin": [
       [
         "src/components/FeedbackForm.tsx",
-        33
+        32
       ]
     ],
     "translation": "Comentarios enviados"
@@ -9463,7 +9532,8 @@
         93
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "F6m23G": {
     "message": "File uploads",
@@ -9850,7 +9920,7 @@
     "origin": [
       [
         "src/views/activity-log/index.tsx",
-        72
+        73
       ]
     ],
     "translation": "de"
@@ -10244,7 +10314,7 @@
     "origin": [
       [
         "src/views/board/index.tsx",
-        709
+        701
       ]
     ],
     "translation": "Comienza creando una nueva lista"
@@ -10337,6 +10407,10 @@
     "placeholders": {},
     "comments": [],
     "origin": [
+      [
+        "src/views/board/components/NewOpportunityForm.tsx",
+        67
+      ],
       [
         "src/views/settings/BoardsSettings.tsx",
         298
@@ -11041,7 +11115,7 @@
     "origin": [
       [
         "src/components/FeedbackForm.tsx",
-        87
+        86
       ]
     ],
     "translation": "Ideas para mejorar esta página..."
@@ -11057,6 +11131,18 @@
       ]
     ],
     "translation": ""
+  },
+  "PcmGG9": {
+    "message": "If importing a link fails, the website may block automated access. Use our Web Clipper instead: it can save pages you can access, including pages requiring login or a subscription.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/board/components/SavedFileUploadForm.tsx",
+        231
+      ]
+    ],
+    "translation": "Si falla la importación del enlace, el sitio puede bloquear el acceso automatizado. Usa nuestro Web Clipper: permite guardar páginas a las que tienes acceso, incluidas las que requieren iniciar sesión o una suscripción."
   },
   "l3s5ri": {
     "message": "Import",
@@ -11370,7 +11456,7 @@
       ],
       [
         "src/views/board/components/NewCardForm.tsx",
-        545
+        528
       ],
       [
         "src/views/card/index.tsx",
@@ -11804,6 +11890,18 @@
     ],
     "translation": ""
   },
+  "AiAM6R": {
+    "message": "Job opportunity text",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/board/components/SavedFileUploadForm.tsx",
+        241
+      ]
+    ],
+    "translation": "Texto de la oportunidad laboral"
+  },
   "5dyv3L": {
     "message": "Job posting and company links",
     "placeholders": {},
@@ -11824,7 +11922,11 @@
     "origin": [
       [
         "src/views/board/components/NewCardForm.tsx",
-        399
+        379
+      ],
+      [
+        "src/views/board/components/SavedFileUploadForm.tsx",
+        220
       ]
     ],
     "translation": "URL de la oferta de empleo"
@@ -11860,7 +11962,7 @@
     "origin": [
       [
         "src/views/board/components/NewCardForm.tsx",
-        375
+        355
       ]
     ],
     "translation": "Puesto"
@@ -12229,7 +12331,7 @@
       ],
       [
         "src/views/board/components/NewCardForm.tsx",
-        494
+        477
       ],
       [
         "src/views/card/index.tsx",
@@ -12649,6 +12751,10 @@
     "comments": [],
     "origin": [
       [
+        "src/views/board/components/NewOpportunityForm.tsx",
+        37
+      ],
+      [
         "src/views/card/components/ActivityList.tsx",
         79
       ]
@@ -12666,7 +12772,7 @@
       ],
       [
         "src/views/board/index.tsx",
-        339
+        338
       ],
       [
         "src/views/public/board/CardModal.tsx",
@@ -12799,7 +12905,7 @@
     "origin": [
       [
         "src/views/activity-log/index.tsx",
-        344
+        373
       ],
       [
         "src/views/card/components/ActivityList.tsx",
@@ -12839,7 +12945,11 @@
     "origin": [
       [
         "src/views/activity-log/index.tsx",
-        344
+        373
+      ],
+      [
+        "src/views/board/components/NewOpportunityForm.tsx",
+        64
       ],
       [
         "src/views/card/components/ActivityList.tsx",
@@ -13201,6 +13311,10 @@
     "comments": [],
     "origin": [
       [
+        "src/views/board/components/NewOpportunityForm.tsx",
+        37
+      ],
+      [
         "src/views/card/index.tsx",
         2084
       ]
@@ -13456,7 +13570,7 @@
       ],
       [
         "src/views/board/components/NewCardForm.tsx",
-        452
+        435
       ],
       [
         "src/views/card/index.tsx",
@@ -13937,10 +14051,6 @@
     "comments": [],
     "origin": [
       [
-        "src/components/FeedbackForm.tsx",
-        111
-      ],
-      [
         "src/pages/contact.tsx",
         22
       ]
@@ -14100,7 +14210,7 @@
       ],
       [
         "src/views/board/index.tsx",
-        671
+        663
       ]
     ],
     "translation": "Nueva lista"
@@ -14112,7 +14222,7 @@
     "origin": [
       [
         "src/views/board/components/NewCardForm.tsx",
-        357
+        347
       ]
     ],
     "translation": "Nueva oportunidad"
@@ -14280,7 +14390,7 @@
     "origin": [
       [
         "src/views/activity-log/index.tsx",
-        169
+        194
       ]
     ],
     "translation": "Todavía no hay actividad."
@@ -14438,7 +14548,7 @@
     "origin": [
       [
         "src/views/board/index.tsx",
-        705
+        697
       ]
     ],
     "translation": "Sin listas"
@@ -14450,7 +14560,7 @@
     "origin": [
       [
         "src/views/board/index.tsx",
-        710
+        702
       ]
     ],
     "translation": "Aún no se han creado listas"
@@ -14736,7 +14846,7 @@
     "origin": [
       [
         "src/views/activity-log/index.tsx",
-        74
+        75
       ]
     ],
     "translation": "el"
@@ -15184,6 +15294,18 @@
     ],
     "translation": "Oportunidad duplicada correctamente."
   },
+  "51nJfy": {
+    "message": "Opportunity submitted",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/board/components/SavedFileUploadForm.tsx",
+        178
+      ]
+    ],
+    "translation": "Oportunidad enviada"
+  },
   "BzEFor": {
     "message": "or",
     "placeholders": {},
@@ -15197,7 +15319,6 @@
     "translation": "o"
   },
   "dXTJaj": {
-    "translation": "O pide a un asistente de IA compatible que añada oportunidades a través de <0>MCP</0>.",
     "message": "Or ask a compatible AI assistant to add opportunities through <0>MCP</0>.",
     "placeholders": {},
     "comments": [],
@@ -15206,7 +15327,8 @@
         "src/pages/get-started.tsx",
         1038
       ]
-    ]
+    ],
+    "translation": "O pide a un asistente de IA compatible que añada oportunidades a través de <0>MCP</0>."
   },
   "ZqDqbi": {
     "message": "Organize and find cards quickly with powerful filtering tools.",
@@ -15478,6 +15600,18 @@
       ]
     ],
     "translation": "Pégalo en Google Calendar, Outlook o cualquier aplicación compatible con fuentes iCal."
+  },
+  "z5G3z2": {
+    "message": "Paste the copied job opportunity here...",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/board/components/SavedFileUploadForm.tsx",
+        248
+      ]
+    ],
+    "translation": "Pega aquí la oportunidad laboral copiada..."
   },
   "URAE3q": {
     "message": "Paused",
@@ -15963,6 +16097,18 @@
     ],
     "translation": "Por favor, introduce una dirección de correo electrónico válida"
   },
+  "3sCCNd": {
+    "message": "Please enter a valid HTTP or HTTPS URL.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/board/components/SavedFileUploadForm.tsx",
+        128
+      ]
+    ],
+    "translation": "Introduce una URL HTTP o HTTPS válida."
+  },
   "CJ3zUq": {
     "message": "Please enter a valid name",
     "placeholders": {},
@@ -16015,6 +16161,18 @@
     ],
     "translation": "Por favor, introduce una URL de YouTube válida"
   },
+  "x4pNIn": {
+    "message": "Please paste the job opportunity text.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/board/components/SavedFileUploadForm.tsx",
+        110
+      ]
+    ],
+    "translation": "Pega el texto de la oportunidad laboral."
+  },
   "wPZBpR": {
     "message": "Please select a file to upload.",
     "placeholders": {},
@@ -16022,7 +16180,7 @@
     "origin": [
       [
         "src/views/board/components/SavedFileUploadForm.tsx",
-        60
+        90
       ],
       [
         "src/views/settings/components/Avatar.tsx",
@@ -16042,7 +16200,7 @@
       ],
       [
         "src/components/FeedbackForm.tsx",
-        41
+        40
       ],
       [
         "src/components/NewWorkspaceForm.tsx",
@@ -16058,7 +16216,7 @@
       ],
       [
         "src/views/board/components/NewCardForm.tsx",
-        214
+        208
       ],
       [
         "src/views/board/components/NewListForm.tsx",
@@ -16082,11 +16240,11 @@
       ],
       [
         "src/views/board/index.tsx",
-        234
+        233
       ],
       [
         "src/views/board/index.tsx",
-        290
+        289
       ],
       [
         "src/views/boards/components/ImportBoardsForm.tsx",
@@ -16099,26 +16257,6 @@
       [
         "src/views/card/components/AttachmentThumbnails.tsx",
         74
-      ],
-      [
-        "src/views/card/components/Comment.tsx",
-        97
-      ],
-      [
-        "src/views/card/components/DeleteCardConfirmation.tsx",
-        52
-      ],
-      [
-        "src/views/card/components/DeleteCommentConfirmation.tsx",
-        46
-      ],
-      [
-        "src/views/card/components/DeleteChecklistConfirmation.tsx",
-        38
-      ],
-      [
-        "src/views/card/components/DueDateSelector.tsx",
-        66
       ],
       [
         "src/views/card/components/ChecklistItemRow.tsx",
@@ -16137,6 +16275,26 @@
         81
       ],
       [
+        "src/views/card/components/Comment.tsx",
+        97
+      ],
+      [
+        "src/views/card/components/DeleteCardConfirmation.tsx",
+        52
+      ],
+      [
+        "src/views/card/components/DeleteChecklistConfirmation.tsx",
+        38
+      ],
+      [
+        "src/views/card/components/DeleteCommentConfirmation.tsx",
+        46
+      ],
+      [
+        "src/views/card/components/DueDateSelector.tsx",
+        66
+      ],
+      [
         "src/views/card/components/LabelSelector.tsx",
         80
       ],
@@ -16149,16 +16307,16 @@
         82
       ],
       [
-        "src/views/card/components/NewCommentForm.tsx",
-        37
-      ],
-      [
         "src/views/card/components/NewChecklistForm.tsx",
         71
       ],
       [
         "src/views/card/components/NewChecklistItemForm.tsx",
         90
+      ],
+      [
+        "src/views/card/components/NewCommentForm.tsx",
+        37
       ],
       [
         "src/views/card/index.tsx",
@@ -16282,7 +16440,7 @@
       ],
       [
         "src/views/board/index.tsx",
-        348
+        347
       ],
       [
         "src/views/card/components/Dropdown.tsx",
@@ -16306,7 +16464,7 @@
     "origin": [
       [
         "src/views/board/components/SavedFileUploadForm.tsx",
-        38
+        68
       ]
     ],
     "translation": ""
@@ -16765,10 +16923,22 @@
     "origin": [
       [
         "src/views/activity-log/index.tsx",
-        82
+        83
       ]
     ],
     "translation": ""
+  },
+  "l8nPOL": {
+    "translation": "procesó una oportunidad de un enlace",
+    "message": "processed a linked opportunity",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/activity-log/index.tsx",
+        101
+      ]
+    ]
   },
   "UpjXir": {
     "message": "processed an email opportunity",
@@ -16777,7 +16947,7 @@
     "origin": [
       [
         "src/views/activity-log/index.tsx",
-        88
+        89
       ]
     ],
     "translation": ""
@@ -16789,10 +16959,34 @@
     "origin": [
       [
         "src/views/activity-log/index.tsx",
-        92
+        117
       ]
     ],
     "translation": ""
+  },
+  "GjGWJh": {
+    "translation": "procesó una oportunidad cargada",
+    "message": "processed an uploaded opportunity",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/activity-log/index.tsx",
+        95
+      ]
+    ]
+  },
+  "TdPRrm": {
+    "translation": "procesó el texto pegado de una oportunidad",
+    "message": "processed pasted opportunity text",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/activity-log/index.tsx",
+        107
+      ]
+    ]
   },
   "O6Y2dC": {
     "message": "Processes the job page, turns it into a card, adds salary insights and company rating data, and uses AI to assign labels and summarise the role and requirements.",
@@ -16805,6 +16999,30 @@
       ]
     ],
     "translation": ""
+  },
+  "o/NRir": {
+    "message": "Processing may take a minute or two. We'll add the opportunity to your selected column when it's ready.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/board/components/SavedFileUploadForm.tsx",
+        179
+      ]
+    ],
+    "translation": "El procesamiento puede tardar uno o dos minutos. Añadiremos la oportunidad a la columna seleccionada cuando esté lista."
+  },
+  "3vfb9i": {
+    "message": "Processing may take a minute or two. You can keep using shortlistOS while we add the opportunity to this column.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/board/components/SavedFileUploadForm.tsx",
+        213
+      ]
+    ],
+    "translation": "El procesamiento puede tardar uno o dos minutos. Puedes seguir usando shortlistOS mientras añadimos la oportunidad a esta columna."
   },
   "K47k8R": {
     "message": "Product",
@@ -17027,6 +17245,42 @@
     ],
     "translation": "¿Preguntas?"
   },
+  "7aqUC1": {
+    "translation": "puso en cola una oportunidad de un enlace",
+    "message": "queued a linked opportunity",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/activity-log/index.tsx",
+        99
+      ]
+    ]
+  },
+  "6InKN0": {
+    "translation": "puso en cola una oportunidad cargada",
+    "message": "queued an uploaded opportunity",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/activity-log/index.tsx",
+        93
+      ]
+    ]
+  },
+  "sVl19c": {
+    "translation": "puso en cola el texto pegado de una oportunidad",
+    "message": "queued pasted opportunity text",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/activity-log/index.tsx",
+        105
+      ]
+    ]
+  },
   "kfOGMr": {
     "message": "Quick Win",
     "placeholders": {},
@@ -17148,7 +17402,7 @@
     "origin": [
       [
         "src/views/activity-log/index.tsx",
-        86
+        87
       ]
     ],
     "translation": ""
@@ -17618,7 +17872,7 @@
     "origin": [
       [
         "src/views/activity-log/index.tsx",
-        35
+        36
       ]
     ],
     "translation": "renombró"
@@ -18824,7 +19078,7 @@
     "origin": [
       [
         "src/components/FeedbackForm.tsx",
-        131
+        109
       ]
     ],
     "translation": "Enviar comentarios"
@@ -19376,7 +19630,7 @@
       ],
       [
         "src/views/board/index.tsx",
-        573
+        565
       ]
     ],
     "translation": "Lista"
@@ -20327,6 +20581,18 @@
     ],
     "translation": "Atascada en Guardada"
   },
+  "hQRttt": {
+    "message": "Submit",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/board/components/SavedFileUploadForm.tsx",
+        302
+      ]
+    ],
+    "translation": "Enviar"
+  },
   "wVt8ZM": {
     "message": "Subscribe to a private iCal feed in Google Calendar, Apple Calendar, Outlook, or another compatible app. Opportunity due dates stay visible in the calendar you already use.",
     "placeholders": {},
@@ -20526,11 +20792,11 @@
     "origin": [
       [
         "src/views/board/index.tsx",
-        573
+        565
       ],
       [
         "src/views/board/index.tsx",
-        616
+        608
       ]
     ],
     "translation": "Plantilla"
@@ -20704,6 +20970,18 @@
     ],
     "translation": "Testimonios"
   },
+  "xeiujy": {
+    "message": "Text",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/board/components/NewOpportunityForm.tsx",
+        37
+      ]
+    ],
+    "translation": "Texto"
+  },
   "nhMhRr": {
     "message": "Thank you for your feedback!",
     "placeholders": {},
@@ -20711,7 +20989,7 @@
     "origin": [
       [
         "src/components/FeedbackForm.tsx",
-        34
+        33
       ]
     ],
     "translation": "¡Gracias por tus comentarios!"
@@ -20785,7 +21063,11 @@
     "origin": [
       [
         "src/views/board/components/SavedFileUploadForm.tsx",
-        33
+        63
+      ],
+      [
+        "src/views/board/components/SavedFileUploadForm.tsx",
+        144
       ]
     ],
     "translation": ""
@@ -21081,12 +21363,12 @@
         78
       ],
       [
-        "src/views/card/components/DeleteCommentConfirmation.tsx",
-        69
-      ],
-      [
         "src/views/card/components/DeleteChecklistConfirmation.tsx",
         59
+      ],
+      [
+        "src/views/card/components/DeleteCommentConfirmation.tsx",
+        69
       ]
     ],
     "translation": "Esta acción no se puede deshacer."
@@ -21451,7 +21733,7 @@
       ],
       [
         "src/views/activity-log/index.tsx",
-        66
+        67
       ]
     ],
     "translation": "a"
@@ -21692,7 +21974,7 @@
     "origin": [
       [
         "src/views/board/components/SavedFileUploadForm.tsx",
-        151
+        281
       ]
     ],
     "translation": ""
@@ -21744,6 +22026,18 @@
       ]
     ],
     "translation": "No se pudo agregar la etiqueta"
+  },
+  "S+Wfxl": {
+    "message": "Unable to add opportunity",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/board/components/SavedFileUploadForm.tsx",
+        208
+      ]
+    ],
+    "translation": "No se pudo añadir la oportunidad"
   },
   "qfofyV": {
     "message": "Unable to archive shortlist",
@@ -21817,7 +22111,7 @@
     "origin": [
       [
         "src/views/board/index.tsx",
-        346
+        345
       ],
       [
         "src/views/public/board/CardModal.tsx",
@@ -21841,7 +22135,7 @@
     "origin": [
       [
         "src/views/board/components/NewCardForm.tsx",
-        211
+        205
       ]
     ],
     "translation": "No se pudo crear la tarjeta"
@@ -22065,7 +22359,7 @@
     "origin": [
       [
         "src/components/FeedbackForm.tsx",
-        40
+        39
       ]
     ],
     "translation": "No se pudo enviar el comentario"
@@ -22165,7 +22459,7 @@
     "origin": [
       [
         "src/views/board/index.tsx",
-        289
+        288
       ],
       [
         "src/views/card/index.tsx",
@@ -22257,7 +22551,7 @@
     "origin": [
       [
         "src/views/board/index.tsx",
-        233
+        232
       ],
       [
         "src/views/card/components/ListSelector.tsx",
@@ -22386,7 +22680,7 @@
     "origin": [
       [
         "src/views/activity-log/index.tsx",
-        41
+        42
       ]
     ],
     "translation": "desarchivó"
@@ -22944,6 +23238,10 @@
     "comments": [],
     "origin": [
       [
+        "src/views/board/components/NewOpportunityForm.tsx",
+        71
+      ],
+      [
         "src/views/settings/BoardsSettings.tsx",
         303
       ]
@@ -22980,8 +23278,12 @@
     "comments": [],
     "origin": [
       [
+        "src/views/board/components/NewOpportunityForm.tsx",
+        37
+      ],
+      [
         "src/views/board/components/SavedFileUploadForm.tsx",
-        171
+        302
       ]
     ],
     "translation": ""
@@ -22993,7 +23295,7 @@
     "origin": [
       [
         "src/views/board/components/SavedFileUploadForm.tsx",
-        107
+        199
       ]
     ],
     "translation": ""
@@ -23020,10 +23322,6 @@
     "comments": [],
     "origin": [
       [
-        "src/views/board/components/SavedFileUploadForm.tsx",
-        121
-      ],
-      [
         "src/views/card/components/AttachmentUpload.tsx",
         50
       ]
@@ -23044,7 +23342,8 @@
         86
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "BBUDfW": {
     "message": "Urgent",
@@ -23150,6 +23449,18 @@
       ]
     ],
     "translation": ""
+  },
+  "YsTyiu": {
+    "message": "Use a publicly available job posting that does not require login.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/board/components/SavedFileUploadForm.tsx",
+        230
+      ]
+    ],
+    "translation": "Usa una oferta de empleo pública que no requiera iniciar sesión."
   },
   "b9iaPc": {
     "message": "Use a shortlist for one job search, client pipeline, or focused group of opportunities.",
@@ -23359,7 +23670,7 @@
     "origin": [
       [
         "src/views/activity-log/index.tsx",
-        273
+        302
       ],
       [
         "src/views/card/components/ActivityList.tsx",
@@ -23580,6 +23891,30 @@
     ],
     "translation": "No pudimos preparar tu exportación. Inténtalo de nuevo más tarde."
   },
+  "yA6pSD": {
+    "message": "We couldn't read this page. The website may block access. Paste the opportunity into the Text tab or use the Web Clipper instead.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/board/components/SavedFileUploadForm.tsx",
+        136
+      ]
+    ],
+    "translation": "No pudimos leer esta página. El sitio puede bloquear el acceso. Pega la oportunidad en la pestaña Texto o usa el Web Clipper."
+  },
+  "OP9F/n": {
+    "message": "We couldn't submit the opportunity. Please try again.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/views/board/components/SavedFileUploadForm.tsx",
+        183
+      ]
+    ],
+    "translation": "No pudimos enviar la oportunidad. Inténtalo de nuevo."
+  },
   "+EkBs0": {
     "message": "We couldn't update your preferences. Please try again.",
     "placeholders": {},
@@ -23602,7 +23937,8 @@
         98
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "IRZtPR": {
     "message": "We have enabled automation on all your active boards and tasks.",
@@ -23642,7 +23978,8 @@
         94
       ]
     ],
-    "translation": ""
+    "translation": "",
+    "obsolete": true
   },
   "9y1RcT": {
     "message": "We're just getting started. ",
@@ -24204,7 +24541,7 @@
       ],
       [
         "src/views/board/index.tsx",
-        573
+        565
       ],
       [
         "src/views/home/index.tsx",
@@ -24806,11 +25143,7 @@
     "origin": [
       [
         "src/views/board/components/List.tsx",
-        78
-      ],
-      [
-        "src/views/board/components/List.tsx",
-        100
+        70
       ],
       [
         "src/views/board/components/UpdateBoardSlugButton.tsx",
@@ -24822,11 +25155,11 @@
       ],
       [
         "src/views/board/index.tsx",
-        655
+        647
       ],
       [
         "src/views/board/index.tsx",
-        715
+        707
       ],
       [
         "src/views/boards/components/BoardsList.tsx",

@@ -4,12 +4,102 @@ import { describe, expect, it } from "vitest";
 import * as boardActivityRepo from "@kan/db/repository/board-activity.repo";
 import * as boardRepo from "@kan/db/repository/board.repo";
 import * as shortlistActivityLogRepo from "@kan/db/repository/shortlistActivityLog.repo";
-import { boardActivities, boards, workspaceMembers } from "@kan/db/schema";
+import {
+  boardActivities,
+  boards,
+  users,
+  workspaceMembers,
+} from "@kan/db/schema";
 
 import { activityLogRouter } from "../src/routers/activity-log";
 import { createTestDb, seedTestData } from "./test-db";
 
 describe("global activity log", () => {
+  it("shows failed imports without cards and authorizes browser failure reports", async () => {
+    const db = await createTestDb();
+    class Rollback extends Error {}
+    try {
+      await db.transaction(async (tx) => {
+        const testDb = tx as unknown as typeof db;
+        const { user, workspace } = await seedTestData(testDb);
+        const board = await boardRepo.create(testDb, {
+          name: "Failed imports",
+          slug: "failed-imports",
+          createdBy: user.id,
+          workspaceId: workspace.id,
+        });
+        if (!board) throw new Error("Missing board");
+        const context = {
+          user: { ...user, name: user.name ?? "Test User" },
+          db: testDb,
+          auth: null as never,
+          headers: new Headers(),
+          transport: "trpc" as const,
+          requestId: crypto.randomUUID(),
+        };
+        const caller = activityLogRouter.createCaller(context);
+        const report = {
+          boardPublicId: board.publicId,
+          sourceKind: "link" as const,
+          sourceTitle: "Job posting",
+          sourceUrl: "https://example.com/job",
+          reason: "PAGE_FETCH_FAILED" as const,
+        };
+        await expect(caller.recordImportFailure(report)).rejects.toMatchObject({
+          code: "FORBIDDEN",
+        });
+        await testDb
+          .update(users)
+          .set({
+            shortlistPowerpackActivatedAt: new Date(Date.now() - 86_400_000),
+            shortlistPowerpackExpiresAt: new Date(Date.now() + 86_400_000),
+          })
+          .where(eq(users.id, user.id));
+        await expect(caller.recordImportFailure(report)).resolves.toEqual({
+          recorded: true,
+        });
+        const outsider = activityLogRouter.createCaller({
+          ...context,
+          user: { ...context.user, id: crypto.randomUUID() },
+        });
+        await expect(
+          outsider.recordImportFailure(report),
+        ).rejects.toMatchObject({ code: "FORBIDDEN" });
+        for (const sourceKind of shortlistActivityLogRepo.sourceActivityKinds) {
+          await shortlistActivityLogRepo.createSourceActivity(testDb, {
+            activityType: `source.${sourceKind}.failed`,
+            activityResult: "FAILED",
+            boardId: board.id,
+            payload: {
+              sourceId: "private-source-id",
+              sourceKind,
+              sourceTitle: "Job posting",
+              sourceUrl: null,
+              reason: "Could not process this source",
+              attempt: 3,
+            },
+          });
+        }
+        const result = await caller.list({ limit: 100 });
+        const failures = result.activities.filter(
+          (activity) => activity.entityType === "source",
+        );
+        expect(failures).toHaveLength(6);
+        expect(
+          new Set(failures.map((activity) => activity.sourceKind)),
+        ).toEqual(new Set(shortlistActivityLogRepo.sourceActivityKinds));
+        for (const activity of failures) {
+          expect(activity.result).toBe("FAILED");
+          expect(activity.card).toBeNull();
+          expect(activity).not.toHaveProperty("sourceId");
+        }
+        throw new Rollback();
+      });
+    } catch (error) {
+      if (!(error instanceof Rollback)) throw error;
+    }
+  }, 30_000);
+
   it("includes source intake and processing activity with source metadata", async () => {
     const db = await createTestDb();
     const { user, workspace } = await seedTestData(db);

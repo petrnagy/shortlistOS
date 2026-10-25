@@ -1,12 +1,20 @@
 import type { NextApiRequest, NextApiResponse } from "next";
+import { z } from "zod";
 
 import type { dbClient } from "@kan/db/client";
 import { createNextApiContext } from "@kan/api/trpc";
 import { withApiLogging } from "@kan/api/utils/apiLogging";
+import { assertUserInWorkspace } from "@kan/api/utils/auth";
 import { assertPermission } from "@kan/api/utils/permissions";
 import { withRateLimit } from "@kan/api/utils/rateLimit";
 import * as boardRepo from "@kan/db/repository/board.repo";
+import { getImportContext } from "@kan/db/repository/shortlist-intake.repo";
+import {
+  createSourceActivity,
+  ensureShortlistRobotUser,
+} from "@kan/db/repository/shortlistActivityLog.repo";
 import { shortlistAttachmentSources } from "@kan/db/schema";
+import { createLogger } from "@kan/logger";
 import {
   isSupportedShortlistAttachment,
   SHORTLIST_SOURCE_OBJECT_TYPES,
@@ -14,6 +22,7 @@ import {
 } from "@kan/shared/constants";
 
 import { env } from "~/env";
+import { hasActivePowerpack } from "~/utils/powerpack";
 import {
   enqueueShortlistSource,
   sanitizeShortlistFilename,
@@ -21,6 +30,7 @@ import {
 } from "~/utils/shortlistSourceIntake";
 
 const MAX_SIZE_BYTES = 10 * 1024 * 1024;
+const logger = createLogger("opportunity-import");
 
 export const config = {
   api: {
@@ -68,10 +78,36 @@ export async function processAuthenticatedShortlistFileUpload(
     }
 
     const boardPublicId = req.query.boardPublicId;
-    if (typeof boardPublicId !== "string" || boardPublicId.length < 12) {
+    if (typeof boardPublicId !== "string" || boardPublicId.length !== 12) {
       return res.status(400).json({ error: "Invalid boardPublicId" });
     }
 
+    const intake = z
+      .object({
+        listPublicId: z.string().length(12).optional(),
+        intakeMethod: z.enum(["upload", "link", "text"]).default("upload"),
+        sourceUrl: z
+          .string()
+          .url()
+          .max(4096)
+          .refine((value) => {
+            const url = new URL(value);
+            return (
+              ["http:", "https:"].includes(url.protocol) &&
+              !url.username &&
+              !url.password
+            );
+          })
+          .optional(),
+      })
+      .safeParse(req.query);
+    if (
+      !intake.success ||
+      (intake.data.intakeMethod === "link" && !intake.data.sourceUrl)
+    ) {
+      return res.status(400).json({ error: "Invalid import options" });
+    }
+    const { listPublicId, intakeMethod, sourceUrl } = intake.data;
     const contentType = req.headers["content-type"];
     const contentLengthHeader = req.headers["content-length"];
     const contentLength = contentLengthHeader
@@ -95,7 +131,15 @@ export async function processAuthenticatedShortlistFileUpload(
     const originalFilenameHeader =
       (req.headers["x-original-filename"] as string | undefined) ?? "";
 
-    if (!isSupportedShortlistAttachment(originalFilenameHeader)) {
+    const validFile =
+      intakeMethod === "link"
+        ? originalFilenameHeader === "job-opportunity.html" &&
+          contentType.startsWith("text/html")
+        : intakeMethod === "text"
+          ? originalFilenameHeader === "job-opportunity.txt" &&
+            contentType.startsWith("text/plain")
+          : isSupportedShortlistAttachment(originalFilenameHeader);
+    if (!validFile) {
       return res.status(400).json({ error: "Unsupported file type" });
     }
 
@@ -109,9 +153,24 @@ export async function processAuthenticatedShortlistFileUpload(
     }
 
     try {
+      await assertUserInWorkspace(db, userId, board.workspaceId);
       await assertPermission(db, userId, board.workspaceId, "card:create");
     } catch {
       return res.status(403).json({ error: "Permission denied" });
+    }
+
+    const { user, activeBoard, destination } = await getImportContext(db, {
+      boardId: board.id,
+      userId,
+      listPublicId,
+    });
+    if (!hasActivePowerpack(user)) {
+      return res.status(403).json({ error: "An active Powerpack is required" });
+    }
+    if (!activeBoard || !destination) {
+      return res
+        .status(404)
+        .json({ error: "Active board or destination column not found" });
     }
 
     const sanitizedFilename = sanitizeShortlistFilename(originalFilenameHeader);
@@ -125,6 +184,9 @@ export async function processAuthenticatedShortlistFileUpload(
         metadataJson: {
           boardPublicId,
           originalFilename: originalFilenameHeader,
+          listPublicId: destination.publicId,
+          intakeMethod,
+          sourceUrl: intakeMethod === "link" ? sourceUrl : undefined,
         },
         originalFilename: sanitizedFilename,
       })
@@ -157,6 +219,9 @@ export async function processAuthenticatedShortlistFileUpload(
       boardId: board.id,
       createdBy: userId,
       payloadJson: {
+        listPublicId: destination.publicId,
+        intakeMethod,
+        sourceUrl: intakeMethod === "link" ? sourceUrl : undefined,
         objectId: object.id,
         s3Key: object.s3Key,
         fileContentType: contentType,
@@ -167,7 +232,29 @@ export async function processAuthenticatedShortlistFileUpload(
       sourceType: SHORTLIST_SOURCE_TYPES.ATTACHMENT,
     });
 
-    return res.status(200).json({ jobId, sourceId: source.id });
+    if (!jobId) throw new Error("Failed to queue opportunity import");
+    try {
+      await ensureShortlistRobotUser(db);
+      await createSourceActivity(db, {
+        activityType: `source.${intakeMethod}.received`,
+        activityResult: "SUCCESS",
+        boardId: board.id,
+        payload: {
+          sourceId: source.id,
+          sourceKind: intakeMethod,
+          sourceTitle:
+            intakeMethod === "link"
+              ? (sourceUrl ?? sanitizedFilename)
+              : intakeMethod === "text"
+                ? "Pasted opportunity text"
+                : sanitizedFilename,
+          sourceUrl: intakeMethod === "link" ? (sourceUrl ?? null) : null,
+        },
+      });
+    } catch (error) {
+      logger.error({ error }, "Failed to record queued opportunity import");
+    }
+    return res.status(200).json({ accepted: true });
   } catch {
     return res.status(500).json({ error: "Internal server error" });
   }

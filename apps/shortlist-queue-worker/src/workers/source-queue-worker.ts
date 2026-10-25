@@ -21,6 +21,7 @@ import {
 } from "drizzle-orm";
 
 import type { dbClient } from "@kan/db/client";
+import type { SourceActivityKind } from "@kan/db/repository/shortlistActivityLog.repo";
 import type { JobPostingClassification, OpportunityFacts } from "@kan/llm";
 import * as cardRepo from "@kan/db/repository/card.repo";
 import * as cardActivityRepo from "@kan/db/repository/cardActivity.repo";
@@ -31,6 +32,7 @@ import {
   boards,
   cards,
   lists,
+  shortlistAttachmentSources,
   shortlistEmailSources,
   shortlistJobQueue,
   shortlistSourceCards,
@@ -196,21 +198,23 @@ export async function processShortlistJobQueueBatch(
   return result;
 }
 
-async function recordSourceProcessingActivity(
+export async function recordSourceProcessingActivity(
   db: dbClient,
   job: QueueJobRow,
   status: QueueProcessingStatus,
 ) {
   if (
     job.sourceType !== SHORTLIST_SOURCE_TYPES.WEBPAGE &&
-    job.sourceType !== SHORTLIST_SOURCE_TYPES.EMAIL
+    job.sourceType !== SHORTLIST_SOURCE_TYPES.EMAIL &&
+    job.sourceType !== SHORTLIST_SOURCE_TYPES.ATTACHMENT
   ) {
     return;
   }
   if (
     status !== SHORTLIST_JOB_STATUSES.COMPLETED &&
     status !== SHORTLIST_JOB_STATUSES.DUPLICATE &&
-    status !== SHORTLIST_JOB_STATUSES.FAILED
+    status !== SHORTLIST_JOB_STATUSES.FAILED &&
+    status !== SHORTLIST_JOB_STATUSES.RETRY
   ) {
     return;
   }
@@ -222,6 +226,7 @@ async function recordSourceProcessingActivity(
         cardId: shortlistSourceCards.cardId,
         error: shortlistJobQueue.error,
         processingLog: shortlistJobQueue.processingLog,
+        attempts: shortlistJobQueue.attempts,
       })
       .from(shortlistJobQueue)
       .leftJoin(
@@ -234,19 +239,16 @@ async function recordSourceProcessingActivity(
       .where(eq(shortlistJobQueue.id, job.id))
       .limit(1);
 
-    const sourceKind =
-      job.sourceType === SHORTLIST_SOURCE_TYPES.EMAIL ? "email" : "web";
+    const sourceKind = getSourceActivityKind(job.sourceType, job.payloadJson);
     const succeeded =
       status === SHORTLIST_JOB_STATUSES.COMPLETED ||
       status === SHORTLIST_JOB_STATUSES.DUPLICATE;
     const activityType = succeeded
       ? `source.${sourceKind}.processed`
-      : `source.${sourceKind}.failed`;
+      : `source.${sourceKind}.${status === SHORTLIST_JOB_STATUSES.RETRY ? "retrying" : "failed"}`;
     const reason = succeeded
       ? null
-      : (queueRow?.error ??
-        queueRow?.processingLog?.split("\n").filter(Boolean).at(-1) ??
-        "The source could not be processed.");
+      : getSourceFailureReason(queueRow?.error, queueRow?.processingLog);
 
     await createSourceActivity(db, {
       activityType,
@@ -259,6 +261,7 @@ async function recordSourceProcessingActivity(
         sourceTitle: source.title,
         sourceUrl: source.url,
         reason,
+        attempt: queueRow?.attempts ?? job.attempts + 1,
       },
     });
   } catch (error) {
@@ -273,6 +276,23 @@ async function getSourceActivityDetails(
   db: dbClient,
   job: QueueJobRow,
 ): Promise<{ title: string; url: string | null }> {
+  if (job.sourceType === SHORTLIST_SOURCE_TYPES.ATTACHMENT) {
+    const source = await db.query.shortlistAttachmentSources.findFirst({
+      columns: { originalFilename: true },
+      where: eq(shortlistAttachmentSources.id, job.sourceId),
+    });
+    const method = getAttachmentIntakeMethod(job.payloadJson);
+    const url = method === "link" ? getPayloadSourceUrl(job.payloadJson) : null;
+    return {
+      title:
+        method === "link"
+          ? (url ?? "Linked opportunity")
+          : method === "text"
+            ? "Pasted opportunity text"
+            : (source?.originalFilename ?? "Uploaded opportunity"),
+      url,
+    };
+  }
   if (job.sourceType === SHORTLIST_SOURCE_TYPES.EMAIL) {
     const [email] = await db
       .select({
@@ -309,6 +329,36 @@ async function getSourceActivityDetails(
 
   const url = getPayloadSourceUrl(job.payloadJson);
   return { title: url ?? "Web opportunity", url };
+}
+
+export function getSourceActivityKind(
+  sourceType: string,
+  payload: unknown,
+): SourceActivityKind {
+  if (sourceType === SHORTLIST_SOURCE_TYPES.EMAIL) return "email";
+  if (sourceType === SHORTLIST_SOURCE_TYPES.ATTACHMENT)
+    return getAttachmentIntakeMethod(payload);
+  return "web";
+}
+
+export function getSourceFailureReason(
+  error?: string | null,
+  processingLog?: string | null,
+): string {
+  if (processingLog?.includes("Classification rejected this source")) {
+    return error
+      ? error.slice(0, 1000)
+      : "This source does not contain a job opportunity.";
+  }
+  if (/daily.*limit|limit.*daily/i.test(error ?? ""))
+    return "The daily processing limit was reached. Processing will resume automatically.";
+  if (/Destination column/i.test(error ?? ""))
+    return "The selected column is no longer available.";
+  if (/Board .*not found|Automation was disabled/i.test(error ?? ""))
+    return "This shortlist is unavailable or its Powerpack is inactive.";
+  if (/No text|extract|parse|PDF|document type/i.test(error ?? ""))
+    return "The source could not be read. Try pasting the opportunity as text.";
+  return "Processing could not be completed. Please try again.";
 }
 
 async function getPendingJobs(
@@ -507,13 +557,17 @@ async function processQueueJob(
       });
     }
 
-    const savedList = await getSavedList(db, job.boardId);
+    const destinationList = await getDestinationList(
+      db,
+      job.boardId,
+      job.payloadJson,
+    );
 
-    if (!savedList) {
+    if (!destinationList) {
       return finishJobWithStatus(db, job, {
         attempt,
         log,
-        message: `List "${SAVED_LIST_NAME}" was not found in board ${board.publicId}.`,
+        message: `Destination column was not found in board ${board.publicId}.`,
         status: SHORTLIST_JOB_STATUSES.FAILED,
       });
     }
@@ -659,7 +713,7 @@ async function processQueueJob(
     );
     processingLog = appendLog(
       processingLog,
-      `Prepared card "${cardInput.title}" for Saved list.`,
+      `Prepared card "${cardInput.title}" for ${destinationList.name} list.`,
     );
 
     const duplicate = existingLink
@@ -709,11 +763,24 @@ async function processQueueJob(
     const createdCard = await cardRepo.create(db, {
       ...cardInput,
       createdBy: SHORTLIST_ROBOT_USER.id,
-      listId: savedList.id,
+      listId: destinationList.id,
       workspaceId: board.workspaceId,
       position: "end",
     });
     incompleteCreatedCardId = createdCard.id;
+
+    if (job.sourceType === SHORTLIST_SOURCE_TYPES.ATTACHMENT) {
+      const method = getAttachmentIntakeMethod(job.payloadJson);
+      await createRobotCommentActivity(
+        db,
+        createdCard.id,
+        method === "link"
+          ? "Created from link"
+          : method === "text"
+            ? "Created from pasted text"
+            : "Created from uploaded file",
+      );
+    }
 
     await requestCardEnrichment(db, createdCard.id, job.createdBy);
 
@@ -745,7 +812,7 @@ async function processQueueJob(
       error: null,
       processingLog: appendLog(
         processingLog,
-        `Created card ${createdCard.publicId} in "${SAVED_LIST_NAME}".`,
+        `Created card ${createdCard.publicId} in "${destinationList.name}".`,
       ),
       status: SHORTLIST_JOB_STATUSES.COMPLETED,
     });
@@ -1518,7 +1585,10 @@ async function addRobotProcessingHistory(
       args.jobTitle,
     ),
   );
-  const intakeLabel = getSourceIntakeLabel(args.job.sourceType);
+  const intakeLabel = getSourceIntakeLabel(
+    args.job.sourceType,
+    args.job.payloadJson,
+  );
 
   await createRobotCommentActivity(
     db,
@@ -1739,8 +1809,21 @@ async function attachOriginalSourceFile(
   return attachment;
 }
 
-function getSourceIntakeLabel(sourceType: string) {
-  if (sourceType === SHORTLIST_SOURCE_TYPES.ATTACHMENT) return "Upload";
+export function getAttachmentIntakeMethod(
+  payload: unknown,
+): "upload" | "link" | "text" {
+  const method =
+    payload && typeof payload === "object" && "intakeMethod" in payload
+      ? payload.intakeMethod
+      : undefined;
+  return method === "link" || method === "text" ? method : "upload";
+}
+
+function getSourceIntakeLabel(sourceType: string, payload: unknown) {
+  if (sourceType === SHORTLIST_SOURCE_TYPES.ATTACHMENT) {
+    const method = getAttachmentIntakeMethod(payload);
+    return method === "link" ? "Link" : method === "text" ? "Text" : "Upload";
+  }
   if (sourceType === SHORTLIST_SOURCE_TYPES.EMAIL) return "Email";
   if (sourceType === SHORTLIST_SOURCE_TYPES.WEBPAGE) return "Web clipper";
 
@@ -1960,15 +2043,32 @@ async function getBoard(
   return board;
 }
 
-async function getSavedList(db: dbClient, boardId: number) {
+export async function getDestinationList(
+  db: dbClient,
+  boardId: number,
+  payload: unknown,
+) {
+  const listPublicId =
+    payload && typeof payload === "object" && "listPublicId" in payload
+      ? payload.listPublicId
+      : undefined;
+  if (
+    listPublicId !== undefined &&
+    (typeof listPublicId !== "string" || listPublicId.length !== 12)
+  ) {
+    throw new Error("Invalid destination column");
+  }
   return db.query.lists.findFirst({
     columns: {
       id: true,
       publicId: true,
+      name: true,
     },
     where: and(
       eq(lists.boardId, boardId),
-      eq(lists.name, SAVED_LIST_NAME),
+      listPublicId
+        ? eq(lists.publicId, listPublicId)
+        : eq(lists.name, SAVED_LIST_NAME),
       isNull(lists.deletedAt),
     ),
   });

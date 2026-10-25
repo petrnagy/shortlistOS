@@ -473,6 +473,8 @@ The email and card automation workers check for work once per hour. Reminder ema
 
 All workers skip deleted or archived shortlists and re-check Powerpack access immediately before processing. The automation workers intentionally remain idle during `pnpm dev`; run their `start` scripts explicitly when testing worker behavior locally.
 
+When testing Upload, Link, Text, Magic Inbox, or the Web Clipper on localhost, run `pnpm --filter @kan/shortlist-queue-worker start` in a separate terminal. `pnpm dev` does not start this processor: accepted imports remain pending until it runs. To process the current queue once, use `pnpm --filter @kan/shortlist-queue-worker process-sources` instead.
+
 ### Email Template Preview
 
 Preview every production React Email template locally with:

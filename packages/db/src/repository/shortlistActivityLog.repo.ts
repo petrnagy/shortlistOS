@@ -10,7 +10,14 @@ import {
 } from "@kan/db/schema";
 import { SHORTLIST_ROBOT_USER } from "@kan/shared/constants";
 
-export type SourceActivityKind = "email" | "web";
+export const sourceActivityKinds = [
+  "email",
+  "web",
+  "upload",
+  "link",
+  "text",
+] as const;
+export type SourceActivityKind = (typeof sourceActivityKinds)[number];
 
 export const sourceActivityTypes = [
   "source.web.clipped",
@@ -19,6 +26,20 @@ export const sourceActivityTypes = [
   "source.email.received",
   "source.email.processed",
   "source.email.failed",
+  "source.web.retrying",
+  "source.email.retrying",
+  "source.upload.received",
+  "source.upload.processed",
+  "source.upload.failed",
+  "source.upload.retrying",
+  "source.link.received",
+  "source.link.processed",
+  "source.link.failed",
+  "source.link.retrying",
+  "source.text.received",
+  "source.text.processed",
+  "source.text.failed",
+  "source.text.retrying",
 ] as const;
 
 export interface SourceActivityPayload {
@@ -27,6 +48,7 @@ export interface SourceActivityPayload {
   sourceTitle: string;
   sourceUrl: string | null;
   reason?: string | null;
+  attempt?: number;
 }
 
 export async function ensureShortlistRobotUser(db: dbClient) {
@@ -96,13 +118,15 @@ function parseSourceActivityPayload(
     const parsed = JSON.parse(value) as Partial<SourceActivityPayload>;
     return {
       sourceId: typeof parsed.sourceId === "string" ? parsed.sourceId : "",
-      sourceKind: parsed.sourceKind === "email" ? "email" : "web",
+      sourceKind:
+        sourceActivityKinds.find((kind) => kind === parsed.sourceKind) ?? "web",
       sourceTitle:
         typeof parsed.sourceTitle === "string" && parsed.sourceTitle.length > 0
           ? parsed.sourceTitle
           : "Opportunity",
       sourceUrl: typeof parsed.sourceUrl === "string" ? parsed.sourceUrl : null,
       reason: typeof parsed.reason === "string" ? parsed.reason : null,
+      attempt: typeof parsed.attempt === "number" ? parsed.attempt : undefined,
     };
   } catch {
     return {
@@ -175,6 +199,7 @@ export const getPaginatedUserActivities = async (
       sourceTitle: payload.sourceTitle,
       sourceUrl: payload.sourceUrl,
       reason: payload.reason,
+      attempt: payload.attempt,
       card: row.cardPublicId
         ? { publicId: row.cardPublicId, title: row.cardTitle ?? "" }
         : null,
