@@ -13,29 +13,35 @@ import {
   processInboundEmailBatch,
 } from "./inbound-email-worker";
 
-const { mockPutObject, mockEnsureRobot, mockLogger, state } = vi.hoisted(
-  () => ({
-    mockPutObject: vi.fn(() => Promise.resolve()),
-    mockEnsureRobot: vi.fn(() => Promise.resolve()),
-    mockLogger: { info: vi.fn(), warn: vi.fn(), error: vi.fn() },
-    state: {
-      attempts: 0,
-      lastError: null as string | null,
-      job: null as Record<string, unknown> | null,
-      status: "PENDING",
-      sourceCreated: false,
-      objectRows: [] as Record<string, unknown>[],
-      objectSelectCalls: 0,
-      duplicateObjectLookup: null as Record<string, unknown> | null,
-      queueCreated: false,
-      activityCount: 0,
-    },
-  }),
-);
+const {
+  mockPutObject,
+  mockEnsureRobot,
+  mockCreateSourceActivity,
+  mockLogger,
+  state,
+} = vi.hoisted(() => ({
+  mockPutObject: vi.fn(() => Promise.resolve()),
+  mockEnsureRobot: vi.fn(() => Promise.resolve()),
+  mockCreateSourceActivity: vi.fn(() => Promise.resolve()),
+  mockLogger: { info: vi.fn(), warn: vi.fn(), error: vi.fn() },
+  state: {
+    attempts: 0,
+    lastError: null as string | null,
+    job: null as Record<string, unknown> | null,
+    status: "PENDING",
+    sourceCreated: false,
+    objectRows: [] as Record<string, unknown>[],
+    objectSelectCalls: 0,
+    duplicateObjectLookup: null as Record<string, unknown> | null,
+    queueCreated: false,
+    activityCount: 0,
+  },
+}));
 
 vi.mock("@kan/shared/utils", () => ({ putObject: mockPutObject }));
 vi.mock("@kan/db/repository/shortlistActivityLog.repo", () => ({
   ensureShortlistRobotUser: mockEnsureRobot,
+  createSourceActivity: mockCreateSourceActivity,
 }));
 vi.mock("@kan/logger", () => ({
   createLogger: vi.fn(() => mockLogger),
@@ -148,7 +154,9 @@ function createMockDb() {
         const result = Promise.resolve();
         return Object.assign(result, {
           returning: () =>
-            values.status === "COMPLETED" ? [{ id: "inbound-job-1" }] : [],
+            ["COMPLETED", "RETRY", "FAILED"].includes(String(values.status))
+              ? [{ id: "inbound-job-1" }]
+              : [],
         });
       },
     }),
@@ -211,6 +219,13 @@ describe("inbound email worker", () => {
       workerId: "test-worker",
     });
     expect(first).toMatchObject({ selected: 1, retried: 1, completed: 0 });
+    expect(mockCreateSourceActivity).toHaveBeenCalledWith(
+      db,
+      expect.objectContaining({
+        activityType: "source.email.retrying",
+        activityResult: "FAILED",
+      }),
+    );
     expect(state.status).toBe("RETRY");
     expect(state.queueCreated).toBe(false);
 
@@ -265,6 +280,14 @@ describe("inbound email worker", () => {
     expect(state.lastError).toContain("HTTP 503");
     expect(state.queueCreated).toBe(false);
     expect(state.activityCount).toBe(0);
+    expect(mockCreateSourceActivity).toHaveBeenCalledTimes(5);
+    expect(mockCreateSourceActivity).toHaveBeenLastCalledWith(
+      db,
+      expect.objectContaining({
+        activityType: "source.email.failed",
+        activityResult: "FAILED",
+      }),
+    );
   });
 
   it("does not retry authentication failures", async () => {

@@ -52,10 +52,9 @@ import { DeleteBoardConfirmation } from "./components/DeleteBoardConfirmation";
 import { DeleteListConfirmation } from "./components/DeleteListConfirmation";
 import Filters from "./components/Filters";
 import List from "./components/List";
-import { NewCardForm } from "./components/NewCardForm";
 import { NewListForm } from "./components/NewListForm";
+import { NewOpportunityForm } from "./components/NewOpportunityForm";
 import { NewTemplateForm } from "./components/NewTemplateForm";
-import { SavedFileUploadForm } from "./components/SavedFileUploadForm";
 import UpdateBoardSlugButton from "./components/UpdateBoardSlugButton";
 import { UpdateBoardSlugForm } from "./components/UpdateBoardSlugForm";
 import VisibilityButton from "./components/VisibilityButton";
@@ -431,19 +430,12 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
           modalSize="md"
           isVisible={isOpen && modalContentType === "NEW_CARD"}
         >
-          <NewCardForm
+          <NewOpportunityForm
             isTemplate={!!isTemplate}
             boardPublicId={boardId ?? ""}
             listPublicId={selectedPublicListId}
             queryParams={queryParams}
           />
-        </Modal>
-
-        <Modal
-          modalSize="md"
-          isVisible={isOpen && modalContentType === "SAVED_FILE_UPLOAD"}
-        >
-          <SavedFileUploadForm boardPublicId={boardId ?? ""} />
         </Modal>
 
         <Modal

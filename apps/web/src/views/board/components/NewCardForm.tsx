@@ -3,11 +3,7 @@ import { Trans } from "@lingui/react/macro";
 import { format } from "date-fns";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import {
-  HiOutlineBarsArrowDown,
-  HiOutlineBarsArrowUp,
-  HiXMark,
-} from "react-icons/hi2";
+import { HiOutlineBarsArrowDown, HiOutlineBarsArrowUp } from "react-icons/hi2";
 
 import type { NewCardInput } from "@kan/api/types";
 import { generateUID } from "@kan/shared/utils";
@@ -20,7 +16,6 @@ import DateSelector from "~/components/DateSelector";
 import Editor from "~/components/Editor";
 import Input from "~/components/Input";
 import LabelIcon from "~/components/LabelIcon";
-import Toggle from "~/components/Toggle";
 import { useModalFormState } from "~/hooks/useModalFormState";
 import { useModal } from "~/providers/modal";
 import { usePopup } from "~/providers/popup";
@@ -101,7 +96,6 @@ export function NewCardForm({
 
   const labelPublicIds = watch("labelPublicIds") || [];
   const memberPublicIds = watch("memberPublicIds") || [];
-  const isCreateAnotherEnabled = watch("isCreateAnotherEnabled");
   const position = watch("position");
   const title = watch("title");
   const description = watch("description");
@@ -317,10 +311,6 @@ export function NewCardForm({
     });
   };
 
-  const handleToggleCreateAnother = (): void => {
-    setValue("isCreateAnotherEnabled", !isCreateAnotherEnabled);
-  };
-
   const handleSelectList = (listPublicId: string): void => {
     setValue("listPublicId", listPublicId);
   };
@@ -356,16 +346,6 @@ export function NewCardForm({
           <h2 className="text-sm font-bold text-neutral-900 dark:text-dark-1000">
             {t`New opportunity`}
           </h2>
-          <button
-            type="button"
-            className="rounded p-1 hover:bg-light-200 focus:outline-none dark:hover:bg-dark-300"
-            onClick={(e) => {
-              closeModal();
-              e.preventDefault();
-            }}
-          >
-            <HiXMark size={18} className="text-light-900 dark:text-dark-900" />
-          </button>
         </div>
 
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
@@ -428,7 +408,10 @@ export function NewCardForm({
             />
           </div>
         </div>
-        <div className="mt-2 flex space-x-1" data-onboarding="new-card-controls">
+        <div
+          className="mt-2 flex space-x-1"
+          data-onboarding="new-card-controls"
+        >
           <div className="w-fit">
             <CheckboxDropdown
               items={formattedLists}
@@ -589,12 +572,6 @@ export function NewCardForm({
       </div>
 
       <div className="mt-5 flex items-center justify-end space-x-4 border-t border-light-600 px-5 pb-5 pt-5 dark:border-dark-600">
-        <Toggle
-          label={t`Create another`}
-          isChecked={isCreateAnotherEnabled}
-          onChange={handleToggleCreateAnother}
-        />
-
         <div>
           <Button
             data-onboarding="create-card-submit"

@@ -1,5 +1,8 @@
-import { describe, expect, it } from "vitest";
+import type { SQL } from "drizzle-orm";
+import { PgDialect } from "drizzle-orm/pg-core";
+import { describe, expect, it, vi } from "vitest";
 
+import type { dbClient } from "@kan/db/client";
 import type { OpportunityFacts } from "@kan/llm";
 import {
   SHORTLIST_SOURCE_OBJECT_TYPES,
@@ -8,6 +11,8 @@ import {
 
 import {
   buildEnrichmentPatch,
+  getAttachmentIntakeMethod,
+  getDestinationList,
   getJobRetryDelayMs,
   mergeContacts,
   mergeDescription,
@@ -18,6 +23,50 @@ import {
   slugifyJobTitle,
   tokenSimilarity,
 } from "./source-queue-worker";
+
+describe("import destination columns", () => {
+  const setup = () => {
+    const findFirst = vi
+      .fn<(options: { where: SQL }) => Promise<unknown>>()
+      .mockResolvedValue(undefined);
+    const db = { query: { lists: { findFirst } } } as unknown as dbClient;
+    return { db, findFirst };
+  };
+
+  it("looks up the selected column within the source board and excludes deleted columns", async () => {
+    const { db, findFirst } = setup();
+    await getDestinationList(db, 42, { listPublicId: "applied12345" });
+    const where = findFirst.mock.calls[0]?.[0].where;
+    if (!where) throw new Error("Missing destination filter");
+    const query = new PgDialect().sqlToQuery(where);
+    expect(query.params).toEqual([42, "applied12345"]);
+    expect(query.sql).toContain('"deletedAt" is null');
+    // Missing/deleted destinations must fail rather than silently redirect to Saved.
+    expect(findFirst).toHaveBeenCalledTimes(1);
+  });
+
+  it("keeps Saved as the default for existing ingestion jobs", async () => {
+    const { db, findFirst } = setup();
+    await getDestinationList(db, 42, null);
+    const where = findFirst.mock.calls[0]?.[0].where;
+    if (!where) throw new Error("Missing destination filter");
+    expect(new PgDialect().sqlToQuery(where).params).toEqual([42, "Saved"]);
+  });
+
+  it("rejects corrupt destination metadata instead of importing to Saved", async () => {
+    const { db, findFirst } = setup();
+    await expect(
+      getDestinationList(db, 42, { listPublicId: 123 }),
+    ).rejects.toThrow("Invalid destination column");
+    expect(findFirst).not.toHaveBeenCalled();
+  });
+
+  it("distinguishes import provenance and preserves legacy uploads", () => {
+    expect(getAttachmentIntakeMethod({ intakeMethod: "link" })).toBe("link");
+    expect(getAttachmentIntakeMethod({ intakeMethod: "text" })).toBe("text");
+    expect(getAttachmentIntakeMethod(null)).toBe("upload");
+  });
+});
 
 const classifiedSource = (
   role: "ATTACHMENT" | "CURRENT_EMAIL" | "QUOTED_HISTORY",
