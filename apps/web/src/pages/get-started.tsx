@@ -46,6 +46,10 @@ import {
 import { Alert } from "~/components/Alert";
 import Button from "~/components/Button";
 import { PageHead } from "~/components/PageHead";
+import {
+  CHROME_WEB_CLIPPER_URL,
+  FIREFOX_WEB_CLIPPER_URL,
+} from "~/config/web-clipper-links";
 import { FeatureCard, Section } from "~/views/home/components/LandingSection";
 import Layout from "~/views/home/components/Layout";
 
@@ -1036,7 +1040,8 @@ export default function GetStartedPage() {
                     .
                   </Trans>{" "}
                   <Trans>
-                    Or ask a compatible AI assistant to add opportunities through{" "}
+                    Or ask a compatible AI assistant to add opportunities
+                    through{" "}
                     <Link
                       href="#mcp"
                       className="decoration-current/50 font-medium underline underline-offset-4 hover:decoration-current"
@@ -1149,6 +1154,12 @@ export default function GetStartedPage() {
               <p className="mx-auto mt-3 max-w-3xl text-center text-sm leading-6 text-light-900 dark:text-dark-900">
                 {powerpackFeatures[2].description}
               </p>
+              <Alert
+                className="mx-auto mt-6 max-w-3xl"
+                title={t`Where to find your Magic Inbox address`}
+              >
+                {t`Open the board's Settings, then go to Automation > Email to this shortlist. Enable it to reveal that board's private email address.`}
+              </Alert>
               <div className="mt-6 lg:relative lg:left-1/2 lg:w-[calc(100vw-2rem)] lg:max-w-[1200px] lg:-translate-x-1/2">
                 <CaptureJourney kind="email" />
               </div>
@@ -1161,6 +1172,24 @@ export default function GetStartedPage() {
               <p className="mx-auto mt-3 max-w-3xl text-center text-sm leading-6 text-light-900 dark:text-dark-900">
                 {powerpackFeatures[3].description}
               </p>
+              <div className="mt-5 flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm">
+                <Link
+                  href={CHROME_WEB_CLIPPER_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-semibold text-light-1000 underline underline-offset-4 dark:text-dark-1000"
+                >
+                  {t`Chrome Web Store`}
+                </Link>
+                <Link
+                  href={FIREFOX_WEB_CLIPPER_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-semibold text-light-1000 underline underline-offset-4 dark:text-dark-1000"
+                >
+                  {t`Firefox Add-ons`}
+                </Link>
+              </div>
               <div className="mt-6 lg:relative lg:left-1/2 lg:w-[calc(100vw-2rem)] lg:max-w-[1200px] lg:-translate-x-1/2">
                 <CaptureJourney kind="web" />
               </div>
