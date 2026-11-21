@@ -4,9 +4,12 @@ import { FaEnvelope, FaGithub, FaLinkedin } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 
 import { APP_VERSION } from "~/config/app-version";
-import { env } from "~/env";
+import {
+  CHROME_WEB_CLIPPER_URL,
+  FIREFOX_WEB_CLIPPER_URL,
+} from "~/config/web-clipper-links";
 
-const githubUrl = env.NEXT_PUBLIC_GITHUB_URL ?? "#";
+const githubUrl = "https://github.com/petrnagy/shortlistOS";
 const xUrl = "https://x.com/petrnagy";
 const linkedinUrl = "https://www.linkedin.com/in/petrnagy/";
 const emailUrl = "mailto:petr@shortlistos.co";
@@ -88,8 +91,18 @@ const Footer = () => {
       title: t`Product`,
       links: [
         { label: t`Features`, href: "/#product" },
-        { label: t`Powerpack`, href: "/#powerpack" },
         { label: t`Pricing`, href: "/pricing" },
+        { label: t`Powerpack`, href: "/#powerpack" },
+        {
+          label: t`Chrome Web Store`,
+          href: CHROME_WEB_CLIPPER_URL,
+          external: true,
+        },
+        {
+          label: t`Firefox Add-ons`,
+          href: FIREFOX_WEB_CLIPPER_URL,
+          external: true,
+        },
       ],
     },
     {
