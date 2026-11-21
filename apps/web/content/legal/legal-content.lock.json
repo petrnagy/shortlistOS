@@ -1,8 +1,8 @@
 {
   "repository": "petrnagy/shortlistOS-legal",
-  "commit": "06a525c1ac834cc679ec3b97c8b21a055d29619d",
+  "commit": "5a169ac8982934f17502e049bfdf736f6af813fa",
   "files": {
-    "terms-of-use.md": "5618358d695b184aae6652da8c75a456cf8ff17954460b918f97129fe4d344a4",
-    "privacy-policy.md": "574db64cc8a8126f56ea330641d5dbc20db36d970c06a3cf30b085f25134b1dc"
+    "terms-of-use.md": "57e8fb856fc977e09fcc29e3256f17df7a45021445eb3066fb372888351f79e6",
+    "privacy-policy.md": "acc5ec4325585fd186775ebb9a83b2b00dc6d7cd5465dc0d045c7c0b4667b46f"
   }
 }
